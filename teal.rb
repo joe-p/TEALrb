@@ -62,7 +62,7 @@ module TEALrb
     attr_reader :teal, :vars
 
     def initialize(vars)
-      @vars = vars
+      @vars = OpenStruct.new vars
       @teal = []
       @if_count = 0
       @open_ifs = 0
@@ -189,8 +189,8 @@ c.compile do
     9+10
   end
 
-  vars[:foobar] if app_global_get('some_key')
-  vars[:foo].call
+  vars.foorbar if app_global_get('some_key')
+  vars.foo.call
 end
 
 puts c.teal
