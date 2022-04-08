@@ -1,4 +1,5 @@
 require 'pry'
+require 'method_source'
 
 class String
   def teal
@@ -56,14 +57,14 @@ module TEALrb
       @if_count = 0
     end
 
-    def compile(input)
+    def compile(vars = {}, &blk)
       seq = StringIO.new
       seq.puts '['
 
       ifs = [nil]
       if_level = 0
 
-      input.each_line do |line|
+      blk.source.lines[1..-2].each do |line|
         line.strip!
         next if line.empty?
 
@@ -188,4 +189,24 @@ a2.sequence do
   ]
 end
 
-puts Compiler.new.compile(IO.read('source.rb')).teal
+c = Compiler.new
+
+vars = {
+  foo: -> { 5 + 6 },
+  bar: Int.new(7) + 8,
+  foobar: add(9, 10),
+}
+
+c.compile(vars) do
+  1 + 2
+  app_global_get("some_key")
+  
+  if 3 + 4
+      vars[:foo].call
+  end
+  
+  vars[:bar]
+  vars[:foobar]
+end
+
+puts c.teal
