@@ -73,7 +73,8 @@ module TEALrb
           ifs[if_level][:seq].puts '['
         elsif line[/^end/]
           ifs[if_level][:seq].print ']'
-          seq.puts "self.if(#{ifs[if_level][:condition]}) do\n#{ifs[if_level][:seq].string}\nend"
+          seq.puts "self.if(#{ifs[if_level][:condition]}) do\n#{ifs[if_level][:seq].string}\nend,"
+          if_level -= 1
         elsif ifs[if_level]
           ifs[if_level][:seq].puts line + ','
         else
@@ -83,7 +84,6 @@ module TEALrb
 
       seq.print ']'
 
-      binding.pry
       @teal = eval(seq.string).map(&:teal).flatten.compact
       self
     end
@@ -107,8 +107,6 @@ module TEALrb
       @teal += ["bnz if#{@id}_end"]
       @teal += blk.call.map(&:teal).flatten.compact
       @teal += ["if#{@id}_end:"]
-    rescue
-      binding.pry
     end
 
     def else(&blk)
