@@ -1,5 +1,6 @@
 require 'pry'
 require 'method_source'
+require_relative 'expressions'
 
 class String
   def teal
@@ -8,76 +9,6 @@ class String
 end
 
 module TEALrb
-  class Expression
-    attr_reader :teal
-
-    def +(other)
-      add self, other
-    end
-  end
-
-  class Int < Expression
-    def initialize(integer)
-      @teal = ["int #{integer}"]
-    end
-  end
-
-  class Bytes < Expression
-    def initialize(string)
-      @teal = ["bytes \"#{string}\""]
-    end
-  end
-
-  class AppGlobalGet < Expression
-    def initialize(key)
-      @teal = [key.teal, 'app_global_get']
-    end
-  end
-
-  def app_global_get(key = nil)
-    AppGlobalGet.new(key)
-  end
-
-  class AppGlobalPut < Expression
-    def initialize(key, value)
-      @teal = [value.teal, key.teal, 'app_global_put']
-    end
-  end
-
-  def app_global_put(key = nil, value = nil)
-    AppGlobalPut.new(key, value)
-  end
-
-  class Store < Expression
-    def initialize(index, value)
-      @teal = [value.teal, "store #{index}"]
-    end
-  end
-
-  def store(index, value = nil)
-    Store.new(index, value)
-  end
-
-  class Load < Expression
-    def initialize(index)
-      @teal = ["load #{index}"]
-    end
-  end
-
-  def load(index = nil)
-    Load.new(index)
-  end
-
-  class Add < Expression
-    def initialize(a, b)
-      @teal = [a.teal, b.teal, '+']
-    end
-  end
-
-  def add(a = nil, b = nil)
-    Add.new a, b
-  end
-
   class If
     attr_accessor :blocks
     attr_reader :id
