@@ -38,6 +38,36 @@ module TEALrb
     AppGlobalGet.new(key)
   end
 
+  class AppGlobalPut < Expression
+    def initialize(key, value)
+      @teal = [value.teal, key.teal, 'app_global_put']
+    end
+  end
+
+  def app_global_put(key = nil, value = nil)
+    AppGlobalPut.new(key, value)
+  end
+
+  class Store < Expression
+    def initialize(index, value)
+      @teal = [value.teal, "store #{index}"]
+    end
+  end
+
+  def store(index, value = nil)
+    Store.new(index, value)
+  end
+
+  class Load < Expression
+    def initialize(index)
+      @teal = ["load #{index}"]
+    end
+  end
+
+  def load(index = nil)
+    Load.new(index)
+  end
+
   class Add < Expression
     def initialize(a, b)
       @teal = [a.teal, b.teal, '+']
@@ -59,13 +89,14 @@ module TEALrb
   end
 
   class Compiler
-    attr_reader :teal, :vars
+    attr_reader :teal
+    attr_accessor :vars, :subs
 
-    def initialize(vars)
-      @vars = OpenStruct.new vars
-      @teal = []
+    def initialize
+      @vars = OpenStruct.new
+      @teal = ['b main']
       @if_count = 0
-      @open_ifs = 0
+      @open_ifs = []
     end
 
     @@eval_location = "#{__FILE__}:#{__LINE__ + 2}"
@@ -73,10 +104,29 @@ module TEALrb
       eval("(#{str}).teal")
     end
 
-    def compile(&blk)
-      @open_ifs = []
+    def defsub(name, &blk)
+      params = blk.parameters.map(&:last).map(&:to_s)
+      @teal << name + ':'
+      str = blk.source.lines[1..-2].join("\n")
+      
+      params.each_with_index do |name, i|
+        @teal << "store #{201+i}"
+        str.gsub!(name, "load(#{201+i})")
+      end
 
-      blk.source.lines[1..-2].each do |line|
+      compile_string(str)
+
+      @teal << 'retsub'
+    end
+
+    def compile(&blk)    
+      @open_ifs = []
+      @teal << 'main:'
+      compile_string(blk.source.lines[1..-2].join("\n"))
+    end
+
+    def compile_string(str)
+      str.each_line do |line|
         line.strip!
         next if line.empty?
 
@@ -172,13 +222,15 @@ end
 
 include TEALrb
 
-vars = {
-  foo: -> { 75 + 76 },
-  bar: Int.new(77) + 78,
-  foobar: add(79, 710),
-}
+c = Compiler.new
 
-c = Compiler.new(vars)
+c.vars.foo = -> { 75 + 76 }
+c.vars.bar = Int.new(77) + 78
+c.vars.foobar = add(79, 710)
+
+c.defsub('increment_global') do |global_key, amount|
+  app_global_put(global_key, app_global_get(global_key) + amount)
+end
 
 c.compile do
   if 1+2
@@ -188,8 +240,6 @@ c.compile do
   else
     9+10
   end
-
-  vars.foorbar if app_global_get('some_key')
   vars.foo.call
 end
 
