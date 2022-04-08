@@ -100,7 +100,7 @@ module TEALrb
           end_if
         elsif line[/ if /]
           new_if(line[/(?<=if ).*/])
-          @teal += teal_eval(line[/.*(?= if)/])
+          @open_ifs.last.blocks.values.last << line[/.*(?= if)/]
           end_if
         elsif !@open_ifs.empty?
           @open_ifs.last.blocks.values.last << line
@@ -128,7 +128,9 @@ module TEALrb
 
       if else_block
         @teal << else_block.map {|str| teal_eval str}
-      end        
+      end
+      
+      @teal << "b if#{current_if.id}_end"
       
       current_if.blocks.values.each_with_index do |block, i|
         @teal << "if#{current_if.id}_#{i}:"
@@ -186,6 +188,8 @@ c.compile do
   else
     9+10
   end
+
+  vars[:foobar] if app_global_get('some_key')
 
 end
 
