@@ -159,6 +159,7 @@ module TEALrb
         end
       end
 
+      @teal = @teal.flatten.compact
       self
     end
 
@@ -222,25 +223,27 @@ end
 
 include TEALrb
 
-c = Compiler.new
+approval = Compiler.new
 
-c.vars.foo = -> { 75 + 76 }
-c.vars.bar = Int.new(77) + 78
-c.vars.foobar = add(79, 710)
-
-c.defsub('increment_global') do |global_key, amount|
+approval.defsub('increment_global') do |global_key, amount|
   app_global_put(global_key, app_global_get(global_key) + amount)
 end
 
-c.compile do
-  if 1+2
-    3+4
-  elsif 5+6
-    7+8
+approval.vars.foo = -> { 1 + 2 }
+approval.vars.bar = add(3, 4)
+
+approval.compile do
+  if vars.foo.call
+    vars.bar
+  elsif 5 + 6
+    7
+    8
+    add
   else
-    9+10
+    add 9, 10
   end
-  vars.foo.call
+
+  13 + 14 if app_global_get 'some_key'
 end
 
-puts c.teal
+puts approval.teal
