@@ -173,9 +173,9 @@ end
 include TEALrb
 
 vars = {
-  foo: -> { 5 + 6 },
-  bar: Int.new(7) + 8,
-  foobar: add(9, 10),
+  foo: -> { 75 + 76 },
+  bar: Int.new(77) + 78,
+  foobar: add(79, 710),
 }
 
 c = Compiler.new(vars)
@@ -190,7 +190,7 @@ c.compile do
   end
 
   vars[:foobar] if app_global_get('some_key')
-
+  vars[:foo].call
 end
 
 puts c.teal
