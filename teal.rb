@@ -55,11 +55,10 @@ module TEALrb
       @vars = vars
       @teal = []
       @if_count = 0
-      @if_level = 0
     end
 
     @@eval_location = "#{__FILE__}:#{__LINE__ + 2}"
-    def teal_eval(str, vars = {})
+    def teal_eval(str)
       eval("(#{str}).teal")
     end
 
@@ -71,14 +70,17 @@ module TEALrb
         if line[/^if /]
           new_if(line[/(?<=if ).*/])
         elsif line == 'else'
-          @teal = @teal.map! { |t| t == "bnz if#{@if_level}_end" ? "bz if#{@if_level}_else" : t }
-          @teal += ["b if#{@if_level}_end"]
-          @teal += ["if#{@if_level}_else:"]
+          @teal = @teal.map! { |t| t == "bnz if#{@if_count}_end" ? "bz if#{@if_count}_else" : t }
+          @teal += ["b if#{@if_count}_end"]
+          @teal += ["if#{@if_count}_else:"]
         elsif line == 'end'
-          @teal += ["if#{@if_level}_end:"]
-          @if_level -= 1
+          end_if
+        elsif line[/ if /]
+          new_if(line[/(?<=if ).*/])
+          @teal += teal_eval(line[/.*(?= if)/])
+          end_if
         else
-            @teal += teal_eval(line, vars)
+            @teal += teal_eval(line)
         end
       end
 
@@ -86,9 +88,14 @@ module TEALrb
     end
 
     def new_if(conditional)
-      @if_level +- 1
-      @teal += teal_eval(conditional, vars)
-      @teal += ["bnz if#{@if_level}_end"]
+      @if_count += 1
+      binding.pry
+      @teal += teal_eval(conditional)
+      @teal += ["bnz if#{@if_count}_end"]
+    end
+
+    def end_if
+      @teal += ["if#{@if_count}_end:"]
     end
   end
 end
@@ -135,7 +142,7 @@ c.compile do
   else
     5+6
   end
-  7+app_global_get('eight')
+  7+app_global_get('eight') if 565 + 454
 end
 
 puts c.teal
