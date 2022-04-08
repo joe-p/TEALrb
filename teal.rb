@@ -95,7 +95,7 @@ module TEALrb
         elsif line == 'else'
           @open_ifs.last.blocks['else'] = []
         elsif line[/^elsif/]
-          nil
+          @open_ifs.last.blocks[line[/(?<=elsif ).*/]] = []
         elsif line == 'end'
           end_if
         elsif line[/ if /]
@@ -130,11 +130,10 @@ module TEALrb
         @teal << else_block.map {|str| teal_eval str}
       end        
       
-      @teal << "b if#{current_if.id}_end"
-
       current_if.blocks.values.each_with_index do |block, i|
         @teal << "if#{current_if.id}_#{i}:"
         @teal += block.map { |str| teal_eval str }
+        @teal << "b if#{current_if.id}_end"
       end
 
       @teal << "if#{current_if.id}_end:"
@@ -182,8 +181,10 @@ c = Compiler.new(vars)
 c.compile do
   if 1+2
     3+4
+  elsif 5+6
+    7+8
   else
-    5+6
+    9+10
   end
 
 end
