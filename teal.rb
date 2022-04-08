@@ -56,6 +56,39 @@ module TEALrb
       @if_count = 0
     end
 
+    def compile(input)
+      seq = StringIO.new
+      seq.puts '['
+
+      ifs = [nil]
+      if_level = 0
+
+      input.each_line do |line|
+        line.strip!
+        next if line.empty?
+
+        if line[/^if /]
+          if_level += 1
+          ifs[if_level] = { condition: line[/(?<=if ).*/].strip, seq: StringIO.new }
+          ifs[if_level][:seq].puts '['
+        elsif line[/^end/]
+          ifs[if_level][:seq].print ']'
+          seq.puts "self.if(#{ifs[if_level][:condition]}) do\n#{ifs[if_level][:seq].string}\nend"
+        elsif ifs[if_level]
+          ifs[if_level][:seq].puts line + ','
+        else
+          seq.puts line + ','
+        end
+      end
+
+      seq.print ']'
+
+      binding.pry
+      @teal = eval(seq.string).map(&:teal).flatten.compact
+      self
+    end
+    @@compile_location = "#{__FILE__}:#{__LINE__ - 3}"
+
     @@sequence_location = "#{__FILE__}:#{__LINE__ + 2}"
     def sequence(&blk)
       @teal += blk.call.map(&:teal).flatten.compact
@@ -74,6 +107,8 @@ module TEALrb
       @teal += ["bnz if#{@id}_end"]
       @teal += blk.call.map(&:teal).flatten.compact
       @teal += ["if#{@id}_end:"]
+    rescue
+      binding.pry
     end
 
     def else(&blk)
@@ -86,7 +121,6 @@ module TEALrb
       @teal += ["if#{@id}_end:"]
       self
     end
-
   end
 end
 
@@ -102,7 +136,9 @@ class Integer
 
   def +(other)
     from_seq = caller[-2]&.include? TEALrb::Compiler.class_variable_get :@@sequence_location
-    if from_seq and !caller.join.include? 'pry'
+    from_compile = caller[-2]&.include? TEALrb::Compiler.class_variable_get :@@compile_location
+
+    if (from_seq or from_compile) and !caller.join.include? 'pry'
       TEALrb::Add.new self, other
     else
       og_add(other)
@@ -124,34 +160,34 @@ foo = -> { 5 + 6 }
 bar = Int.new(7) + 8
 foobar = add(9, 10)
 
-approval.sequence do 
+approval.sequence do
   [
     1,
     2,
-    add, 
+    add,
     3 + 4,
-    foo.call, 
-    bar, 
-    foobar, 
+    foo.call,
+    bar,
+    foobar,
     app_global_get
   ]
 end
 
 a2 = Compiler.new
 
-a2.sequence do 
+a2.sequence do
   [
     a.if(1 + 2) do
       [
-        3 + 4,
+        3 + 4
       ]
     end.else do
       [
-        5+6
+        5 + 6
       ]
     end,
-    5+6
+    5 + 6
   ]
 end
 
-puts a2.teal
+puts Compiler.new.compile(IO.read('source.rb')).teal
