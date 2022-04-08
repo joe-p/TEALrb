@@ -55,6 +55,7 @@ module TEALrb
       @vars = vars
       @teal = []
       @if_count = 0
+      @open_ifs = 0
     end
 
     @@eval_location = "#{__FILE__}:#{__LINE__ + 2}"
@@ -70,10 +71,13 @@ module TEALrb
         if line[/^if /]
           new_if(line[/(?<=if ).*/])
         elsif line == 'else'
-          @teal = @teal.map! { |t| t == "bnz if#{@if_count}_end" ? "bz if#{@if_count}_else" : t }
-          @teal += ["b if#{@if_count}_end"]
-          @teal += ["if#{@if_count}_else:"]
+          else_block
+        elsif line[/^elsif/]
+          end_if if @elsif            
+          @elsif = true
+          new_if(line[/(?<=elsif ).*/])
         elsif line == 'end'
+          end_if if @elsif            
           end_if
         elsif line[/ if /]
           new_if(line[/(?<=if ).*/])
@@ -89,13 +93,20 @@ module TEALrb
 
     def new_if(conditional)
       @if_count += 1
-      binding.pry
+      @open_ifs += 1
       @teal += teal_eval(conditional)
-      @teal += ["bnz if#{@if_count}_end"]
+      @teal += ["bz if#{@if_count}_end"]
     end
 
     def end_if
-      @teal += ["if#{@if_count}_end:"]
+      @teal += ["if#{@open_ifs}_end:"]
+      @open_ifs -= 1
+    end
+
+    def else_block
+      @teal = @teal.map! { |t| t == "bz if#{@if_count}_end" ? "bz if#{@if_count}_else" : t }
+      @teal += ["b if#{@if_count}_end"]
+      @teal += ["if#{@if_count}_else:"]
     end
   end
 end
@@ -139,10 +150,12 @@ c = Compiler.new(vars)
 c.compile do
   if 1+2
     3+4
+  elsif 5+6
+    7+8
   else
-    5+6
+    9+10
   end
-  7+app_global_get('eight') if 565 + 454
+
 end
 
 puts c.teal
