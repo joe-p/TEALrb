@@ -48,6 +48,16 @@ module TEALrb
     Add.new a, b
   end
 
+  class If
+    attr_accessor :blocks
+    attr_reader :id
+
+    def initialize(condition, id)
+      @blocks = {condition => []}
+      @id = id
+    end
+  end
+
   class Compiler
     attr_reader :teal, :vars
 
@@ -64,27 +74,38 @@ module TEALrb
     end
 
     def compile(&blk)
+      @open_ifs = []
+
       blk.source.lines[1..-2].each do |line|
         line.strip!
         next if line.empty?
 
+        # for if:
+        #   bnz if1
+        #   bnz if1_e1
+        #   bnz if1_e2
+        #   ... (this is the else block)
+        #   b if1_end
+        #   if1_e1:
+        #     ...
+        #     b if1_end
+        #   if1_end:
         if line[/^if /]
           new_if(line[/(?<=if ).*/])
         elsif line == 'else'
-          else_block
+          @open_ifs.last.blocks['else'] = []
         elsif line[/^elsif/]
-          end_if if @elsif            
-          @elsif = true
-          new_if(line[/(?<=elsif ).*/])
+          nil
         elsif line == 'end'
-          end_if if @elsif            
           end_if
         elsif line[/ if /]
           new_if(line[/(?<=if ).*/])
           @teal += teal_eval(line[/.*(?= if)/])
           end_if
+        elsif !@open_ifs.empty?
+          @open_ifs.last.blocks.values.last << line
         else
-            @teal += teal_eval(line)
+          @teal += teal_eval(line)
         end
       end
 
@@ -92,21 +113,32 @@ module TEALrb
     end
 
     def new_if(conditional)
+      @open_ifs << If.new(conditional, @if_count)
       @if_count += 1
-      @open_ifs += 1
-      @teal += teal_eval(conditional)
-      @teal += ["bz if#{@if_count}_end"]
     end
 
     def end_if
-      @teal += ["if#{@open_ifs}_end:"]
-      @open_ifs -= 1
-    end
+      current_if = @open_ifs.pop
+      else_block = current_if.blocks.delete 'else'
+      
+      current_if.blocks.keys.each_with_index do |cond, i|
+        @teal += teal_eval cond
+        @teal << "bnz if#{current_if.id}_#{i}"
+      end
 
-    def else_block
-      @teal = @teal.map! { |t| t == "bz if#{@if_count}_end" ? "bz if#{@if_count}_else" : t }
-      @teal += ["b if#{@if_count}_end"]
-      @teal += ["if#{@if_count}_else:"]
+      if else_block
+        @teal << else_block.map {|str| teal_eval str}
+      end        
+      
+      @teal << "b if#{current_if.id}_end"
+
+      current_if.blocks.values.each_with_index do |block, i|
+        @teal << "if#{current_if.id}_#{i}:"
+        @teal += block.map { |str| teal_eval str }
+      end
+
+      @teal << "if#{current_if.id}_end:"
+
     end
   end
 end
@@ -150,10 +182,8 @@ c = Compiler.new(vars)
 c.compile do
   if 1+2
     3+4
-  elsif 5+6
-    7+8
   else
-    9+10
+    5+6
   end
 
 end
