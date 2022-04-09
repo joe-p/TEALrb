@@ -30,7 +30,7 @@ approval = Compiler.new
 
 
 approval.def 'royalty_addr' do
-  approval.vars.royalty_addr = Txna.application_args(0)
+  Txna.application_args(0)
 end
 
 approval.def 'init' do 
