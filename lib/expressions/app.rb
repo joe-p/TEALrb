@@ -38,4 +38,18 @@ module TEALrb
   def app_global_put(key = nil, value = nil)
     AppGlobalPut.new(key, value)
   end
+
+  class Txn < Expression
+    def self.application_id
+      new 24
+    end
+
+    def initialize(field)
+      @teal = ["txn #{field}"]
+    end
+  end
+
+  def txn(field)
+    Txn.new(field)
+  end
 end

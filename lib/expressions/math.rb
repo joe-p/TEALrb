@@ -78,4 +78,14 @@ module TEALrb
   def greater_eq(a = nil, b = nil)
     GreaterThanOrEqual.new a, b
   end
+
+  class Equals < Expression
+    def initialize(a, b)
+      @teal = [a.teal, b.teal, '==']
+    end
+  end
+
+  def equals(a = nil, b = nil)
+    Equals.new a, b
+  end
 end

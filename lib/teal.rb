@@ -1,4 +1,5 @@
 require 'method_source'
+require_relative 'constants'
 require_relative 'compiler'
 require_relative 'expressions'
 require_relative 'patches'
