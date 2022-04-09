@@ -131,19 +131,32 @@ class Integer
     TEALrb::Int.new(self).teal
   end
 
-  alias og_add +
-  alias og_subtract -
-  alias og_less <
-  alias og_more >
+  alias original_add +
+  alias original_subtract -
+  alias original_less <
+  alias original_greater >
+  alias original_less_eq <=
+  alias original_greater_eq >=
 
-  def +(other)
-    from_eval = caller.join.include? TEALrb::Compiler.class_variable_get :@@eval_location
-    from_pry = caller.join.include? 'pry'
+  ORIGINAL_METHODS = {
+    '+': :original_add,
+    '-': :original_subtract,
+    '<': :original_less,
+    '>': :original_greater,
+    '<=': :original_less_eq,
+    '>=': :original_greater_eq
+  }
 
-    if from_eval and !from_pry
-      TEALrb::Add.new self, other
-    else
-      og_add(other)
+  ORIGINAL_METHODS.keys do
+    self.class.define_method -> (other) do
+      from_eval = caller.join.include? TEALrb::Compiler.class_variable_get :@@eval_location
+      from_pry = caller.join.include? 'pry'
+  
+      if from_eval and !from_pry
+        TEALrb::Add.new self, other
+      else
+        self.send ORIGINAL_METHODS[__method__], other
+      end
     end
   end
 end

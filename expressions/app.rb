@@ -1,12 +1,12 @@
 module TEALrb
     class AppOptedIn < Expression
         def initialize(account = nil, app = nil)
-          @teal = [account.teal, app.teal 'app_opted_in']
+          @teal = [account.teal, app.teal, 'app_opted_in']
         end
       end
     
       def app_opted_in(account = nil, app = nil)
-        AppOptedIn.new((account, app)
+        AppOptedIn.new(account, app)
       end
 
       class AppLocalGet < Expression
