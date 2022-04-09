@@ -15,6 +15,10 @@ module TEALrb
       eval(str).teal
     end
 
+    def def(name, &blk)
+      define_singleton_method(name, blk)
+    end
+
     def defsub(name, &blk)
       params = blk.parameters.map(&:last).map(&:to_s)
       @teal << name + ':'

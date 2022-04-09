@@ -31,7 +31,7 @@ module TEALrb
 
   class AppGlobalPut < Expression
     def initialize(key, value)
-      @teal = [value.teal, key.teal, 'app_global_put']
+      @teal = [key.teal, value.teal, 'app_global_put']
     end
   end
 
@@ -41,7 +41,7 @@ module TEALrb
 
   class Txn < Expression
     def self.application_id
-      new 24
+      new 'ApplicationID'
     end
 
     def initialize(field)
@@ -51,5 +51,19 @@ module TEALrb
 
   def txn(field)
     Txn.new(field)
+  end
+
+  class Txna < Expression
+    def self.application_args(index)
+      new 'ApplicationArgs', index
+    end
+
+    def initialize(field, index)
+      @teal = ["txna #{field} #{index}"]
+    end
+  end
+
+  def txna(field)
+    Txna.new(field)
   end
 end
