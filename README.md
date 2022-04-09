@@ -90,8 +90,8 @@
 | `extract_uint32` | `TODO` |
 | `extract_uint64` | `TODO` |
 | `balance` | `TODO` |
-| `app_opted_in` | `TODO` |
-| `app_local_get` | `TODO` |
+| `app_opted_in` | `app_opted_in(account, app)` |
+| `app_local_get` | `app_local_get(account, key)` |
 | `app_local_get_ex` | `TODO` |
 | `app_global_get` | `TODO` |
 | `app_global_get_ex` | `TODO` |
