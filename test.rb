@@ -1,4 +1,6 @@
 require_relative 'lib/teal'
+require 'pry'
+
 include TEALrb
 
 approval = Compiler.new
