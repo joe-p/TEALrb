@@ -14,7 +14,7 @@ module TEALrb
     attr_reader :id
 
     def initialize(condition, id)
-      @blocks = {condition => []}
+      @blocks = { condition => [] }
       @id = id
     end
   end
@@ -39,10 +39,10 @@ module TEALrb
       params = blk.parameters.map(&:last).map(&:to_s)
       @teal << name + ':'
       str = blk.source.lines[1..-2].join("\n")
-      
+
       params.each_with_index do |name, i|
-        @teal << "store #{201+i}"
-        str.gsub!(name, "load(#{201+i})")
+        @teal << "store #{201 + i}"
+        str.gsub!(name, "load(#{201 + i})")
       end
 
       compile_string(str)
@@ -50,7 +50,7 @@ module TEALrb
       @teal << 'retsub'
     end
 
-    def compile(&blk)    
+    def compile(&blk)
       @open_ifs = []
       @teal << 'main:'
       compile_string(blk.source.lines[1..-2].join("\n"))
@@ -102,18 +102,16 @@ module TEALrb
     def end_if
       current_if = @open_ifs.pop
       else_block = current_if.blocks.delete 'else'
-      
+
       current_if.blocks.keys.each_with_index do |cond, i|
         @teal += teal_eval cond
         @teal << "bnz if#{current_if.id}_#{i}"
       end
 
-      if else_block
-        @teal << else_block.map {|str| teal_eval str}
-      end
-      
+      @teal << else_block.map { |str| teal_eval str } if else_block
+
       @teal << "b if#{current_if.id}_end"
-      
+
       current_if.blocks.values.each_with_index do |block, i|
         @teal << "if#{current_if.id}_#{i}:"
         @teal += block.map { |str| teal_eval str }
@@ -121,7 +119,6 @@ module TEALrb
       end
 
       @teal << "if#{current_if.id}_end:"
-
     end
   end
 
@@ -129,7 +126,7 @@ module TEALrb
     def teal
       TEALrb::Int.new(self).teal
     end
-  
+
     TEAL_CLASSES = {
       '+': TEALrb::Add,
       '-': TEALrb::Subtract,
@@ -139,12 +136,12 @@ module TEALrb
       '>=': TEALrb::GreaterThanOrEqual,
       '/': TEALrb::Divide
     }
-  
+
     TEAL_CLASSES.each do |meth, klass|
       define_method(meth) do |other|
         from_eval = caller.join.include? TEALrb::Compiler.class_variable_get :@@eval_location
         from_pry = caller.join.include? 'pry'
-  
+
         if from_eval and !from_pry
           klass.new self, other
         else
@@ -158,7 +155,6 @@ end
 class Integer
   prepend TEALrb::IntegerMethods
 end
-
 
 class String
   prepend TEALrb::StringMethods
