@@ -6,10 +6,9 @@ module TEALrb
 
     TEALrb::METHOD_CLASS_HASH.each do |meth, klass|
       define_method(meth) do |other|
-        from_eval = caller.join.include? TEALrb::Compiler.class_variable_get :@@eval_location
-        from_pry = caller.join.include? 'pry'
+        from_eval = caller[0].include? "(eval):1:in `teal_eval'"
 
-        if from_eval and !from_pry
+        if from_eval
           TEALrb.const_get(klass).new self, other
         else
           super(other)

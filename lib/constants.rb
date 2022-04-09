@@ -6,6 +6,7 @@ module TEALrb
         '>': 'GreaterThan',
         '<=': 'LessThanOrEqual',
         '>=': 'GreaterThanOrEqual',
-        '/': 'Divide'
+        '/': 'Divide',
+        '==': 'Equals'
     }
 end

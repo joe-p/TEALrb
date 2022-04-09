@@ -12,7 +12,7 @@ module TEALrb
 
     @@eval_location = "#{__FILE__}:#{__LINE__ + 2}"
     def teal_eval(str)
-      eval("(#{str}).teal")
+      eval(str).teal
     end
 
     def defsub(name, &blk)
