@@ -51,7 +51,7 @@ module TEALrb
 
   class GreaterThan < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '<']
+      @teal = [a.teal, b.teal, '>']
     end
   end
 
@@ -61,7 +61,7 @@ module TEALrb
 
   class LessThanOrEqual < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '<']
+      @teal = [a.teal, b.teal, '<=']
     end
   end
 
@@ -71,7 +71,7 @@ module TEALrb
 
   class GreaterThanOrEqual < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '<']
+      @teal = [a.teal, b.teal, '>=']
     end
   end
 
