@@ -22,6 +22,7 @@ approval.compile do
   end
 
   13 + 14 if app_global_get 'some_key'
+  5 / 1
 end
 
 puts approval.teal

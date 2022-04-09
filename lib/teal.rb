@@ -144,18 +144,29 @@ class Integer
     '<': :original_less,
     '>': :original_greater,
     '<=': :original_less_eq,
-    '>=': :original_greater_eq
+    '>=': :original_greater_eq,
+    '/': :original_divide
   }
 
-  ORIGINAL_METHODS.keys do
-    self.class.define_method -> (other) do
+  TEAL_CLASSES = {
+    '+': TEALrb::Add,
+    '-': TEALrb::Subtract,
+    '<': TEALrb::LessThan,
+    '>': TEALrb::GreaterThan,
+    '<=': TEALrb::LessThanOrEqual,
+    '>=': TEALrb::GreaterThanOrEqual,
+    '/': TEALrb::Divide
+  }
+
+  ORIGINAL_METHODS.keys.each do |meth|
+    define_method(meth) do |other|
       from_eval = caller.join.include? TEALrb::Compiler.class_variable_get :@@eval_location
       from_pry = caller.join.include? 'pry'
-  
+
       if from_eval and !from_pry
-        TEALrb::Add.new self, other
+        TEAL_CLASSES[meth].new self, other
       else
-        self.send ORIGINAL_METHODS[__method__], other
+        self.send ORIGINAL_METHODS[meth], other
       end
     end
   end
