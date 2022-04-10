@@ -22,8 +22,18 @@ module TEALrb
       define_singleton_method(name, blk)
     end
 
-    def defsub(name, &blk)
+    def subroutine(name, &blk)
       params = blk.parameters.map(&:last).map(&:to_s)
+      vars.sub_name = name
+
+      define_singleton_method(name) do |*args|
+        vars.sub_args = args
+
+        compile do 
+          callsub(sub_name, *sub_args)
+        end
+      end
+
       @teal << name + ':'
       str = blk.source.lines[1..-2].join("\n")
 
@@ -37,9 +47,13 @@ module TEALrb
       @teal << 'retsub'
     end
 
+    def main(str = nil, &blk)
+      @teal << 'main:'
+      compile(str, &blk)
+    end
+
     def compile(str = nil, &blk)
       @open_ifs ||= []
-      @teal << 'main:' unless @teal.include? 'main:'
       
       if str 
         compile_string(str)
@@ -66,6 +80,7 @@ module TEALrb
       str.each_line do |line|
         line.strip!
         next if line.empty?
+        next if line[/^#/]
 
         # for if:
         #   bnz if1
@@ -92,7 +107,7 @@ module TEALrb
         elsif !@open_ifs.empty?
           @open_ifs.last.blocks.values.last << line
         else
-          @teal += teal_eval(line)
+          @teal << teal_eval(line)
         end
       end
 
@@ -110,7 +125,7 @@ module TEALrb
       else_block = current_if.blocks.delete 'else'
 
       current_if.blocks.keys.each_with_index do |cond, i|
-        @teal += teal_eval cond
+        @teal << teal_eval(cond)
         @teal << "bnz if#{current_if.id}_#{i}"
       end
 

@@ -67,4 +67,14 @@ module TEALrb
     Not.new
   end
 
+  class Callsub < Expression
+    def initialize(name, *args)
+      @teal = [args.map(&:teal), "callsub #{name}"].flatten
+    end
+  end
+
+  def callsub(name, *args)
+    Callsub.new(name, *args)
+  end
+
 end
