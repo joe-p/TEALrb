@@ -1,5 +1,7 @@
 module TEALrb
   class TEAL
+    @@subroutines = []
+
     attr_reader :teal
 
     def initialize(version: 5)
@@ -21,9 +23,8 @@ module TEALrb
       raise e
     end
 
-    def self.subroutine(*methods)
-      @@subroutines ||= []
-      @@subroutines += methods
+    def self.subroutine(method)
+      @@subroutines << method
     end
 
     def define_subroutine(name, &blk)
@@ -141,6 +142,7 @@ module TEALrb
     end
 
     def compile_source
+      @teal << 'main:'
       compile_block(&method(:source))
     end
   end
