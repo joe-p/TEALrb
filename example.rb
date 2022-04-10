@@ -85,6 +85,8 @@ approval.def 'bid' do
   end
 end
 
+approval.vars.fee = 1000
+
 approval.def 'pay' do |receiever, amount|
   vars.receiever = receiever
   vars.amount = amount
@@ -93,7 +95,7 @@ approval.def 'pay' do |receiever, amount|
     itxn_begin
     itxn_field 'TypeEnum', 1
     itxn_field 'Receiver', receiever
-    itxn_field 'Amount', amount
+    itxn_field 'Amount', amount - fee
     itxn_submit
   end
 end

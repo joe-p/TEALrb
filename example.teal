@@ -197,6 +197,8 @@ app_global_get
 itxn_field Receiver
 byte "Highest Bid"
 app_global_get
+int 1000
+-
 itxn_field Amount
 itxn_submit
 b if10_end
