@@ -11,7 +11,7 @@ approval.def 'init' do
   vars.metadata = Txna.application_args(2)
   vars.tx_methods = btoi Txna.application_args(3)
 
-  compile_block do
+  compile do
     app_global_put('Royalty Address', royalty_address)
     app_global_put('Owner', Txn.sender)
     app_global_put('Highest Bidder', '')
@@ -32,7 +32,7 @@ approval.def 'start_auction' do
   vars.starting_price = btoi(Txna.application_args(1))
   vars.duration = btoi(Txna.application_args(2))
 
-  compile_block do
+  compile do
     err if !(app_global_get('TX Methods') & 4)
     err if !(payment.receiver == Global.current_application_address)
     err if !(payment.amount == 100000)

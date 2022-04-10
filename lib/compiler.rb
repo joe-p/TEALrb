@@ -32,15 +32,20 @@ module TEALrb
         str.gsub!(name, "load(#{201 + i})")
       end
 
-      compile_string(str)
+      compile(str)
 
       @teal << 'retsub'
     end
 
-    def compile(&blk)
-      @open_ifs = []
-      @teal << 'main:'
-      compile_block(&blk)
+    def compile(str = nil, &blk)
+      @open_ifs ||= []
+      @teal << 'main:' unless @teal.include? 'main:'
+      
+      if str 
+        compile_string(str)
+      else
+        compile_block(&blk)
+      end
     end
 
     def compile_block(&blk)
