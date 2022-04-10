@@ -1,7 +1,6 @@
 module TEALrb
-  class Compiler
+  class TEAL
     attr_reader :teal
-    attr_accessor :vars, :subs
 
     def initialize(version: 5)
       @vars = OpenStruct.new
@@ -9,6 +8,10 @@ module TEALrb
       @teal = ["#pragma version #{@version}", 'b main']
       @if_count = 0
       @open_ifs = []
+
+      @@subroutines.each do |sub|
+        define_singleton_method(sub, &method(sub))
+      end
     end
 
     def teal_eval(str)
@@ -18,19 +21,20 @@ module TEALrb
       raise e
     end
 
-    def def(name, &blk)
-      define_singleton_method(name, blk)
+    def self.subroutine(*methods)
+      @@subroutines ||= []
+      @@subroutines += methods
     end
 
-    def subroutine(name, &blk)
+    def define_subroutine(name, &blk)
       params = blk.parameters.map(&:last).map(&:to_s)
-      vars.sub_name = name
+      @sub_name = name
 
-      define_singleton_method(name) do |*args|
-        vars.sub_args = args
+      define_method(name) do |*args|
+        @sub_args = args
 
         compile do 
-          callsub(sub_name, *sub_args)
+          callsub(@sub_name, *@sub_args)
         end
       end
 
@@ -66,17 +70,7 @@ module TEALrb
       compile_string(blk.source.lines[1..-2].join("\n"))
     end
 
-    def define_vars
-      vars.to_h.each do |name, value|
-        self.def name do
-          value
-        end
-      end
-    end
-
     def compile_string(str)
-      define_vars
-
       str.each_line do |line|
         line.strip!
         next if line.empty?
@@ -140,6 +134,14 @@ module TEALrb
       end
 
       @teal << "if#{current_if.id}_end:"
+    end
+
+    def source
+      err
+    end
+
+    def compile_source
+      compile_block(&method(:source))
     end
   end
 end

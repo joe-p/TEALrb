@@ -3,17 +3,19 @@ require 'pry'
 
 include TEALrb
 
-approval = Compiler.new
+class Approval < TEAL
+  subroutine def increment_global(global_key, amount)
+    app_global_put(global_key, app_global_get(global_key) + amount)
+  end
 
-approval.subroutine('increment_global') do |global_key, amount|
-  app_global_put(global_key, app_global_get(global_key) + amount)
+  def source
+    app_global_put('test', 0)
+    increment_global('test', 1)
+    increment_global('test', 1)
+    increment_global('test', 1)
+  end
 end
 
-approval.main do
-  app_global_put('test', 0)
-  increment_global('test', 1)
-  increment_global('test', 1)
-  increment_global('test', 1)
-end
-
+approval = Approval.new
+approval.compile_source
 puts approval.teal
