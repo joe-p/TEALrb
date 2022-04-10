@@ -44,7 +44,7 @@ approval.def 'start_auction' do
 end
 
 approval.def 'start_sale' do 
-  vars.price = btoi Txna.application_args(0)
+  vars.price = btoi Txna.application_args(1)
 
   compile do
     err if !(app_global_get('TX Methods') & 2)
