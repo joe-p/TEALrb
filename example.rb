@@ -7,9 +7,9 @@ approval = Compiler.new
 
 approval.def 'init' do 
   vars.royalty_address = Txna.application_args(0)
-  vars.royalty_percent = btoi(Txna.application_args(1))
+  vars.royalty_percent = btoi Txna.application_args(1)
   vars.metadata = Txna.application_args(2)
-  vars.tx_methods = btoi(Txna.application_args(3))
+  vars.tx_methods = btoi Txna.application_args(3)
 
   compile_block do
     app_global_put('Royalty Address', royalty_address)
