@@ -9,7 +9,8 @@ module TEALrb
         '/': 'Divide',
         '==': 'Equals',
         '&': 'BitwiseAnd',
-        '!=': 'NotEquals'
+        '!=': 'NotEquals',
+        '*': 'Multiply',
     }
 
     UNARY_METHODS = {

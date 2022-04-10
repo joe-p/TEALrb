@@ -100,6 +100,24 @@ class Approval < TEAL
     end
   end
 
+  def end_auction
+    @highest_bid = app_global_get 'Highest Bid'
+    @royalty_percent = app_global_get 'Royalty Percent'
+    @royalty_amount = @highest_bid * @royalty_percent / 100
+    @royalty_address = app_global_get 'Royalty Address'
+    @owner = app_global_get 'Owner'
+
+    compile do
+      err if !(Global.latest_timestamp > app_global_get('Auction End'))
+      pay(@royalty_address, @royalty_amount)
+      pay(@owner, @highest_bid - @royalty_amount)
+      app_global_put('Auction End', 0)
+      app_global_put('Owner', app_global_get('Highest Bidder'))
+      app_global_put('Highest Bidder', '')
+      approve
+    end
+  end
+
   def source
     if Txn.application_id == 0
       init
@@ -111,6 +129,8 @@ class Approval < TEAL
       end_sale
     elsif Txna.application_args(0) == 'bid'
       bid
+    elsif Txna.application_args(0) == 'end_auction'
+      end_auction
     else
       err
     end
@@ -120,3 +140,4 @@ end
 approval = Approval.new
 approval.compile_source
 puts approval.teal
+IO.write('example.teal', approval.teal.join("\n") )

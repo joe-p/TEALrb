@@ -21,6 +21,10 @@ txna ApplicationArgs 0
 byte "bid"
 ==
 bnz if0_4
+txna ApplicationArgs 0
+byte "end_auction"
+==
+bnz if0_5
 err
 b if0_end
 if0_0:
@@ -208,6 +212,68 @@ gtxn 1 Amount
 app_global_put
 byte "Highest Bidder"
 gtxn 1 Sender
+app_global_put
+int 1
+return
+b if0_end
+if0_5:
+global LatestTimestamp
+byte "Auction End"
+app_global_get
+>
+!
+bnz if11_0
+b if11_end
+if11_0:
+err
+b if11_end
+if11_end:
+itxn_begin
+int 1
+itxn_field TypeEnum
+byte "Royalty Address"
+app_global_get
+itxn_field Receiver
+byte "Highest Bid"
+app_global_get
+byte "Royalty Percent"
+app_global_get
+*
+int 100
+/
+int 1000
+-
+itxn_field Amount
+itxn_submit
+itxn_begin
+int 1
+itxn_field TypeEnum
+byte "Owner"
+app_global_get
+itxn_field Receiver
+byte "Highest Bid"
+app_global_get
+byte "Highest Bid"
+app_global_get
+byte "Royalty Percent"
+app_global_get
+*
+int 100
+/
+-
+int 1000
+-
+itxn_field Amount
+itxn_submit
+byte "Auction End"
+int 0
+app_global_put
+byte "Owner"
+byte "Highest Bidder"
+app_global_get
+app_global_put
+byte "Highest Bidder"
+byte ""
 app_global_put
 int 1
 return

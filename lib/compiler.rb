@@ -1,5 +1,6 @@
 module TEALrb
   class TEAL
+    include TEALrb
     @@subroutines = []
 
     attr_reader :teal
