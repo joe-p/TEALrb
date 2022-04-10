@@ -1,0 +1,213 @@
+#pragma version 5
+b main
+main:
+txn ApplicationID
+int 0
+==
+bnz if0_0
+txna ApplicationArgs 0
+byte "start_auction"
+==
+bnz if0_1
+txna ApplicationArgs 0
+byte "start_sale"
+==
+bnz if0_2
+txna ApplicationArgs 0
+byte "end_sale"
+==
+bnz if0_3
+txna ApplicationArgs 0
+byte "bid"
+==
+bnz if0_4
+err
+b if0_end
+if0_0:
+byte "Royalty Address"
+txna ApplicationArgs 0
+app_global_put
+byte "Owner"
+txn Sender
+app_global_put
+byte "Highest Bidder"
+byte ""
+app_global_put
+byte "Metadata"
+txna ApplicationArgs 2
+app_global_put
+byte "Royalty Percent"
+txna ApplicationArgs 1
+btoi
+app_global_put
+byte "Auction End"
+int 0
+app_global_put
+byte "TX Methods"
+txna ApplicationArgs 3
+btoi
+app_global_put
+byte "Sale Price"
+int 0
+app_global_put
+byte "Highest Bid"
+int 0
+app_global_put
+int 1
+return
+b if0_end
+if0_1:
+byte "TX Methods"
+app_global_get
+int 4
+&
+!
+bnz if1_0
+b if1_end
+if1_0:
+err
+b if1_end
+if1_end:
+gtxn 1 Receiver
+global CurrentApplicationAddress
+==
+!
+bnz if2_0
+b if2_end
+if2_0:
+err
+b if2_end
+if2_end:
+gtxn 1 Amount
+int 100000
+==
+!
+bnz if3_0
+b if3_end
+if3_0:
+err
+b if3_end
+if3_end:
+byte "Auction End"
+global LatestTimestamp
+txna ApplicationArgs 2
+btoi
++
+app_global_put
+byte "Highest Bid"
+txna ApplicationArgs 1
+btoi
+app_global_put
+int 1
+return
+b if0_end
+if0_2:
+byte "TX Methods"
+app_global_get
+int 2
+&
+!
+bnz if4_0
+b if4_end
+if4_0:
+err
+b if4_end
+if4_end:
+txn Sender
+byte "Owner"
+app_global_get
+==
+!
+bnz if5_0
+b if5_end
+if5_0:
+err
+b if5_end
+if5_end:
+byte "Sale Price"
+txna ApplicationArgs 1
+btoi
+app_global_put
+int 1
+return
+b if0_end
+if0_3:
+txn Sender
+byte "Owner"
+app_global_get
+==
+!
+bnz if6_0
+b if6_end
+if6_0:
+err
+b if6_end
+if6_end:
+byte "Sale Price"
+int 0
+app_global_put
+int 1
+return
+b if0_end
+if0_4:
+global LatestTimestamp
+byte "Auction End"
+app_global_get
+<
+!
+bnz if7_0
+b if7_end
+if7_0:
+err
+b if7_end
+if7_end:
+gtxn 1 Amount
+byte "Highest Bid"
+app_global_get
+>
+!
+bnz if8_0
+b if8_end
+if8_0:
+err
+b if8_end
+if8_end:
+gtxn 0 Sender
+gtxn 1 Sender
+==
+!
+bnz if9_0
+b if9_end
+if9_0:
+err
+b if9_end
+if9_end:
+byte "Highest Bidder"
+app_global_get
+byte ""
+!=
+bnz if10_0
+b if10_end
+if10_0:
+itxn_begin
+int 1
+itxn_field TypeEnum
+byte "Highest Bidder"
+app_global_get
+itxn_field Receiver
+byte "Highest Bid"
+app_global_get
+itxn_field Amount
+itxn_submit
+b if10_end
+if10_end:
+byte "Highest Bid"
+gtxn 1 Amount
+app_global_put
+byte "Highest Bidder"
+gtxn 1 Sender
+app_global_put
+int 1
+return
+b if0_end
+if0_end:

@@ -89,6 +89,16 @@ module TEALrb
     Equals.new a, b
   end
 
+  class NotEquals < Expression
+    def initialize(a, b)
+      @teal = [a.teal, b.teal, '!=']
+    end
+  end
+
+  def not_equals(a = nil, b = nil)
+    NotEquals.new a, b
+  end
+
   class BitwiseAnd < Expression
     def initialize(a, b)
       @teal = [a.teal, b.teal, '&']

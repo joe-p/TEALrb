@@ -138,4 +138,35 @@ module TEALrb
   def global(field)
     Global.new(field)
   end
+
+  class ItxnBegin < Expression
+    def initialize
+      @teal = ['itxn_begin']
+    end
+  end
+
+  def itxn_begin
+    ItxnBegin.new
+  end
+
+  class ItxnField < Expression
+    def initialize(field, value = nil)
+      @teal = [value.teal, "itxn_field #{field}"]
+    end
+  end
+
+  def itxn_field(field, value = nil)
+    ItxnField.new field, value
+  end
+
+  class ItxnSubmit < Expression
+    def initialize
+      @teal = ['itxn_submit']
+    end
+  end
+
+  def itxn_submit
+    ItxnSubmit.new 
+  end
+  
 end

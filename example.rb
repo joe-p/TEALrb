@@ -64,7 +64,41 @@ approval.def 'end_sale' do
   end
 end
 
-approval.compile do
+approval.def 'bid' do
+  vars.payment = Gtxn[1]
+  vars.app_call = Gtxn[0]
+  vars.highest_bidder = app_global_get('Highest Bidder')
+  vars.highest_bid = app_global_get('Highest Bid')
+
+  compile do
+    err if !(Global.latest_timestamp < app_global_get('Auction End'))
+    err if !(payment.amount > highest_bid)
+    err if !(app_call.sender == payment.sender)
+
+    if highest_bidder != ''
+      pay(highest_bidder, highest_bid)
+    end
+
+    app_global_put('Highest Bid', payment.amount)
+    app_global_put('Highest Bidder', payment.sender)
+    approve
+  end
+end
+
+approval.def 'pay' do |receiever, amount|
+  vars.receiever = receiever
+  vars.amount = amount
+
+  compile do
+    itxn_begin
+    itxn_field 'TypeEnum', 1
+    itxn_field 'Receiver', receiever
+    itxn_field 'Amount', amount
+    itxn_submit
+  end
+end
+
+approval.main do
   if Txn.application_id == 0
     init
   elsif Txna.application_args(0) == 'start_auction'
@@ -73,6 +107,8 @@ approval.compile do
     start_sale
   elsif Txna.application_args(0) == 'end_sale'
     end_sale
+  elsif Txna.application_args(0) == 'bid'
+    bid
   else
     err
   end
