@@ -44,6 +44,10 @@ module TEALrb
       new 'ApplicationID'
     end
 
+    def self.sender
+      new 'Sender'
+    end
+
     def initialize(field)
       @teal = ["txn #{field}"]
     end

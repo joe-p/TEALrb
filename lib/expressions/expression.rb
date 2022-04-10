@@ -20,4 +20,26 @@ module TEALrb
       @teal = ["bytes \"#{string}\""]
     end
   end
+
+  class Btoi < Expression
+    def initialize(bytes = nil)
+      @teal = [bytes.teal, 'btoi']
+    end
+  end
+
+  def btoi(bytes = nil)
+    Btoi.new bytes
+  end
+
+  class Approve < Expression
+    def initialize
+      @teal = [1.teal, 'return']
+    end
+  end
+
+  def approve()
+    Approve.new
+  end
+
+
 end

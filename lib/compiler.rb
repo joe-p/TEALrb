@@ -10,7 +10,6 @@ module TEALrb
       @open_ifs = []
     end
 
-    @@eval_location = "#{__FILE__}:#{__LINE__ + 2}"
     def teal_eval(str)
       eval(str).teal
     end
@@ -37,10 +36,24 @@ module TEALrb
     def compile(&blk)
       @open_ifs = []
       @teal << 'main:'
+      compile_block(&blk)
+    end
+
+    def compile_block(&blk)
       compile_string(blk.source.lines[1..-2].join("\n"))
     end
 
+    def define_vars
+      vars.to_h.each do |name, value|
+        self.def name do
+          value
+        end
+      end
+    end
+
     def compile_string(str)
+      define_vars
+
       str.each_line do |line|
         line.strip!
         next if line.empty?
