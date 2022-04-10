@@ -43,11 +43,36 @@ approval.def 'start_auction' do
   end
 end
 
+approval.def 'start_sale' do 
+  vars.price = btoi Txna.application_args(0)
+
+  compile do
+    err if !(app_global_get('TX Methods') & 2)
+    err if !(Txn.sender == app_global_get('Owner'))
+    app_global_put('Sale Price', price)
+    approve
+  end
+end
+
+approval.def 'end_sale' do 
+  vars.price = btoi Txna.application_args(0)
+
+  compile do
+    err if !(Txn.sender == app_global_get('Owner'))
+    app_global_put('Sale Price', 0)
+    approve
+  end
+end
+
 approval.compile do
   if Txn.application_id == 0
     init
   elsif Txna.application_args(0) == 'start_auction'
     start_auction
+  elsif Txna.application_args(0) == 'start_sale'
+    start_sale
+  elsif Txna.application_args(0) == 'end_sale'
+    end_sale
   else
     err
   end
