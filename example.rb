@@ -118,6 +118,44 @@ class Approval < TEAL
     end
   end
 
+  def transfer
+    @receiver = Txna.application_args(1)
+
+    compile do
+      err if !(app_global_get('TX Methods') & 1)
+      err if !(Txn.sender == app_global_get('Owner'))
+      app_global_put('Owner', @receiver)
+      approve
+    end
+  end
+
+  def buy
+    @royalty_payment = Gtxn[2]
+    @payment = Gtxn[1]
+    @royalty_amount = app_global_get('Sale Price') * app_global_get('Royalty Percent') / 100
+    @purchase_amount = app_global_get('Sale Price') - @royalty_amount
+
+    compile do
+      err if !(app_global_get('Sale Price') > 0)
+
+        # Verify senders are all the same
+        err if !(@royalty_payment.sender == @payment.sender)
+        err if !(Txn.sender == @payment.sender)
+
+        # Verify receivers are correct
+        err if !(@royalty_payment.receiver == app_global_get('Royalty Address'))
+        err if !(@payment.receiver == app_global_get('Owner'))
+
+        # Verify amounts are correct
+        err if !(@royalty_payment.amount == @royalty_amount)
+        err if !(@payment.amount == @purchase_amount)
+
+        app_global_put('Owner', Txn.sender)
+        app_global_put('Sale Price', 0)
+        approve
+    end
+  end
+
   def source
     if Txn.application_id == 0
       init
@@ -131,6 +169,10 @@ class Approval < TEAL
       bid
     elsif Txna.application_args(0) == 'end_auction'
       end_auction
+    elsif Txna.application_args(0) == 'transfer'
+      transfer
+    elsif Txna.application_args(0) == 'buy'
+      buy
     else
       err
     end

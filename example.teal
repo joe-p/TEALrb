@@ -25,6 +25,14 @@ txna ApplicationArgs 0
 byte "end_auction"
 ==
 bnz if0_5
+txna ApplicationArgs 0
+byte "transfer"
+==
+bnz if0_6
+txna ApplicationArgs 0
+byte "buy"
+==
+bnz if0_7
 err
 b if0_end
 if0_0:
@@ -274,6 +282,133 @@ app_global_get
 app_global_put
 byte "Highest Bidder"
 byte ""
+app_global_put
+int 1
+return
+b if0_end
+if0_6:
+byte "TX Methods"
+app_global_get
+int 1
+&
+!
+bnz if12_0
+b if12_end
+if12_0:
+err
+b if12_end
+if12_end:
+txn Sender
+byte "Owner"
+app_global_get
+==
+!
+bnz if13_0
+b if13_end
+if13_0:
+err
+b if13_end
+if13_end:
+byte "Owner"
+txna ApplicationArgs 1
+app_global_put
+int 1
+return
+b if0_end
+if0_7:
+byte "Sale Price"
+app_global_get
+int 0
+>
+!
+bnz if14_0
+b if14_end
+if14_0:
+err
+b if14_end
+if14_end:
+gtxn 2 Sender
+gtxn 1 Sender
+==
+!
+bnz if15_0
+b if15_end
+if15_0:
+err
+b if15_end
+if15_end:
+txn Sender
+gtxn 1 Sender
+==
+!
+bnz if16_0
+b if16_end
+if16_0:
+err
+b if16_end
+if16_end:
+gtxn 2 Receiver
+byte "Royalty Address"
+app_global_get
+==
+!
+bnz if17_0
+b if17_end
+if17_0:
+err
+b if17_end
+if17_end:
+gtxn 1 Receiver
+byte "Owner"
+app_global_get
+==
+!
+bnz if18_0
+b if18_end
+if18_0:
+err
+b if18_end
+if18_end:
+gtxn 2 Amount
+byte "Sale Price"
+app_global_get
+byte "Royalty Percent"
+app_global_get
+*
+int 100
+/
+==
+!
+bnz if19_0
+b if19_end
+if19_0:
+err
+b if19_end
+if19_end:
+gtxn 1 Amount
+byte "Sale Price"
+app_global_get
+byte "Sale Price"
+app_global_get
+byte "Royalty Percent"
+app_global_get
+*
+int 100
+/
+-
+==
+!
+bnz if20_0
+b if20_end
+if20_0:
+err
+b if20_end
+if20_end:
+byte "Owner"
+txn Sender
+app_global_put
+byte "Sale Price"
+int 0
 app_global_put
 int 1
 return
