@@ -88,4 +88,14 @@ module TEALrb
   def equals(a = nil, b = nil)
     Equals.new a, b
   end
+
+  class BitwiseAnd < Expression
+    def initialize(a, b)
+      @teal = [a.teal, b.teal, '&']
+    end
+  end
+
+  def bitwise_and(a = nil, b = nil)
+    BitwiseAnd.new a, b
+  end
 end

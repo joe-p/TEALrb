@@ -57,6 +57,56 @@ module TEALrb
     Txn.new(field)
   end
 
+  class Gtxn < Expression
+    def self.application_id(index)
+      new index, 'ApplicationID'
+    end
+
+    def self.sender(index)
+      new index, 'Sender'
+    end
+
+    def self.receiver(index)
+      new index, 'Receiver'
+    end
+
+    def self.amount(index)
+      new index, 'Amount'
+    end
+
+    def self.[](index)
+      GroupTransaction.new(index)
+    end
+
+    def initialize(index, field)
+      @teal = ["gtxn #{index} #{field}"]
+    end
+  end
+
+  def gtxn(index, field)
+    Gtxn.new(index, field)
+  end
+
+  class GroupTransaction
+    def initialize(index)
+      @index = index
+    end
+
+    GTXN_METHODS = [
+      :sender,
+      :receiver,
+      :application_id, 
+      :amount
+    ]
+
+    GTXN_METHODS.each do |meth|
+      define_method meth do
+        Gtxn.send(meth, @index)
+      end
+    end
+
+  end
+
   class Txna < Expression
     def self.application_args(index)
       new 'ApplicationArgs', index
@@ -69,5 +119,23 @@ module TEALrb
 
   def txna(field)
     Txna.new(field)
+  end
+
+  class Global < Expression
+    def self.current_application_address
+      new 'CurrentApplicationAddress'
+    end
+
+    def self.latest_timestamp
+      new 'LatestTimestamp'
+    end
+
+    def initialize(field)
+      @teal = ["global #{field}"]
+    end
+  end
+
+  def global(field)
+    Global.new(field)
   end
 end

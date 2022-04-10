@@ -1,5 +1,5 @@
 module TEALrb
-    METHOD_CLASS_HASH = {
+    BINARY_METHODS = {
         '+': 'Add',
         '-': 'Subtract',
         '<': 'LessThan',
@@ -7,6 +7,11 @@ module TEALrb
         '<=': 'LessThanOrEqual',
         '>=': 'GreaterThanOrEqual',
         '/': 'Divide',
-        '==': 'Equals'
+        '==': 'Equals',
+        '&': 'BitwiseAnd',
+    }
+
+    UNARY_METHODS = {
+        '!': 'Not'
     }
 end

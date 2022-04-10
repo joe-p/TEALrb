@@ -3,15 +3,19 @@ module TEALrb
     attr_reader :teal
     attr_accessor :vars, :subs
 
-    def initialize
+    def initialize(version: 5)
       @vars = OpenStruct.new
-      @teal = ['b main']
+      @version = version
+      @teal = ["#pragma version #{@version}", 'b main']
       @if_count = 0
       @open_ifs = []
     end
 
     def teal_eval(str)
       eval(str).teal
+    rescue StandardError, SyntaxError => e
+      puts "TEAL EVAL ERROR: #{str}"
+      raise e
     end
 
     def def(name, &blk)
