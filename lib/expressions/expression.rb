@@ -17,7 +17,7 @@ module TEALrb
 
   class Bytes < Expression
     def initialize(string)
-      @teal = ["bytes \"#{string}\""]
+      @teal = ["byte \"#{string}\""]
     end
   end
 

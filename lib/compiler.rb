@@ -111,7 +111,7 @@ module TEALrb
 
       current_if.blocks.values.each_with_index do |block, i|
         @teal << "if#{current_if.id}_#{i}:"
-        @teal += block.map { |str| teal_eval str }
+        @teal << block.map { |str| teal_eval str }
         @teal << "b if#{current_if.id}_end"
       end
 
