@@ -27,7 +27,6 @@ module TEALrb
         end
       end
     end
-
   end
 end
 

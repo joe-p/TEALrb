@@ -30,9 +30,9 @@ module TEALrb
 
       # variable assignment regex
       if str[/^@*[a-z_][a-zA-Z_0-9]* =/]
-        return nil
+        nil
       else
-        return result.teal
+        result.teal
       end
     rescue StandardError, SyntaxError => e
       puts "TEAL EVAL ERROR: #{str}"
@@ -48,7 +48,7 @@ module TEALrb
     end
 
     def define_teal_method(name, &blk)
-      define_singleton_method(name) do |*args|
+      define_singleton_method(name) do |*_args|
         compile(&blk)
       end
     end
@@ -60,7 +60,7 @@ module TEALrb
       define_singleton_method(name) do |*args|
         @sub_args = args
 
-        compile do 
+        compile do
           callsub(@sub_name, *@sub_args)
         end
       end
@@ -85,8 +85,8 @@ module TEALrb
 
     def compile(str = nil, &blk)
       @open_ifs ||= []
-      
-      if str 
+
+      if str
         compile_string(str)
       else
         compile_block(&blk)
@@ -102,7 +102,7 @@ module TEALrb
         line.strip!
         next if line.empty?
         next if line[/^#/]
-        
+
         if line[/^if /]
           new_if(line[/(?<=if ).*/])
         elsif line == 'else'

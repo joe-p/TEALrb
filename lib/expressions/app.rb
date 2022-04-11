@@ -92,11 +92,11 @@ module TEALrb
       @index = index
     end
 
-    GTXN_METHODS = [
-      :sender,
-      :receiver,
-      :application_id, 
-      :amount
+    GTXN_METHODS = %i[
+      sender
+      receiver
+      application_id
+      amount
     ]
 
     GTXN_METHODS.each do |meth|
@@ -104,7 +104,6 @@ module TEALrb
         Gtxn.send(meth, @index)
       end
     end
-
   end
 
   class Txna < Expression
@@ -166,7 +165,6 @@ module TEALrb
   end
 
   def itxn_submit
-    ItxnSubmit.new 
+    ItxnSubmit.new
   end
-  
 end
