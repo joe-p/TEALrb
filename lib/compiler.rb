@@ -25,8 +25,9 @@ module TEALrb
 
     def teal_eval(str, eval_binding = @default_binding)
       result = eval_binding.eval(str)
-      
-      if str[/^@\w+ =/]
+
+      # variable assignment regex
+      if str[/^@*[a-z_][a-zA-Z_0-9]* =/]
         return nil
       else
         return result.teal
