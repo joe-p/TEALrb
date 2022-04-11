@@ -9,13 +9,8 @@ class Approval < TEAL
   end
 
   teal def teal_method
-    @a = 1
-    @b = 2
-    @a+@b
-  end
-
-  teal def another_teal_method
-    @a = 123
+    @a = 3
+    @b = 4
     @a+@b
   end
 
@@ -26,18 +21,23 @@ class Approval < TEAL
   end
 
   def eval_binding_method
-    a = 100
-    b = 200
+    a = 7
+    b = 8
 
     compile_block(binding) do
       a+b
     end
   end
 
+  teal def another_teal_method
+    @a = 9
+    @a+@b
+  end
+
   def source
     # Raw teal
     byte 'Key One'
-    111
+    int 111
     app_global_put
 
     # Single method call
@@ -47,11 +47,11 @@ class Approval < TEAL
     'Key Three'
     app_global_put 333
 
+    subroutine_method(1, 2)
     teal_method
-    subroutine_method(3, 4)
     ruby_method
-    another_teal_method
     eval_binding_method
+    another_teal_method
   end
 end
 
