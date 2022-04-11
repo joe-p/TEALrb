@@ -1,7 +1,16 @@
 require_relative '../lib/teal'
 
 class Approval < TEALrb::Contract
-  # Defines a subroutine in the TEAL code
+  @@abi.name = 'TEALrb_Demo'
+  @@abi.add_id(Networks.mainnet, '1234')
+
+  # Specify ABI arg types, return type, and desc
+  abi(
+    args: [uint64, uint64],
+    returns: uint64,
+    desc: 'Adds two numbers, subtracts two numbers, then multiplies two numbers'
+  )
+  # define subroutine
   subroutine def subroutine_method(a, b)
     a+b
     a-b
@@ -88,3 +97,4 @@ end
 approval = Approval.new
 approval.compile_main
 IO.write('demo.teal', approval.teal )
+IO.write( 'demo.json', JSON.pretty_generate(approval.abi_hash) )

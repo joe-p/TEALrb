@@ -2,7 +2,8 @@ require 'method_source'
 require 'ostruct'
 
 require_relative 'constants'
-require_relative 'compiler'
+require_relative 'abi'
+require_relative 'contract'
 require_relative 'expressions'
 require_relative 'patches'
 

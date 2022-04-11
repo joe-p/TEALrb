@@ -1,8 +1,17 @@
 module TEALrb
   class Contract
     include TEALrb
+    extend ABITypes
+
     @@subroutines = []
     @@teal_methods = []
+    @@abi_method_hash = nil
+
+    @@abi = ABI.new
+
+    def self.abi(desc:, args:, returns:)
+      @@abi_method_hash = { desc: desc, args: args.map(&:to_s), returns: returns.to_s }
+    end
 
     def initialize(version: 5)
       @vars = OpenStruct.new
@@ -41,6 +50,7 @@ module TEALrb
 
     def self.subroutine(method)
       @@subroutines << method
+      @@abi.add_method( **({name: method.to_s}.merge @@abi_method_hash) )
     end
 
     def self.teal(method)
@@ -160,6 +170,10 @@ module TEALrb
     def compile_main
       @teal << 'main:'
       compile_block(&method(:main))
+    end
+
+    def abi_hash
+      @@abi.to_h
     end
   end
 end
