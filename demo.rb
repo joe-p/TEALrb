@@ -35,13 +35,13 @@ class Approval < TEAL
   end
 
   def source
-    # Single method call
-    app_global_put('Key One', 111)
-
     # Raw teal
-    byte 'Key Two'
-    222
+    byte 'Key One'
+    111
     app_global_put
+
+    # Single method call
+    app_global_put('Key Two', 222)
 
     # Two-step method call
     'Key Three'
