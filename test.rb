@@ -4,15 +4,26 @@ require 'pry'
 include TEALrb
 
 class Approval < TEAL
-  subroutine def increment_global(global_key, amount)
-    app_global_put(global_key, app_global_get(global_key) + amount)
+  subroutine def subroutine_method(a, b)
+    a+b
+  end
+
+  teal def teal_method
+    @a = 1
+    @b = 2
+    @a+@b
+  end
+
+  def ruby_method
+    @a = 5
+    @b = 6
+    @a+@b
   end
 
   def source
-    app_global_put('test', 0)
-    increment_global('test', 1)
-    increment_global('test', 1)
-    increment_global('test', 1)
+    teal_method
+    subroutine_method(3, 4)
+    ruby_method
   end
 end
 

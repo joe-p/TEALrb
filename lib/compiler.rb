@@ -2,6 +2,7 @@ module TEALrb
   class TEAL
     include TEALrb
     @@subroutines = []
+    @@teal_methods = []
 
     attr_reader :teal
 
@@ -13,12 +14,22 @@ module TEALrb
       @open_ifs = []
 
       @@subroutines.each do |sub|
-        define_singleton_method(sub, &method(sub))
+        define_subroutine(sub, &method(sub))
+      end
+
+      @@teal_methods.each do |meth|
+        define_teal_method(meth, &method(meth))
       end
     end
 
     def teal_eval(str)
-      eval(str).teal
+      result = eval(str)
+      
+      if str[/^@\w+ =/]
+        return nil
+      else
+        return result.teal
+      end
     rescue StandardError, SyntaxError => e
       puts "TEAL EVAL ERROR: #{str}"
       raise e
@@ -28,11 +39,21 @@ module TEALrb
       @@subroutines << method
     end
 
+    def self.teal(method)
+      @@teal_methods << method
+    end
+
+    def define_teal_method(name, &blk)
+      define_singleton_method(name) do |*args|
+        compile(&blk)
+      end
+    end
+
     def define_subroutine(name, &blk)
       params = blk.parameters.map(&:last).map(&:to_s)
       @sub_name = name
 
-      define_method(name) do |*args|
+      define_singleton_method(name) do |*args|
         @sub_args = args
 
         compile do 
@@ -40,7 +61,7 @@ module TEALrb
         end
       end
 
-      @teal << name + ':'
+      @teal << name.to_s + ':'
       str = blk.source.lines[1..-2].join("\n")
 
       params.each_with_index do |name, i|
