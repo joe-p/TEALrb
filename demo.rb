@@ -59,6 +59,21 @@ class Approval < TEAL
     key_four_value = 444           # => nil
     app_global_put(key_four_value) # => ['int 444', 'app_global_put']
 
+    # combining raw teal with conditionals
+    byte 'Bad Key'
+    err if app_global_get
+
+    # TEALrb methods with conditionals
+    if app_global_get('First Word') == 'Hi'
+      app_global_put('Second Word', 'Mom')
+    elsif app_global_get('First Word') == 'Hello'
+      app_global_put('Second Word', 'World')
+    elsif app_global_get('First Word') == 'Howdy'
+      app_global_put('Second Word', 'Partner')
+    else
+      app_global_put('Second Word', '???')
+    end
+
     subroutine_method(1, 2)
     teal_method
     ruby_method
