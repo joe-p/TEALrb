@@ -162,5 +162,4 @@ end
 
 approval = Approval.new
 approval.compile_source
-puts approval.teal
 IO.write('example.teal', approval.teal )
