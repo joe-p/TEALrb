@@ -4,8 +4,6 @@ module TEALrb
     @@subroutines = []
     @@teal_methods = []
 
-    attr_reader :teal
-
     def initialize(version: 5)
       @vars = OpenStruct.new
       @version = version
@@ -21,6 +19,10 @@ module TEALrb
       @@teal_methods.each do |meth|
         define_teal_method(meth, &method(meth))
       end
+    end
+
+    def teal
+      @teal.join("\n")
     end
 
     def teal_eval(str, eval_binding = @default_binding)
