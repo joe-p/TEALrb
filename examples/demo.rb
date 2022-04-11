@@ -1,4 +1,4 @@
-require_relative 'lib/teal'
+require_relative '../lib/teal'
 
 class Approval < TEALrb::Contract
   # Defines a subroutine in the TEAL code

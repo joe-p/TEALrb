@@ -1,9 +1,7 @@
-require_relative 'lib/teal'
+require_relative '../lib/teal'
 require 'pry'
 
-include TEALrb
-
-class Approval < TEAL
+class Approval < TEALrb::Contract
   def initialize(**kwargs)
     super
     @fee = 1000
