@@ -78,6 +78,7 @@ class Approval < TEAL
   end
 
   def pay(receiver, amount)
+    # use compile_block(binding) so we have access to receiver and amount
     compile_block(binding) do
       itxn_begin
       itxn_field 'TypeEnum', 1
