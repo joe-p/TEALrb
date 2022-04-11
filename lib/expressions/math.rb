@@ -79,24 +79,24 @@ module TEALrb
     GreaterThanOrEqual.new a, b
   end
 
-  class Equals < Expression
+  class Equal < Expression
     def initialize(a, b)
       @teal = [a.teal, b.teal, '==']
     end
   end
 
-  def equals(a = nil, b = nil)
-    Equals.new a, b
+  def equal(a = nil, b = nil)
+    Equal.new a, b
   end
 
-  class NotEquals < Expression
+  class NotEqual < Expression
     def initialize(a, b)
       @teal = [a.teal, b.teal, '!=']
     end
   end
 
-  def not_equals(a = nil, b = nil)
-    NotEquals.new a, b
+  def not_equal(a = nil, b = nil)
+    NotEqual.new a, b
   end
 
   class BitwiseAnd < Expression

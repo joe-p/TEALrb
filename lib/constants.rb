@@ -7,9 +7,9 @@ module TEALrb
         '<=': 'LessThanOrEqual',
         '>=': 'GreaterThanOrEqual',
         '/': 'Divide',
-        '==': 'Equals',
+        '==': 'Equal',
         '&': 'BitwiseAnd',
-        '!=': 'NotEquals',
+        '!=': 'NotEqual',
         '*': 'Multiply',
     }
 
