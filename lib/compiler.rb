@@ -99,17 +99,7 @@ module TEALrb
         line.strip!
         next if line.empty?
         next if line[/^#/]
-
-        # for if:
-        #   bnz if1
-        #   bnz if1_e1
-        #   bnz if1_e2
-        #   ... (this is the else block)
-        #   b if1_end
-        #   if1_e1:
-        #     ...
-        #     b if1_end
-        #   if1_end:
+        
         if line[/^if /]
           new_if(line[/(?<=if ).*/])
         elsif line == 'else'

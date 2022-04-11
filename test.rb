@@ -14,6 +14,11 @@ class Approval < TEAL
     @a+@b
   end
 
+  teal def another_teal_method
+    @a = 123
+    @a+@b
+  end
+
   def ruby_method
     @a = 5
     @b = 6
@@ -30,9 +35,22 @@ class Approval < TEAL
   end
 
   def source
+    # Single method call
+    app_global_put('Key One', 111)
+
+    # Raw teal
+    byte 'Key Two'
+    222
+    app_global_put
+
+    # Two-step method call
+    'Key Three'
+    app_global_put 333
+
     teal_method
     subroutine_method(3, 4)
     ruby_method
+    another_teal_method
     eval_binding_method
   end
 end

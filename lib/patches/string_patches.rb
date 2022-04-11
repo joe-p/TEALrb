@@ -1,7 +1,7 @@
 module TEALrb
   module StringPatches
     def teal
-      TEALrb::Bytes.new(self).teal
+      TEALrb::Byte.new(self).teal
     end
   end
 end

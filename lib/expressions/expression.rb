@@ -21,10 +21,18 @@ module TEALrb
     end
   end
 
-  class Bytes < Expression
+  def int(integer)
+    Int.new integer
+  end
+
+  class Byte < Expression
     def initialize(string)
       @teal = ["byte \"#{string}\""]
     end
+  end
+
+  def byte(string)
+    Byte.new string
   end
 
   class Btoi < Expression
