@@ -6,7 +6,7 @@ module TEALrb
 
     TEALrb::BINARY_METHODS.each do |meth, klass|
       define_method(meth) do |other|
-        from_eval = caller[0].include? "(eval):1:in `teal_eval'"
+        from_eval = (caller[0] + caller[2]).include? "`teal_eval'"
 
         if from_eval
           TEALrb.const_get(klass).new self, other

@@ -12,6 +12,7 @@ module TEALrb
       @teal = ["#pragma version #{@version}", 'b main']
       @if_count = 0
       @open_ifs = []
+      @default_binding = binding
 
       @@subroutines.each do |sub|
         define_subroutine(sub, &method(sub))
@@ -22,8 +23,8 @@ module TEALrb
       end
     end
 
-    def teal_eval(str)
-      result = eval(str)
+    def teal_eval(str, eval_binding = @default_binding)
+      result = eval_binding.eval(str)
       
       if str[/^@\w+ =/]
         return nil
@@ -89,11 +90,11 @@ module TEALrb
       end
     end
 
-    def compile_block(&blk)
-      compile_string(blk.source.lines[1..-2].join("\n"))
+    def compile_block(eval_binding = @default_binding, &blk)
+      compile_string(blk.source.lines[1..-2].join("\n"), eval_binding)
     end
 
-    def compile_string(str)
+    def compile_string(str, eval_binding = @default_binding)
       str.each_line do |line|
         line.strip!
         next if line.empty?
@@ -124,7 +125,7 @@ module TEALrb
         elsif !@open_ifs.empty?
           @open_ifs.last.blocks.values.last << line
         else
-          @teal << teal_eval(line)
+          @teal << teal_eval(line, eval_binding)
         end
       end
 
@@ -137,22 +138,22 @@ module TEALrb
       @if_count += 1
     end
 
-    def end_if
+    def end_if(eval_binding = @default_binding)
       current_if = @open_ifs.pop
       else_block = current_if.blocks.delete 'else'
 
       current_if.blocks.keys.each_with_index do |cond, i|
-        @teal << teal_eval(cond)
+        @teal << teal_eval(cond, eval_binding)
         @teal << "bnz if#{current_if.id}_#{i}"
       end
 
-      @teal << else_block.map { |str| teal_eval str } if else_block
+      @teal << else_block.map { |str| teal_eval(str, eval_binding) } if else_block
 
       @teal << "b if#{current_if.id}_end"
 
       current_if.blocks.values.each_with_index do |block, i|
         @teal << "if#{current_if.id}_#{i}:"
-        @teal << block.map { |str| teal_eval str }
+        @teal << block.map { |str| teal_eval(str, eval_binding) }
         @teal << "b if#{current_if.id}_end"
       end
 

@@ -20,10 +20,20 @@ class Approval < TEAL
     @a+@b
   end
 
+  def eval_binding_method
+    a = 100
+    b = 200
+
+    compile_block(binding) do
+      a+b
+    end
+  end
+
   def source
     teal_method
     subroutine_method(3, 4)
     ruby_method
+    eval_binding_method
   end
 end
 
