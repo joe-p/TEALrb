@@ -138,7 +138,7 @@ class Approval < TEAL
     approve
   end
 
-  def source
+  def main
     if Txn.application_id == 0
       init
     elsif Txna.application_args(0) == 'start_auction'
@@ -162,5 +162,5 @@ class Approval < TEAL
 end
 
 approval = Approval.new
-approval.compile_source
+approval.compile_main
 IO.write('example.teal', approval.teal )

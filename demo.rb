@@ -1,12 +1,11 @@
 require_relative 'lib/teal'
-require 'pry'
 
-include TEALrb
-
-class Approval < TEAL
+class Approval < TEALrb::Contract
   # Defines a subroutine in the TEAL code
   subroutine def subroutine_method(a, b)
     a+b
+    a-b
+    a*b
   end
 
   # Evaluate all code in the method as TEALrb expressions
@@ -24,32 +23,35 @@ class Approval < TEAL
   end
 
   # Only evalutes the code in the compile_block block as TEALrb expressions
-  def explicit_compile_method
+  def explicit_compile_method(a)
     # Since this if statement is outside of the compile block, it is not evaluated as TEALrb expressions
     if 100 < 1_000
-      a = 7
+      b = 8
     else
-      a = 777777
+      b = 88888
     end
 
     # The binding is passed here so the evaluation of the compile block includes local variables
     compile_block(binding) do
-      b = 8
       a+b # => ['int 7', 'int 8', '+'] 
     end
   end
 
-  def source
+  def main
     # Raw teal
     byte 'Key One'
     int 111
     app_global_put
 
+    int 100
+    int 200
+    add # can't use some ruby operators (+ => add, - => subtract, * => multiply, etc.)
+
     # Single method call
     app_global_put('Key Two', 222)
 
     # Two-step method call
-    'Key Three'
+    'Key Three' # string literals are implicitly bytes
     app_global_put 333
 
     # Using variables
@@ -63,11 +65,13 @@ class Approval < TEAL
     byte 'Bad Key'
     err if app_global_get
 
-    # TEALrb methods with conditionals
+    # More complex conditionals
     if app_global_get('First Word') == 'Hi'
       app_global_put('Second Word', 'Mom')
     elsif app_global_get('First Word') == 'Hello'
-      app_global_put('Second Word', 'World')
+      byte 'Second Word'
+      byte 'World'
+      app_global_put
     elsif app_global_get('First Word') == 'Howdy'
       app_global_put('Second Word', 'Partner')
     else
@@ -77,10 +81,10 @@ class Approval < TEAL
     subroutine_method(1, 2)
     teal_method
     ruby_method
-    explicit_compile_method
+    explicit_compile_method(7)
   end
 end
 
 approval = Approval.new
-approval.compile_source
+approval.compile_main
 IO.write('demo.teal', approval.teal )

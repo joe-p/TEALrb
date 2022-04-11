@@ -6,11 +6,20 @@ store 202
 load 201
 load 202
 +
+load 201
+load 202
+-
+load 201
+load 202
+*
 retsub
 main:
 byte "Key One"
 int 111
 app_global_put
+int 100
+int 200
++
 byte "Key Two"
 int 222
 app_global_put

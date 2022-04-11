@@ -1,5 +1,5 @@
 module TEALrb
-  class TEAL
+  class Contract
     include TEALrb
     @@subroutines = []
     @@teal_methods = []
@@ -153,13 +153,13 @@ module TEALrb
       @teal << "if#{current_if.id}_end:"
     end
 
-    def source
+    def main
       err
     end
 
-    def compile_source
+    def compile_main
       @teal << 'main:'
-      compile_block(&method(:source))
+      compile_block(&method(:main))
     end
   end
 end
