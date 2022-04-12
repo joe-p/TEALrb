@@ -65,16 +65,6 @@ module TEALrb
     Err.new
   end
 
-  class Not < Expression
-    def initialize(expr)
-      @teal = [expr.teal, '!']
-    end
-  end
-
-  def not
-    Not.new
-  end
-
   class Callsub < Expression
     def initialize(name, *args)
       @teal = [args.map(&:teal), "callsub #{name}"].flatten
