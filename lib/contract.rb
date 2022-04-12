@@ -80,7 +80,7 @@ module TEALrb
 
       params.each_with_index do |name, i|
         @teal << "store #{201 + i}"
-        str.gsub!(name, "load(#{201 + i})")
+        compile("#{name} = load(#{201 + i})")
       end
 
       compile(str)
