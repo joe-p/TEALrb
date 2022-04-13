@@ -152,3 +152,16 @@ TEALrb is a work in progress. Expect significant commits to master which will ev
 | gloadss | TODO |
 | itxnas f | TODO |
 | gitxnas t f | TODO |
+
+# Features
+- [x] Subroutine definition
+- [x] if/elsif/else branching
+- [x] ABI JSON generation
+- [ ] ABI type encoding/decoding
+- [ ] Scratch space management
+- [ ] Looping
+
+# Milestones
+- [ ] 100% opcode coverage
+- [ ] 100% enum coverage
+- [ ] PyTEAL feature parity
