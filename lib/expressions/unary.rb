@@ -5,7 +5,7 @@ module TEALrb
     end
   end
 
-  def not
+  def not(expr = nil)
     Not.new
   end
 end
