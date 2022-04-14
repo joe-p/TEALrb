@@ -1,7 +1,7 @@
 module TEALrb
   class Int < Expression
     def initialize(integer)
-      @teal = ["int #{integer}"]
+      @teal = TEAL.new ["int #{integer}"]
     end
   end
 
@@ -11,7 +11,7 @@ module TEALrb
 
   class Byte < Expression
     def initialize(string)
-      @teal = ["byte \"#{string}\""]
+      @teal = TEAL.new ["byte \"#{string}\""]
     end
   end
 
@@ -21,11 +21,21 @@ module TEALrb
 
   class Btoi < Expression
     def initialize(bytes = nil)
-      @teal = [bytes.teal, 'btoi']
+      @teal = TEAL.new [bytes.teal, 'btoi']
     end
   end
 
   def btoi(bytes = nil)
     Btoi.new bytes
+  end
+
+  class Itob < Expression
+    def initialize(bytes = nil)
+      @teal = TEAL.new [bytes.teal, 'itob']
+    end
+  end
+
+  def itob(bytes = nil)
+    Itob.new bytes
   end
 end

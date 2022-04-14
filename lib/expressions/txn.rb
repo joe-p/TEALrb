@@ -9,7 +9,7 @@ module TEALrb
     end
 
     def initialize(field)
-      @teal = ["txn #{field}"]
+      @teal = TEAL.new ["txn #{field}"]
     end
   end
 
@@ -39,7 +39,7 @@ module TEALrb
     end
 
     def initialize(index, field)
-      @teal = ["gtxn #{index} #{field}"]
+      @teal = TEAL.new ["gtxn #{index} #{field}"]
     end
   end
 
@@ -72,7 +72,7 @@ module TEALrb
     end
 
     def initialize(field, index)
-      @teal = ["txna #{field} #{index}"]
+      @teal = TEAL.new ["txna #{field} #{index}"]
     end
   end
 
@@ -82,7 +82,7 @@ module TEALrb
 
   class ItxnBegin < Expression
     def initialize
-      @teal = ['itxn_begin']
+      @teal = TEAL.new ['itxn_begin']
     end
   end
 
@@ -92,7 +92,7 @@ module TEALrb
 
   class ItxnField < Expression
     def initialize(field, value = nil)
-      @teal = [value.teal, "itxn_field #{field}"]
+      @teal = TEAL.new [value.teal, "itxn_field #{field}"]
     end
   end
 
@@ -102,7 +102,7 @@ module TEALrb
 
   class ItxnSubmit < Expression
     def initialize
-      @teal = ['itxn_submit']
+      @teal = TEAL.new ['itxn_submit']
     end
   end
 

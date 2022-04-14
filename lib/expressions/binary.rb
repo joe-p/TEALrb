@@ -1,7 +1,7 @@
 module TEALrb
   class Add < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '+']
+      @teal = TEAL.new [a.teal, b.teal, '+']
     end
   end
 
@@ -11,7 +11,7 @@ module TEALrb
 
   class Subtract < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '-']
+      @teal = TEAL.new [a.teal, b.teal, '-']
     end
   end
 
@@ -21,7 +21,7 @@ module TEALrb
 
   class Divide < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '/']
+      @teal = TEAL.new [a.teal, b.teal, '/']
     end
   end
 
@@ -31,7 +31,7 @@ module TEALrb
 
   class Multiply < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '*']
+      @teal = TEAL.new [a.teal, b.teal, '*']
     end
   end
 
@@ -41,7 +41,7 @@ module TEALrb
 
   class LessThan < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '<']
+      @teal = TEAL.new [a.teal, b.teal, '<']
     end
   end
 
@@ -51,7 +51,7 @@ module TEALrb
 
   class GreaterThan < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '>']
+      @teal = TEAL.new [a.teal, b.teal, '>']
     end
   end
 
@@ -61,7 +61,7 @@ module TEALrb
 
   class LessThanOrEqual < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '<=']
+      @teal = TEAL.new [a.teal, b.teal, '<=']
     end
   end
 
@@ -71,7 +71,7 @@ module TEALrb
 
   class GreaterThanOrEqual < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '>=']
+      @teal = TEAL.new [a.teal, b.teal, '>=']
     end
   end
 
@@ -81,7 +81,7 @@ module TEALrb
 
   class Equal < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '==']
+      @teal = TEAL.new [a.teal, b.teal, '==']
     end
   end
 
@@ -91,7 +91,7 @@ module TEALrb
 
   class NotEqual < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '!=']
+      @teal = TEAL.new [a.teal, b.teal, '!=']
     end
   end
 
@@ -101,7 +101,7 @@ module TEALrb
 
   class BitwiseAnd < Expression
     def initialize(a, b)
-      @teal = [a.teal, b.teal, '&']
+      @teal = TEAL.new [a.teal, b.teal, '&']
     end
   end
 

@@ -1,7 +1,7 @@
 module TEALrb
   class AppOptedIn < Expression
     def initialize(account = nil, app = nil)
-      @teal = [account.teal, app.teal, 'app_opted_in']
+      @teal = TEAL.new [account.teal, app.teal, 'app_opted_in']
     end
   end
 
@@ -19,7 +19,7 @@ module TEALrb
     end
 
     def initialize(field)
-      @teal = ["global #{field}"]
+      @teal = TEAL.new ["global #{field}"]
     end
   end
 

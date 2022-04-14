@@ -1,7 +1,7 @@
 module TEALrb
   class Store < Expression
     def initialize(index, value)
-      @teal = [value.teal, "store #{index}"]
+      @teal = TEAL.new [value.teal, "store #{index}"]
     end
   end
 
@@ -11,7 +11,7 @@ module TEALrb
 
   class Load < Expression
     def initialize(index)
-      @teal = ["load #{index}"]
+      @teal = TEAL.new ["load #{index}"]
     end
   end
 
@@ -21,7 +21,7 @@ module TEALrb
 
   class AppLocalGet < Expression
     def initialize(account = nil, key = nil)
-      @teal = [account.teal, key.teal, 'app_local_get']
+      @teal = TEAL.new [account.teal, key.teal, 'app_local_get']
     end
   end
 
@@ -31,7 +31,7 @@ module TEALrb
 
   class AppGlobalGet < Expression
     def initialize(key)
-      @teal = [key.teal, 'app_global_get']
+      @teal = TEAL.new [key.teal, 'app_global_get']
     end
   end
 
@@ -41,7 +41,7 @@ module TEALrb
 
   class AppGlobalPut < Expression
     def initialize(key, value)
-      @teal = [key.teal, value.teal, 'app_global_put']
+      @teal = TEAL.new [key.teal, value.teal, 'app_global_put']
     end
   end
 

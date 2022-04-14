@@ -1,7 +1,7 @@
 module TEALrb
   class Sha256 < Expression
     def initialize(input = nil)
-      @teal = [input.teal, 'sha256']
+      @teal = TEAL.new [input.teal, 'sha256']
     end
   end
 

@@ -1,7 +1,7 @@
 module TEALrb
   class Not < Expression
     def initialize(expr)
-      @teal = [expr.teal, '!']
+      @teal = TEAL.new [expr.teal, '!']
     end
   end
 

@@ -9,9 +9,13 @@ load 202
 load 201
 load 202
 -
+byte "151f7c75"
 load 201
 load 202
 *
+itob
+concat
+log
 retsub
 main:
 byte "Key One"

@@ -14,7 +14,7 @@ class Approval < TEALrb::Contract
   subroutine def subroutine_method(a, b)
     a + b
     a - b
-    a * b
+    abi_return(itob(a * b))
   end
 
   # Evaluate all code in the method as TEALrb expressions

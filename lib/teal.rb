@@ -17,6 +17,12 @@ module TEALrb
       @id = id
     end
   end
+
+  class TEAL < Array
+    def teal
+      self.flatten
+    end
+  end
 end
 
 class NilClass
