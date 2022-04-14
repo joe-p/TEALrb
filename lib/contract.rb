@@ -113,6 +113,10 @@ module TEALrb
         next if line.empty?
         next if line[/^#/]
 
+        if line[/^unless /] or line[/ unless /]
+          line.gsub!(/unless .*/, "if !(#{line[/(?<=unless ).*/]})")
+        end
+
         if line[/^if /]
           new_if(line[/(?<=if ).*/])
         elsif line == 'else'
