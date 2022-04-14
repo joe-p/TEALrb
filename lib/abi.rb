@@ -41,18 +41,18 @@ module TEALrb
       @methods << {
         name: name,
         desc: desc,
-        args: args.map {|a| {type: a} }, 
-        returns: {type: returns}
+        args: args.map { |a| { type: a } },
+        returns: { type: returns }
       }
     end
-    
+
     def add_id(network, id)
-      @networks[network] = {appID: id}
+      @networks[network] = { appID: id }
     end
 
     def to_h
       {
-        'name' => @name, 
+        'name' => @name,
         'networks' => @networks,
         'methods' => @methods
       }

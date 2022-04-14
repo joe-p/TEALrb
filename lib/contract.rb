@@ -50,7 +50,7 @@ module TEALrb
 
     def self.subroutine(method)
       @@subroutines << method
-      @@abi.add_method( **({name: method.to_s}.merge @@abi_method_hash) )
+      @@abi.add_method(**({ name: method.to_s }.merge @@abi_method_hash))
     end
 
     def self.teal(method)
@@ -113,9 +113,7 @@ module TEALrb
         next if line.empty?
         next if line[/^#/]
 
-        if line[/^unless /] or line[/ unless /]
-          line.gsub!(/unless .*/, "if !(#{line[/(?<=unless ).*/]})")
-        end
+        line.gsub!(/unless .*/, "if !(#{line[/(?<=unless ).*/]})") if line[/^unless /] or line[/ unless /]
 
         if line[/^if /]
           new_if(line[/(?<=if ).*/])

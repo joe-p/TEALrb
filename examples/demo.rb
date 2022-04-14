@@ -12,37 +12,37 @@ class Approval < TEALrb::Contract
   )
   # define subroutine
   subroutine def subroutine_method(a, b)
-    a+b
-    a-b
-    a*b
+    a + b
+    a - b
+    a * b
   end
 
   # Evaluate all code in the method as TEALrb expressions
   teal def teal_method
     a = 3
     b = 4
-    a + b # => ['int 3', 'int 4', '+'] 
+    a + b # => ['int 3', 'int 4', '+']
   end
 
   # Only evalulates the return value as a TEALrb expression
   def ruby_method
     a = 5
     b = 6
-    a+b # => ['int 11']
+    a + b # => ['int 11']
   end
 
   # Only evalutes the code in the compile_block block as TEALrb expressions
   def explicit_compile_method(a)
     # Since this if statement is outside of the compile block, it is not evaluated as TEALrb expressions
-    if 100 < 1_000
-      b = 8
-    else
-      b = 88888
-    end
+    b = if 100 < 1_000
+          8
+        else
+          88_888
+        end
 
     # The binding is passed here so the evaluation of the compile block includes local variables
     compile_block(binding) do
-      a+b # => ['int 7', 'int 8', '+'] 
+      a + b # => ['int 7', 'int 8', '+']
     end
   end
 
@@ -96,5 +96,5 @@ end
 
 approval = Approval.new
 approval.compile_main
-IO.write('demo.teal', approval.teal )
-IO.write( 'demo.json', JSON.pretty_generate(approval.abi_hash) )
+IO.write('demo.teal', approval.teal)
+IO.write('demo.json', JSON.pretty_generate(approval.abi_hash))

@@ -6,6 +6,6 @@ module TEALrb
   end
 
   def not(expr = nil)
-    Not.new
+    Not.new(expr)
   end
 end
