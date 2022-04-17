@@ -6,12 +6,12 @@ TEALrb is a work in progress. Expect significant commits to master which will ev
 |------|--------|
 | err | `err` |
 | sha256 | `sha256(input)` |
-| keccak256 | TODO |
-| sha512_256 | TODO |
-| ed25519verify | TODO |
-| ecdsa_verify v | TODO |
-| ecdsa_pk_decompress v | TODO |
-| ecdsa_pk_recover v | TODO |
+| keccak256 | `keccak256(input)` |
+| sha512_256 | `sha512_256(input)` |
+| ed25519verify | `ed25519verify(input)` |
+| ecdsa_verify v | `ecdsa_verify(index, input)` |
+| ecdsa_pk_decompress v | `ecdsa_pk_decompress(index, input)` |
+| ecdsa_pk_recover v | `ecdsa_pk_recover(index, input)` |
 | + | `add(a, b)` |
 | - | `subtract(a, b)` |
 | / | `divide(a, b)` |
@@ -53,7 +53,7 @@ TEALrb is a work in progress. Expect significant commits to master which will ev
 | arg_1 | TODO |
 | arg_2 | TODO |
 | arg_3 | TODO |
-| txn f | TODO |
+| txn f | `txn(field)` |
 | global f | `global(field)` |
 | gtxn t f | TODO |
 | load i | `load(index)` |
