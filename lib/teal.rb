@@ -20,7 +20,7 @@ module TEALrb
 
   class TEAL < Array
     def teal
-      self.flatten
+      flatten
     end
   end
 end
