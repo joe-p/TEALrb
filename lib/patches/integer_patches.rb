@@ -1,16 +1,20 @@
 module TEALrb
   module Patches
     module IntegerMethods
+      include TEALrb::Expressions::Types
+      include TEALrb::Expressions::Binary
+      include TEALrb::Expressions::Unary
+
       def teal
-          TEALrb::Expressions::Types::Int.new(self).teal
+        int(self).teal
       end
 
-      TEALrb::BINARY_METHODS.each do |meth, klass|
+      TEALrb::BINARY_METHODS.each do |meth, opcode|
         define_method(meth) do |other|
           from_eval = (caller[0] + caller[2]).include? "`teal_eval'"
 
           if from_eval
-            TEALrb::Expressions::Binary.const_get(klass).new self, other
+            send(opcode, self, other)
           else
             super(other)
           end
@@ -22,7 +26,7 @@ module TEALrb
           from_eval = caller[0].include? "(eval):1:in `teal_eval'"
 
           if from_eval
-            TEALrb::Expressions::Unary.const_get(klass).new self
+            send(opcode, self)
           else
             super()
           end

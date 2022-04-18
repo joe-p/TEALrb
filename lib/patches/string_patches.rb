@@ -1,8 +1,9 @@
 module TEALrb
   module Patches
     module StringPatches
+    include TEALrb::Expressions::Types
       def teal
-        TEALrb::Expressions::Types::Byte.new(self).teal
+        byte(self).teal
       end
     end
   end

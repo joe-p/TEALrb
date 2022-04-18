@@ -1,44 +1,20 @@
 module TEALrb
   module Expressions
     module Flow
-      class Approve < Expression
-        def initialize
-          @teal = TEAL.new [1.teal, 'return']
-        end
-      end
-
       def approve
-        Approve.new
-      end
-
-      class Err < Expression
-        def initialize
-          @teal = TEAL.new ['err']
-        end
+        TEAL.new [1.teal, 'return']
       end
 
       def err
-        Err.new
-      end
-
-      class Callsub < Expression
-        def initialize(name, *args)
-          @teal = TEAL.new [args.map(&:teal), "callsub #{name}"].flatten
-        end
+        TEAL.new ['err']
       end
 
       def callsub(name, *args)
-        Callsub.new(name, *args)
-      end
-
-      class Log < Expression
-        def initialize(data)
-          @teal = TEAL.new [data.teal, 'log']
-        end
+        TEAL.new [args.map(&:teal), "callsub #{name}"].flatten
       end
 
       def log(data = nil)
-        Log.new(data)
+        TEAL.new [data.teal, 'log']
       end
 
       def abi_return(data)

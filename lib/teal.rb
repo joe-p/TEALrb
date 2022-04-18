@@ -19,8 +19,23 @@ module TEALrb
   end
 
   class TEAL < Array
+    include TEALrb::Expressions::Binary
+    include TEALrb::Expressions::Unary
+
     def teal
       flatten
+    end
+
+    TEALrb::BINARY_METHODS.each do |meth, opcode|
+      define_method(meth) do |other|
+        send(opcode, self, other)
+      end
+    end
+
+    TEALrb::UNARY_METHODS.each do |meth, opcode|
+      define_method(meth) do
+        send(opcode, self)
+      end
     end
   end
 end

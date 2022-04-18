@@ -1,14 +1,8 @@
 module TEALrb
   module Expressions
     module Unary
-      class Not < Expression
-        def initialize(expr)
-          @teal = TEAL.new [expr.teal, '!']
-        end
-      end
-
       def not(expr = nil)
-        Not.new(expr)
+        TEAL.new [expr.teal, '!']
       end
     end
   end

@@ -1,52 +1,47 @@
 module TEALrb
   module Expressions
     module Transaction
-      class Txn < Expression
+      def txn(field)
+        TEAL.new ["txn #{field}"]
+      end
+      
+      module Txn
+        extend Transaction
         def self.application_id
-          new 'ApplicationID'
+          txn 'ApplicationID'
         end
 
         def self.sender
-          new 'Sender'
-        end
-
-        def initialize(field)
-          @teal = TEAL.new ["txn #{field}"]
+          txn 'Sender'
         end
       end
 
-      def txn(field)
-        Txn.new(field)
-      end
-
-      class Gtxn < Expression
+      module Gtxn
+        extend Transaction
+        
         def self.application_id(index)
-          new index, 'ApplicationID'
+          gtxn index, 'ApplicationID'
         end
 
         def self.sender(index)
-          new index, 'Sender'
+          gtxn index, 'Sender'
         end
 
         def self.receiver(index)
-          new index, 'Receiver'
+          gtxn index, 'Receiver'
         end
 
         def self.amount(index)
-          new index, 'Amount'
+          gtxn index, 'Amount'
         end
 
         def self.[](index)
           GroupTransaction.new(index)
         end
-
-        def initialize(index, field)
-          @teal = TEAL.new ["gtxn #{index} #{field}"]
-        end
       end
 
       def gtxn(index, field)
-        Gtxn.new(index, field)
+        TEAL.new ["gtxn #{index} #{field}"]
       end
 
       class GroupTransaction
@@ -68,48 +63,28 @@ module TEALrb
         end
       end
 
-      class Txna < Expression
+      module Txna
+        extend Transaction
+
         def self.application_args(index)
-          new 'ApplicationArgs', index
-        end
-
-        def initialize(field, index)
-          @teal = TEAL.new ["txna #{field} #{index}"]
+          txna 'ApplicationArgs', index
         end
       end
 
-      def txna(field)
-        Txna.new(field)
-      end
-
-      class ItxnBegin < Expression
-        def initialize
-          @teal = TEAL.new ['itxn_begin']
-        end
+      def txna(field, index)
+        TEAL.new ["txna #{field} #{index}"]
       end
 
       def itxn_begin
-        ItxnBegin.new
-      end
-
-      class ItxnField < Expression
-        def initialize(field, value = nil)
-          @teal = TEAL.new [value.teal, "itxn_field #{field}"]
-        end
+        TEAL.new ['itxn_begin']
       end
 
       def itxn_field(field, value = nil)
-        ItxnField.new field, value
-      end
-
-      class ItxnSubmit < Expression
-        def initialize
-          @teal = TEAL.new ['itxn_submit']
-        end
+        TEAL.new [value.teal, "itxn_field #{field}"]
       end
 
       def itxn_submit
-        ItxnSubmit.new
+        TEAL.new ['itxn_submit']
       end
     end
   end
