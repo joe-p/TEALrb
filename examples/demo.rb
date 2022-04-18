@@ -6,7 +6,10 @@ class Approval < TEALrb::Contract
 
   # Specify ABI arg types, return type, and desc
   abi(
-    args: [uint64, uint64],
+    args: {
+      a: {type: uint64, desc: 'The first number'},
+      b: {type: uint64, desc: 'The second number'}
+    },
     returns: uint64,
     desc: 'Adds two numbers, subtracts two numbers, then multiplies two numbers'
   )

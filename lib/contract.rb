@@ -10,7 +10,12 @@ module TEALrb
     @@abi = ABI.new
 
     def self.abi(desc:, args:, returns:)
-      @@abi_method_hash = { desc: desc, args: args.map(&:to_s), returns: returns.to_s }
+      args = args.map do |name, h|
+        h[:name] = name.to_s
+        h[:type] = h[:type].to_s
+        h
+      end
+      @@abi_method_hash = { desc: desc, args: args, returns: returns.to_s }
     end
 
     def initialize(version: 5)

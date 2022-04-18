@@ -11,10 +11,14 @@
       "desc": "Adds two numbers, subtracts two numbers, then multiplies two numbers",
       "args": [
         {
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "The first number",
+          "name": "a"
         },
         {
-          "type": "uint64"
+          "type": "uint64",
+          "desc": "The second number",
+          "name": "b"
         }
       ],
       "returns": {

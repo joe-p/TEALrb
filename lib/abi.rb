@@ -41,7 +41,7 @@ module TEALrb
       @methods << {
         name: name,
         desc: desc,
-        args: args.map { |a| { type: a } },
+        args: args,
         returns: { type: returns }
       }
     end
