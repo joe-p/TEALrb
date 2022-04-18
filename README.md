@@ -81,7 +81,7 @@ TEALrb is a work in progress. Expect significant commits to master which will ev
 | select | TODO |
 | cover n | TODO |
 | uncover n | TODO |
-| concat | TODO |
+| concat | `concat(a, b)` |
 | substring s e | TODO |
 | substring3 | TODO |
 | getbit | TODO |
