@@ -1,5 +1,5 @@
 module TEALrb
-  module Expressions
+  module Opcodes
     module Transaction
       def txn(field)
         TEAL.new ["txn #{field}"]

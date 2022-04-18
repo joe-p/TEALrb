@@ -1,5 +1,5 @@
 module TEALrb
-  module Expressions
+  module Opcodes
     module Types
       def int(integer)
         TEAL.new ["int #{integer}"]

@@ -1,5 +1,5 @@
 module TEALrb
-  module Expressions
+  module Opcodes
     module Flow
       def approve
         TEAL.new [1.teal, 'return']

@@ -1,9 +1,9 @@
 module TEALrb
   module Patches
     module IntegerMethods
-      include TEALrb::Expressions::Types
-      include TEALrb::Expressions::Binary
-      include TEALrb::Expressions::Unary
+      include TEALrb::Opcodes::Types
+      include TEALrb::Opcodes::Binary
+      include TEALrb::Opcodes::Unary
 
       def teal
         int(self).teal

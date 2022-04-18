@@ -19,8 +19,8 @@ module TEALrb
   end
 
   class TEAL < Array
-    include TEALrb::Expressions::Binary
-    include TEALrb::Expressions::Unary
+    include TEALrb::Opcodes::Binary
+    include TEALrb::Opcodes::Unary
 
     def teal
       flatten

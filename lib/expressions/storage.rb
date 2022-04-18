@@ -1,5 +1,5 @@
 module TEALrb
-  module Expressions
+  module Opcodes
     module Storage
       def store(index, value = nil)
         TEAL.new [value.teal, "store #{index}"]

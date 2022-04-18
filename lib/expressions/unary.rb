@@ -1,5 +1,5 @@
 module TEALrb
-  module Expressions
+  module Opcodes
     module Unary
       def not(expr = nil)
         TEAL.new [expr.teal, '!']

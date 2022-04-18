@@ -1,5 +1,5 @@
 module TEALrb
-  module Expressions
+  module Opcodes
     module Binary
       def add(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, '+']

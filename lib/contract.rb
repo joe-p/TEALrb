@@ -1,15 +1,15 @@
 module TEALrb
   class Contract
     include TEALrb
-    include TEALrb::Expressions::App
-    include TEALrb::Expressions::Binary
-    include TEALrb::Expressions::Byte
-    include TEALrb::Expressions::Crypto
-    include TEALrb::Expressions::Flow
-    include TEALrb::Expressions::Storage
-    include TEALrb::Expressions::Transaction
-    include TEALrb::Expressions::Types
-    include TEALrb::Expressions::Unary
+    include TEALrb::Opcodes::App
+    include TEALrb::Opcodes::Binary
+    include TEALrb::Opcodes::Byte
+    include TEALrb::Opcodes::Crypto
+    include TEALrb::Opcodes::Flow
+    include TEALrb::Opcodes::Storage
+    include TEALrb::Opcodes::Transaction
+    include TEALrb::Opcodes::Types
+    include TEALrb::Opcodes::Unary
     extend ABI::ABITypes
 
     @@subroutines = []

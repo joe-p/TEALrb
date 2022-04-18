@@ -1,5 +1,5 @@
 module TEALrb
-  module Expressions
+  module Opcodes
     module App
       def app_opted_in(account = nil, app = nil)
         TEAL.new [account.teal, app.teal, 'app_opted_in']
