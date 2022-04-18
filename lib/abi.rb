@@ -12,7 +12,7 @@ module TEALrb
       @type = type
     end
 
-    def [](n)
+    def [](n = nil)
       ABIType.new "#{@type}[#{n}]"
     end
 
