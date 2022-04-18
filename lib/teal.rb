@@ -3,8 +3,8 @@ require 'ostruct'
 
 require_relative 'constants'
 require_relative 'abi'
-require_relative 'contract'
 require_relative 'expressions'
+require_relative 'contract'
 require_relative 'patches'
 
 module TEALrb
@@ -23,8 +23,4 @@ module TEALrb
       flatten
     end
   end
-end
-
-class NilClass
-  def teal; end
 end

@@ -1,13 +1,22 @@
 module TEALrb
   class Contract
     include TEALrb
-    extend ABITypes
+    include TEALrb::Expressions::App
+    include TEALrb::Expressions::Binary
+    include TEALrb::Expressions::Byte
+    include TEALrb::Expressions::Crypto
+    include TEALrb::Expressions::Flow
+    include TEALrb::Expressions::Storage
+    include TEALrb::Expressions::Transaction
+    include TEALrb::Expressions::Types
+    include TEALrb::Expressions::Unary
+    extend ABI::ABITypes
 
     @@subroutines = []
     @@teal_methods = []
     @@abi_method_hash = nil
 
-    @@abi = ABI.new
+    @@abi = ABI::ABIDescription.new
 
     def self.abi(desc:, args:, returns:)
       args = args.map do |name, h|
