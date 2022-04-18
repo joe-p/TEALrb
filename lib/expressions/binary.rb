@@ -1,6 +1,20 @@
 module TEALrb
   module Opcodes
     module Binary
+      OPCODE_METHOD_MAPPING = {
+        '+': 'add',
+        '-': 'subtract',
+        '<': 'less',
+        '>': 'greater',
+        '<=': 'less_eq',
+        '>=': 'greater_eq',
+        '/': 'divide',
+        '==': 'equal',
+        '&': 'bitwise_and',
+        '!=': 'not_equal',
+        '*': 'multiply'
+      }
+
       def add(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, '+']
       end

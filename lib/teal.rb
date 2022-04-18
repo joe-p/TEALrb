@@ -26,13 +26,13 @@ module TEALrb
       flatten
     end
 
-    TEALrb::BINARY_METHODS.each do |meth, opcode|
+    TEALrb::Opcodes::Binary::OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do |other|
         send(opcode, self, other)
       end
     end
 
-    TEALrb::UNARY_METHODS.each do |meth, opcode|
+    TEALrb::Opcodes::Unary::OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do
         send(opcode, self)
       end

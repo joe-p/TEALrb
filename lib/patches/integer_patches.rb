@@ -9,7 +9,7 @@ module TEALrb
         int(self).teal
       end
 
-      TEALrb::BINARY_METHODS.each do |meth, opcode|
+      TEALrb::Opcodes::Binary::OPCODE_METHOD_MAPPING.each do |meth, opcode|
         define_method(meth) do |other|
           from_eval = (caller[0] + caller[2]).include? "`teal_eval'"
 
@@ -21,7 +21,7 @@ module TEALrb
         end
       end
 
-      TEALrb::UNARY_METHODS.each do |meth, klass|
+      TEALrb::Opcodes::Unary::OPCODE_METHOD_MAPPING.each do |meth, klass|
         define_method(meth) do
           from_eval = caller[0].include? "(eval):1:in `teal_eval'"
 
