@@ -2,7 +2,7 @@ module TEALrb
   module Opcodes
     module Crypto
       def sha256(input = nil)
-        TEAL.new [input.teal, 'sha256']      
+        TEAL.new [input.teal, 'sha256']
       end
 
       def keccak256(input = nil)

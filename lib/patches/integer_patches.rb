@@ -21,7 +21,7 @@ module TEALrb
         end
       end
 
-      TEALrb::Opcodes::Unary::OPCODE_METHOD_MAPPING.each do |meth, klass|
+      TEALrb::Opcodes::Unary::OPCODE_METHOD_MAPPING.each do |meth, _klass|
         define_method(meth) do
           from_eval = caller[0].include? "(eval):1:in `teal_eval'"
 

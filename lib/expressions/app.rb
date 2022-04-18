@@ -7,7 +7,7 @@ module TEALrb
 
       module Global
         extend App
-        
+
         def self.current_application_address
           global 'CurrentApplicationAddress'
         end

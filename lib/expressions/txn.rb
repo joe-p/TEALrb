@@ -4,7 +4,7 @@ module TEALrb
       def txn(field)
         TEAL.new ["txn #{field}"]
       end
-      
+
       module Txn
         extend Transaction
         def self.application_id
@@ -18,7 +18,7 @@ module TEALrb
 
       module Gtxn
         extend Transaction
-        
+
         def self.application_id(index)
           gtxn index, 'ApplicationID'
         end
