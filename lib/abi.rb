@@ -22,8 +22,50 @@ module TEALrb
   end
 
   module ABITypes
-    def uint64
-      ABIType.new 'uint64'
+    def byte
+      ABIType.new "byte"
+    end
+
+    def bool
+      ABIType.new "bool"
+    end
+
+    def address
+      ABIType.new "address"
+    end
+
+    def string
+      ABIType.new "string"
+    end
+
+    def account
+      ABIType.new "account"
+    end
+
+    def asset
+      ABIType.new "asset"
+    end
+
+    def application
+      ABIType.new "application"
+    end
+
+    (8..512).step(8) do |n|
+      (0..160).each do |m|
+        type = "ufixed#{n}x#{m}"
+        
+        define_method(type) do
+          ABIType.new type
+        end
+      end
+    end
+
+    (8..512).step(8) do |n|
+      type = "uint#{n}"
+      
+      define_method(type) do
+        ABIType.new type
+      end
     end
   end
 
