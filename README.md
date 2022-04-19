@@ -1,5 +1,45 @@
 TEALrb is a work in progress. Expect significant commits to master which will eventually be squashed upon release.
 
+# Raw TEAL Exceptions
+TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby syntax therefore the TEALrb-specific syntax must be used.
+
+## Opcodes
+| TEAL | TEALrb |
+|------|--------|
+| `+` | `add(a, b)` |
+| `-` | `subtract(a, b)` |
+| `/` | `divide(a, b)` |
+| `*` | `multiply(a, b)` |
+| `<` | `less(a, b)` |
+| `>`| `greater(a, b)` |
+| `<=` | `less_eq(a, b)` |
+| `>=` | `greater_eq(a, b)` |
+| `==` | `equal(a, b)` |
+| `!=` | `no_equal(a, b)` |
+| `!` | `not(expr)` |
+| `&` | `bitwise_and(a, b)` |
+
+### Example
+These opcodes can still be used on TEALrb expressions:
+
+```ruby
+app_global_get('Some Key') == 'Some Bytes'
+```
+
+They just can't be used on a single line by themselves:
+
+```ruby
+byte 'Some Key'
+app_global_get
+byte 'Some Bytes'
+== # => invalid ruby syntax
+```
+
+## Branch Labels
+| TEAL | TEALrb |
+|------|--------|
+| `br_label:` | `:br_label` |
+
 # Opcode Coverage
 
 | TEAL | TEALrb |
