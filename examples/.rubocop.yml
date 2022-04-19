@@ -1,0 +1,12 @@
+# This is an example .rubocop.yml for TEALrb contracts
+
+AllCops:
+  NewCops: enable
+
+# Allows void literals
+Lint/Void:
+  Enabled: false
+
+# Since case isn't supported by TEALrb (yet), if/elsif are acceptable
+Style/CaseLikeIf:
+  Enabled: false
