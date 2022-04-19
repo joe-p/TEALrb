@@ -133,7 +133,7 @@ byte 'Some Bytes'
 | bz target | TODO |
 | b target | TODO |
 | return | TODO |
-| assert | TODO |
+| assert | `assert(expr)` |
 | pop | TODO |
 | dup | TODO |
 | dup2 | TODO |

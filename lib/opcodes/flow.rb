@@ -17,6 +17,10 @@ module TEALrb
         TEAL.new [data.teal, 'log']
       end
 
+      def assert(expr)
+        TEAL.new [expr.teal, 'assert']
+      end
+
       def abi_return(data)
         log(concat('151f7c75', data.teal).teal)
       end

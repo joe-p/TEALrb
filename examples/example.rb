@@ -32,9 +32,9 @@ class Approval < TEALrb::Contract
     starting_price = btoi(Txna.application_args(1))
     duration = btoi(Txna.application_args(2))
 
-    err unless app_global_get('TX Methods') & 4
-    err unless payment.receiver == Global.current_application_address
-    err unless payment.amount == 100_000
+    assert app_global_get('TX Methods') & 4
+    assert payment.receiver == Global.current_application_address
+    assert payment.amount == 100_000
     app_global_put('Auction End', Global.latest_timestamp + duration)
     app_global_put('Highest Bid', starting_price)
 
@@ -44,14 +44,14 @@ class Approval < TEALrb::Contract
   teal def start_sale
     price = btoi Txna.application_args(1)
 
-    err unless app_global_get('TX Methods') & 2
-    err unless Txn.sender == app_global_get('Owner')
+    assert app_global_get('TX Methods') & 2
+    assert Txn.sender == app_global_get('Owner')
     app_global_put('Sale Price', price)
     approve
   end
 
   teal def end_sale
-    err unless Txn.sender == app_global_get('Owner')
+    assert Txn.sender == app_global_get('Owner')
     app_global_put('Sale Price', 0)
     approve
   end
@@ -62,9 +62,9 @@ class Approval < TEALrb::Contract
     highest_bidder = app_global_get('Highest Bidder')
     highest_bid = app_global_get('Highest Bid')
 
-    err unless Global.latest_timestamp < app_global_get('Auction End')
-    err unless payment.amount > highest_bid
-    err unless app_call.sender == payment.sender
+    assert Global.latest_timestamp < app_global_get('Auction End')
+    assert payment.amount > highest_bid
+    assert app_call.sender == payment.sender
 
     pay(highest_bidder, highest_bid) if highest_bidder != ''
 
@@ -91,7 +91,7 @@ class Approval < TEALrb::Contract
     royalty_address = app_global_get 'Royalty Address'
     owner = app_global_get 'Owner'
 
-    err unless Global.latest_timestamp > app_global_get('Auction End')
+    assert Global.latest_timestamp > app_global_get('Auction End')
     pay(royalty_address, royalty_amount)
     pay(owner, highest_bid - royalty_amount)
     app_global_put('Auction End', 0)
@@ -103,8 +103,8 @@ class Approval < TEALrb::Contract
   teal def transfer
     receiver = Txna.application_args(1)
 
-    err unless app_global_get('TX Methods') & 1
-    err unless Txn.sender == app_global_get('Owner')
+    assert app_global_get('TX Methods') & 1
+    assert Txn.sender == app_global_get('Owner')
     app_global_put('Owner', receiver)
     approve
   end
@@ -115,19 +115,19 @@ class Approval < TEALrb::Contract
     royalty_amount = app_global_get('Sale Price') * app_global_get('Royalty Percent') / 100
     purchase_amount = app_global_get('Sale Price') - royalty_amount
 
-    err unless app_global_get('Sale Price') > 0
+    assert app_global_get('Sale Price') > 0
 
     # Verify senders are all the same
-    err unless royalty_payment.sender == payment.sender
-    err unless Txn.sender == payment.sender
+    assert royalty_payment.sender == payment.sender
+    assert Txn.sender == payment.sender
 
     # Verify receivers are correct
-    err unless royalty_payment.receiver == app_global_get('Royalty Address')
-    err unless payment.receiver == app_global_get('Owner')
+    assert royalty_payment.receiver == app_global_get('Royalty Address')
+    assert payment.receiver == app_global_get('Owner')
 
     # Verify amounts are correct
-    err unless royalty_payment.amount == royalty_amount
-    err unless payment.amount == purchase_amount
+    assert royalty_payment.amount == royalty_amount
+    assert payment.amount == purchase_amount
 
     app_global_put('Owner', Txn.sender)
     app_global_put('Sale Price', 0)

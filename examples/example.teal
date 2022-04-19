@@ -73,33 +73,15 @@ byte "TX Methods"
 app_global_get
 int 4
 &
-!
-bnz if1_0
-b if1_end
-if1_0:
-err
-b if1_end
-if1_end:
+assert
 gtxn 1 Receiver
 global CurrentApplicationAddress
 ==
-!
-bnz if2_0
-b if2_end
-if2_0:
-err
-b if2_end
-if2_end:
+assert
 gtxn 1 Amount
 int 100000
 ==
-!
-bnz if3_0
-b if3_end
-if3_0:
-err
-b if3_end
-if3_end:
+assert
 byte "Auction End"
 global LatestTimestamp
 txna ApplicationArgs 2
@@ -118,24 +100,12 @@ byte "TX Methods"
 app_global_get
 int 2
 &
-!
-bnz if4_0
-b if4_end
-if4_0:
-err
-b if4_end
-if4_end:
+assert
 txn Sender
 byte "Owner"
 app_global_get
 ==
-!
-bnz if5_0
-b if5_end
-if5_0:
-err
-b if5_end
-if5_end:
+assert
 byte "Sale Price"
 txna ApplicationArgs 1
 btoi
@@ -148,13 +118,7 @@ txn Sender
 byte "Owner"
 app_global_get
 ==
-!
-bnz if6_0
-b if6_end
-if6_0:
-err
-b if6_end
-if6_end:
+assert
 byte "Sale Price"
 int 0
 app_global_put
@@ -166,41 +130,23 @@ global LatestTimestamp
 byte "Auction End"
 app_global_get
 <
-!
-bnz if7_0
-b if7_end
-if7_0:
-err
-b if7_end
-if7_end:
+assert
 gtxn 1 Amount
 byte "Highest Bid"
 app_global_get
 >
-!
-bnz if8_0
-b if8_end
-if8_0:
-err
-b if8_end
-if8_end:
+assert
 gtxn 0 Sender
 gtxn 1 Sender
 ==
-!
-bnz if9_0
-b if9_end
-if9_0:
-err
-b if9_end
-if9_end:
+assert
 byte "Highest Bidder"
 app_global_get
 byte ""
 !=
-bnz if10_0
-b if10_end
-if10_0:
+bnz if1_0
+b if1_end
+if1_0:
 itxn_begin
 int 1
 itxn_field TypeEnum
@@ -213,8 +159,8 @@ int 1000
 -
 itxn_field Amount
 itxn_submit
-b if10_end
-if10_end:
+b if1_end
+if1_end:
 byte "Highest Bid"
 gtxn 1 Amount
 app_global_put
@@ -229,13 +175,7 @@ global LatestTimestamp
 byte "Auction End"
 app_global_get
 >
-!
-bnz if11_0
-b if11_end
-if11_0:
-err
-b if11_end
-if11_end:
+assert
 itxn_begin
 int 1
 itxn_field TypeEnum
@@ -291,24 +231,12 @@ byte "TX Methods"
 app_global_get
 int 1
 &
-!
-bnz if12_0
-b if12_end
-if12_0:
-err
-b if12_end
-if12_end:
+assert
 txn Sender
 byte "Owner"
 app_global_get
 ==
-!
-bnz if13_0
-b if13_end
-if13_0:
-err
-b if13_end
-if13_end:
+assert
 byte "Owner"
 txna ApplicationArgs 1
 app_global_put
@@ -320,55 +248,25 @@ byte "Sale Price"
 app_global_get
 int 0
 >
-!
-bnz if14_0
-b if14_end
-if14_0:
-err
-b if14_end
-if14_end:
+assert
 gtxn 2 Sender
 gtxn 1 Sender
 ==
-!
-bnz if15_0
-b if15_end
-if15_0:
-err
-b if15_end
-if15_end:
+assert
 txn Sender
 gtxn 1 Sender
 ==
-!
-bnz if16_0
-b if16_end
-if16_0:
-err
-b if16_end
-if16_end:
+assert
 gtxn 2 Receiver
 byte "Royalty Address"
 app_global_get
 ==
-!
-bnz if17_0
-b if17_end
-if17_0:
-err
-b if17_end
-if17_end:
+assert
 gtxn 1 Receiver
 byte "Owner"
 app_global_get
 ==
-!
-bnz if18_0
-b if18_end
-if18_0:
-err
-b if18_end
-if18_end:
+assert
 gtxn 2 Amount
 byte "Sale Price"
 app_global_get
@@ -378,13 +276,7 @@ app_global_get
 int 100
 /
 ==
-!
-bnz if19_0
-b if19_end
-if19_0:
-err
-b if19_end
-if19_end:
+assert
 gtxn 1 Amount
 byte "Sale Price"
 app_global_get
@@ -397,13 +289,7 @@ int 100
 /
 -
 ==
-!
-bnz if20_0
-b if20_end
-if20_0:
-err
-b if20_end
-if20_end:
+assert
 byte "Owner"
 txn Sender
 app_global_put
