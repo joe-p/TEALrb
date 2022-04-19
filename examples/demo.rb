@@ -102,6 +102,12 @@ class Approval < TEALrb::Contract
     gtxn(0, 'Sender')
     Gtxn.sender(0)
     Gtxn[0].sender
+
+    # Manual branching
+    b manual_br
+    app_global_get('Unreachable')
+    :manual_br # Branch labels are prefiexed with ":" (literal symbol)
+    app_global_get('Manual Br')
   end
 end
 

@@ -89,3 +89,9 @@ int 8
 gtxn 0 Sender
 gtxn 0 Sender
 gtxn 0 Sender
+b manual_br
+byte "Unreachable"
+app_global_get
+manual_br:
+byte "Manual Br"
+app_global_get
