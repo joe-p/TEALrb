@@ -3,7 +3,7 @@ require 'ostruct'
 
 require_relative 'constants'
 require_relative 'abi'
-require_relative 'expressions'
+require_relative 'opcodes'
 require_relative 'contract'
 require_relative 'patches'
 
