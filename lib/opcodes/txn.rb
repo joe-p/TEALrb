@@ -5,34 +5,43 @@ module TEALrb
         TEAL.new ["txn #{field}"]
       end
 
-      module Txn
-        extend Transaction
-        def self.application_id
-          txn 'ApplicationID'
+      module TxnFields
+        include Transaction
+
+        def application_id(*args)
+          opcode('ApplicationID', *args)
         end
 
-        def self.sender
-          txn 'Sender'
+        def sender(*args)
+          opcode('Sender', *args)
+        end
+
+        def receiver(*args)
+          opcode('Receiver', *args)
+        end
+
+        def amount(*args)
+          opcode('Amount', *args)
+        end
+
+        def application_args(*args)
+          opcode('ApplicationArgs', *args)
+        end
+      end
+
+      module Txn
+        extend TxnFields
+
+        def self.opcode(field)
+          txn field
         end
       end
 
       module Gtxn
-        extend Transaction
+        extend TxnFields
 
-        def self.application_id(index)
-          gtxn index, 'ApplicationID'
-        end
-
-        def self.sender(index)
-          gtxn index, 'Sender'
-        end
-
-        def self.receiver(index)
-          gtxn index, 'Receiver'
-        end
-
-        def self.amount(index)
-          gtxn index, 'Amount'
+        def self.opcode(field, index)
+          gtxn index, field
         end
 
         def self.[](index)
@@ -45,29 +54,22 @@ module TEALrb
       end
 
       class GroupTransaction
+        include TxnFields
+
         def initialize(index)
           @index = index
         end
 
-        GTXN_METHODS = %i[
-          sender
-          receiver
-          application_id
-          amount
-        ]
-
-        GTXN_METHODS.each do |meth|
-          define_method meth do
-            Gtxn.send(meth, @index)
-          end
+        def opcode(field)
+          gtxn @index, field
         end
       end
 
       module Txna
-        extend Transaction
+        extend TxnFields  
 
-        def self.application_args(index)
-          txna 'ApplicationArgs', index
+        def self.opcode(field, index)
+          txna field, index
         end
       end
 
