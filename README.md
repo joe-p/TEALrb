@@ -14,10 +14,31 @@ TEALrb supports the writing of raw TEAL with following exceptions. In these exce
 | `>`| `greater(a, b)` |
 | `<=` | `less_eq(a, b)` |
 | `>=` | `greater_eq(a, b)` |
+| `&&` | TODO |
+| `||` | TODO |
 | `==` | `equal(a, b)` |
 | `!=` | `no_equal(a, b)` |
 | `!` | `not(expr)` |
-| `&` | `bitwise_and(a, b)` |
+| `%` | TODO |
+| `|` | TODO |
+| `&` | `bitwise_and` |
+| `^` | TODO |
+| `~` | TODO |
+| `b+` | TODO |
+| `b-` | TODO |
+| `b/` | TODO |
+| `b*` | TODO |
+| `b<` | TODO |
+| `b>` | TODO |
+| `b<=` | TODO |
+| `b>=` | TODO |
+| `b==` | TODO |
+| `b!=` | TODO |
+| `b%` | TODO |
+| `b|` | TODO |
+| `b&` | TODO |
+| `b^` | TODO |
+| `b~` | TODO |
 
 ### Example
 These opcodes can still be used on TEALrb expressions:
