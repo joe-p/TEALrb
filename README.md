@@ -17,7 +17,7 @@ TEALrb supports the writing of raw TEAL with following exceptions. In these exce
 | `&&` | TODO |
 | `||` | TODO |
 | `==` | `equal(a, b)` |
-| `!=` | `no_equal(a, b)` |
+| `!=` | `not_equal(a, b)` |
 | `!` | `not(expr)` |
 | `%` | TODO |
 | `|` | TODO |
