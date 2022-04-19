@@ -13,12 +13,12 @@
         {
           "type": "uint64",
           "desc": "The first number",
-          "name": "a"
+          "name": "x"
         },
         {
           "type": "uint64",
           "desc": "The second number",
-          "name": "b"
+          "name": "y"
         }
       ],
       "returns": {

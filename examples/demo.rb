@@ -7,37 +7,37 @@ class Approval < TEALrb::Contract
   # Specify ABI arg types, return type, and desc
   abi(
     args: {
-      a: { type: uint64, desc: 'The first number' },
-      b: { type: uint64, desc: 'The second number' }
+      x: { type: uint64, desc: 'The first number' },
+      y: { type: uint64, desc: 'The second number' }
     },
     returns: uint64,
     desc: 'Adds two numbers, subtracts two numbers, then multiplies two numbers'
   )
   # define subroutine
-  subroutine def subroutine_method(a, b)
-    a + b
-    a - b
-    abi_return(itob(a * b))
+  subroutine def subroutine_method(x, y)
+    x + y
+    x - y
+    abi_return(itob(x * y))
   end
 
   # Evaluate all code in the method as TEALrb expressions
   teal def teal_method
-    a = 3
-    b = 4
-    a + b # => ['int 3', 'int 4', '+']
+    x = 3
+    y = 4
+    x + y # => ['int 3', 'int 4', '+']
   end
 
   # Only evalulates the return value as a TEALrb expression
   def ruby_method
-    a = 5
-    b = 6
-    a + b # => ['int 11']
+    x = 5
+    y = 6
+    x + y # => ['int 11']
   end
 
   # Only evalutes the code in the compile_block block as TEALrb expressions
-  def explicit_compile_method(a)
+  def explicit_compile_method(x)
     # Since this if statement is outside of the compile block, it is not evaluated as TEALrb expressions
-    b = if 100 < 1_000
+    y = if 100 < 1_000
           8
         else
           88_888
@@ -45,7 +45,7 @@ class Approval < TEALrb::Contract
 
     # The binding is passed here so the evaluation of the compile block includes local variables
     compile_block(binding) do
-      a + b # => ['int 7', 'int 8', '+']
+      x + y # => ['int 7', 'int 8', '+']
     end
   end
 
