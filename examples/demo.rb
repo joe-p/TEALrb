@@ -90,10 +90,18 @@ class Approval < TEALrb::Contract
       app_global_put('Second Word', '???')
     end
 
+    # Calling methods
+    # See header comments of each method for details
     subroutine_method(1, 2)
     teal_method
     ruby_method
     explicit_compile_method(7)
+
+    # Accessing specific indexes/fields
+    # All of the following are the same
+    gtxn(0, 'Sender')
+    Gtxn.sender(0)
+    Gtxn[0].sender
   end
 end
 
