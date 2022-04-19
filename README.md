@@ -84,7 +84,7 @@ byte 'Some Bytes'
 | && | TODO |
 | \|\| | TODO |
 | == | `equal(a, b)` |
-| != | `no_equal(a, b)` |
+| != | `not_equal(a, b)` |
 | ! | `not(expr)` |
 | len | TODO |
 | itob | TODO |
