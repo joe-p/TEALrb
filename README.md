@@ -56,10 +56,16 @@ byte 'Some Bytes'
 == # => invalid ruby syntax
 ```
 
-## Branch Labels
+## Branching
+
+In TEALrb, branch labels are symbol literals and when using a branching opcode the argument must be a symbol or string
+
 | TEAL | TEALrb |
 |------|--------|
 | `br_label:` | `:br_label` |
+| `b br_label`| `b :br_label` |
+| `bz br_label`| `bz :br_label` |
+| `bnz br_label`| `bnz :br_label` |
 
 # Opcode Coverage
 
@@ -129,10 +135,10 @@ byte 'Some Bytes'
 | gaids | `gaids(transaction)` |
 | loads | `loads(index)` |
 | stores | `stores(index, value)` |
-| bnz target | TODO |
-| bz target | TODO |
-| b target | TODO |
-| return | `return` |
+| bnz target | `bnz(target)` |
+| bz target | `bz(target)` |
+| b target | `b(target)` |
+| return | `return(expr)` |
 | assert | `assert(expr)` |
 | pop | `pop(expr)` |
 | dup | `dup(expr)` |
@@ -224,4 +230,3 @@ byte 'Some Bytes'
 # Milestones
 - [ ] 100% opcode coverage
 - [ ] 100% enum coverage
-- [ ] PyTEAL feature parity

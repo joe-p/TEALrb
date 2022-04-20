@@ -1,6 +1,18 @@
 module TEALrb
   module Opcodes
     module Flow
+      def b(target)
+        TEAL.new ["#{__method__} #{target}"]
+      end
+
+      def bnz(target)
+        TEAL.new ["#{__method__} #{target}"]
+      end
+
+      def bz(target)
+        TEAL.new ["#{__method__} #{target}"]
+      end
+
       def approve
         TEAL.new [1.teal, 'return']
       end

@@ -49,14 +49,13 @@ module TEALrb
     end
 
     def teal_eval(str, eval_binding = @default_binding)
+      result = eval_binding.eval(str)
+      
       if str[/^@*[a-z_][a-zA-Z_0-9]* =/] # variable assignment
-        eval_binding.eval(str)
-        nil
-      elsif str[/^(b|bz|bnz) /] # branching
-        TEAL.new [str]
-      else
-        eval_binding.eval(str).teal
+        return nil
       end
+
+      result.teal
     rescue StandardError, SyntaxError => e
       puts "TEAL EVAL ERROR: #{str}"
       raise e
