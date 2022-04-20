@@ -74,7 +74,7 @@ module TEALrb
       def gitxna(transaction_index, field, index)
         TEAL.new ["gitxna #{transaction_index} #{field} #{index}"]
       end
-      
+
       def gitxnas(transaction_index, field, index = nil)
         TEAL.new [index.teal, "gitxnas #{transaction_index} #{field}"]
       end
