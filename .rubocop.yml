@@ -9,6 +9,11 @@
 #
 # See https://docs.rubocop.org/rubocop/configuration
 
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - 'teal_rb.gemspec'
+    - 'Gemfile'
+
 # Pending Cops
 Lint/RefinementImportMethods: # new in 1.27
   Enabled: true
