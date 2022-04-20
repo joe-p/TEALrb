@@ -55,6 +55,30 @@ module TEALrb
         TEAL.new ["gtxn #{index} #{field}"]
       end
 
+      def gtxnsas(field, index = nil, transaction_index = nil)
+        TEAL.new [index.teal, transaction_index.teal, "gtxnsas #{field}"]
+      end
+
+      def gtxna(transaction_index, field, index)
+        TEAL.new ["gtxna #{transaction_index} #{field} #{index}"]
+      end
+
+      def gtxnsa(field, index, transaction_index = nil)
+        TEAL.new [transaction_index.teal, "gtxna #{field} #{index}"]
+      end
+
+      def gitxn(transaction_index, field)
+        TEAL.new ["gitxn #{transaction_index} #{field}"]
+      end
+
+      def gitxna(transaction_index, field, index)
+        TEAL.new ["gitxna #{transaction_index} #{field} #{index}"]
+      end
+      
+      def gitxnas(transaction_index, field, index = nil)
+        TEAL.new [index.teal, "gitxnas #{transaction_index} #{field}"]
+      end
+
       class GroupTransaction
         include TxnFields
 
@@ -89,6 +113,10 @@ module TEALrb
 
       def itxn_submit
         TEAL.new ['itxn_submit']
+      end
+
+      def itxna(field, index)
+        TEAL.new ["itxna #{field} #{index}"]
       end
     end
   end

@@ -22,6 +22,18 @@ module TEALrb
       def app_global_put(key = nil, value = nil)
         TEAL.new [key.teal, value.teal, 'app_global_put']
       end
+
+      def gload(transaction_index, index)
+        TEAL.new ["gload #{transaction_index} #{index}"]
+      end
+
+      def intcblock(*ints)
+        TEAL.new ["intcblock #{ints.join(' ')}"]
+      end
+
+      def bytecblock(*bytes)
+        TEAL.new ["bytecblock #{bytes.join(' ')}"]
+      end
     end
   end
 end

@@ -136,13 +136,13 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 | mulw | `mulw(a, b)` |
 | addw | `addw(a, b)` |
 | divmodw | `divmodw(a, b)` |
-| intcblock uint ... | TODO |
+| intcblock uint ... | `intcblock(*ints)` |
 | intc i | `intc(index)` |
 | intc_0 | `intc_0` |
 | intc_1 | `intc_1` |
 | intc_2 | `intc_2` |
 | intc_3 | `intc_3` |
-| bytecblock bytes ... | TODO |
+| bytecblock bytes ... | `bytecblock(*bytes)` |
 | bytec i | `bytec(index)` |
 | bytec_0 | `bytec_0` |
 | bytec_1 | `bytec_1` |
@@ -155,14 +155,14 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 | arg_3 | `arg_3` |
 | txn f | `txn(field)` |
 | global f | `global(field)` |
-| gtxn t f | TODO |
+| gtxn t f | `gtxnsas(field, transaction_index, index)` |
 | load i | `load(index)` |
 | store i | `store(index, value)` |
 | txna f i | `txna(field, index)` |
-| gtxna t f i | TODO |
+| gtxna t f i | `gtxna(transaction_index, field, index)` |
 | gtxns f | `gtxns(field, transaction_index)` |
-| gtxnsa f i | TODO |
-| gload t i | TODO |
+| gtxnsa f i | `gtxnsa(field, index, transaction_index)` |
+| gload t i | `gload(transaction_index, index)` |
 | gloads i | `gloads(index, transaction_index)` |
 | gaid t | `gaid(transaction_index)` |
 | gaids | `gaids(transaction)` |
@@ -182,13 +182,13 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 | cover n | `cover(count)` |
 | uncover n | `uncover(count)` |
 | concat | `concat(a, b)` |
-| substring s e | TODO |
+| substring s e | `substring(start, exclusive_end, byte_array)` |
 | substring3 | `substring3(byte_array, start, exclusive_end)` |
 | getbit | `getbit(input, bit_index)` |
 | setbit | `setbit(input, bit_index, value)` |
 | getbyte | `getbyte(input, byte_index)` |
 | setbyte | `setbyte(byte_array, byte_index, value)` |
-| extract s l | TODO |
+| extract s l | `extract(start, length, byte_array)` |
 | extract3 | `extract3(byte_array, start, exclusive_end)` |
 | extract_uint16 | `extract_uint16(byte_array, start)` |
 | extract_uint32 | `extract_uint32(byte_array, start)` |
@@ -208,8 +208,8 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 | app_params_get f | `app_params_get(field, asset)` |
 | acct_params_get f | `acct_params_get(field, account)` |
 | min_balance | `min_balance(account)` |
-| pushbytes bytes | TODO |
-| pushint uint | TODO |
+| pushbytes bytes | `pushbytes(string)` |
+| pushint uint | `pushint(integer)` |
 | callsub target | `callsub(name, *args)` |
 | retsub | `retsub` |
 | shl | `shl(a, b)` |
@@ -240,17 +240,17 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 | itxn_field f | `itxn_field(field, value)` |
 | itxn_submit | `itxn_submit` |
 | itxn f | `txn(field)` |
-| itxna f i | TODO |
+| itxna f i | `itxna(field, index)` |
 | itxn_next | `itxn_next` |
-| gitxn t f | TODO |
-| gitxna t f i | TODO |
+| gitxn t f | `gitxn(transaction_index, field)` |
+| gitxna t f i | ` gitxna(transaction_index, field, index)` |
 | txnas f | `txnas(field, index)` |
 | gtxnas t f | `gtxn(index, field)` |
-| gtxnsas f | `gtxnsas(field, transaction_index, index)` |
+| gtxnsas f | `gtxnsas(field, index, transaction_index)` |
 | args | `args(index)` |
 | gloadss | `gloadss(transaction, index)` |
 | itxnas f | `itxnas(field, index)` |
-| gitxnas t f | TODO |
+| gitxnas t f | `gitxnas(transaction_index, field, index)` |
 
 # Features
 - [x] Subroutine definition

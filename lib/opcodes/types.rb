@@ -3,6 +3,14 @@
 module TEALrb
   module Opcodes
     module Types
+      def pushint(integer)
+        TEAL.new ["pushint #{integer}"]
+      end
+
+      def pushbytes(string)
+        TEAL.new ["pushbytes \"#{string}\""]
+      end
+
       def int(integer)
         TEAL.new ["int #{integer}"]
       end
