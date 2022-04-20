@@ -85,34 +85,34 @@ byte 'Some Bytes'
 | == | `equal(a, b)` |
 | != | `not_equal(a, b)` |
 | ! | `not(expr)` |
-| len | TODO |
-| itob | TODO |
+| len | `len(input)` |
+| itob | `itob(integer)` |
 | btoi | `btoi(bytes)` |
 | % | `modulo(a, b)` |
 | \| | `bitwise_or(a, b)` |
 | & | `bitwise_and(a, b)` |
 | ^ | `bitwise_xor(a, b)` |
 | ~ | `bitwise_invert(a, b)` |
-| mulw | TODO |
-| addw | TODO |
-| divmodw | TODO |
+| mulw | `mulw(a, b)` |
+| addw | `addw(a, b)` |
+| divmodw | `divmodw(a, b)` |
 | intcblock uint ... | TODO |
 | intc i | TODO |
-| intc_0 | TODO |
-| intc_1 | TODO |
-| intc_2 | TODO |
-| intc_3 | TODO |
+| intc_0 | `intc_0` |
+| intc_1 | `intc_1` |
+| intc_2 | `intc_2` |
+| intc_3 | `intc_3` |
 | bytecblock bytes ... | TODO |
 | bytec i | TODO |
-| bytec_0 | TODO |
-| bytec_1 | TODO |
-| bytec_2 | TODO |
-| bytec_3 | TODO |
+| bytec_0 | `bytec_0` |
+| bytec_1 | `bytec_1` |
+| bytec_2 | `bytec_2` |
+| bytec_3 | `bytec_3` |
 | arg n | TODO |
-| arg_0 | TODO |
-| arg_1 | TODO |
-| arg_2 | TODO |
-| arg_3 | TODO |
+| arg_0 | `arg_0` |
+| arg_1 | `arg_1` |
+| arg_2 | `arg_2` |
+| arg_3 | `arg_3` |
 | txn f | `txn(field)` |
 | global f | `global(field)` |
 | gtxn t f | TODO |
@@ -125,61 +125,61 @@ byte 'Some Bytes'
 | gload t i | TODO |
 | gloads i | TODO |
 | gaid t | TODO |
-| gaids | TODO |
-| loads | TODO |
-| stores | TODO |
+| gaids | `gaids(transaction)` |
+| loads | `loads(index)` |
+| stores | `stores(index, value)` |
 | bnz target | TODO |
 | bz target | TODO |
 | b target | TODO |
 | return | TODO |
 | assert | `assert(expr)` |
-| pop | TODO |
-| dup | TODO |
-| dup2 | TODO |
+| pop | `pop(expr)` |
+| dup | `dup(expr)` |
+| dup2 | `dup2(expr_a, expr_b)` |
 | dig n | TODO |
-| swap | TODO |
-| select | TODO |
+| swap | `swap(expr_a, expr_b)` |
+| select | `select(expr_a, expr_b, expr_c)` |
 | cover n | TODO |
 | uncover n | TODO |
 | concat | `concat(a, b)` |
 | substring s e | TODO |
-| substring3 | TODO |
-| getbit | TODO |
-| setbit | TODO |
-| getbyte | TODO |
-| setbyte | TODO |
+| substring3 | `substring3(byte_array, start, exclusive_end)` |
+| getbit | `getbit(input, bit_index)` |
+| setbit | `setbit(input, bit_index, value)` |
+| getbyte | `getbyte(input, byte_index)` |
+| setbyte | `setbyte(byte_array, byte_index, value)` |
 | extract s l | TODO |
-| extract3 | TODO |
-| extract_uint16 | TODO |
-| extract_uint32 | TODO |
-| extract_uint64 | TODO |
-| balance | TODO |
+| extract3 | `extract3(byte_array, start, exclusive_end)` |
+| extract_uint16 | `extract_uint16(byte_array, start)` |
+| extract_uint32 | `extract_uint32(byte_array, start)` |
+| extract_uint64 | `extract_uint64(byte_array, start)` |
+| balance | `balance(account)` |
 | app_opted_in | `app_opted_in(account, app)` |
 | app_local_get | `app_local_get(account, key)` |
-| app_local_get_ex | TODO |
+| app_local_get_ex | `app_local_get_ex(account, application, key)` |
 | app_global_get | `app_global_get(key)` |
-| app_global_get_ex | TODO |
-| app_local_put | TODO |
+| app_global_get_ex | `app_global_get_ex(app, key)` |
+| app_local_put | `app_local_put(account, key, value)` |
 | app_global_put | `app_global_put(key, value)` |
-| app_local_del | TODO |
-| app_global_del | TODO |
+| app_local_del | `app_local_del(account, key)` |
+| app_global_del | `app_global_del(key)` |
 | asset_holding_get f | TODO |
 | asset_params_get f | TODO |
 | app_params_get f | TODO |
 | acct_params_get f | TODO |
-| min_balance | TODO |
+| min_balance | `min_balance(account)` |
 | pushbytes bytes | TODO |
 | pushint uint | TODO |
 | callsub target | `callsub(name, *args)` |
-| retsub | TODO |
-| shl | TODO |
-| shr | TODO |
-| sqrt | TODO |
-| bitlen | TODO |
-| exp | TODO |
-| expw | TODO |
-| bsqrt | TODO |
-| divw | TODO |
+| retsub | `retsub` |
+| shl | `shl(a, b)` |
+| shr | `shr(a, b)` |
+| sqrt | `sqrt(integer)` |
+| bitlen | `bitlen(input)` |
+| exp | `exp(a, b)` |
+| expw | `expw(a, b)` |
+| bsqrt | `bsqrt(big_endian_uint)` |
+| divw | `divw(a, b)` |
 | b+ | `big_endian_add(a, b)` |
 | b- | `big_endian_subtract(a, b)` |
 | b/ | `big_endian_divide(a, b)` |
@@ -194,21 +194,21 @@ byte 'Some Bytes'
 | b& | `padded_bitwise_and(a, b)` |
 | b^ | `padded_bitwise_xor(a, b)` |
 | b~ | `bitwise_byte_invert(a, b)` |
-| bzero | TODO |
-| log | TODO |
+| bzero | `bzero(length)` |
+| log | `log(byte_array)` |
 | itxn_begin | `itxn_begin` |
 | itxn_field f | `itxn_field(field, value)` |
 | itxn_submit | `itxn_submit` |
 | itxn f | `txn(field)` |
 | itxna f i | TODO |
-| itxn_next | TODO |
+| itxn_next | `itxn_next` |
 | gitxn t f | TODO |
 | gitxna t f i | TODO |
 | txnas f | TODO |
 | gtxnas t f | `gtxn(index, field)` |
 | gtxnsas f | TODO |
-| args | TODO |
-| gloadss | TODO |
+| args | `args(index)` |
+| gloadss | `gloadss(transaction, index)` |
 | itxnas f | TODO |
 | gitxnas t f | TODO |
 

@@ -7,3 +7,5 @@ require_relative 'opcodes/unary'
 require_relative 'opcodes/types'
 require_relative 'opcodes/txn'
 require_relative 'opcodes/byte'
+require_relative 'opcodes/unorganized'
+
