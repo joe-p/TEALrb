@@ -97,18 +97,18 @@ byte 'Some Bytes'
 | addw | `addw(a, b)` |
 | divmodw | `divmodw(a, b)` |
 | intcblock uint ... | TODO |
-| intc i | TODO |
+| intc i | `intc(index)` |
 | intc_0 | `intc_0` |
 | intc_1 | `intc_1` |
 | intc_2 | `intc_2` |
 | intc_3 | `intc_3` |
 | bytecblock bytes ... | TODO |
-| bytec i | TODO |
+| bytec i | `bytec(index)` |
 | bytec_0 | `bytec_0` |
 | bytec_1 | `bytec_1` |
 | bytec_2 | `bytec_2` |
 | bytec_3 | `bytec_3` |
-| arg n | TODO |
+| arg n | `arg(index)` |
 | arg_0 | `arg_0` |
 | arg_1 | `arg_1` |
 | arg_2 | `arg_2` |
@@ -120,11 +120,11 @@ byte 'Some Bytes'
 | store i | `store(index, value)` |
 | txna f i | `txna(field, index)` |
 | gtxna t f i | TODO |
-| gtxns f | TODO |
+| gtxns f | `gtxns(field, transaction_index)` |
 | gtxnsa f i | TODO |
 | gload t i | TODO |
-| gloads i | TODO |
-| gaid t | TODO |
+| gloads i | `gloads(index, transaction_index)` |
+| gaid t | `gaid(transaction_index)` |
 | gaids | `gaids(transaction)` |
 | loads | `loads(index)` |
 | stores | `stores(index, value)` |
@@ -136,11 +136,11 @@ byte 'Some Bytes'
 | pop | `pop(expr)` |
 | dup | `dup(expr)` |
 | dup2 | `dup2(expr_a, expr_b)` |
-| dig n | TODO |
+| dig n | `dig(index)` |
 | swap | `swap(expr_a, expr_b)` |
 | select | `select(expr_a, expr_b, expr_c)` |
-| cover n | TODO |
-| uncover n | TODO |
+| cover n | `cover(count)` |
+| uncover n | `uncover(count)` |
 | concat | `concat(a, b)` |
 | substring s e | TODO |
 | substring3 | `substring3(byte_array, start, exclusive_end)` |
@@ -163,10 +163,10 @@ byte 'Some Bytes'
 | app_global_put | `app_global_put(key, value)` |
 | app_local_del | `app_local_del(account, key)` |
 | app_global_del | `app_global_del(key)` |
-| asset_holding_get f | TODO |
-| asset_params_get f | TODO |
-| app_params_get f | TODO |
-| acct_params_get f | TODO |
+| asset_holding_get f | `asset_holding_get(field, account, asset)` |
+| asset_params_get f | `asset_params_get(field, asset)` |
+| app_params_get f | `app_params_get(field, asset)` |
+| acct_params_get f | `acct_params_get(field, account)` |
 | min_balance | `min_balance(account)` |
 | pushbytes bytes | TODO |
 | pushint uint | TODO |
@@ -204,12 +204,12 @@ byte 'Some Bytes'
 | itxn_next | `itxn_next` |
 | gitxn t f | TODO |
 | gitxna t f i | TODO |
-| txnas f | TODO |
+| txnas f | `txnas(field, index)` |
 | gtxnas t f | `gtxn(index, field)` |
-| gtxnsas f | TODO |
+| gtxnsas f | `gtxnsas(field, transaction_index, index)` |
 | args | `args(index)` |
 | gloadss | `gloadss(transaction, index)` |
-| itxnas f | TODO |
+| itxnas f | `itxnas(field, index)` |
 | gitxnas t f | TODO |
 
 # Features
