@@ -14,31 +14,30 @@ TEALrb supports the writing of raw TEAL with following exceptions. In these exce
 | `>`| `greater(a, b)` |
 | `<=` | `less_eq(a, b)` |
 | `>=` | `greater_eq(a, b)` |
-| `&&` | TODO |
-| `||` | TODO |
+| `&&` | `value_and(&&)` |
+| `||` | `value_or(a, b)` |
 | `==` | `equal(a, b)` |
 | `!=` | `not_equal(a, b)` |
 | `!` | `not(expr)` |
-| `%` | TODO |
-| `|` | TODO |
-| `&` | `bitwise_and` |
-| `^` | TODO |
-| `~` | TODO |
-| `b+` | TODO |
-| `b-` | TODO |
-| `b/` | TODO |
-| `b*` | TODO |
-| `b<` | TODO |
-| `b>` | TODO |
-| `b<=` | TODO |
-| `b>=` | TODO |
-| `b==` | TODO |
-| `b!=` | TODO |
-| `b%` | TODO |
-| `b|` | TODO |
-| `b&` | TODO |
-| `b^` | TODO |
-| `b~` | TODO |
+| `%` | `modulo(a, b)` |
+| `|` | `bitwise_or(a, b)` |
+| `&` | `bitwise_and(a, b)` |
+| `^` | `bitwise_xor(a, b)` |
+| `~` | `bitwise_invert(a, b)` |
+| `b+` | `big_endian_add(a, b)` |
+| `b-` | `big_endian_subtract(a, b)` |
+| `b/` | `big_endian_divide(a, b)` |
+| `b*` | `big_endian_multiply(a, b)` |
+| `b>` | `big_endian_more(a, b)` |
+| `b<=` | `big_endian_less_eq(a, b)` |
+| `b>=` | `big_endian_more_eq(a, b)` |
+| `b==` | `big_endian_equal(a, b)` |
+| `b!=` | `big_endian_not_equal(a, b)` |
+| `b%` | `big_endian_modulo(a, b)` |
+| `b|` | `padded_bitwise_or(a, b)` |
+| `b&` | `padded_bitwise_and(a, b)` |
+| `b^` | `padded_bitwise_xor(a, b)` |
+| `b~` | `bitwise_byte_invert(a, b)` |
 
 ### Example
 These opcodes can still be used on TEALrb expressions:
@@ -81,19 +80,19 @@ byte 'Some Bytes'
 | > | `greater(a, b)` |
 | <= | `less_eq(a, b)` |
 | >= | `greater_eq(a, b)` |
-| && | TODO |
-| \|\| | TODO |
+| && | `value_and(&&)` |
+| \|\| | `value_or(a, b)` |
 | == | `equal(a, b)` |
 | != | `not_equal(a, b)` |
 | ! | `not(expr)` |
 | len | TODO |
 | itob | TODO |
 | btoi | `btoi(bytes)` |
-| % | TODO |
-| \| | TODO |
-| & | `bitwise_and` |
-| ^ | TODO |
-| ~ | TODO |
+| % | `modulo(a, b)` |
+| \| | `bitwise_or(a, b)` |
+| & | `bitwise_and(a, b)` |
+| ^ | `bitwise_xor(a, b)` |
+| ~ | `bitwise_invert(a, b)` |
 | mulw | TODO |
 | addw | TODO |
 | divmodw | TODO |
@@ -181,21 +180,20 @@ byte 'Some Bytes'
 | expw | TODO |
 | bsqrt | TODO |
 | divw | TODO |
-| b+ | TODO |
-| b- | TODO |
-| b/ | TODO |
-| b* | TODO |
-| b< | TODO |
-| b> | TODO |
-| b<= | TODO |
-| b>= | TODO |
-| b== | TODO |
-| b!= | TODO |
-| b% | TODO |
-| b\| | TODO |
-| b& | TODO |
-| b^ | TODO |
-| b~ | TODO |
+| b+ | `big_endian_add(a, b)` |
+| b- | `big_endian_subtract(a, b)` |
+| b/ | `big_endian_divide(a, b)` |
+| b* | `big_endian_multiply(a, b)` |
+| b> | `big_endian_more(a, b)` |
+| b<= | `big_endian_less_eq(a, b)` |
+| b>= | `big_endian_more_eq(a, b)` |
+| b== | `big_endian_equal(a, b)` |
+| b!= | `big_endian_not_equal(a, b)` |
+| b% | `big_endian_modulo(a, b)` |
+| b\| | `padded_bitwise_or(a, b)` |
+| b& | `padded_bitwise_and(a, b)` |
+| b^ | `padded_bitwise_xor(a, b)` |
+| b~ | `bitwise_byte_invert(a, b)` |
 | bzero | TODO |
 | log | TODO |
 | itxn_begin | `itxn_begin` |
