@@ -9,6 +9,7 @@ module TEALrb
     @@subroutines = []
     @@teal_methods = []
     @@abi_method_hash = nil
+    @@version = 6
 
     @@abi = ABI::ABIDescription.new
 
@@ -21,10 +22,8 @@ module TEALrb
       @@abi_method_hash = { desc: desc, args: args, returns: returns.to_s }
     end
 
-    def initialize(version: 5)
-      @vars = OpenStruct.new
-      @version = version
-      @teal = ["#pragma version #{@version}", 'b main']
+    def initialize()
+      @teal = ["#pragma version #{@@version}", 'b main']
       @if_count = 0
       @open_ifs = []
       @default_binding = binding
