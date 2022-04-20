@@ -38,6 +38,7 @@ TEALrb supports the writing of raw TEAL with following exceptions. In these exce
 | `b&` | `padded_bitwise_and(a, b)` |
 | `b^` | `padded_bitwise_xor(a, b)` |
 | `b~` | `bitwise_byte_invert(a, b)` |
+| `return` | `teal_return(expr)` |
 
 ### Example
 These opcodes can still be used on TEALrb expressions:
@@ -131,7 +132,7 @@ byte 'Some Bytes'
 | bnz target | TODO |
 | bz target | TODO |
 | b target | TODO |
-| return | TODO |
+| return | `return` |
 | assert | `assert(expr)` |
 | pop | `pop(expr)` |
 | dup | `dup(expr)` |
