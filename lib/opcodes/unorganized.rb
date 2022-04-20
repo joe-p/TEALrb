@@ -224,63 +224,63 @@ module TEALrb
       def intc(index)
         TEAL.new ["intc #{index}"]
       end
-      
+
       def bytec(index)
         TEAL.new ["bytec #{index}"]
       end
-      
+
       def arg(index)
         TEAL.new ["arg #{index}"]
       end
-      
+
       def gtxns(field, transaction_index = nil)
         TEAL.new [transaction_index.teal, "gtxns #{field}"]
       end
-      
+
       def gloads(index, transaction_index = nil)
         TEAL.new [transaction_index.teal, "gloads #{index}"]
       end
-      
+
       def gaid(transaction_index)
         TEAL.new ["gaid #{transaction_index}"]
       end
-      
+
       def dig(index)
         TEAL.new ["dig #{index}"]
       end
-      
+
       def cover(count)
         TEAL.new ["cover #{count}"]
       end
-      
+
       def uncover(count)
         TEAL.new ["uncover #{count}"]
       end
-      
+
       def asset_holding_get(field, account = nil, asset = nil)
         TEAL.new [account.teal, asset.teal, "asset_holding_get #{field}"]
       end
-      
+
       def asset_params_get(field, asset = nil)
         TEAL.new [asset.teal, "asset_params_get #{field}"]
       end
-      
+
       def app_params_get(field, asset = nil)
         TEAL.new [asset.teal, "app_params_get #{field}"]
       end
-      
+
       def acct_params_get(field, account = nil)
         TEAL.new [account.teal, "acct_params_get #{field}"]
       end
-      
+
       def txnas(field, index = nil)
         TEAL.new [index.teal, "txnas #{field}"]
       end
-      
+
       def gtxnsas(field, transaction_index = nil, index = nil)
         TEAL.new [transaction_index.teal, index.teal, "gtxnsas #{field}"]
       end
-      
+
       def itxnas(field, index = nil)
         TEAL.new [index.teal, "itxnas #{field}"]
       end

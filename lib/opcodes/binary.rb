@@ -38,39 +38,39 @@ module TEALrb
       def big_endian_more(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b>']
       end
-      
+
       def big_endian_less_eq(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b<=']
       end
-      
+
       def big_endian_more_eq(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b>=']
       end
-      
+
       def big_endian_equal(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b==']
       end
-      
+
       def big_endian_not_equal(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b!=']
       end
-      
+
       def big_endian_modulo(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b%']
       end
-      
+
       def padded_bitwise_or(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b|']
       end
-      
+
       def padded_bitwise_and(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b&']
       end
-      
+
       def padded_bitwise_xor(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b^']
       end
-      
+
       def bitwise_byte_invert(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b~']
       end

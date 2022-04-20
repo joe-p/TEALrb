@@ -66,7 +66,7 @@ module TEALrb
       end
 
       module Txna
-        extend TxnFields  
+        extend TxnFields
 
         def self.opcode(field, index)
           txna field, index
