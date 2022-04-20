@@ -22,21 +22,19 @@ module TEALrb
   end
 
   class TEAL < Array
-    include TEALrb::Opcodes
-
     def teal
       flatten
     end
 
     TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do |other|
-        send(opcode, self, other)
+        Class.new.extend(TEALrb::Opcodes).send(opcode, self, other)
       end
     end
 
     TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do
-        send(opcode, self)
+        Class.new.extend(TEALrb::Opcodes).send(opcode, self)
       end
     end
   end
