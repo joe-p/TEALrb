@@ -1,4 +1,8 @@
 module TEALrb
+  module ExtendedOpcodes
+    extend Opcodes
+  end
+
   module Opcodes
     module TxnFields
       def application_id(*args)

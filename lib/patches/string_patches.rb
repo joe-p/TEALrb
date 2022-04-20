@@ -4,7 +4,7 @@ module TEALrb
   module Patches
     module StringPatches
       def teal
-        Class.new.extend(TEALrb::Opcodes).byte(self).teal
+        ExtendedOpcodes.byte(self).teal
       end
     end
   end

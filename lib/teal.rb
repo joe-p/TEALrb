@@ -28,13 +28,13 @@ module TEALrb
 
     TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do |other|
-        Class.new.extend(TEALrb::Opcodes).send(opcode, self, other)
+        ExtendedOpcodes.send(opcode, self, other)
       end
     end
 
     TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do
-        Class.new.extend(TEALrb::Opcodes).send(opcode, self)
+        ExtendedOpcodes.send(opcode, self)
       end
     end
   end
