@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   class Contract
     include TEALrb
@@ -86,7 +88,7 @@ module TEALrb
         end
       end
 
-      @teal << name.to_s + ':'
+      @teal << ("#{name}:")
       str = blk.source.lines[1..-2].join("\n")
 
       params.each_with_index do |name, i|
@@ -124,7 +126,7 @@ module TEALrb
         next if line.empty?
         next if line[/^#/]
 
-        line.gsub!(/unless .*/, "if !(#{line[/(?<=unless ).*/]})") if line[/^unless /] or line[/ unless /]
+        line.gsub!(/unless .*/, "if !(#{line[/(?<=unless ).*/]})") if line[/^unless /] || line[/ unless /]
 
         if line[/^if /]
           new_if(line[/(?<=if ).*/])

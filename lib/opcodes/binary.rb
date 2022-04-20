@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   module Opcodes
     module Binary
@@ -34,7 +36,7 @@ module TEALrb
         'b&': 'padded_bitwise_and',
         'b^': 'padded_bitwise_xor',
         'b~': 'bitwise_byte_invert'
-      }
+      }.freeze
       def big_endian_more(a = nil, b = nil)
         TEAL.new [a.teal, b.teal, 'b>']
       end

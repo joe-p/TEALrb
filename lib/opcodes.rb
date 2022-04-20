@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'opcodes/crypto'
 require_relative 'opcodes/flow'
 require_relative 'opcodes/binary'

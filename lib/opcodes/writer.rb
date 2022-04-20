@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This is just a file used during development for generating code for opcodes
 # It will be delted once 100% of opcodes are covered
 
@@ -8,7 +10,7 @@ ops = {
 }
 
 ops.each do |klass, method|
-  puts ''"class #{klass} < Expression
+  puts "class #{klass} < Expression
     def initialize(index, input = nil)
         @teal = TEAL.new [input.teal, '#{method} \#{index}']
       end
@@ -16,5 +18,5 @@ ops.each do |klass, method|
 
     def #{method}(index, input = nil)
       #{klass}.new(index, input)
-    end"''
+    end"
 end

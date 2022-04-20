@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/teal'
 require 'pry'
 
@@ -159,4 +161,4 @@ end
 
 approval = Approval.new
 approval.compile_main
-IO.write('example.teal', approval.teal)
+File.write('example.teal', approval.teal)

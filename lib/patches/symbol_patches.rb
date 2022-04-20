@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module TEALrb
   module Patches
     module SymbolMethods
       def teal
-        to_s + ':'
+        "#{self}:"
       end
     end
   end

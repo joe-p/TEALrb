@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/teal'
 
 class Approval < TEALrb::Contract
@@ -113,5 +115,5 @@ end
 
 approval = Approval.new
 approval.compile_main
-IO.write('demo.teal', approval.teal)
-IO.write('demo.json', JSON.pretty_generate(approval.abi_hash))
+File.write('demo.teal', approval.teal)
+File.write('demo.json', JSON.pretty_generate(approval.abi_hash))
