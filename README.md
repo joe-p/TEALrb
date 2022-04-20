@@ -40,20 +40,53 @@ TEALrb supports the writing of raw TEAL with following exceptions. In these exce
 | `b~` | `bitwise_byte_invert(a, b)` |
 | `return` | `teal_return(expr)` |
 
-### Example
-These opcodes can still be used on TEALrb expressions:
+### Instance Methods
+Some of these opcodes can still be used on TEALrb opcodes as methods. 
 
+| Instance Method | Opcode Method |
+| --- | --- |
+| `+(b)` | `add(self, b)` |
+| `-(b)` | `subtract(self, b)` |
+| `/(b)` | `divide(self, b)` |
+| `*(b)` | `multiply(self, b)` |
+| `<(b)` | `less(self, b)` |
+| `>(b)`| `greater(self, b)` |
+| `<=(b)` | `less_eq(self, b)` |
+| `>=(b)` | `greater_eq(self, b)` |
+| `&&(b)` | `value_and(self, b)` |
+| `||(b)` | `value_or(self, b)` |
+| `==(b)` | `equal(self, b)` |
+| `!=(b)` | `not_equal(self, b)` |
+| `@!(b)` | `not(self)` |
+| `%(b)` | `modulo(self, b)` |
+| `|(b)` | `bitwise_or(self, b)` |
+| `&(b)` | `bitwise_and(self, b)` |
+| `^(b)` | `bitwise_xor(self, b)` |
+| `~(b)` | `bitwise_invert(self, b)` |
+
+#### Example
+
+**Valid Examples:** 
 ```ruby
 app_global_get('Some Key') == 'Some Bytes'
 ```
 
-They just can't be used on a single line by themselves:
+```ruby
+!app_global_get('Some Key')
+```
 
+**Invalid Examples:**
 ```ruby
 byte 'Some Key'
 app_global_get
 byte 'Some Bytes'
 == # => invalid ruby syntax
+```
+
+```ruby
+byte 'Some Key'
+app_global_get
+! # => invalid ruby syntax
 ```
 
 ## Branching
