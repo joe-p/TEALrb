@@ -13,7 +13,10 @@ Style/NumericPredicate:
   EnforcedStyle: comparison
 
 # Pending Cops
-
+Lint/RefinementImportMethods: # new in 1.27
+  Enabled: true
+Style/RedundantInitialize: # new in 1.27
+  Enabled: true
 Gemspec/DateAssignment: # new in 1.10
   Enabled: true
 Gemspec/RequireMFA: # new in 1.23

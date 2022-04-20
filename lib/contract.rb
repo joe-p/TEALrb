@@ -22,7 +22,7 @@ module TEALrb
       @@abi_method_hash = { desc: desc, args: args, returns: returns.to_s }
     end
 
-    def initialize()
+    def initialize
       @teal = ["#pragma version #{@@version}", 'b main']
       @if_count = 0
       @open_ifs = []

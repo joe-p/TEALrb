@@ -77,6 +77,5 @@ module TEALrb
         global 'LatestTimestamp'
       end
     end
-
   end
 end
