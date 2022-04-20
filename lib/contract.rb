@@ -3,15 +3,7 @@
 module TEALrb
   class Contract
     include TEALrb
-    include TEALrb::Opcodes::App
-    include TEALrb::Opcodes::Binary
-    include TEALrb::Opcodes::Byte
-    include TEALrb::Opcodes::Crypto
-    include TEALrb::Opcodes::Flow
-    include TEALrb::Opcodes::Storage
-    include TEALrb::Opcodes::Transaction
-    include TEALrb::Opcodes::Types
-    include TEALrb::Opcodes::Unary
+    include TEALrb::Opcodes
     extend ABI::ABITypes
 
     @@subroutines = []

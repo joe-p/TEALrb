@@ -3,15 +3,13 @@
 module TEALrb
   module Patches
     module IntegerMethods
-      include TEALrb::Opcodes::Types
-      include TEALrb::Opcodes::Binary
-      include TEALrb::Opcodes::Unary
+      include TEALrb::Opcodes
 
       def teal
         int(self).teal
       end
 
-      TEALrb::Opcodes::Binary::OPCODE_METHOD_MAPPING.each do |meth, opcode|
+      TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
         define_method(meth) do |other|
           from_eval = (caller[0] + caller[2]).include? "`teal_eval'"
 
@@ -23,7 +21,7 @@ module TEALrb
         end
       end
 
-      TEALrb::Opcodes::Unary::OPCODE_METHOD_MAPPING.each do |meth, _klass|
+      TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, _klass|
         define_method(meth) do
           from_eval = caller[0].include? "(eval):1:in `teal_eval'"
 

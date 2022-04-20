@@ -3,7 +3,7 @@
 module TEALrb
   module Patches
     module StringPatches
-      include TEALrb::Opcodes::Types
+      include TEALrb::Opcodes
       def teal
         byte(self).teal
       end

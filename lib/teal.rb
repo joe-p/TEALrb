@@ -6,6 +6,7 @@ require 'ostruct'
 require_relative 'constants'
 require_relative 'abi'
 require_relative 'opcodes'
+require_relative 'opcode_modules'
 require_relative 'contract'
 require_relative 'patches'
 
@@ -21,20 +22,19 @@ module TEALrb
   end
 
   class TEAL < Array
-    include TEALrb::Opcodes::Binary
-    include TEALrb::Opcodes::Unary
+    include TEALrb::Opcodes
 
     def teal
       flatten
     end
 
-    TEALrb::Opcodes::Binary::OPCODE_METHOD_MAPPING.each do |meth, opcode|
+    TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do |other|
         send(opcode, self, other)
       end
     end
 
-    TEALrb::Opcodes::Unary::OPCODE_METHOD_MAPPING.each do |meth, opcode|
+    TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do
         send(opcode, self)
       end
