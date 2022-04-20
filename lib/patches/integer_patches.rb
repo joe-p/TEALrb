@@ -9,7 +9,7 @@ module TEALrb
 
       TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
         define_method(meth) do |other|
-          from_eval = (caller[0] + caller[2]).include? "`teal_eval'"
+          from_eval = (caller[0] + caller[2].to_s).include? "`teal_eval'"
 
           if from_eval
             Class.new.extend(TEALrb::Opcodes).send(opcode, self, other)
