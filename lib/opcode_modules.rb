@@ -58,11 +58,25 @@ module TEALrb
     end
 
     module Txna
+      extend Opcodes
       extend TxnFields
 
       def self.opcode(field, index)
         txna field, index
       end
     end
+
+    module Global
+      extend Opcodes
+
+      def self.current_application_address
+        global 'CurrentApplicationAddress'
+      end
+
+      def self.latest_timestamp
+        global 'LatestTimestamp'
+      end
+    end
+
   end
 end
