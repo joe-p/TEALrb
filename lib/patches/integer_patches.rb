@@ -3,10 +3,8 @@
 module TEALrb
   module Patches
     module IntegerMethods
-      include TEALrb::Opcodes
-
       def teal
-        int(self).teal
+        Class.new.extend(TEALrb::Opcodes).int(self).teal
       end
 
       TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
@@ -14,7 +12,7 @@ module TEALrb
           from_eval = (caller[0] + caller[2]).include? "`teal_eval'"
 
           if from_eval
-            send(opcode, self, other)
+            Class.new.extend(TEALrb::Opcodes).send(opcode, self, other)
           else
             super(other)
           end
@@ -26,7 +24,7 @@ module TEALrb
           from_eval = caller[0].include? "(eval):1:in `teal_eval'"
 
           if from_eval
-            send(opcode, self)
+            Class.new.extend(TEALrb::Opcodes).send(opcode, self)
           else
             super()
           end
