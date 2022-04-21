@@ -261,5 +261,5 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 - [ ] Looping
 
 # Milestones
-- [ ] 100% opcode coverage
+- [x] 100% opcode coverage
 - [ ] 100% enum coverage
