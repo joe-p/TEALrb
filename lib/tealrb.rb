@@ -3,12 +3,12 @@
 require 'method_source'
 require 'ostruct'
 
-require_relative 'constants'
-require_relative 'abi'
-require_relative 'opcodes'
-require_relative 'opcode_modules'
-require_relative 'contract'
-require_relative 'patches'
+require_relative 'tealrb/constants'
+require_relative 'tealrb/abi'
+require_relative 'tealrb/opcodes'
+require_relative 'tealrb/opcode_modules'
+require_relative 'tealrb/contract'
+require_relative 'tealrb/patches'
 
 module TEALrb
   class If

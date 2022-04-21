@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/teal'
+require_relative '../lib/tealrb'
 
 class Approval < TEALrb::Contract
   @@abi.name = 'TEALrb_Demo'

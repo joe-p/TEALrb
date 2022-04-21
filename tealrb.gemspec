@@ -1,11 +1,11 @@
 Gem::Specification.new do |s|
-  s.name = 'teal_rb'
+  s.name = 'tealrb'
   s.version     = '0.1.0'
   s.licenses    = ['MIT']
   s.summary     = 'A DSL for building Algorand applications'
   s.authors     = ['Joe Polny']
   s.email       = 'joepolny+dev@gmail.com'
-  s.files       = ['lib/teal.rb']
+  s.files       = ['lib/tealrb.rb']
   s.homepage    = 'https://github.com/joe-p/tealrb'
   s.metadata    = { 'source_code_uri' => 'https://github.com/joe-p/tealrb',
                     'rubygems_mfa_required' => 'true' }
