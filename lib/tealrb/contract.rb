@@ -29,12 +29,16 @@ module TEALrb
       @default_binding = binding
 
       @@subroutines.each do |sub|
-        define_subroutine(sub, &method(sub))
+        source = method(sub).source.lines[1..-2].join("\n")
+        params = method(sub).parameters.map(&:last).map(&:to_s)
+        define_subroutine(sub, source, params)
       end
 
       @@teal_methods.each do |meth|
-        define_teal_method(meth, &method(meth))
+        define_teal_method(meth, method(meth).source.lines[1..-2].join("\n"))
       end
+
+      @main = method(:main).source.lines[1..-2].join("\n")
     end
 
     def teal
@@ -61,14 +65,13 @@ module TEALrb
       @@teal_methods << method
     end
 
-    def define_teal_method(name, &blk)
+    def define_teal_method(name, source)
       define_singleton_method(name) do |*_args|
-        compile(&blk)
+        compile(source)
       end
     end
 
-    def define_subroutine(name, &blk)
-      params = blk.parameters.map(&:last).map(&:to_s)
+    def define_subroutine(name, source, params)
       @sub_name = name
 
       define_singleton_method(name) do |*args|
@@ -80,21 +83,19 @@ module TEALrb
       end
 
       @teal << ("#{name}:")
-      str = blk.source.lines[1..-2].join("\n")
 
       params.each_with_index do |name, i|
         @teal << "store #{201 + i}"
         compile("#{name} = load(#{201 + i})")
       end
 
-      compile(str)
+      compile(source)
 
       @teal << 'retsub'
     end
 
-    def main(str = nil, &blk)
-      @teal << 'main:'
-      compile(str, &blk)
+    def main
+      raise 'main not defined'
     end
 
     def compile(str = nil, &blk)
@@ -169,13 +170,9 @@ module TEALrb
       @teal << "if#{current_if.id}_end:"
     end
 
-    def main
-      err
-    end
-
     def compile_main
       @teal << 'main:'
-      compile_block(&method(:main))
+      compile_string(@main)
     end
 
     def abi_hash
