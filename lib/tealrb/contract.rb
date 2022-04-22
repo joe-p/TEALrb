@@ -33,7 +33,7 @@ module TEALrb
       @@subroutines.each do |sub|
         source = method(sub).source.lines[1..-2].join("\n")
         params = method(sub).parameters.map(&:last).map(&:to_s)
-        define_subroutine(sub, source, params)
+        define_subroutine(sub, params, source)
       end
 
       @@teal_methods.each do |meth|
@@ -73,7 +73,7 @@ module TEALrb
       end
     end
 
-    def define_subroutine(name, source, params)
+    def define_subroutine(name, params, source)
       @sub_name = name
 
       define_singleton_method(name) do |*args|
