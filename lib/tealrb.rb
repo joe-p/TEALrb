@@ -7,6 +7,7 @@ require_relative 'tealrb/constants'
 require_relative 'tealrb/abi'
 require_relative 'tealrb/opcodes'
 require_relative 'tealrb/opcode_modules'
+require_relative 'tealrb/placeholder'
 require_relative 'tealrb/contract'
 require_relative 'tealrb/patches'
 

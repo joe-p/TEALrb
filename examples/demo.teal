@@ -95,3 +95,7 @@ app_global_get
 manual_br:
 byte "Manual Br"
 app_global_get
+byte "Some Key"
+REPLACE_ME
+app_global_put
+gtxn 1 ANOTHER_THING_TO_REPLACE

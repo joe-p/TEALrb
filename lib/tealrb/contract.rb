@@ -114,6 +114,10 @@ module TEALrb
       compile_string(blk.source.lines[1..-2].join("\n"), eval_binding)
     end
 
+    def placeholder(str)
+      Placeholder.new str
+    end
+
     def compile_string(str, eval_binding = @default_binding)
       str.each_line do |line|
         line.strip!

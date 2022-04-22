@@ -110,6 +110,10 @@ class Approval < TEALrb::Contract
     app_global_get('Unreachable')
     :manual_br # Branch labels are prefiexed with ":" (literal symbol)
     app_global_get('Manual Br')
+
+    # Using a placeholder for later substitution
+    app_global_put('Some Key', placeholder("REPLACE_ME"))
+    gtxn(1, placeholder("ANOTHER_THING_TO_REPLACE"))
   end
 end
 
