@@ -6,6 +6,8 @@ module TEALrb
     include TEALrb::Opcodes
     extend ABI::ABITypes
 
+    attr_accessor :main
+
     @@subroutines = []
     @@teal_methods = []
     @@abi_method_hash = nil
