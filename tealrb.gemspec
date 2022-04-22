@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.summary     = 'A DSL for building Algorand applications'
   s.authors     = ['Joe Polny']
   s.email       = 'joepolny+dev@gmail.com'
-  s.files       = ['lib/tealrb.rb']
+  s.files       = Dir['lib/**/*.rb']
   s.homepage    = 'https://github.com/joe-p/tealrb'
   s.metadata    = { 'source_code_uri' => 'https://github.com/joe-p/tealrb',
                     'rubygems_mfa_required' => 'true' }
