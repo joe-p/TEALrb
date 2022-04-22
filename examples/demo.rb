@@ -119,5 +119,11 @@ end
 
 approval = Approval.new
 approval.compile_main
-File.write('demo.teal', approval.teal)
-File.write('demo.json', JSON.pretty_generate(approval.abi_hash))
+
+# WASM doesn't support file writing
+if RUBY_PLATFORM.include? 'wasm'
+  puts approval.teal
+else
+  File.write('demo.teal', approval.teal)
+  File.write('demo.json', JSON.pretty_generate(approval.abi_hash))
+end

@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-require 'method_source'
+if RUBY_PLATFORM.include? 'wasm'
+  require_relative '../../method_source/lib/method_source'
+else
+  require 'method_source'
+end
+
 require 'ostruct'
 
 require_relative 'tealrb/constants'
@@ -24,7 +29,7 @@ module TEALrb
 
   class TEAL < Array
     def teal
-      flatten
+      TEAL.new flatten
     end
 
     TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
