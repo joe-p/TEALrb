@@ -41,10 +41,6 @@ module TEALrb
       '!': 'not'
     }.freeze
 
-    def abi_return(data)
-      log(concat('151f7c75', data.teal).teal)
-    end
-
     def acct_params_get(field, account = nil)
       TEAL.new [account.teal, "acct_params_get #{field}"]
     end

@@ -4,26 +4,10 @@ require 'json'
 
 module TEALrb
   module ABI
-=begin
-      (8..512).step(8) do |n|
-        (0..160).each do |m|
-          type = "ufixed#{n}x#{m}"
-
-          define_method(type) do
-            ABIType.new type
-          end
-        end
-      end
-
-      (8..512).step(8) do |n|
-        type = "uint#{n}"
-
-        define_method(type) do
-          ABIType.new type
-        end
-      end
+    def abi_return(data)
+      log(concat('151f7c75', data.teal).teal)
     end
-=end
+    
     class ABIDescription
       attr_accessor :name
       attr_reader :methods

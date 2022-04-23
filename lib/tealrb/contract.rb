@@ -3,6 +3,7 @@
 module TEALrb
   class Contract
     include TEALrb
+    include ABI
     include TEALrb::Opcodes
     include TEALrb::Types
 
@@ -94,10 +95,6 @@ module TEALrb
       compile(source)
 
       @teal << 'retsub'
-    end
-
-    def main
-      raise 'main not defined'
     end
 
     def compile(str = nil, &blk)
