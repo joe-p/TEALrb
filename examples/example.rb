@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../lib/tealrb'
-require 'pry'
 
 class Approval < TEALrb::Contract
   def initialize(**kwargs)

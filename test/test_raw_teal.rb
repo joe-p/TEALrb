@@ -1,6 +1,5 @@
 require 'minitest/autorun'
 require '../lib/tealrb'
-require 'pry'
 
 class RawTealTests < Minitest::Test
   def compile_test(input, teal)
