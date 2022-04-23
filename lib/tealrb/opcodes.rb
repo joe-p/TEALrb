@@ -453,10 +453,6 @@ module TEALrb
       TEAL.new [bytes.teal, 'itob']
     end
 
-    def itob(integer = nil)
-      TEAL.new [integer.teal, 'itob']
-    end
-
     def itxn_begin
       TEAL.new ['itxn_begin']
     end
@@ -507,10 +503,6 @@ module TEALrb
 
     def log(byte_array = nil)
       TEAL.new [byte_array.teal, 'log']
-    end
-
-    def log(data = nil)
-      TEAL.new [data.teal, 'log']
     end
 
     def min_balance(account = nil)

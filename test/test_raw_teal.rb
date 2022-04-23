@@ -366,10 +366,6 @@ class RawTealTests < Minitest::Test
     compile_test 'itob', 'itob'
   end
 
-  def test_itob
-    compile_test 'itob', 'itob'
-  end
-
   def test_itxn_field
     compile_test 'itxn_field 0', 'itxn_field 0'
   end
@@ -404,10 +400,6 @@ class RawTealTests < Minitest::Test
 
   def test_loads
     compile_test 'loads', 'loads'
-  end
-
-  def test_log
-    compile_test 'log', 'log'
   end
 
   def test_log

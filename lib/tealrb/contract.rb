@@ -87,9 +87,9 @@ module TEALrb
 
       @teal << ("#{name}:")
 
-      params.each_with_index do |name, i|
+      params.each_with_index do |param_name, i|
         @teal << "store #{201 + i}"
-        compile("#{name} = load(#{201 + i})")
+        compile("#{param_name} = load(#{201 + i})")
       end
 
       compile(source)
