@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    teal_rb (0.1.0)
+    tealrb (0.1.0)
       method_source
 
 GEM
@@ -42,7 +42,7 @@ PLATFORMS
 DEPENDENCIES
   pry
   rubocop
-  teal_rb!
+  tealrb!
   yard
 
 BUNDLED WITH
