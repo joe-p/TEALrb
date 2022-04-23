@@ -417,7 +417,7 @@ module TEALrb
       TEAL.new [transaction_index.teal, "gtxna #{field} #{index}"]
     end
 
-    def gtxnas(transaction_index, field, index = nil )
+    def gtxnas(transaction_index, field, index = nil)
       TEAL.new [index.teal, "gtxnas #{transaction_index} #{field}"]
     end
 

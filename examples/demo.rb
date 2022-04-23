@@ -112,8 +112,8 @@ class Approval < TEALrb::Contract
     app_global_get('Manual Br')
 
     # Using a placeholder for later substitution
-    app_global_put('Some Key', placeholder("REPLACE_ME"))
-    gtxn(1, placeholder("ANOTHER_THING_TO_REPLACE"))
+    app_global_put('Some Key', placeholder('REPLACE_ME'))
+    gtxn(1, placeholder('ANOTHER_THING_TO_REPLACE'))
   end
 end
 

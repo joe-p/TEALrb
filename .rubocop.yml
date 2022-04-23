@@ -11,7 +11,7 @@
 
 Style/FrozenStringLiteralComment:
   Exclude:
-    - 'teal_rb.gemspec'
+    - 'tealrb.gemspec'
     - 'Gemfile'
 
 # Pending Cops
