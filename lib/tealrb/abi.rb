@@ -7,7 +7,7 @@ module TEALrb
     def abi_return(data)
       log(concat('151f7c75', data.teal).teal)
     end
-    
+
     class ABIDescription
       attr_accessor :name
       attr_reader :methods
