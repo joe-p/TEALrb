@@ -93,8 +93,8 @@ module TEALrb
       TEAL.new [account.teal, app.teal, 'app_opted_in']
     end
 
-    def app_params_get(field, asset = nil)
-      TEAL.new [asset.teal, "app_params_get #{field}"]
+    def app_params_get(field, app_id = nil)
+      TEAL.new [app_id.teal, "app_params_get #{field}"]
     end
 
     def approve

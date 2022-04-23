@@ -256,10 +256,6 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 - [x] Subroutine definition
 - [x] if/elsif/else branching
 - [x] ABI JSON generation
+- [ ] Looping
 - [ ] ABI type encoding/decoding
 - [ ] Scratch space management
-- [ ] Looping
-
-# Milestones
-- [x] 100% opcode coverage
-- [ ] 100% enum coverage
