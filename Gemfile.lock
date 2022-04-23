@@ -10,6 +10,7 @@ GEM
     ast (2.4.2)
     coderay (1.1.3)
     method_source (1.0.0)
+    minitest (5.13.0)
     parallel (1.22.1)
     parser (3.1.2.0)
       ast (~> 2.4.1)
@@ -30,6 +31,8 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.17.0)
       parser (>= 3.1.1.0)
+    rubocop-minitest (0.19.1)
+      rubocop (>= 0.90, < 2.0)
     ruby-progressbar (1.11.0)
     unicode-display_width (2.1.0)
     webrick (1.7.0)
@@ -41,8 +44,10 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  minitest
   pry
   rubocop
+  rubocop-minitest
   tealrb!
   yard
 

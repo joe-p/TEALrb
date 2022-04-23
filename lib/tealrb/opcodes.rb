@@ -410,7 +410,7 @@ module TEALrb
     end
 
     def gtxnsa(field, index, transaction_index = nil)
-      TEAL.new [transaction_index.teal, "gtxna #{field} #{index}"]
+      TEAL.new [transaction_index.teal, "gtxnsa #{field} #{index}"]
     end
 
     def gtxnas(transaction_index, field, index = nil)
@@ -529,7 +529,7 @@ module TEALrb
       TEAL.new [a.teal, b.teal, 'mulw']
     end
 
-    def not(expr = nil)
+    def zero?(expr = nil)
       TEAL.new [expr.teal, '!']
     end
 
@@ -606,7 +606,7 @@ module TEALrb
     end
 
     def substring(start, exclusive_end, byte_array = nil)
-      TEAL.new [byte_array.teal, "#{substring} #{start} #{exclusive_end}"]
+      TEAL.new [byte_array.teal, "substring #{start} #{exclusive_end}"]
     end
 
     def substring3(byte_array = nil, start = nil, exclusive_end = nil)

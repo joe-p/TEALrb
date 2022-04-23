@@ -3,6 +3,16 @@ TEALrb is a work in progress. Expect significant commits to master which will ev
 # Raw TEAL Exceptions
 TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby syntax therefore the TEALrb-specific syntax must be used.
 
+## Overview
+
+| Description | TEAL | TEALrb |
+|---|---|---|
+| Opcodes that are special ruby keywords/symbols | `!` | `zero?` |
+| Labels as literal symbols | `br_label:` | `:br_label` |
+| Branching to labels with literal symbols | `bz br_label`| `bz :br_label` |
+| Opcodes with required arguments | `gtxna 0 1 2` | `gtxna 0, 1, 2` |
+
+
 ## Opcodes
 | TEAL | TEALrb |
 |------|--------|
@@ -18,7 +28,7 @@ TEALrb supports the writing of raw TEAL with following exceptions. In these exce
 | `||` | `value_or(a, b)` |
 | `==` | `equal(a, b)` |
 | `!=` | `not_equal(a, b)` |
-| `!` | `not(expr)` |
+| `!` | `zero?(expr)` |
 | `%` | `modulo(a, b)` |
 | `|` | `bitwise_or(a, b)` |
 | `&` | `bitwise_and(a, b)` |
@@ -57,7 +67,7 @@ Some of these opcodes can still be used on TEALrb opcodes as methods.
 | `||(b)` | `value_or(self, b)` |
 | `==(b)` | `equal(self, b)` |
 | `!=(b)` | `not_equal(self, b)` |
-| `@!(b)` | `not(self)` |
+| `@!(b)` | `zero?(self)` |
 | `%(b)` | `modulo(self, b)` |
 | `|(b)` | `bitwise_or(self, b)` |
 | `&(b)` | `bitwise_and(self, b)` |
@@ -100,6 +110,15 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 | `bz br_label`| `bz :br_label` |
 | `bnz br_label`| `bnz :br_label` |
 
+## Opcode Arguments
+If an Opcode has required arguments, it must be called with the required arguments in TEALrb. To maintain valid ruby syntax, this means the arguments must be separated by commas. 
+
+### Example
+```ruby
+gtxna 0 1 2 # => SyntaxError
+gtxna 0, 1, 2 # => gtxna 0 1 2
+```
+
 # Opcode Coverage
 
 | TEAL | TEALrb |
@@ -124,7 +143,7 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 | \|\| | `value_or(a, b)` |
 | == | `equal(a, b)` |
 | != | `not_equal(a, b)` |
-| ! | `not(expr)` |
+| ! | `zero?(expr)` |
 | len | `len(input)` |
 | itob | `itob(integer)` |
 | btoi | `btoi(bytes)` |
