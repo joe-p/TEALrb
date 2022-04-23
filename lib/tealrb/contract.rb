@@ -4,7 +4,7 @@ module TEALrb
   class Contract
     include TEALrb
     include TEALrb::Opcodes
-    extend ABI::ABITypes
+    include TEALrb::Types
 
     attr_accessor :main
 
@@ -18,10 +18,10 @@ module TEALrb
     def self.abi(desc:, args:, returns:)
       args = args.map do |name, h|
         h[:name] = name.to_s
-        h[:type] = h[:type].to_s
+        h[:type] = h[:type].to_s.split('::').last.downcase
         h
       end
-      @@abi_method_hash = { desc: desc, args: args, returns: returns.to_s }
+      @@abi_method_hash = { desc: desc, args: args, returns: returns.to_s.split('::').last.downcase }
     end
 
     def initialize
