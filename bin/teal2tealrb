@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require_relative '../lib/tealrb'
+
+puts TEALrb::CmdLine::TEAL2TEALrb.convert(File.read(ARGV.first))
