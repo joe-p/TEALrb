@@ -13,7 +13,6 @@ require_relative 'tealrb/contract'
 require_relative 'tealrb/patches'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 
-
 module TEALrb
   class If
     attr_accessor :blocks

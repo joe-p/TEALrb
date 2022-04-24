@@ -12,6 +12,9 @@ Style/CaseLikeIf:
 Style/NumericPredicate:
   EnforcedStyle: comparison
 
+Minitest:
+  Enabled: false
+
 # Pending Cops
 Lint/RefinementImportMethods: # new in 1.27
   Enabled: true

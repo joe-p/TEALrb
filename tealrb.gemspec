@@ -10,9 +10,9 @@ Gem::Specification.new do |s|
   s.metadata    = { 'source_code_uri' => 'https://github.com/joe-p/tealrb',
                     'rubygems_mfa_required' => 'true' }
   s.add_runtime_dependency 'method_source'
+  s.add_development_dependency 'minitest'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rubocop'
-  s.add_development_dependency 'yard'
-  s.add_development_dependency 'minitest'
   s.add_development_dependency 'rubocop-minitest'
+  s.add_development_dependency 'yard'
 end

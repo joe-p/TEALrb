@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'stringio'
 module TEALrb
   module CmdLine
@@ -37,7 +39,6 @@ module TEALrb
               else
                 arg_as_int || "'#{arg}'"
               end
-
             end
 
             line = "#{opcode} #{args.join(', ')}"
