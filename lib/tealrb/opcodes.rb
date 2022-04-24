@@ -38,7 +38,7 @@ module TEALrb
     }.freeze
 
     UNARY_OPCODE_METHOD_MAPPING = {
-      '!': 'not'
+      '!': 'zero?'
     }.freeze
 
     def acct_params_get(field, account = nil)
