@@ -1,3 +1,5 @@
+**Note:** Right now I am in the process of a complete rewrite that uses AST parsing. This branch is a current WIP.
+
 # TEALrb
 TEALrb is a Ruby-based DSL for writing Algorand smart contracts. The goal is to create a way to easily write contracts without adding too much unavoidable abstraction on top of raw TEAL. It's designed to support raw teal (as much as possible within the confines of Ruby syntax) while also providing some useful functionality such as conditionals, variables, methods, and ABI support. 
 

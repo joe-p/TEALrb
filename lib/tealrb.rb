@@ -9,8 +9,9 @@ require_relative 'tealrb/abi'
 require_relative 'tealrb/opcodes'
 require_relative 'tealrb/opcode_modules'
 require_relative 'tealrb/placeholder'
-require_relative 'tealrb/contract'
-require_relative 'tealrb/patches'
+require_relative 'tealrb/rewriters'
+require_relative 'tealrb/contractv2'
+#require_relative 'tealrb/patches'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 
 module TEALrb
@@ -27,6 +28,14 @@ module TEALrb
   class TEAL < Array
     def teal
       flatten
+    end
+
+    def boolean_and(_other)
+      self << '&&'
+    end
+
+    def boolean_or(_other)
+      self << '||'
     end
 
     TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|

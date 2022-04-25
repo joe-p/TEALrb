@@ -5,11 +5,10 @@ require '../lib/tealrb'
 
 class RawTealTests < Minitest::Test
   def compile_test(input, teal)
-    contract = TEALrb::Contract.new
-    contract.main = input
-    contract.compile_main
+    contract = TEALrb::ContractV2.new
+    contract.compile_string input
 
-    assert_equal(teal, contract.teal.lines.last)
+    assert_equal(teal, contract.teal.first)
   end
 
   def test_acct_params_get
@@ -361,7 +360,7 @@ class RawTealTests < Minitest::Test
   end
 
   def test_intcblock
-    compile_test 'intcblock 0', 'intcblock 0'
+    compile_test 'intcblock 0, 1, 2, 3', 'intcblock 0 1 2 3'
   end
 
   def test_itob

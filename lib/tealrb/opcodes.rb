@@ -41,604 +41,608 @@ module TEALrb
       '!': 'zero?'
     }.freeze
 
-    def acct_params_get(field, account = nil)
-      TEAL.new [account.teal, "acct_params_get #{field}"]
+    def acct_params_get(field, _account = nil)
+      @teal << "acct_params_get #{field}"
     end
 
-    def add(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '+']
+    def add(_a = nil, _b = nil)
+      @teal << '+'
     end
 
-    def addw(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'addw']
+    def addw(_a = nil, _b = nil)
+      @teal << 'addw'
     end
 
-    def app_global_del(key = nil)
-      TEAL.new [key.teal, 'app_global_del']
+    def app_global_del(_key = nil)
+      @teal << 'app_global_del'
     end
 
-    def app_global_get(key = nil)
-      TEAL.new [key.teal, 'app_global_get']
+    def app_global_get(_key = nil)
+      @teal << 'app_global_get'
     end
 
-    def app_global_get_ex(app = nil, key = nil)
-      TEAL.new [app.teal, key.teal, 'app_global_get_ex']
+    def app_global_get_ex(_app = nil, _key = nil)
+      @teal << 'app_global_get_ex'
     end
 
-    def app_global_put(key = nil, value = nil)
-      TEAL.new [key.teal, value.teal, 'app_global_put']
+    def app_global_put(_key = nil, _value = nil)
+      @teal << 'app_global_put'
     end
 
-    def app_local_del(account = nil, key = nil)
-      TEAL.new [account.teal, key.teal, 'app_local_del']
+    def app_local_del(_account = nil, _key = nil)
+      @teal << 'app_local_del'
     end
 
-    def app_local_get(account = nil, key = nil)
-      TEAL.new [account.teal, key.teal, 'app_local_get']
+    def app_local_get(_account = nil, _key = nil)
+      @teal << 'app_local_get'
     end
 
-    def app_local_get_ex(account = nil, application = nil, key = nil)
-      TEAL.new [account.teal, application.teal, key.teal, 'app_local_get_ex']
+    def app_local_get_ex(_account = nil, _application = nil, _key = nil)
+      @teal << 'app_local_get_ex'
     end
 
-    def app_local_put(account = nil, key = nil, value = nil)
-      TEAL.new [account.teal, key.teal, value.teal, 'app_local_put']
+    def app_local_put(_account = nil, _key = nil, _value = nil)
+      @teal << 'app_local_put'
     end
 
-    def app_opted_in(account = nil, app = nil)
-      TEAL.new [account.teal, app.teal, 'app_opted_in']
+    def app_opted_in(_account = nil, _app = nil)
+      @teal << 'app_opted_in'
     end
 
-    def app_params_get(field, app_id = nil)
-      TEAL.new [app_id.teal, "app_params_get #{field}"]
+    def app_params_get(field, _app_id = nil)
+      @teal << "app_params_get #{field}"
     end
 
     def approve
-      TEAL.new [1.teal, 'return']
+      @teal << 'return'
     end
 
     def arg(index)
-      TEAL.new ["arg #{index}"]
+      @teal << "arg #{index}"
     end
 
     def arg_0
-      TEAL.new ['arg_0']
+      @teal << 'arg_0'
     end
 
     def arg_1
-      TEAL.new ['arg_1']
+      @teal << 'arg_1'
     end
 
     def arg_2
-      TEAL.new ['arg_2']
+      @teal << 'arg_2'
     end
 
     def arg_3
-      TEAL.new ['arg_3']
+      @teal << 'arg_3'
     end
 
-    def args(index = nil)
-      TEAL.new [index.teal, 'args']
+    def args(_index = nil)
+      @teal << 'args'
     end
 
-    def assert(expr = nil)
-      TEAL.new [expr.teal, 'assert']
+    def assert(_expr = nil)
+      @teal << 'assert'
     end
 
-    def asset_holding_get(field, account = nil, asset = nil)
-      TEAL.new [account.teal, asset.teal, "asset_holding_get #{field}"]
+    def asset_holding_get(field, _account = nil, _asset = nil)
+      @teal << "asset_holding_get #{field}"
     end
 
-    def asset_params_get(field, asset = nil)
-      TEAL.new [asset.teal, "asset_params_get #{field}"]
+    def asset_params_get(field, _asset = nil)
+      @teal << "asset_params_get #{field}"
     end
 
     def b(target)
-      TEAL.new ["#{__method__} #{target}"]
+      @teal << "#{__method__} #{target}"
     end
 
-    def balance(account = nil)
-      TEAL.new [account.teal, 'balance']
+    def balance(_account = nil)
+      @teal << 'balance'
     end
 
-    def big_endian_add(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b+']
+    def big_endian_add(_a = nil, _b = nil)
+      @teal << 'b+'
     end
 
-    def big_endian_divide(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b/']
+    def big_endian_divide(_a = nil, _b = nil)
+      @teal << 'b/'
     end
 
-    def big_endian_equal(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b==']
+    def big_endian_equal(_a = nil, _b = nil)
+      @teal << 'b=='
     end
 
-    def big_endian_less(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b<']
+    def big_endian_less(_a = nil, _b = nil)
+      @teal << 'b<'
     end
 
-    def big_endian_less_eq(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b<=']
+    def big_endian_less_eq(_a = nil, _b = nil)
+      @teal << 'b<='
     end
 
-    def big_endian_modulo(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b%']
+    def big_endian_modulo(_a = nil, _b = nil)
+      @teal << 'b%'
     end
 
-    def big_endian_more(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b>']
+    def big_endian_more(_a = nil, _b = nil)
+      @teal << 'b>'
     end
 
-    def big_endian_more_eq(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b>=']
+    def big_endian_more_eq(_a = nil, _b = nil)
+      @teal << 'b>='
     end
 
-    def big_endian_multiply(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b*']
+    def big_endian_multiply(_a = nil, _b = nil)
+      @teal << 'b*'
     end
 
-    def big_endian_not_equal(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b!=']
+    def big_endian_not_equal(_a = nil, _b = nil)
+      @teal << 'b!='
     end
 
-    def big_endian_subtract(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b-']
+    def big_endian_subtract(_a = nil, _b = nil)
+      @teal << 'b-'
     end
 
-    def bitlen(input = nil)
-      TEAL.new [input.teal, 'bitlen']
+    def bitlen(_input = nil)
+      @teal << 'bitlen'
     end
 
-    def bitwise_and(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '&']
+    def bitwise_and(_a = nil, _b = nil)
+      @teal << '&'
     end
 
-    def bitwise_byte_invert(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b~']
+    def bitwise_byte_invert(_a = nil, _b = nil)
+      @teal << 'b~'
     end
 
-    def bitwise_invert(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '~']
+    def bitwise_invert(_a = nil, _b = nil)
+      @teal << '~'
     end
 
-    def bitwise_or(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '|']
+    def bitwise_or(_a = nil, _b = nil)
+      @teal << '|'
     end
 
-    def bitwise_xor(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '^']
+    def bitwise_xor(_a = nil, _b = nil)
+      @teal << '^'
     end
 
     def bnz(target)
-      TEAL.new ["#{__method__} #{target}"]
+      @teal << "#{__method__} #{target}"
     end
 
-    def bsqrt(big_endian_uint = nil)
-      TEAL.new [big_endian_uint.teal, 'bsqrt']
+    def bsqrt(_big_endian_uint = nil)
+      @teal << 'bsqrt'
     end
 
-    def btoi(bytes = nil)
-      TEAL.new [bytes.teal, 'btoi']
+    def btoi(_bytes = nil)
+      @teal << 'btoi'
     end
 
     def byte(string)
-      TEAL.new ["byte \"#{string}\""]
+      @teal << "byte \"#{string}\""
     end
 
     def bytec(index)
-      TEAL.new ["bytec #{index}"]
+      @teal << "bytec #{index}"
     end
 
     def bytec_0
-      TEAL.new ['bytec_0']
+      @teal << 'bytec_0'
     end
 
     def bytec_1
-      TEAL.new ['bytec_1']
+      @teal << 'bytec_1'
     end
 
     def bytec_2
-      TEAL.new ['bytec_2']
+      @teal << 'bytec_2'
     end
 
     def bytec_3
-      TEAL.new ['bytec_3']
+      @teal << 'bytec_3'
     end
 
     def bytecblock(*bytes)
-      TEAL.new ["bytecblock #{bytes.join(' ')}"]
+      @teal << "bytecblock #{bytes.join(' ')}"
     end
 
     def bz(target)
-      TEAL.new ["#{__method__} #{target}"]
+      @teal << "#{__method__} #{target}"
     end
 
-    def bzero(length = nil)
-      TEAL.new [length.teal, 'bzero']
+    def bzero(_length = nil)
+      @teal << 'bzero'
     end
 
-    def callsub(name, *args)
-      TEAL.new [args.map(&:teal), "callsub #{name}"].flatten
+    def callsub(name, *_args)
+      @teal << "callsub #{name}"
     end
 
-    def concat(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'concat']
+    def concat(_a = nil, _b = nil)
+      @teal << 'concat'
     end
 
     def cover(count)
-      TEAL.new ["cover #{count}"]
+      @teal << "cover #{count}"
     end
 
     def dig(index)
-      TEAL.new ["dig #{index}"]
+      @teal << "dig #{index}"
     end
 
-    def divide(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '/']
+    def divide(_a = nil, _b = nil)
+      @teal << '/'
     end
 
-    def divmodw(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'divmodw']
+    def divmodw(_a = nil, _b = nil)
+      @teal << 'divmodw'
     end
 
-    def divw(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'divw']
+    def divw(_a = nil, _b = nil)
+      @teal << 'divw'
     end
 
-    def dup(expr = nil)
-      TEAL.new [expr.teal, 'dup']
+    def dup(_expr = nil)
+      @teal << 'dup'
     end
 
-    def dup2(expr_a = nil, expr_b = nil)
-      TEAL.new [expr_a.teal, expr_b.teal, 'dup2']
+    def dup2(_expr_a = nil, _expr_b = nil)
+      @teal << 'dup2'
     end
 
-    def ecdsa_pk_decompress(index, input = nil)
-      TEAL.new [input.teal, "ecdsa_pk_decompress #{index}"]
+    def ecdsa_pk_decompress(index, _input = nil)
+      @teal << "ecdsa_pk_decompress #{index}"
     end
 
-    def ecdsa_pk_recover(index, input = nil)
-      TEAL.new [input.teal, "ecdsa_pk_recover #{index}"]
+    def ecdsa_pk_recover(index, _input = nil)
+      @teal << "ecdsa_pk_recover #{index}"
     end
 
-    def ecdsa_verify(index, input = nil)
-      TEAL.new [input.teal, "ecdsa_verify #{index}"]
+    def ecdsa_verify(index, _input = nil)
+      @teal << "ecdsa_verify #{index}"
     end
 
-    def ed25519verify(input = nil)
-      TEAL.new [input.teal, 'ed25519verify']
+    def ed25519verify(_input = nil)
+      @teal << 'ed25519verify'
     end
 
-    def equal(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '==']
+    def equal(_a = nil, _b = nil)
+      @teal << '=='
     end
 
     def err
-      TEAL.new ['err']
+      @teal << 'err'
     end
 
-    def exp(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'exp']
+    def exp(_a = nil, _b = nil)
+      @teal << 'exp'
     end
 
-    def expw(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'expw']
+    def expw(_a = nil, _b = nil)
+      @teal << 'expw'
     end
 
-    def extract(start, length, byte_array = nil)
-      TEAL.new [byte_array.teal, "extract #{start} #{length}"]
+    def extract(start, length, _byte_array = nil)
+      @teal << "extract #{start} #{length}"
     end
 
-    def extract3(byte_array = nil, start = nil, exclusive_end = nil)
-      TEAL.new [byte_array.teal, start.teal, exclusive_end.teal, 'extract3']
+    def extract3(_byte_array = nil, _start = nil, _exclusive_end = nil)
+      @teal << 'extract3'
     end
 
-    def extract_uint16(byte_array = nil, start = nil)
-      TEAL.new [byte_array.teal, start.teal, 'extract_uint16']
+    def extract_uint16(_byte_array = nil, _start = nil)
+      @teal << 'extract_uint16'
     end
 
-    def extract_uint32(byte_array = nil, start = nil)
-      TEAL.new [byte_array.teal, start.teal, 'extract_uint32']
+    def extract_uint32(_byte_array = nil, _start = nil)
+      @teal << 'extract_uint32'
     end
 
-    def extract_uint64(byte_array = nil, start = nil)
-      TEAL.new [byte_array.teal, start.teal, 'extract_uint64']
+    def extract_uint64(_byte_array = nil, _start = nil)
+      @teal << 'extract_uint64'
     end
 
     def gaid(transaction_index)
-      TEAL.new ["gaid #{transaction_index}"]
+      @teal << "gaid #{transaction_index}"
     end
 
-    def gaids(transaction = nil)
-      TEAL.new [transaction.teal, 'gaids']
+    def gaids(_transaction = nil)
+      @teal << 'gaids'
     end
 
-    def getbit(input = nil, bit_index = nil)
-      TEAL.new [input.teal, bit_index.teal, 'getbit']
+    def getbit(_input = nil, _bit_index = nil)
+      @teal << 'getbit'
     end
 
-    def getbyte(input = nil, byte_index = nil)
-      TEAL.new [input.teal, byte_index.teal, 'getbyte']
+    def getbyte(_input = nil, _byte_index = nil)
+      @teal << 'getbyte'
     end
 
     def gitxn(transaction_index, field)
-      TEAL.new ["gitxn #{transaction_index} #{field}"]
+      @teal << "gitxn #{transaction_index} #{field}"
     end
 
     def gitxna(transaction_index, field, index)
-      TEAL.new ["gitxna #{transaction_index} #{field} #{index}"]
+      @teal << "gitxna #{transaction_index} #{field} #{index}"
     end
 
-    def gitxnas(transaction_index, field, index = nil)
-      TEAL.new [index.teal, "gitxnas #{transaction_index} #{field}"]
+    def gitxnas(transaction_index, field, _index = nil)
+      @teal << "gitxnas #{transaction_index} #{field}"
     end
 
     def gload(transaction_index, index)
-      TEAL.new ["gload #{transaction_index} #{index}"]
+      @teal << "gload #{transaction_index} #{index}"
     end
 
-    def gloads(index, transaction_index = nil)
-      TEAL.new [transaction_index.teal, "gloads #{index}"]
+    def gloads(index, _transaction_index = nil)
+      @teal << "gloads #{index}"
     end
 
-    def gloadss(transaction = nil, index = nil)
-      TEAL.new [transaction.teal, index.teal, 'gloadss']
+    def gloadss(_transaction = nil, _index = nil)
+      @teal << 'gloadss'
     end
 
     def global(field)
-      TEAL.new ["global #{field}"]
+      @teal << "global #{field}"
     end
 
-    def greater(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '>']
+    def greater(_a = nil, _b = nil)
+      @teal << '>'
     end
 
-    def greater_eq(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '>=']
+    def greater_eq(_a = nil, _b = nil)
+      @teal << '>='
     end
 
     def gtxn(index, field)
-      TEAL.new ["gtxn #{index} #{field}"]
+      @teal << "gtxn #{index} #{field}"
     end
 
     def gtxna(transaction_index, field, index)
-      TEAL.new ["gtxna #{transaction_index} #{field} #{index}"]
+      @teal << "gtxna #{transaction_index} #{field} #{index}"
     end
 
-    def gtxns(field, transaction_index = nil)
-      TEAL.new [transaction_index.teal, "gtxns #{field}"]
+    def gtxns(field, _transaction_index = nil)
+      @teal << "gtxns #{field}"
     end
 
-    def gtxnsa(field, index, transaction_index = nil)
-      TEAL.new [transaction_index.teal, "gtxnsa #{field} #{index}"]
+    def gtxnsa(field, index, _transaction_index = nil)
+      @teal << "gtxnsa #{field} #{index}"
     end
 
-    def gtxnas(transaction_index, field, index = nil)
-      TEAL.new [index.teal, "gtxnas #{transaction_index} #{field}"]
+    def gtxnas(transaction_index, field, _index = nil)
+      @teal << "gtxnas #{transaction_index} #{field}"
     end
 
-    def gtxnsas(field, transaction_index = nil, index = nil)
-      TEAL.new [transaction_index.teal, index.teal, "gtxnsas #{field}"]
+    def gtxnsas(field, _transaction_index = nil, _index = nil)
+      @teal << "gtxnsas #{field}"
     end
 
     def int(integer)
-      TEAL.new ["int #{integer}"]
+      @teal << "int #{integer}"
     end
 
     def intc(index)
-      TEAL.new ["intc #{index}"]
+      @teal << "intc #{index}"
     end
 
     def intc_0
-      TEAL.new ['intc_0']
+      @teal << 'intc_0'
     end
 
     def intc_1
-      TEAL.new ['intc_1']
+      @teal << 'intc_1'
     end
 
     def intc_2
-      TEAL.new ['intc_2']
+      @teal << 'intc_2'
     end
 
     def intc_3
-      TEAL.new ['intc_3']
+      @teal << 'intc_3'
     end
 
     def intcblock(*ints)
-      TEAL.new ["intcblock #{ints.join(' ')}"]
+      @teal << "intcblock #{ints.join(' ')}"
     end
 
-    def itob(bytes = nil)
-      TEAL.new [bytes.teal, 'itob']
+    def itob(_bytes = nil)
+      @teal << 'itob'
     end
 
     def itxn_begin
-      TEAL.new ['itxn_begin']
+      @teal << 'itxn_begin'
     end
 
-    def itxn_field(field, value = nil)
-      TEAL.new [value.teal, "itxn_field #{field}"]
+    def itxn_field(field, _value = nil)
+      @teal << "itxn_field #{field}"
     end
 
     def itxn_next
-      TEAL.new ['itxn_next']
+      @teal << 'itxn_next'
     end
 
     def itxn_submit
-      TEAL.new ['itxn_submit']
+      @teal << 'itxn_submit'
     end
 
     def itxna(field, index)
-      TEAL.new ["itxna #{field} #{index}"]
+      @teal << "itxna #{field} #{index}"
     end
 
-    def itxnas(field, index = nil)
-      TEAL.new [index.teal, "itxnas #{field}"]
+    def itxnas(field, _index = nil)
+      @teal << "itxnas #{field}"
     end
 
-    def keccak256(input = nil)
-      TEAL.new [input.teal, 'keccak256']
+    def keccak256(_input = nil)
+      @teal << 'keccak256'
     end
 
-    def len(input = nil)
-      TEAL.new [input.teal, 'len']
+    def label(label_name)
+      @teal << "#{label_name}:"
     end
 
-    def less(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '<']
+    def len(_input = nil)
+      @teal << 'len'
     end
 
-    def less_eq(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '<=']
+    def less(_a = nil, _b = nil)
+      @teal << '<'
+    end
+
+    def less_eq(_a = nil, _b = nil)
+      @teal << '<='
     end
 
     def load(index)
-      TEAL.new ["load #{index}"]
+      @teal << "load #{index}"
     end
 
-    def loads(index = nil)
-      TEAL.new [index.teal, 'loads']
+    def loads(_index = nil)
+      @teal << 'loads'
     end
 
-    def log(byte_array = nil)
-      TEAL.new [byte_array.teal, 'log']
+    def log(_byte_array = nil)
+      @teal << 'log'
     end
 
-    def min_balance(account = nil)
-      TEAL.new [account.teal, 'min_balance']
+    def min_balance(_account = nil)
+      @teal << 'min_balance'
     end
 
-    def modulo(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '%']
+    def modulo(_a = nil, _b = nil)
+      @teal << '%'
     end
 
-    def multiply(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '*']
+    def multiply(_a = nil, _b = nil)
+      @teal << '*'
     end
 
-    def mulw(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'mulw']
+    def mulw(_a = nil, _b = nil)
+      @teal << 'mulw'
     end
 
-    def zero?(expr = nil)
-      TEAL.new [expr.teal, '!']
+    def zero?(_expr = nil)
+      @teal << '!'
     end
 
-    def not_equal(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '!=']
+    def not_equal(_a = nil, _b = nil)
+      @teal << '!='
     end
 
-    def padded_bitwise_and(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b&']
+    def padded_bitwise_and(_a = nil, _b = nil)
+      @teal << 'b&'
     end
 
-    def padded_bitwise_or(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b|']
+    def padded_bitwise_or(_a = nil, _b = nil)
+      @teal << 'b|'
     end
 
-    def padded_bitwise_xor(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'b^']
+    def padded_bitwise_xor(_a = nil, _b = nil)
+      @teal << 'b^'
     end
 
-    def pop(expr = nil)
-      TEAL.new [expr.teal, 'pop']
+    def pop(_expr = nil)
+      @teal << 'pop'
     end
 
     def pushbytes(string)
-      TEAL.new ["pushbytes \"#{string}\""]
+      @teal << "pushbytes \"#{string}\""
     end
 
     def pushint(integer)
-      TEAL.new ["pushint #{integer}"]
+      @teal << "pushint #{integer}"
     end
 
     def retsub
-      TEAL.new ['retsub']
+      @teal << 'retsub'
     end
 
-    def select(expr_a = nil, expr_b = nil, expr_c = nil)
-      TEAL.new [expr_a.teal, expr_b.teal, expr_c.teal, 'select']
+    def select(_expr_a = nil, _expr_b = nil, _expr_c = nil)
+      @teal << 'select'
     end
 
-    def setbit(input = nil, bit_index = nil, value = nil)
-      TEAL.new [input.teal, bit_index.teal, value.teal, 'setbit']
+    def setbit(_input = nil, _bit_index = nil, _value = nil)
+      @teal << 'setbit'
     end
 
-    def setbyte(byte_array = nil, byte_index = nil, value = nil)
-      TEAL.new [byte_array.teal, byte_index.teal, value.teal, 'setbyte']
+    def setbyte(_byte_array = nil, _byte_index = nil, _value = nil)
+      @teal << 'setbyte'
     end
 
-    def sha256(input = nil)
-      TEAL.new [input.teal, 'sha256']
+    def sha256(_input = nil)
+      @teal << 'sha256'
     end
 
-    def sha512_256(input = nil)
-      TEAL.new [input.teal, 'sha512_256']
+    def sha512_256(_input = nil)
+      @teal << 'sha512_256'
     end
 
-    def shl(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'shl']
+    def shl(_a = nil, _b = nil)
+      @teal << 'shl'
     end
 
-    def shr(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, 'shr']
+    def shr(_a = nil, _b = nil)
+      @teal << 'shr'
     end
 
-    def sqrt(integer = nil)
-      TEAL.new [integer.teal, 'sqrt']
+    def sqrt(_integer = nil)
+      @teal << 'sqrt'
     end
 
-    def store(index, value = nil)
-      TEAL.new [value.teal, "store #{index}"]
+    def store(index, _value = nil)
+      @teal << "store #{index}"
     end
 
-    def stores(index = nil, value = nil)
-      TEAL.new [index.teal, value.teal, 'stores']
+    def stores(_index = nil, _value = nil)
+      @teal << 'stores'
     end
 
-    def substring(start, exclusive_end, byte_array = nil)
-      TEAL.new [byte_array.teal, "substring #{start} #{exclusive_end}"]
+    def substring(start, exclusive_end, _byte_array = nil)
+      @teal << "substring #{start} #{exclusive_end}"
     end
 
-    def substring3(byte_array = nil, start = nil, exclusive_end = nil)
-      TEAL.new [byte_array.teal, start.teal, exclusive_end.teal, 'substring3']
+    def substring3(_byte_array = nil, _start = nil, _exclusive_end = nil)
+      @teal << 'substring3'
     end
 
-    def subtract(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '-']
+    def subtract(_a = nil, _b = nil)
+      @teal << '-'
     end
 
-    def swap(expr_a = nil, expr_b = nil)
-      TEAL.new [expr_a.teal, expr_b.teal, 'swap']
+    def swap(_expr_a = nil, _expr_b = nil)
+      @teal << 'swap'
     end
 
-    def teal_return(expr = nil)
-      TEAL.new [expr.teal, 'return']
+    def teal_return(_expr = nil)
+      @teal << 'return'
     end
 
     def txn(field)
-      TEAL.new ["txn #{field}"]
+      @teal << "txn #{field}"
     end
 
     def txna(field, index)
-      TEAL.new ["txna #{field} #{index}"]
+      @teal << "txna #{field} #{index}"
     end
 
-    def txnas(field, index = nil)
-      TEAL.new [index.teal, "txnas #{field}"]
+    def txnas(field, _index = nil)
+      @teal << "txnas #{field}"
     end
 
     def uncover(count)
-      TEAL.new ["uncover #{count}"]
+      @teal << "uncover #{count}"
     end
 
-    def boolean_and(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '&&']
+    def boolean_and(_a = nil, _b = nil)
+      @teal << '&&'
     end
 
-    def boolean_or(a = nil, b = nil)
-      TEAL.new [a.teal, b.teal, '||']
+    def boolean_or(_a = nil, _b = nil)
+      @teal << '||'
     end
   end
 end
