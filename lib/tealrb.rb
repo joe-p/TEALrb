@@ -11,7 +11,6 @@ require_relative 'tealrb/opcode_modules'
 require_relative 'tealrb/placeholder'
 require_relative 'tealrb/rewriters'
 require_relative 'tealrb/contractv2'
-#require_relative 'tealrb/patches'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 
 module TEALrb
