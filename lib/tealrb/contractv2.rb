@@ -38,9 +38,41 @@ module TEALrb
     include TEALrb
     include Opcodes
     attr_reader :teal
+    
+    def self.subroutines
+      @@subroutines ||= []
+    end
+
+    def self.subroutine(name)
+      subroutines << name unless subroutines.include? name
+    end
 
     def initialize
-      @teal = TEAL.new
+      @teal = TEAL.new ['b main']
+
+      @@subroutines.each do |name|
+        label(name)
+
+        source = method(name).source
+        
+        new_source = rewrite(source)
+        new_source = rewrite_with_rewriter(new_source, SubroutineRewriter)
+
+        pre_string = StringIO.new
+        method(name).parameters.map.with_index do |param, i| 
+          param_name = param.last
+          pre_string.puts "store #{200 + i}"
+          pre_string.puts "#{param_name} = -> { load #{200 + i} }"
+
+        end
+
+        new_source = pre_string.string + new_source + 'retsub'
+        eval(new_source)
+
+        define_singleton_method(name) do |*_args|
+          callsub(name)
+        end
+      end
     end
 
     def rewrite_with_rewriter(string, rewriter)
@@ -66,7 +98,11 @@ module TEALrb
     end
 
     def compile
-      compile_string(method(:main).source.lines[1..-2].join)
+      @teal << 'main:'
+      main_source = method(:main).source
+      new_source = rewrite(main_source)
+      self.class.class_eval(new_source)
+      main
     end
   end
 end

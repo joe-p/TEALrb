@@ -4,7 +4,16 @@ require_relative 'lib/tealrb'
 require 'pry'
 
 class TestContract < TEALrb::ContractV2
+
+  subroutine def save(key, value)
+    app_global_put(key, value)
+  end
+
   def main
+    1
+    save('Hello', 2)
+  end
+  def main_old
     a = app_global_put('Some Key', 2)
     if a
       'if block'

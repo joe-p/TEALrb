@@ -1,6 +1,28 @@
 require 'parser/current'
 
 module TEALrb
+  class SubroutineRewriter < Parser::TreeRewriter
+    def on_def(node)
+      r = remove node.loc.name
+      r.remove node.loc.keyword
+      r.remove node.loc.end
+      super
+    end
+
+    def on_args(node)
+      remove node.loc.expression
+      super
+    end
+    
+    def on_send(node)
+      if node.loc.selector.source == 'subroutine'
+        remove node.loc.selector
+      end
+      super
+    end
+
+  end
+
   class AssignRewriter < Parser::TreeRewriter
     def on_lvasgn(node)
       rh = Parser::Source::Range.new(
