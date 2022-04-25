@@ -14,8 +14,8 @@ module TEALrb
       '&': 'bitwise_and',
       '!=': 'not_equal',
       '*': 'multiply',
-      '&&': 'value_and',
-      '||': 'value_or',
+      '&&': 'boolean_and',
+      '||': 'boolean_or',
       '%': 'modulo',
       '|': 'bitwise_or',
       '^': 'bitwise_xor',
@@ -633,11 +633,11 @@ module TEALrb
       TEAL.new ["uncover #{count}"]
     end
 
-    def value_and(a = nil, b = nil)
+    def boolean_and(a = nil, b = nil)
       TEAL.new [a.teal, b.teal, '&&']
     end
 
-    def value_or(a = nil, b = nil)
+    def boolean_or(a = nil, b = nil)
       TEAL.new [a.teal, b.teal, '||']
     end
   end

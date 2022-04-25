@@ -532,12 +532,12 @@ class RawTealTests < Minitest::Test
     compile_test 'uncover 0', 'uncover 0'
   end
 
-  def test_value_and
-    compile_test 'value_and', '&&'
+  def test_boolean_and
+    compile_test 'boolean_and', '&&'
   end
 
-  def test_value_or
-    compile_test 'value_or', '||'
+  def test_boolean_or
+    compile_test 'boolean_or', '||'
   end
 
   def test_label

@@ -29,8 +29,8 @@ TEALrb supports the writing of raw TEAL with following exceptions. In these exce
 | `>`| `greater(a, b)` |
 | `<=` | `less_eq(a, b)` |
 | `>=` | `greater_eq(a, b)` |
-| `&&` | `value_and(&&)` |
-| `\|\|` | `value_or(a, b)` |
+| `&&` | `boolean_and(&&)` |
+| `\|\|` | `boolean_or(a, b)` |
 | `==` | `equal(a, b)` |
 | `!=` | `not_equal(a, b)` |
 | `!` | `zero?(expr)` |
@@ -68,8 +68,8 @@ Some of these opcodes can still be used on TEALrb opcodes as methods.
 | `>(b)`| `greater(self, b)` |
 | `<=(b)` | `less_eq(self, b)` |
 | `>=(b)` | `greater_eq(self, b)` |
-| `&&(b)` | `value_and(self, b)` |
-| `\|\|(b)` | `value_or(self, b)` |
+| `&&(b)` | `boolean_and(self, b)` |
+| `\|\|(b)` | `boolean_or(self, b)` |
 | `==(b)` | `equal(self, b)` |
 | `!=(b)` | `not_equal(self, b)` |
 | `@!(b)` | `zero?(self)` |
