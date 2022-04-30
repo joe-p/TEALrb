@@ -71,6 +71,10 @@ module TEALrb
     def define_subroutine(name, source)
       label(name) # add teal label
 
+      comment_params = method(name).parameters.map(&:last).join(', ')
+      comment_content = "#{name}(#{comment_params})"
+      comment(comment_content, inline: true)
+
       new_source = rewrite(source)
       new_source = rewrite_with_rewriter(new_source, MethodRewriter)
 
@@ -79,7 +83,8 @@ module TEALrb
       method(name).parameters.map.with_index do |param, i|
         param_name = param.last
         pre_string.puts "store #{200 + i}"
-        pre_string.puts "#{param_name} = -> { load #{200 + i} }"
+        pre_string.puts "comment('#{param_name}', inline: true)"
+        pre_string.puts "#{param_name} = -> { load #{200 + i}; comment('#{param_name}', inline: true) }"
       end
 
       new_source = "#{pre_string.string}#{new_source}retsub"
@@ -87,6 +92,15 @@ module TEALrb
 
       define_singleton_method(name) do |*_args|
         callsub(name)
+      end
+    end
+
+    def comment(content, inline: false)
+      if inline
+        last_line = @teal.pop
+        @teal << "#{last_line} // #{content}"
+      else
+        @teal << "// #{content}"
       end
     end
 
