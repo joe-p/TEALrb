@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parser/current'
 
 module TEALrb
@@ -13,14 +15,11 @@ module TEALrb
       remove(node.loc.expression) if node.loc.expression
       super
     end
-    
+
     def on_send(node)
-      if node.loc.selector.source == 'subroutine' || node.loc.selector.source == 'teal'
-        remove node.loc.selector
-      end
+      remove node.loc.selector if node.loc.selector.source == 'subroutine' || node.loc.selector.source == 'teal'
       super
     end
-
   end
 
   class AssignRewriter < Parser::TreeRewriter

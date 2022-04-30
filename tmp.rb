@@ -6,11 +6,10 @@ require_relative 'lib/tealrb'
 require 'pry'
 
 class TestContract < TEALrb::ContractV2
-
   subroutine def save(key, value)
     app_global_put(key, value)
   end
-  
+
   teal def teal_method
     'teal method'
   end

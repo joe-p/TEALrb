@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   class IfBlock
     @@id = 0
@@ -38,7 +40,7 @@ module TEALrb
     include TEALrb
     include Opcodes
     attr_reader :teal
-    
+
     @@subroutines = []
     def self.subroutines
       @@subroutines
@@ -74,13 +76,13 @@ module TEALrb
 
       pre_string = StringIO.new
 
-      method(name).parameters.map.with_index do |param, i| 
+      method(name).parameters.map.with_index do |param, i|
         param_name = param.last
         pre_string.puts "store #{200 + i}"
         pre_string.puts "#{param_name} = -> { load #{200 + i} }"
       end
 
-      new_source = pre_string.string + new_source + 'retsub'
+      new_source = "#{pre_string.string}#{new_source}retsub"
       eval(new_source)
 
       define_singleton_method(name) do |*_args|
@@ -112,9 +114,9 @@ module TEALrb
         string = rewrite_with_rewriter(string, rw)
       end
 
-      puts "**** TEALrb ****"
+      puts '**** TEALrb ****'
       puts string
-      puts "**** TEALrb ****"
+      puts '**** TEALrb ****'
       string
     end
 
