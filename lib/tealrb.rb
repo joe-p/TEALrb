@@ -14,6 +14,12 @@ require_relative 'tealrb/contractv2'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 
 module TEALrb
+
+  @@current_teal = {}
+  def self.current_teal
+    @@current_teal
+  end
+
   class If
     attr_accessor :blocks
     attr_reader :id
@@ -39,12 +45,15 @@ module TEALrb
 
     TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do |other|
+        @teal = 1
         ExtendedOpcodes.send(opcode, self, other)
       end
     end
 
     TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do
+        @teal = 1
+
         ExtendedOpcodes.send(opcode, self)
       end
     end

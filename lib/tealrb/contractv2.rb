@@ -134,7 +134,7 @@ module TEALrb
     end
 
     def rewrite(string)
-      [IfRewriter, OpRewriter, AssignRewriter].each do |rw|
+      [ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
 
@@ -145,10 +145,12 @@ module TEALrb
     end
 
     def compile_string(string)
+      TEALrb.current_teal[Thread.current] = @teal
       eval(rewrite(string))
     end
 
     def compile
+      TEALrb.current_teal[Thread.current] = @teal
       @teal << 'main:'
       main_source = method(:main).source
       new_source = rewrite(main_source)

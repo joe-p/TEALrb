@@ -40,6 +40,15 @@ module TEALrb
     end
   end
 
+  class ComparisonRewriter < Parser::TreeRewriter
+    def on_send(node)
+      if TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.keys.map(&:to_s).include? node.loc.selector.source
+        wrap(node.loc.expression, '(', ')')
+      end
+      super
+    end
+  end
+
   class OpRewriter < Parser::TreeRewriter
     def on_and(node)
       replace(node.loc.operator, '.boolean_and')
