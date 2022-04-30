@@ -39,16 +39,18 @@ module TEALrb
     include Opcodes
     attr_reader :teal
     
+    @@subroutines = []
     def self.subroutines
-      @@subroutines ||= []
+      @@subroutines
     end
 
     def self.subroutine(name)
       subroutines << name unless subroutines.include? name
     end
 
+    @@teal_methods = []
     def self.teal_methods
-      @@teal_methods ||= []
+      @@teal_methods
     end
 
     def self.teal(name)

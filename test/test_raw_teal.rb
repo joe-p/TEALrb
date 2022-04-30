@@ -8,7 +8,7 @@ class RawTealTests < Minitest::Test
     contract = TEALrb::ContractV2.new
     contract.compile_string input
 
-    assert_equal(teal, contract.teal.first)
+    assert_equal(teal, contract.teal.last)
   end
 
   def test_acct_params_get
