@@ -63,6 +63,16 @@ module TEALrb
       new_source = rewrite(source)
       new_source = rewrite_with_rewriter(new_source, MethodRewriter)
 
+      pre_string = StringIO.new
+
+      method(name).parameters.map.with_index do |param, i|
+        param_name = param.last
+        pre_string.puts "store #{200 + i}"
+        pre_string.puts "comment('#{param_name}', inline: true)"
+        pre_string.puts "#{param_name} = -> { load #{200 + i}; comment('#{param_name}', inline: true) }"
+      end
+
+      new_source = "#{pre_string.string}#{new_source}"
       define_singleton_method(name) do |*_args|
         eval(new_source)
       end

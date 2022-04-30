@@ -10,12 +10,12 @@ class TestContract < TEALrb::ContractV2
     app_global_put(key, value)
   end
 
-  teal def teal_method
-    'teal method'
+  teal def teal_method(input)
+    "teal method: #{input}"
   end
 
-  def ruby_method
-    'ruby method'
+  def ruby_method(input)
+    "ruby method: #{input}"
   end
 
   def main
@@ -23,10 +23,10 @@ class TestContract < TEALrb::ContractV2
     save_var = save('Hello', 2)
 
     # Ruby Method
-    ruby_var = byte(ruby_method)
+    ruby_var = byte(ruby_method('ruby method input'))
 
     # TEAL method
-    teal_var = teal_method
+    teal_var = teal_method('teal method input')
 
     if save_var
       ruby_var
