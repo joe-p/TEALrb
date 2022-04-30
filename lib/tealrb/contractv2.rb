@@ -47,31 +47,33 @@ module TEALrb
       subroutines << name unless subroutines.include? name
     end
 
+    def define_subroutine(name, source)
+      label(name) # add teal label
+
+      new_source = rewrite(source)
+      new_source = rewrite_with_rewriter(new_source, SubroutineRewriter)
+
+      pre_string = StringIO.new
+
+      method(name).parameters.map.with_index do |param, i| 
+        param_name = param.last
+        pre_string.puts "store #{200 + i}"
+        pre_string.puts "#{param_name} = -> { load #{200 + i} }"
+      end
+
+      new_source = pre_string.string + new_source + 'retsub'
+      eval(new_source)
+
+      define_singleton_method(name) do |*_args|
+        callsub(name)
+      end
+    end
+
     def initialize
       @teal = TEAL.new ['b main']
 
       @@subroutines.each do |name|
-        label(name)
-
-        source = method(name).source
-        
-        new_source = rewrite(source)
-        new_source = rewrite_with_rewriter(new_source, SubroutineRewriter)
-
-        pre_string = StringIO.new
-        method(name).parameters.map.with_index do |param, i| 
-          param_name = param.last
-          pre_string.puts "store #{200 + i}"
-          pre_string.puts "#{param_name} = -> { load #{200 + i} }"
-
-        end
-
-        new_source = pre_string.string + new_source + 'retsub'
-        eval(new_source)
-
-        define_singleton_method(name) do |*_args|
-          callsub(name)
-        end
+        define_subroutine name, method(name).source
       end
     end
 
