@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# This is a temporary file used during development for quick testing that will be deleted upon release
+
 require_relative 'lib/tealrb'
 require 'pry'
 
@@ -8,30 +10,31 @@ class TestContract < TEALrb::ContractV2
   subroutine def save(key, value)
     app_global_put(key, value)
   end
+  
+  teal def teal_method
+    'teal method'
+  end
+
+  def ruby_method
+    'ruby method'
+  end
 
   def main
-    1
-    save('Hello', 2)
-  end
-  def main_old
-    a = app_global_put('Some Key', 2)
-    if a
-      'if block'
-    elsif gtxnsa(1, 2, app_global_put('Some Key', 3))
-      'elsif block'
-    else
-      'else block'
-    end
-  end
+    # Subroutine
+    save_var = save('Hello', 2)
 
-  def raw
-    a = -> { app_global_put(byte('Some Key'), int(2)) }
-    IfBlock.new(@teal,  a.call ) do
-      byte('if block')
-    end.elsif( gtxnsa(1, 2, app_global_put(byte('Some Key'), int(3))) ) do
-      byte('elsif block')
-    end.else do
-      byte('else block')
+    # Ruby Method
+    ruby_var = byte(ruby_method)
+
+    # TEAL method
+    teal_var = teal_method
+
+    if save_var
+      ruby_var
+    elsif teal_var
+      'in elsif c'
+    else
+      'in else'
     end
   end
 end

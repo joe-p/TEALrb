@@ -1,7 +1,7 @@
 require 'parser/current'
 
 module TEALrb
-  class SubroutineRewriter < Parser::TreeRewriter
+  class MethodRewriter < Parser::TreeRewriter
     def on_def(node)
       r = remove node.loc.name
       r.remove node.loc.keyword
@@ -10,12 +10,12 @@ module TEALrb
     end
 
     def on_args(node)
-      remove node.loc.expression
+      remove(node.loc.expression) if node.loc.expression
       super
     end
     
     def on_send(node)
-      if node.loc.selector.source == 'subroutine'
+      if node.loc.selector.source == 'subroutine' || node.loc.selector.source == 'teal'
         remove node.loc.selector
       end
       super

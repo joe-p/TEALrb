@@ -47,11 +47,28 @@ module TEALrb
       subroutines << name unless subroutines.include? name
     end
 
+    def self.teal_methods
+      @@teal_methods ||= []
+    end
+
+    def self.teal(name)
+      teal_methods << name unless subroutines.include? name
+    end
+
+    def define_teal_method(name, source)
+      new_source = rewrite(source)
+      new_source = rewrite_with_rewriter(new_source, MethodRewriter)
+
+      define_singleton_method(name) do |*_args|
+        eval(new_source)
+      end
+    end
+
     def define_subroutine(name, source)
       label(name) # add teal label
 
       new_source = rewrite(source)
-      new_source = rewrite_with_rewriter(new_source, SubroutineRewriter)
+      new_source = rewrite_with_rewriter(new_source, MethodRewriter)
 
       pre_string = StringIO.new
 
@@ -74,6 +91,10 @@ module TEALrb
 
       @@subroutines.each do |name|
         define_subroutine name, method(name).source
+      end
+
+      @@teal_methods.each do |name|
+        define_teal_method name, method(name).source
       end
     end
 
