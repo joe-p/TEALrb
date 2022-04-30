@@ -156,6 +156,10 @@ module TEALrb
       new_source = rewrite(main_source)
       self.class.class_eval(new_source)
       main
+    rescue SyntaxError, StandardError => e
+      line_num = e.backtrace.first.split(':')[1].to_i
+      puts "EXCEPTION: #{new_source.lines[line_num - 1].strip}"
+      raise e
     end
   end
 end

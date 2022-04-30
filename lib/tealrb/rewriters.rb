@@ -38,6 +38,22 @@ module TEALrb
       insert_after(node.loc.name, '.call')
       super
     end
+
+    def on_ivasgn(node)
+      rh = Parser::Source::Range.new(
+        node.loc.expression.source_buffer,
+        node.loc.operator.end_pos + 1,
+        node.loc.expression.end_pos
+      )
+
+      wrap(rh, '-> { ', ' }')
+      super
+    end
+
+    def on_ivar(node)
+      insert_after(node.loc.name, '.call') unless node.loc.name.source == '@teal'
+      super
+    end
   end
 
   class ComparisonRewriter < Parser::TreeRewriter
@@ -51,7 +67,13 @@ module TEALrb
 
   class OpRewriter < Parser::TreeRewriter
     def on_and(node)
-      replace(node.loc.operator, '.boolean_and')
+      wrap(node.children[1].loc.expression, '(', ')')
+
+      op_loc = node.loc.operator
+      op_loc = op_loc.resize(3) if op_loc.resize(3).source == '&& '
+
+      replace(op_loc, '.boolean_and')
+
       super
     end
 
@@ -106,7 +128,7 @@ module TEALrb
       cond_expr = node.children.first.loc.expression
       replace(cond_expr, "#{cond_expr.source} ) do")
 
-      replace(node.loc.else, 'end.else do') if node.loc.else.source == 'else'
+      replace(node.loc.else, 'end.else do') if node.loc.else && node.loc.else.source == 'else'
       super
     end
   end
