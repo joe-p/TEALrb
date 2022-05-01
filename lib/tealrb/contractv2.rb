@@ -42,27 +42,22 @@ module TEALrb
     attr_reader :teal
 
     class << self
-      @version = 6
-
-      attr_reader :version
+      attr_accessor :subroutines, :version, :teal_methods
     end
 
-    @@subroutines = []
-    def self.subroutines
-      @@subroutines
+    def self.inherited(klass)
+      klass.version = 6
+      klass.subroutines = []
+      klass.teal_methods = []
+      super
     end
 
     def self.subroutine(name)
       subroutines << name unless subroutines.include? name
     end
 
-    @@teal_methods = []
-    def self.teal_methods
-      @@teal_methods
-    end
-
     def self.teal(name)
-      teal_methods << name unless subroutines.include? name
+      teal_methods << name unless teal_methods.include? name
     end
 
     def define_teal_method(name, source)
@@ -125,11 +120,11 @@ module TEALrb
     def initialize
       @teal = TEAL.new ["#pragma version #{self.class.version}"]
 
-      @@subroutines.each do |name|
+      self.class.subroutines.each do |name|
         define_subroutine name, method(name).source
       end
 
-      @@teal_methods.each do |name|
+      self.class.teal_methods.each do |name|
         define_teal_method name, method(name).source
       end
     end
