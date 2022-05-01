@@ -5,7 +5,7 @@
 require_relative 'lib/tealrb'
 require 'pry'
 
-class TestContract < TEALrb::ContractV2
+class TestContract < TEALrb::Contract
   subroutine def save(key, value)
     app_global_put(key, value)
   end

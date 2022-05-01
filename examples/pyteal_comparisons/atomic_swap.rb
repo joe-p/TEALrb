@@ -2,7 +2,7 @@
 
 require_relative '../../lib/tealrb'
 
-class AtomicSwap < TEALrb::ContractV2
+class AtomicSwap < TEALrb::Contract
   alias tmpl_hash_fn sha256
 
   def main

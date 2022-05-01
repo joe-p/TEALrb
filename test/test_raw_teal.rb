@@ -5,7 +5,7 @@ require '../lib/tealrb'
 
 class RawTealTests < Minitest::Test
   def compile_test(input, teal)
-    contract = TEALrb::ContractV2.new
+    contract = TEALrb::Contract.new
     contract.compile_string input
 
     assert_equal(teal, contract.teal.last)

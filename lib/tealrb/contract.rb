@@ -36,7 +36,7 @@ module TEALrb
     end
   end
 
-  class ContractV2
+  class Contract
     include TEALrb
     include Opcodes
     include Types

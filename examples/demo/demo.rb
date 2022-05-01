@@ -1,7 +1,7 @@
 
 require_relative '../../lib/tealrb'
 
-class Approval < TEALrb::ContractV2
+class Approval < TEALrb::Contract
   abi_description.name = 'TEALrb_Demo'
   abi_description.add_id(MAINNET, '1234')
 
