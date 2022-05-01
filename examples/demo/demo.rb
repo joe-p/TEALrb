@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 require_relative '../../lib/tealrb'
 
@@ -62,7 +63,7 @@ class Approval < TEALrb::Contract
     comment 'combining raw teal with conditionals'
     byte 'Bad Key'
     if app_global_get
-        err
+      err
     end
 
     comment 'more complex conditionals'
