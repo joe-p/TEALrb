@@ -39,21 +39,41 @@ module TEALrb
   class ContractV2
     include TEALrb
     include Opcodes
+    include Types
+    include ABI
+
     attr_reader :teal
 
     class << self
-      attr_accessor :subroutines, :version, :teal_methods
+      attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_description
     end
 
     def self.inherited(klass)
       klass.version = 6
       klass.subroutines = []
       klass.teal_methods = []
+      klass.abi_description = ABI::ABIDescription.new
+      klass.abi_method_hash = {}
       super
     end
 
+    def self.abi(desc:, args:, returns:)
+      args = args.map do |name, h|
+        h[:name] = name.to_s
+        h[:type] = h[:type].to_s.split('::').last.downcase
+        h
+      end
+
+      require 'pry'; binding.pry
+
+      self.abi_method_hash = { desc: desc, args: args, returns: returns.to_s.split('::').last.downcase }
+    end
+
     def self.subroutine(name)
-      subroutines << name unless subroutines.include? name
+      return if subroutines.include? name
+
+      subroutines << name
+      abi_description.add_method(**({ name: name.to_s }.merge abi_method_hash))
     end
 
     def self.teal(name)
@@ -80,6 +100,8 @@ module TEALrb
     end
 
     def define_subroutine(name, source)
+      TEALrb.current_teal[Thread.current] = @teal
+
       @teal << 'b main' unless @teal.include? 'b main'
 
       label(name) # add teal label
@@ -127,6 +149,14 @@ module TEALrb
       self.class.teal_methods.each do |name|
         define_teal_method name, method(name).source
       end
+    end
+
+    def placeholder(string)
+      @teal << string
+    end
+
+    def abi_hash
+      self.class.abi_description.to_h
     end
 
     def rewrite_with_rewriter(string, rewriter)

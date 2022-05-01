@@ -1,0 +1,29 @@
+{
+  "name": "TEALrb_Demo",
+  "networks": {
+    "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=": {
+      "appID": "1234"
+    }
+  },
+  "methods": [
+    {
+      "name": "subroutine_method",
+      "desc": "Adds two numbers, subtracts two numbers, then multiplies two numbers",
+      "args": [
+        {
+          "type": "uint64",
+          "desc": "The first number",
+          "name": "x"
+        },
+        {
+          "type": "uint64",
+          "desc": "The second number",
+          "name": "y"
+        }
+      ],
+      "returns": {
+        "type": "uint64"
+      }
+    }
+  ]
+}

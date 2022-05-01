@@ -1,0 +1,107 @@
+#pragma version 6
+b main
+subroutine_method: // subroutine_method(x, y)
+store 200 // x
+store 201 // y
+load 200 // x
+load 201 // y
++
+load 200 // x
+load 201 // y
+-
+load 200 // x
+load 201 // y
+*
+itob
+concat
+log
+retsub
+main:
+// raw teal
+byte "Key One"
+int 111
+app_global_put
+int 100
+int 200
++
+// single method call
+byte "Key Two"
+int 222
+app_global_put
+// two step method call
+byte "Key Three"
+int 333
+app_global_put
+// using variables
+byte "Key Four"
+int 444
+app_global_put
+// combining raw teal with conditionals
+byte "Bad Key"
+app_global_get
+bz if0_else0
+err
+b if0_end
+if0_else0:
+// more complex conditionals
+byte "First Word"
+app_global_get
+byte "Hi"
+==
+bz if1_else0
+byte "Second Word"
+byte "Mom"
+app_global_put
+b if1_end
+if1_else0:
+byte "First Word"
+app_global_get
+byte "Hello"
+==
+bz if1_else1
+byte "Second Word"
+byte "World"
+app_global_put
+b if1_end
+if1_else1:
+byte "First Word"
+app_global_get
+byte "Howdy"
+==
+bz if1_else2
+byte "Second Word"
+byte "Partner"
+app_global_put
+b if1_end
+if1_else2:
+byte "Second Word"
+byte "???"
+app_global_put
+if_end:
+// calling methods
+// subroutine method
+int 1
+int 2
+callsub subroutine_method
+// teal method
+int 3
+int 4
++
+// ruby method
+int 11
+// accessing specific indexes/fields
+gtxn 0 Sender
+gtxn 0 Sender
+gtxn 0 Sender
+// manual branching
+b manual_br
+byte "Unreachable"
+app_global_get
+manual_br:
+byte "Manual Br"
+app_global_get
+// placeholders
+byte "Some Key"
+REPLACE_ME
+app_global_put
+gtxn 1 ANOTHER_THING_TO_REPLACE

@@ -85,7 +85,7 @@ module TEALrb
     OPCODE_METHODS = TEALrb::Opcodes.instance_methods.freeze
 
     def on_const(node)
-      @skips = 1 if node.loc.name.source == 'Txna'
+      @skips = 1 if ['Txna', 'Gtxn'].include? node.loc.name.source
       super
     end
 
@@ -100,6 +100,8 @@ module TEALrb
           @skips = params.count { |param| param[0] == :req }
         end
       elsif meth_name == :comment
+        @skips = 1
+      elsif meth_name == :placeholder
         @skips = 1
       end
       super
