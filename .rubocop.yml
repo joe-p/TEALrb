@@ -14,6 +14,41 @@ Style/FrozenStringLiteralComment:
     - 'tealrb.gemspec'
     - 'Gemfile'
 
+
+# TODO
+Metrics/BlockNesting:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Style/ClassVars:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
   
 # Pending Cops
 Lint/RefinementImportMethods: # new in 1.27

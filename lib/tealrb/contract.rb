@@ -93,7 +93,7 @@ module TEALrb
 
       new_source = "#{pre_string.string}#{new_source}"
       define_singleton_method(name) do |*_args|
-        eval(new_source)
+        eval(new_source) # rubocop:disable Security/Eval
       end
     end
 
@@ -121,7 +121,7 @@ module TEALrb
       end
 
       new_source = "#{pre_string.string}#{new_source}retsub"
-      eval(new_source)
+      eval(new_source) # rubocop:disable Security/Eval
 
       define_singleton_method(name) do |*_args|
         callsub(name)
@@ -177,7 +177,7 @@ module TEALrb
 
     def compile_string(string)
       TEALrb.current_teal[Thread.current] = @teal
-      eval(rewrite(string))
+      eval(rewrite(string)) # rubocop:disable Security/Eval
     end
 
     def compile

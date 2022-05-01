@@ -105,19 +105,19 @@ module TEALrb
       TEALrb.current_teal[Thread.current] << "arg #{index}"
     end
 
-    def arg_0
+    def arg_0 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'arg_0'
     end
 
-    def arg_1
+    def arg_1 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'arg_1'
     end
 
-    def arg_2
+    def arg_2 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'arg_2'
     end
 
-    def arg_3
+    def arg_3 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'arg_3'
     end
 
@@ -237,19 +237,19 @@ module TEALrb
       TEALrb.current_teal[Thread.current] << "bytec #{index}"
     end
 
-    def bytec_0
+    def bytec_0 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'bytec_0'
     end
 
-    def bytec_1
+    def bytec_1 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'bytec_1'
     end
 
-    def bytec_2
+    def bytec_2 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'bytec_2'
     end
 
-    def bytec_3
+    def bytec_3 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'bytec_3'
     end
 
@@ -437,19 +437,19 @@ module TEALrb
       TEALrb.current_teal[Thread.current] << "intc #{index}"
     end
 
-    def intc_0
+    def intc_0 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'intc_0'
     end
 
-    def intc_1
+    def intc_1 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'intc_1'
     end
 
-    def intc_2
+    def intc_2 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'intc_2'
     end
 
-    def intc_3
+    def intc_3 # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'intc_3'
     end
 
@@ -589,7 +589,7 @@ module TEALrb
       TEALrb.current_teal[Thread.current] << 'sha256'
     end
 
-    def sha512_256(_input = nil)
+    def sha512_256(_input = nil) # rubocop:disable Naming/VariableNumber
       TEALrb.current_teal[Thread.current] << 'sha512_256'
     end
 

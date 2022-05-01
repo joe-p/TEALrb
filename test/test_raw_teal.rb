@@ -2,7 +2,6 @@
 
 require 'minitest/autorun'
 require '../lib/tealrb'
-
 class RawTealTests < Minitest::Test
   def compile_test(input, teal)
     contract = TEALrb::Contract.new
@@ -471,7 +470,7 @@ class RawTealTests < Minitest::Test
     compile_test 'sha256', 'sha256'
   end
 
-  def test_sha512_256
+  def test_sha512_256 # rubocop:disable Naming/VariableNumber
     compile_test 'sha512_256', 'sha512_256'
   end
 

@@ -26,7 +26,7 @@ class VotingApproval < TEALrb::Contract
   end
 
   # get_vote_of_sender = App.localGetEx(Int(0), App.id(), Bytes("voted"))
-  teal def get_vote_of_sender
+  teal def get_vote_of_sender # rubocop:disable Naming/AccessorMethodName
     app_local_get_ex(0, Txn.application_id, 'voted')
     store 1
     store 0
@@ -126,7 +126,7 @@ class VotingApproval < TEALrb::Contract
       on_creation
     elsif Txn.on_completion == int('DeleteApplication')
       teal_return is_creator
-    elsif Txn.on_completion == int('UpdateApplication')
+    elsif Txn.on_completion == int('UpdateApplication') # rubocop:disable Lint/DuplicateBranch
       teal_return is_creator
     elsif Txn.on_completion == int('CloseOut')
       on_closeout

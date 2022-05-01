@@ -103,7 +103,8 @@ module TEALrb
         opcode('AssetAmount', *args)
       end
 
-      # @return [[]byte] 32 byte address. Causes clawback of all value of asset from AssetSender if Sender is the Clawback address of the asset. (v1)
+      # @return [[]byte] 32 byte address. Causes clawback of all value of asset from AssetSender if
+      #   Sender is the Clawback address of the asset. (v1)
       def asset_sender(*args)
         opcode('AssetSender', *args)
       end
@@ -118,7 +119,8 @@ module TEALrb
         opcode('AssetCloseTo', *args)
       end
 
-      # @return [uint64] Position of this transaction within an atomic transaction group. A stand-alone transaction is implicitly element 0 in a group of 1 (v1)
+      # @return [uint64] Position of this transaction within an atomic transaction group.
+      #   A stand-alone transaction is implicitly element 0 in a group of 1 (v1)
       def group_index(*args)
         opcode('GroupIndex', *args)
       end
@@ -288,7 +290,8 @@ module TEALrb
         opcode('LocalNumByteSlice', *args)
       end
 
-      # @return [uint64] Number of additional pages for each of the application's approval and clear state programs. An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program. (v4)
+      # @return [uint64] Number of additional pages for each of the application's approval and clear state programs.
+      #   An ExtraProgramPages of 1 means 2048 more total bytes, or 1024 for each program. (v4)
       def extra_program_pages(*args)
         opcode('ExtraProgramPages', *args)
       end
@@ -313,7 +316,8 @@ module TEALrb
         opcode('CreatedAssetID', *args)
       end
 
-      # @return [uint64] ApplicationID allocated by the creation of an application (only with itxn in v5). Application mode only (v5)
+      # @return [uint64] ApplicationID allocated by the creation of an application (only with itxn in v5).
+      #   Application mode only (v5)
       def created_application_id(*args)
         opcode('CreatedApplicationID', *args)
       end
@@ -521,12 +525,14 @@ module TEALrb
         opcode('OpcodeBudget', *args)
       end
 
-      # @return [uint64] The application ID of the application that called this application. 0 if this application is at the top-level. Application mode only. (v6)
+      # @return [uint64] The application ID of the application that called this application.
+      #   0 if this application is at the top-level. Application mode only. (v6)
       def caller_application_id(*args)
         opcode('CallerApplicationID', *args)
       end
 
-      # @return [[]byte] The application address of the application that called this application. ZeroAddress if this application is at the top-level. Application mode only. (v6)
+      # @return [[]byte] The application address of the application that called this application.
+      #   ZeroAddress if this application is at the top-level. Application mode only. (v6)
       def caller_application_address(*args)
         opcode('CallerApplicationAddress', *args)
       end

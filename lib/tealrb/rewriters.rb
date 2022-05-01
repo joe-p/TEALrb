@@ -99,9 +99,7 @@ module TEALrb
           params = TEALrb::Opcodes.instance_method(meth_name).parameters
           @skips = params.count { |param| param[0] == :req }
         end
-      elsif meth_name == :comment
-        @skips = 1
-      elsif meth_name == :placeholder
+      elsif %i[comment placeholder].include? meth_name
         @skips = 1
       end
       super
