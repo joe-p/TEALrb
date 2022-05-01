@@ -1,20 +1,42 @@
-# This is an example .rubocop.yml for TEALrb contracts
+require: rubocop-minitest
 
-# Single-line if conditions are not supported (yet)
-Style/IfUnlessModifier:
-  Enabled: false
+Minitest/AssertInDelta: # new in 0.10
+  Enabled: true
+Minitest/AssertKindOf: # new in 0.10
+  Enabled: true
+Minitest/AssertOutput: # new in 0.10
+  Enabled: true
+Minitest/AssertPathExists: # new in 0.10
+  Enabled: true
+Minitest/AssertPredicate: # new in 0.18
+  Enabled: true
+Minitest/AssertSilent: # new in 0.10
+  Enabled: true
+Minitest/AssertWithExpectedArgument: # new in 0.11
+  Enabled: true
+Minitest/AssertionInLifecycleHook: # new in 0.10
+  Enabled: true
+Minitest/DuplicateTestRun: # new in 0.19
+  Enabled: true
+Minitest/LiteralAsActualArgument: # new in 0.10
+  Enabled: true
+Minitest/MultipleAssertions: # new in 0.10
+  Enabled: true
+Minitest/RefuteInDelta: # new in 0.10
+  Enabled: true
+Minitest/RefuteKindOf: # new in 0.10
+  Enabled: true
+Minitest/RefutePathExists: # new in 0.10
+  Enabled: true
+Minitest/RefutePredicate: # new in 0.18
+  Enabled: true
+Minitest/TestMethodName: # new in 0.10
+  Enabled: true
+Minitest/UnreachableAssertion: # new in 0.14
+  Enabled: true
+Minitest/UnspecifiedException: # new in 0.10
+  Enabled: true
 
-# Allow void literals (strings for bytes, symbols for labels)
-Lint/Void:
-  Enabled: false
-
-# Since case isn't supported by TEALrb (yet), if/elsif are acceptable
-Style/CaseLikeIf:
-  Enabled: false
-
-# Numeric predicates (#zero?, #positive?, #negative?) are not yet supported
-Style/NumericPredicate:
-  EnforcedStyle: comparison
 
 # Pending Cops
 Lint/RefinementImportMethods: # new in 1.27
