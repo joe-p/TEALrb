@@ -10,7 +10,16 @@ module TEALrb
         input.each_line do |line|
           line.strip!
           next if line[/^#/]
-          next if line[%r{^//}]
+
+          if line[%r{^//}]
+            line = %(comment("#{line.sub(%r{//}, '')}"))
+            output.puts line
+            next
+          elsif line[%r{//.*}]
+            comment = line[%r{(?<=//).*}]
+            line.sub!(%r{//.*}, '')
+            inline_comment = %(comment("#{comment}", inline: true))
+          end
 
           opcode = line.split.first
 
@@ -28,9 +37,11 @@ module TEALrb
             line = ":#{line[0..-2]}"
           elsif opcode == 'return'
             line = 'teal_return'
+          elsif opcode == 'method'
+            line.sub!('method', 'method_signature')
           end
 
-          if line.count(' ').positive? && !%w[byte pushbytes].include?(opcode)
+          if line.count(' ').positive? && !%w[byte pushbytes method].include?(opcode)
             args = line.split[1..]
             args.map! do |arg|
               arg_as_int = Integer(arg, exception: false)
@@ -45,6 +56,7 @@ module TEALrb
           end
 
           output.puts line
+          output.puts inline_comment if inline_comment
         end
 
         output.string

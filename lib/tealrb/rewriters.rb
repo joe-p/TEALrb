@@ -91,6 +91,7 @@ module TEALrb
 
     def on_send(node)
       meth_name = node.loc.selector.source.to_sym
+      
       if OPCODE_METHODS.include? meth_name
         if meth_name[/(byte|int)cblock/]
           @skips = node.children.size - 2
@@ -98,6 +99,8 @@ module TEALrb
           params = TEALrb::Opcodes.instance_method(meth_name).parameters
           @skips = params.count { |param| param[0] == :req }
         end
+      elsif meth_name == :comment
+        @skips = 1
       end
       super
     end
@@ -113,7 +116,7 @@ module TEALrb
           when :str
             wrap(node.loc.expression, 'byte(', ')')
           when :sym
-            wrap(node.loc.expression, 'label(', ')')
+            wrap(node.loc.expression, 'label(', ')') if node.loc.expression.source[/^:/]
           end
         end
       end

@@ -6,6 +6,7 @@ module TEALrb
   end
 
   module Opcodes
+    # TODO: Create TxnaFields to seperate array fields
     module TxnFields
       # @return [[]byte] 32 byte address (v1)
       def sender(*args)

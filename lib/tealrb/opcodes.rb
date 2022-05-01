@@ -517,6 +517,10 @@ module TEALrb
       TEALrb.current_teal[Thread.current] << 'log'
     end
 
+    def method_signature(signature)
+      TEALrb.current_teal[Thread.current] << %(method "#{signature}") 
+    end
+
     def min_balance(_account = nil)
       TEALrb.current_teal[Thread.current] << 'min_balance'
     end
