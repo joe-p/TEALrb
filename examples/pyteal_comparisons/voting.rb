@@ -1,6 +1,7 @@
 require_relative '../../lib/tealrb'
 
 class VotingApproval < TEALrb::ContractV2
+    @version = 2
 
     #on_creation = Seq(
     #    [

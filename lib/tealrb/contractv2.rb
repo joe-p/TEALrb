@@ -41,6 +41,12 @@ module TEALrb
     include Opcodes
     attr_reader :teal
 
+    class << self
+      @version = 6
+
+      attr_reader :version
+    end
+
     @@subroutines = []
     def self.subroutines
       @@subroutines
@@ -79,6 +85,8 @@ module TEALrb
     end
 
     def define_subroutine(name, source)
+      @teal << 'b main' unless @teal.include? 'b main'
+
       label(name) # add teal label
 
       comment_params = method(name).parameters.map(&:last).join(', ')
@@ -115,7 +123,7 @@ module TEALrb
     end
 
     def initialize
-      @teal = TEAL.new ['b main']
+      @teal = TEAL.new ["#pragma version #{self.class.version}"]
 
       @@subroutines.each do |name|
         define_subroutine name, method(name).source
@@ -151,7 +159,7 @@ module TEALrb
 
     def compile
       TEALrb.current_teal[Thread.current] = @teal
-      @teal << 'main:'
+      @teal << 'main:' if @teal.include? 'b main'
       main_source = method(:main).source
       new_source = rewrite(main_source)
       self.class.class_eval(new_source)
