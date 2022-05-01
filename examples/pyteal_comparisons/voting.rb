@@ -6,21 +6,21 @@ class VotingApproval < TEALrb::ContractV2
     #on_creation = Seq(
     #    [
     #        App.globalPut(Bytes("Creator"), Txn.sender()),
-    #        Assert(Txn.application_args.length() == Int(4)),
-    #        App.globalPut(Bytes("RegBegin"), Btoi(Txn.application_args[0])),
-    #        App.globalPut(Bytes("RegEnd"), Btoi(Txn.application_args[1])),
-    #        App.globalPut(Bytes("VoteBegin"), Btoi(Txn.application_args[2])),
-    #        App.globalPut(Bytes("VoteEnd"), Btoi(Txn.application_args[3])),
+    #        Assert(Txna.application_args.length() == Int(4)),
+    #        App.globalPut(Bytes("RegBegin"), Btoi(Txna.application_args[0])),
+    #        App.globalPut(Bytes("RegEnd"), Btoi(Txna.application_args[1])),
+    #        App.globalPut(Bytes("VoteBegin"), Btoi(Txna.application_args[2])),
+    #        App.globalPut(Bytes("VoteEnd"), Btoi(Txna.application_args[3])),
     #        Return(Int(1)),
     #    ]
     #)
     teal def on_creation
         app_global_put('Creator', Txn.sender)
         assert(Txn.num_app_args == 4)
-        app_global_put('RegBegin', btoi(Txn.application_args(0)))
-        app_global_put('RegEnd', btoi(Txn.application_args(1)))
-        app_global_put('VoteBegin', btoi(Txn.application_args(2)))
-        app_global_put('VoteEnd', btoi(Txn.application_args(3)))
+        app_global_put('RegBegin', btoi(Txna.application_args(0)))
+        app_global_put('RegEnd', btoi(Txna.application_args(1)))
+        app_global_put('VoteBegin', btoi(Txna.application_args(2)))
+        app_global_put('VoteEnd', btoi(Txna.application_args(3)))
     end
 
     # get_vote_of_sender = App.localGetEx(Int(0), App.id(), Bytes("voted"))
@@ -109,7 +109,7 @@ class VotingApproval < TEALrb::ContractV2
 
     
         #choice = Txn.application_args[1]
-        @choice = Txn.application_args 1
+        @choice = Txna.application_args 1
 
         #choice_tally = App.globalGet(choice)
         @choice_tally = app_global_get(@choice)
@@ -132,7 +132,7 @@ class VotingApproval < TEALrb::ContractV2
             on_closeout
         elsif Txn.on_completion == int('OptIn')
             on_register
-        elsif Txn.application_args(0) == 'vote'
+        elsif Txna.application_args(0) == 'vote'
             on_vote
         end
 

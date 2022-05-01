@@ -565,7 +565,7 @@ module TEALrb
       extend Opcodes
       extend TxnFields
 
-      def self.opcode(field, *_args)
+      def self.opcode(field)
         txn field
       end
     end
