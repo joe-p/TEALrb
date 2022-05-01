@@ -14,7 +14,6 @@ require_relative 'tealrb/contractv2'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 
 module TEALrb
-
   @@current_teal = {}
   def self.current_teal
     @@current_teal

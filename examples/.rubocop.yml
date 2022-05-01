@@ -1,5 +1,9 @@
 # This is an example .rubocop.yml for TEALrb contracts
 
+# Single-line if conditions are not supported (yet)
+Style/IfUnlessModifier:
+  Enabled: false
+
 # Allow void literals (strings for bytes, symbols for labels)
 Lint/Void:
   Enabled: false

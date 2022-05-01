@@ -91,7 +91,7 @@ module TEALrb
 
     def on_send(node)
       meth_name = node.loc.selector.source.to_sym
-      
+
       if OPCODE_METHODS.include? meth_name
         if meth_name[/(byte|int)cblock/]
           @skips = node.children.size - 2

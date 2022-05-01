@@ -518,7 +518,7 @@ module TEALrb
     end
 
     def method_signature(signature)
-      TEALrb.current_teal[Thread.current] << %(method "#{signature}") 
+      TEALrb.current_teal[Thread.current] << %(method "#{signature}")
     end
 
     def min_balance(_account = nil)
