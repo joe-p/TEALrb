@@ -64,8 +64,6 @@ module TEALrb
         h
       end
 
-      require 'pry'; binding.pry
-
       self.abi_method_hash = { desc: desc, args: args, returns: returns.to_s.split('::').last.downcase }
     end
 
