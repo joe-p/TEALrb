@@ -66,7 +66,7 @@ class Approval < TEALrb::Contract
     assert app_call.sender == payment.sender
 
     if highest_bidder != ''
-      pay(highest_bidder, highest_bid) 
+      pay(highest_bidder, highest_bid)
     end
 
     app_global_put('Highest Bid', payment.amount)
