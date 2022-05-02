@@ -14,20 +14,11 @@ require_relative 'tealrb/contract'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 
 module TEALrb
-  @@current_teal = {}
-  def self.current_teal
-    @@current_teal
+  class << self
+    attr_accessor :current_teal
   end
 
-  class If
-    attr_accessor :blocks
-    attr_reader :id
-
-    def initialize(condition, id)
-      @blocks = { condition => [] }
-      @id = id
-    end
-  end
+  @current_teal = {}
 
   class TEAL < Array
     def teal

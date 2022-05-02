@@ -2,14 +2,18 @@
 
 module TEALrb
   class IfBlock
-    @@id = 0
+    class << self
+      attr_accessor :id
+    end
+
+    self.class.id = 0
     def initialize(teal, _cond, &blk)
       @teal = teal
       @else_count = 0
       @end_label = "if#{@id}_end:"
 
-      @id = @@id
-      @@id += 1
+      @id = self.class.id
+      self.class.id += 1
 
       @teal << "bz if#{@id}_else0"
       blk.call
