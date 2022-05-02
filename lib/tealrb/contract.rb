@@ -6,10 +6,12 @@ module TEALrb
       attr_accessor :id
     end
 
-    self.class.id = 0
+    @id = 0
+
     def initialize(teal, _cond, &blk)
       @teal = teal
       @else_count = 0
+      @id = self.class.id
       @end_label = "if#{@id}_end:"
 
       @id = self.class.id
@@ -75,7 +77,8 @@ module TEALrb
       return if subroutines.include? name
 
       subroutines << name
-      abi_description.add_method(**({ name: name.to_s }.merge abi_method_hash))
+      abi_description.add_method(**({ name: name.to_s }.merge abi_method_hash)) unless abi_method_hash.empty?
+      abi_method_hash = {}
     end
 
     def self.teal(name)
@@ -88,7 +91,7 @@ module TEALrb
 
       pre_string = StringIO.new
 
-      method(name).parameters.map.with_index do |param, i|
+      method(name).parameters.reverse.each_with_index do |param, i|
         param_name = param.last
         pre_string.puts "store #{200 + i}"
         pre_string.puts "comment('#{param_name}', inline: true)"
@@ -117,7 +120,7 @@ module TEALrb
 
       pre_string = StringIO.new
 
-      method(name).parameters.map.with_index do |param, i|
+      method(name).parameters.reverse.each_with_index do |param, i|
         param_name = param.last
         pre_string.puts "store #{200 + i}"
         pre_string.puts "comment('#{param_name}', inline: true)"
@@ -130,6 +133,10 @@ module TEALrb
       define_singleton_method(name) do |*_args|
         callsub(name)
       end
+    rescue SyntaxError, StandardError => e
+      line_num = e.backtrace.first.split(':')[1].to_i
+      puts "EXCEPTION: #{new_source.lines[line_num - 1].strip}"
+      raise e
     end
 
     def comment(content, inline: false)
