@@ -98,6 +98,7 @@ module TEALrb
     end
 
     def approve
+      TEALrb.current_teal[Thread.current] << 'int 1'
       TEALrb.current_teal[Thread.current] << 'return'
     end
 
