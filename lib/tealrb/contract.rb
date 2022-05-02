@@ -78,7 +78,7 @@ module TEALrb
 
       subroutines << name
       abi_description.add_method(**({ name: name.to_s }.merge abi_method_hash)) unless abi_method_hash.empty?
-      abi_method_hash = {}
+      @abi_method_hash = {}
     end
 
     def self.teal(name)
