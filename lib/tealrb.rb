@@ -35,15 +35,12 @@ module TEALrb
 
     TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do |other|
-        @teal = 1
         ExtendedOpcodes.send(opcode, self, other)
       end
     end
 
     TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do
-        @teal = 1
-
         ExtendedOpcodes.send(opcode, self)
       end
     end
