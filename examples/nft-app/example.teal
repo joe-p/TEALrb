@@ -4,7 +4,7 @@ pay: // pay(receiver, amount)
 store 200 // amount
 store 201 // receiver
 itxn_begin
-int 1
+int 'pay'
 itxn_field TypeEnum
 load 201 // receiver
 itxn_field Receiver

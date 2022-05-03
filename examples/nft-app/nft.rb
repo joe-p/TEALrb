@@ -76,7 +76,7 @@ class Approval < TEALrb::Contract
 
   subroutine def pay(receiver, amount)
     itxn_begin
-    itxn_field 'TypeEnum', 1
+    itxn_field 'TypeEnum', TxnType.pay
     itxn_field 'Receiver', receiver
     itxn_field 'Amount', amount - 1000
     itxn_submit

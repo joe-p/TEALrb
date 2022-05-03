@@ -18,7 +18,7 @@ class AtomicSwap < TEALrb::Contract
     tmpl_timeout = timeout
 
     fee_cond = Txn.fee < tmpl_fee
-    safety_cond = Txn.type_enum == int('pay') && \
+    safety_cond = Txn.type_enum == TxnType.pay && \
                   Txn.close_remainder_to == Global.zero_address && \
                   Txn.rekey_to == Global.zero_address
 

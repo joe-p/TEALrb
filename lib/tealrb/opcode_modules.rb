@@ -6,6 +6,44 @@ module TEALrb
   end
 
   module Opcodes
+    module TxnType
+      class << self
+        private
+
+        def txn_type_int(type)
+          TEALrb.current_teal[Thread.current] << "int '#{type}'"
+        end
+      end
+
+      def self.unknown
+        txn_type_int 'unknown'
+      end
+
+      def self.pay
+        txn_type_int 'pay'
+      end
+
+      def self.key_registration
+        txn_type_int 'keyreg'
+      end
+
+      def self.asset_config
+        txn_type_int 'acfg'
+      end
+
+      def self.asset_transfer
+        txn_type_int 'axfer'
+      end
+
+      def self.asset_freeze
+        txn_type_int 'afrz'
+      end
+
+      def self.application_call
+        txn_type_int 'appl'
+      end
+    end
+
     # TODO: Create TxnaFields to seperate array fields
     module TxnFields
       # @return [[]byte] 32 byte address (v1)
