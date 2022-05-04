@@ -12,16 +12,16 @@ class Approval < TEALrb::Contract
     metadata = Txna.application_args(2)
     tx_methods = btoi Txna.application_args(3)
 
-    app_global_put('Royalty Address', royalty_address)
-    app_global_put('Owner', Txn.sender)
-    app_global_put('Highest Bidder', '')
-    app_global_put('Metadata', metadata)
+    Global['Royalty Address'] = royalty_address
+    Global['Owner'] = Txn.sender
+    Global['Highest Bidder'] = ''
+    Global['Metadata'] = metadata
 
-    app_global_put('Royalty Percent', royalty_percent)
-    app_global_put('Auction End', 0)
-    app_global_put('TX Methods', tx_methods)
-    app_global_put('Sale Price', 0)
-    app_global_put('Highest Bid', 0)
+    Global['Royalty Percent'] = royalty_percent
+    Global['Auction End'] = 0
+    Global['TX Methods'] = tx_methods
+    Global['Sale Price'] = 0
+    Global['Highest Bid'] = 0
 
     approve
   end
@@ -31,11 +31,11 @@ class Approval < TEALrb::Contract
     starting_price = btoi(Txna.application_args(1))
     duration = btoi(Txna.application_args(2))
 
-    assert app_global_get('TX Methods') & 4
+    assert Global['TX Methods'] & 4
     assert payment.receiver == Global.current_application_address
     assert payment.amount == 100_000
-    app_global_put('Auction End', Global.latest_timestamp + duration)
-    app_global_put('Highest Bid', starting_price)
+    Global['Auction End'] = Global.latest_timestamp + duration
+    Global['Highest Bid'] = starting_price
 
     approve
   end
@@ -43,25 +43,25 @@ class Approval < TEALrb::Contract
   teal def start_sale
     price = btoi Txna.application_args(1)
 
-    assert app_global_get('TX Methods') & 2
-    assert Txn.sender == app_global_get('Owner')
-    app_global_put('Sale Price', price)
+    assert Global['TX Methods'] & 2
+    assert Txn.sender == Global['Owner']
+    Global['Sale Price'] = price
     approve
   end
 
   teal def end_sale
-    assert Txn.sender == app_global_get('Owner')
-    app_global_put('Sale Price', 0)
+    assert Txn.sender == Global['Owner']
+    Global['Sale Price'] = 0
     approve
   end
 
   teal def bid
     payment = Gtxn[1]
     app_call = Gtxn[0]
-    highest_bidder = app_global_get('Highest Bidder')
-    highest_bid = app_global_get('Highest Bid')
+    highest_bidder = Global['Highest Bidder']
+    highest_bid = Global['Highest Bid']
 
-    assert Global.latest_timestamp < app_global_get('Auction End')
+    assert Global.latest_timestamp < Global['Auction End']
     assert payment.amount > highest_bid
     assert app_call.sender == payment.sender
 
@@ -69,8 +69,8 @@ class Approval < TEALrb::Contract
       pay(highest_bidder, highest_bid)
     end
 
-    app_global_put('Highest Bid', payment.amount)
-    app_global_put('Highest Bidder', payment.sender)
+    Global['Highest Bid'] = payment.amount
+    Global['Highest Bidder'] = payment.sender
     approve
   end
 
@@ -83,52 +83,52 @@ class Approval < TEALrb::Contract
   end
 
   teal def end_auction
-    highest_bid = app_global_get 'Highest Bid'
-    royalty_percent = app_global_get 'Royalty Percent'
+    highest_bid = Global['Highest Bid']
+    royalty_percent = Global['Royalty Percent']
     royalty_amount = highest_bid * royalty_percent / 100
-    royalty_address = app_global_get 'Royalty Address'
-    owner = app_global_get 'Owner'
+    royalty_address = Global['Royalty Address']
+    owner = Global['Owner']
 
-    assert Global.latest_timestamp > app_global_get('Auction End')
+    assert Global.latest_timestamp > Global['Auction End']
     pay(royalty_address, royalty_amount)
     pay(owner, highest_bid - royalty_amount)
-    app_global_put('Auction End', 0)
-    app_global_put('Owner', app_global_get('Highest Bidder'))
-    app_global_put('Highest Bidder', '')
+    Global['Auction End'] = 0
+    Global['Owner'] = Global['Highest Bidder']
+    Global['Highest Bidder'] = ''
     approve
   end
 
   teal def transfer
     receiver = Txna.application_args(1)
 
-    assert app_global_get('TX Methods') & 1
-    assert Txn.sender == app_global_get('Owner')
-    app_global_put('Owner', receiver)
+    assert Global['TX Methods'] & 1
+    assert Txn.sender == Global['Owner']
+    Global['Owner'] = receiver
     approve
   end
 
   teal def buy
     royalty_payment = Gtxn[2]
     payment = Gtxn[1]
-    royalty_amount = app_global_get('Sale Price') * app_global_get('Royalty Percent') / 100
-    purchase_amount = app_global_get('Sale Price') - royalty_amount
+    royalty_amount = Global['Sale Price'] * Global['Royalty Percent'] / 100
+    purchase_amount = Global['Sale Price'] - royalty_amount
 
-    assert app_global_get('Sale Price') > 0
+    assert Global['Sale Price'] > 0
 
     # Verify senders are all the same
     assert royalty_payment.sender == payment.sender
     assert Txn.sender == payment.sender
 
     # Verify receivers are correct
-    assert royalty_payment.receiver == app_global_get('Royalty Address')
-    assert payment.receiver == app_global_get('Owner')
+    assert royalty_payment.receiver == Global['Royalty Address']
+    assert payment.receiver == Global['Owner']
 
     # Verify amounts are correct
     assert royalty_payment.amount == royalty_amount
     assert payment.amount == purchase_amount
 
-    app_global_put('Owner', Txn.sender)
-    app_global_put('Sale Price', 0)
+    Global['Owner'] = Txn.sender
+    Global['Sale Price'] = 0
     approve
   end
 

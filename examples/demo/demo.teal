@@ -1,16 +1,16 @@
 #pragma version 6
 b main
 subroutine_method: // subroutine_method(x, y)
-store 200 // x
-store 201 // y
-load 200 // x
-load 201 // y
+store 200 // y
+store 201 // x
+load 201 // x
+load 200 // y
 +
-load 200 // x
-load 201 // y
+load 201 // x
+load 200 // y
 -
-load 200 // x
-load 201 // y
+load 201 // x
+load 200 // y
 *
 itob
 concat
@@ -43,6 +43,7 @@ bz if0_else0
 err
 b if0_end
 if0_else0:
+if0_end:
 // more complex conditionals
 byte "First Word"
 app_global_get
@@ -77,7 +78,7 @@ if1_else2:
 byte "Second Word"
 byte "???"
 app_global_put
-if_end:
+if1_end:
 // calling methods
 // subroutine method
 int 1
@@ -105,3 +106,19 @@ byte "Some Key"
 REPLACE_ME
 app_global_put
 gtxn 1 ANOTHER_THING_TO_REPLACE
+// Global put/get as hash
+byte "Key Four"
+int 444
+app_global_put
+byte "Key Five"
+app_global_get
+// Local put/get as hash
+txn Sender
+byte "Local Key"
+byte "Some Value"
+app_local_put
+txn Receiver
+byte "Local Key"
+app_local_get
+// TxnType enums
+int 'pay'

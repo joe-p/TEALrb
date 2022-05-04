@@ -6,6 +6,38 @@ module TEALrb
   end
 
   module Opcodes
+    class AccountLocal
+      include TEALrb::Opcodes
+
+      def initialize(account)
+        @account = account
+      end
+
+      def [](key)
+        app_local_get @account, key
+      end
+
+      def []=(key, value)
+        app_local_put @account, key, value
+      end
+    end
+
+    module Local
+      def self.[](account)
+        AccountLocal.new account
+      end
+    end
+
+    module Global
+      def self.[](key)
+        app_global_get key
+      end
+
+      def self.[]=(key, value)
+        app_global_put key, value
+      end
+    end
+
     module TxnType
       class << self
         private

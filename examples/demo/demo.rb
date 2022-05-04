@@ -103,6 +103,17 @@ class Approval < TEALrb::Contract
     comment 'placeholders'
     app_global_put('Some Key', placeholder('REPLACE_ME'))
     gtxn(1, 'ANOTHER_THING_TO_REPLACE')
+
+    comment 'Global put/get as hash'
+    Global['Key Four'] = 444
+    Global['Key Five']
+
+    comment 'Local put/get as hash'
+    Local[Txn.sender]['Local Key'] = 'Some Value'
+    Local[Txn.receiver]['Local Key']
+
+    comment 'TxnType enums'
+    TxnType.pay
   end
 end
 
