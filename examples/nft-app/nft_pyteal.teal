@@ -1,0 +1,302 @@
+#pragma version 5
+txn ApplicationID
+int 0
+==
+bnz main_l20
+txn OnCompletion
+int DeleteApplication
+==
+bnz main_l19
+txna ApplicationArgs 0
+byte "start_auction"
+==
+bnz main_l18
+txna ApplicationArgs 0
+byte "start_sale"
+==
+bnz main_l17
+txna ApplicationArgs 0
+byte "end_sale"
+==
+bnz main_l16
+txna ApplicationArgs 0
+byte "bid"
+==
+bnz main_l13
+txna ApplicationArgs 0
+byte "end_auction"
+==
+bnz main_l12
+txna ApplicationArgs 0
+byte "transfer"
+==
+bnz main_l11
+txna ApplicationArgs 0
+byte "buy"
+==
+bnz main_l10
+err
+main_l10:
+byte "Sale Price"
+app_global_get
+int 0
+>
+assert
+gtxn 2 Sender
+gtxn 1 Sender
+==
+assert
+gtxn 1 Sender
+txn Sender
+==
+assert
+gtxn 2 Receiver
+byte "Royalty Address"
+app_global_get
+==
+assert
+gtxn 1 Receiver
+byte "Owner"
+app_global_get
+==
+assert
+gtxn 2 Amount
+byte "Sale Price"
+app_global_get
+byte "Royalty Percent"
+app_global_get
+*
+int 100
+/
+==
+assert
+gtxn 1 Amount
+byte "Sale Price"
+app_global_get
+byte "Sale Price"
+app_global_get
+byte "Royalty Percent"
+app_global_get
+*
+int 100
+/
+-
+==
+assert
+byte "Owner"
+txn Sender
+app_global_put
+byte "Sale Price"
+int 0
+app_global_put
+int 1
+return
+main_l11:
+byte "TX Methods"
+app_global_get
+int 1
+&
+assert
+txn Sender
+byte "Owner"
+app_global_get
+==
+assert
+byte "Owner"
+txna ApplicationArgs 1
+app_global_put
+int 1
+return
+main_l12:
+global LatestTimestamp
+byte "Auction End"
+app_global_get
+>
+assert
+itxn_begin
+int pay
+itxn_field TypeEnum
+byte "Royalty Address"
+app_global_get
+itxn_field Receiver
+byte "Highest Bid"
+app_global_get
+byte "Royalty Percent"
+app_global_get
+*
+int 100
+/
+int 1000
+-
+itxn_field Amount
+itxn_submit
+itxn_begin
+int pay
+itxn_field TypeEnum
+byte "Owner"
+app_global_get
+itxn_field Receiver
+byte "Highest Bid"
+app_global_get
+byte "Highest Bid"
+app_global_get
+byte "Royalty Percent"
+app_global_get
+*
+int 100
+/
+-
+int 1000
+-
+itxn_field Amount
+itxn_submit
+byte "Auction End"
+int 0
+app_global_put
+byte "Owner"
+byte "Highest Bidder"
+app_global_get
+app_global_put
+byte "Highest Bidder"
+byte ""
+app_global_put
+int 1
+return
+main_l13:
+global LatestTimestamp
+byte "Auction End"
+app_global_get
+<
+assert
+gtxn 1 Amount
+byte "Highest Bid"
+app_global_get
+>
+assert
+gtxn 0 Sender
+gtxn 1 Sender
+==
+assert
+byte "Highest Bidder"
+app_global_get
+byte ""
+!=
+bnz main_l15
+main_l14:
+byte "Highest Bid"
+gtxn 1 Amount
+app_global_put
+byte "Highest Bidder"
+gtxn 1 Sender
+app_global_put
+int 1
+return
+main_l15:
+itxn_begin
+int pay
+itxn_field TypeEnum
+byte "Highest Bidder"
+app_global_get
+itxn_field Receiver
+byte "Highest Bid"
+app_global_get
+int 1000
+-
+itxn_field Amount
+itxn_submit
+b main_l14
+main_l16:
+byte "TX Methods"
+app_global_get
+int 2
+&
+assert
+txn Sender
+byte "Owner"
+app_global_get
+==
+assert
+byte "Sale Price"
+txna ApplicationArgs 1
+btoi
+app_global_put
+int 1
+return
+main_l17:
+byte "TX Methods"
+app_global_get
+int 2
+&
+assert
+txn Sender
+byte "Owner"
+app_global_get
+==
+assert
+byte "Sale Price"
+txna ApplicationArgs 1
+btoi
+app_global_put
+int 1
+return
+main_l18:
+byte "TX Methods"
+app_global_get
+int 4
+&
+assert
+gtxn 1 Receiver
+global CurrentApplicationAddress
+==
+assert
+gtxn 1 Amount
+int 100000
+==
+assert
+byte "Auction End"
+global LatestTimestamp
+txna ApplicationArgs 2
+btoi
++
+app_global_put
+byte "Highest Bid"
+txna ApplicationArgs 1
+btoi
+app_global_put
+int 1
+return
+main_l19:
+int 1
+return
+main_l20:
+byte "Royalty Address"
+txna ApplicationArgs 0
+app_global_put
+byte "Owner"
+txn Sender
+app_global_put
+byte "Highest Bidder"
+byte ""
+app_global_put
+byte "Metadata"
+txna ApplicationArgs 2
+app_global_put
+byte "Royalty Percent"
+txna ApplicationArgs 1
+btoi
+app_global_put
+byte "Auction End"
+int 0
+app_global_put
+byte "TX Methods"
+txna ApplicationArgs 3
+btoi
+app_global_put
+byte "Sale Price"
+int 0
+app_global_put
+byte "Highest Bid"
+int 0
+app_global_put
+int 1
+return

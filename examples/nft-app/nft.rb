@@ -158,4 +158,4 @@ end
 approval = Approval.new
 approval.compile
 puts approval.teal
-File.write('example.teal', approval.teal.join("\n"))
+File.write('nft_tealrb.teal', approval.teal.join("\n"))
