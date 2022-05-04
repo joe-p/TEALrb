@@ -28,16 +28,6 @@ module TEALrb
       end
     end
 
-    module Global
-      def self.[](key)
-        app_global_get key
-      end
-
-      def self.[]=(key, value)
-        app_global_put key, value
-      end
-    end
-
     module TxnType
       class << self
         private
@@ -691,6 +681,14 @@ module TEALrb
       def self.opcode(field)
         @teal = TEALrb.current_teal[Thread.current]
         global field
+      end
+
+      def self.[](key)
+        app_global_get key
+      end
+
+      def self.[]=(key, value)
+        app_global_put key, value
       end
     end
   end
