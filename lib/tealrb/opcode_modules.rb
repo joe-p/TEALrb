@@ -691,5 +691,11 @@ module TEALrb
         app_global_put key, value
       end
     end
+
+    module AppArgs
+      def self.[](index)
+        Txna.application_args index
+      end
+    end
   end
 end

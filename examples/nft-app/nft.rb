@@ -7,10 +7,10 @@ class Approval < TEALrb::Contract
   @version = 5
 
   teal def init
-    royalty_address = Txna.application_args(0)
-    royalty_percent = btoi Txna.application_args(1)
-    metadata = Txna.application_args(2)
-    tx_methods = btoi Txna.application_args(3)
+    royalty_address = AppArgs[0]
+    royalty_percent = btoi AppArgs[1]
+    metadata = AppArgs[2]
+    tx_methods = btoi AppArgs[3]
 
     Global['Royalty Address'] = royalty_address
     Global['Owner'] = Txn.sender
@@ -28,8 +28,8 @@ class Approval < TEALrb::Contract
 
   teal def start_auction
     payment = Gtxn[1]
-    starting_price = btoi(Txna.application_args(1))
-    duration = btoi(Txna.application_args(2))
+    starting_price = btoi(AppArgs[1])
+    duration = btoi(AppArgs[2])
 
     assert Global['TX Methods'] & 4
     assert payment.receiver == Global.current_application_address
@@ -41,7 +41,7 @@ class Approval < TEALrb::Contract
   end
 
   teal def start_sale
-    price = btoi Txna.application_args(1)
+    price = btoi AppArgs[1]
 
     assert Global['TX Methods'] & 2
     assert Txn.sender == Global['Owner']
@@ -99,7 +99,7 @@ class Approval < TEALrb::Contract
   end
 
   teal def transfer
-    receiver = Txna.application_args(1)
+    receiver = AppArgs[1]
 
     assert Global['TX Methods'] & 1
     assert Txn.sender == Global['Owner']
@@ -135,19 +135,19 @@ class Approval < TEALrb::Contract
   def main
     if Txn.application_id == 0
       init
-    elsif Txna.application_args(0) == 'start_auction'
+    elsif AppArgs[0] == 'start_auction'
       start_auction
-    elsif Txna.application_args(0) == 'start_sale'
+    elsif AppArgs[0] == 'start_sale'
       start_sale
-    elsif Txna.application_args(0) == 'end_sale'
+    elsif AppArgs[0] == 'end_sale'
       end_sale
-    elsif Txna.application_args(0) == 'bid'
+    elsif AppArgs[0] == 'bid'
       bid
-    elsif Txna.application_args(0) == 'end_auction'
+    elsif AppArgs[0] == 'end_auction'
       end_auction
-    elsif Txna.application_args(0) == 'transfer'
+    elsif AppArgs[0] == 'transfer'
       transfer
-    elsif Txna.application_args(0) == 'buy'
+    elsif AppArgs[0] == 'buy'
       buy
     else
       err

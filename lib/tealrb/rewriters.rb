@@ -85,7 +85,7 @@ module TEALrb
     OPCODE_METHODS = TEALrb::Opcodes.instance_methods.freeze
 
     def on_const(node)
-      @skips = 1 if %w[Txna Gtxn].include? node.loc.name.source
+      @skips = 1 if %w[Txna Gtxn AppArgs].include? node.loc.name.source
       super
     end
 
