@@ -19,13 +19,7 @@ module TEALrb
 
   class AssignRewriter < Rewriter
     def on_lvasgn(node)
-      rh = Parser::Source::Range.new(
-        node.source_range.source_buffer,
-        node.loc.operator.end_pos + 1,
-        node.source_range.end_pos
-      )
-
-      wrap(rh, '-> { ', ' }')
+      wrap(node.children[1].source_range, '-> { ', ' }')
       super
     end
 
@@ -35,13 +29,7 @@ module TEALrb
     end
 
     def on_ivasgn(node)
-      rh = Parser::Source::Range.new(
-        node.source_range.source_buffer,
-        node.loc.operator.end_pos + 1,
-        node.source_range.end_pos
-      )
-
-      wrap(rh, '-> { ', ' }')
+      wrap(node.children[1].source_range, '-> { ', ' }')
       super
     end
 
