@@ -71,7 +71,7 @@ module TEALrb
       op_loc = node.loc.operator
       op_loc = op_loc.resize(3) if op_loc.resize(3).source == '|| '
 
-      replace(op_loc, '.boolean_and')
+      replace(op_loc, '.boolean_or')
       super
     end
 
