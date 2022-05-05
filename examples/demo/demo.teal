@@ -122,3 +122,17 @@ byte "Local Key"
 app_local_get
 // TxnType enums
 int 'pay'
+int 1111
+int 2222
+store 200 // b
+store 201 // a
+load 201 // a
+load 200 // b
+/
+int 3333
+int 4444
+store 200 // arg2
+store 201 // arg1
+load 201 // arg1
+load 200 // arg2
+%

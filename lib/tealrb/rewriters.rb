@@ -11,8 +11,18 @@ module TEALrb
       super
     end
 
+    def on_block(node)
+      replace node.source_range, node.body.source
+    end
+
     def on_send(node)
       remove node.loc.selector if node.loc.selector.source == 'subroutine' || node.loc.selector.source == 'teal'
+      
+      # @teal_methods[:name] = ->(*args) { ... } becomes ->(*args) { ... }
+      if ['@teal_methods', '@subroutines'].include? node.children[0]&.source
+        replace node.source_range, node.children[3].body.source
+      end
+
       super
     end
   end
@@ -34,7 +44,7 @@ module TEALrb
     end
 
     def on_ivar(node)
-      insert_after(node.loc.name, '.call') unless node.loc.name.source == '@teal'
+      insert_after(node.loc.name, '.call') unless ['@teal', '@teal_methods', '@subroutines'].include? node.source
       super
     end
   end
@@ -80,6 +90,10 @@ module TEALrb
     def on_const(node)
       @skips = 1 if %w[Txna Gtxn AppArgs].include? node.loc.name.source
       super
+    end
+
+    def on_ivar(node)
+      @skips = 2 if node.source == '@teal_methods'
     end
 
     def on_send(node)

@@ -56,8 +56,8 @@ module TEALrb
 
     def self.inherited(klass)
       klass.version = 6
-      klass.subroutines = []
-      klass.teal_methods = []
+      klass.subroutines = {}
+      klass.teal_methods = {}
       klass.abi_description = ABI::ABIDescription.new
       klass.abi_method_hash = {}
       super
@@ -73,25 +73,25 @@ module TEALrb
       self.abi_method_hash = { desc: desc, args: args, returns: returns.to_s.split('::').last.downcase }
     end
 
-    def self.subroutine(name)
-      return if subroutines.include? name
-
-      subroutines << name
+    def self.subroutine(name, &blk)
+      @subroutines[name] = (blk || instance_method(name))
       abi_description.add_method(**({ name: name.to_s }.merge abi_method_hash)) unless abi_method_hash.empty?
       @abi_method_hash = {}
     end
 
-    def self.teal(name)
-      teal_methods << name unless teal_methods.include? name
+    def self.teal(name, &blk)
+      @teal_methods[name] = (blk || instance_method(name))
     end
 
-    def define_teal_method(name, source)
-      new_source = rewrite(source)
+    def define_teal_method(name, blk)
+      TEALrb.current_teal[Thread.current] = @teal
+
+      new_source = rewrite(blk.source)
       new_source = rewrite_with_rewriter(new_source, MethodRewriter)
 
       pre_string = StringIO.new
 
-      method(name).parameters.reverse.each_with_index do |param, i|
+      blk.parameters.reverse.each_with_index do |param, i|
         param_name = param.last
         pre_string.puts "store #{200 + i}"
         pre_string.puts "comment('#{param_name}', inline: true)"
@@ -104,23 +104,23 @@ module TEALrb
       end
     end
 
-    def define_subroutine(name, source)
+    def define_subroutine(name, blk)
       TEALrb.current_teal[Thread.current] = @teal
 
       @teal << 'b main' unless @teal.include? 'b main'
 
       label(name) # add teal label
 
-      comment_params = method(name).parameters.map(&:last).join(', ')
+      comment_params = blk.parameters.map(&:last).join(', ')
       comment_content = "#{name}(#{comment_params})"
       comment(comment_content, inline: true)
 
-      new_source = rewrite(source)
+      new_source = rewrite(blk.source)
       new_source = rewrite_with_rewriter(new_source, MethodRewriter)
 
       pre_string = StringIO.new
 
-      method(name).parameters.reverse.each_with_index do |param, i|
+      blk.parameters.reverse.each_with_index do |param, i|
         param_name = param.last
         pre_string.puts "store #{200 + i}"
         pre_string.puts "comment('#{param_name}', inline: true)"
@@ -151,12 +151,12 @@ module TEALrb
     def initialize
       @teal = TEAL.new ["#pragma version #{self.class.version}"]
 
-      self.class.subroutines.each do |name|
-        define_subroutine name, method(name).source
+      self.class.subroutines.each do |name, blk|
+        define_subroutine name, blk
       end
 
-      self.class.teal_methods.each do |name|
-        define_teal_method name, method(name).source
+      self.class.teal_methods.each do |name, blk|
+        define_teal_method name, blk
       end
     end
 

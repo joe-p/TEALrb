@@ -29,6 +29,14 @@ class Approval < TEALrb::Contract
     x + y # => ['int 3', 'int 4', '+']
   end
 
+  # Another way to define teal methods
+  teal :another_teal_method do |a, b|
+    a / b
+  end
+
+  # Yet another way to define teal methods
+  @teal_methods[:yet_another_teal_method] = ->(arg1, arg2) { arg1 % arg2 }
+
   # Only evalulates the return value as a TEALrb expression
   def ruby_method
     x = 5
@@ -114,6 +122,9 @@ class Approval < TEALrb::Contract
 
     comment 'TxnType enums'
     TxnType.pay
+
+    another_teal_method(1111, 2222)
+    yet_another_teal_method(3333, 4444)
   end
 end
 
