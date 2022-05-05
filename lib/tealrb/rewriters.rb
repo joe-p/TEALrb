@@ -66,7 +66,12 @@ module TEALrb
     end
 
     def on_or(node)
-      replace(node.loc.operator, '.boolean_or')
+      wrap(node.children[1].source_range, '(', ')')
+
+      op_loc = node.loc.operator
+      op_loc = op_loc.resize(3) if op_loc.resize(3).source == '|| '
+
+      replace(op_loc, '.boolean_and')
       super
     end
 
