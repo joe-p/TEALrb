@@ -6,6 +6,7 @@ module TEALrb
     include Opcodes
     include Types
     include ABI
+    include Rewriters
 
     attr_reader :teal
 
