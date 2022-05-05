@@ -24,6 +24,7 @@ module TEALrb
       end
     end
 
+    # abi description for the method
     def self.abi(desc:, args:, returns:)
       args = args.map do |name, h|
         h[:name] = name.to_s
@@ -34,16 +35,37 @@ module TEALrb
       self.abi_method_hash = { desc: desc, args: args, returns: returns.to_s.split('::').last.downcase }
     end
 
+    # specifies a TEAL subroutine that will be defined upon intialization
+    # @return [nil]
+    # @overload subroutine(name)
+    #  @param name [Symbol] name of the subroutine and the method to use as the subroutine definition
+    #
+    # @overload subroutine(name)
+    #  @param name [Symbol] name of the subroutine
+    #
+    #  @yield [*args] the definition of the subroutine
     def self.subroutine(name, &blk)
       @subroutines[name] = (blk || instance_method(name))
       abi_description.add_method(**({ name: name.to_s }.merge abi_method_hash)) unless abi_method_hash.empty?
       @abi_method_hash = {}
+      nil
     end
 
+    # specifies a method to be defined upon intialization that will be transpiled to TEAL when called
+    # @return [nil]
+    # @overload subroutine(name)
+    #  @param name [Symbol] name of the method to use as the TEAL definition
+    #
+    # @overload subroutine(name)
+    #  @param name [Symbol] name of the method
+    #
+    #  @yield [*args] the definition of the TEAL method
     def self.teal(name, &blk)
       @teal_methods[name] = (blk || instance_method(name))
+      nil
     end
 
+    # sets the `#pragma version`, defines teal methods, and defines subroutines
     def initialize
       @teal = TEAL.new ["#pragma version #{self.class.version}"]
 
@@ -56,15 +78,19 @@ module TEALrb
       end
     end
 
-    def define_teal_method(name, blk)
+    # defines a method that is transpiled to TEAL
+    # @param name [Symbol] name of the method
+    # @param definition [Lambda, Proc, UnboundMethod] the method definition
+    # @return [nil]
+    def define_teal_method(name, definition)
       TEALrb.current_teal[Thread.current] = @teal
 
-      new_source = rewrite(blk.source)
+      new_source = rewrite(definition.source)
       new_source = rewrite_with_rewriter(new_source, MethodRewriter)
 
       pre_string = StringIO.new
 
-      blk.parameters.reverse.each_with_index do |param, i|
+      definition.parameters.reverse.each_with_index do |param, i|
         param_name = param.last
         pre_string.puts "store #{200 + i}"
         pre_string.puts "comment('#{param_name}', inline: true)"
@@ -75,25 +101,31 @@ module TEALrb
       define_singleton_method(name) do |*_args|
         eval(new_source) # rubocop:disable Security/Eval
       end
+
+      nil
     end
 
-    def define_subroutine(name, blk)
+    # defines a TEAL subroutine
+    # @param name [Symbol] name of the method
+    # @param definition [Lambda, Proc, UnboundMethod] the method definition
+    # @return [nil]
+    def define_subroutine(name, definition)
       TEALrb.current_teal[Thread.current] = @teal
 
       @teal << 'b main' unless @teal.include? 'b main'
 
       label(name) # add teal label
 
-      comment_params = blk.parameters.map(&:last).join(', ')
+      comment_params = definition.parameters.map(&:last).join(', ')
       comment_content = "#{name}(#{comment_params})"
       comment(comment_content, inline: true)
 
-      new_source = rewrite(blk.source)
+      new_source = rewrite(definition.source)
       new_source = rewrite_with_rewriter(new_source, MethodRewriter)
 
       pre_string = StringIO.new
 
-      blk.parameters.reverse.each_with_index do |param, i|
+      definition.parameters.reverse.each_with_index do |param, i|
         param_name = param.last
         pre_string.puts "store #{200 + i}"
         pre_string.puts "comment('#{param_name}', inline: true)"
@@ -106,12 +138,17 @@ module TEALrb
       define_singleton_method(name) do |*_args|
         callsub(name)
       end
+
+      nil
     rescue SyntaxError, StandardError => e
       line_num = e.backtrace.first.split(':')[1].to_i
       puts "EXCEPTION: #{new_source.lines[line_num - 1].strip}"
       raise e
     end
 
+    # insert comment into TEAL source
+    # @param content [String] content of the comment
+    # @param inline [Boolean] whether the comment should be on the previous TEAL line
     def comment(content, inline: false)
       if inline
         last_line = @teal.pop
@@ -121,19 +158,27 @@ module TEALrb
       end
     end
 
+    # inserts a string into TEAL source
+    # @param string [String] the string to insert
     def placeholder(string)
       @teal << string
     end
 
+    # the hash of the abi description
     def abi_hash
       self.class.abi_description.to_h
     end
 
+    # transpiles the given string to TEAL
+    # @param string [String] string to transpile
+    # @return [nil]
     def compile_string(string)
       TEALrb.current_teal[Thread.current] = @teal
       eval(rewrite(string)) # rubocop:disable Security/Eval
+      nil
     end
 
+    # transpiles #main
     def compile
       TEALrb.current_teal[Thread.current] = @teal
       @teal << 'main:' if @teal.include? 'b main'
