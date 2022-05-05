@@ -1,47 +1,6 @@
 # frozen_string_literal: true
 
 module TEALrb
-  class IfBlock
-    class << self
-      attr_accessor :id
-    end
-
-    @id = 0
-
-    def initialize(teal, _cond, &blk)
-      @teal = teal
-      @else_count = 0
-      @id = self.class.id
-      @end_label = "if#{@id}_end:"
-
-      @id = self.class.id
-      self.class.id += 1
-
-      @teal << "bz if#{@id}_else0"
-      blk.call
-      @teal << "b if#{@id}_end"
-      @teal << "if#{@id}_else0:"
-      @teal << @end_label
-    end
-
-    def elsif(_cond, &blk)
-      @else_count += 1
-      @teal.delete @end_label
-      @teal << "bz if#{@id}_else#{@else_count}"
-      blk.call
-      @teal << "b if#{@id}_end"
-      @teal << "if#{@id}_else#{@else_count}:"
-      @teal << @end_label
-      self
-    end
-
-    def else(&blk)
-      @teal.delete @end_label
-      blk.call
-      @teal << @end_label
-    end
-  end
-
   class Contract
     include TEALrb
     include Opcodes
@@ -52,15 +11,17 @@ module TEALrb
 
     class << self
       attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_description
-    end
 
-    def self.inherited(klass)
-      klass.version = 6
-      klass.subroutines = {}
-      klass.teal_methods = {}
-      klass.abi_description = ABI::ABIDescription.new
-      klass.abi_method_hash = {}
-      super
+      private
+
+      def inherited(klass)
+        klass.version = 6
+        klass.subroutines = {}
+        klass.teal_methods = {}
+        klass.abi_description = ABI::ABIDescription.new
+        klass.abi_method_hash = {}
+        super
+      end
     end
 
     def self.abi(desc:, args:, returns:)
@@ -81,6 +42,18 @@ module TEALrb
 
     def self.teal(name, &blk)
       @teal_methods[name] = (blk || instance_method(name))
+    end
+
+    def initialize
+      @teal = TEAL.new ["#pragma version #{self.class.version}"]
+
+      self.class.subroutines.each do |name, blk|
+        define_subroutine name, blk
+      end
+
+      self.class.teal_methods.each do |name, blk|
+        define_teal_method name, blk
+      end
     end
 
     def define_teal_method(name, blk)
@@ -148,40 +121,12 @@ module TEALrb
       end
     end
 
-    def initialize
-      @teal = TEAL.new ["#pragma version #{self.class.version}"]
-
-      self.class.subroutines.each do |name, blk|
-        define_subroutine name, blk
-      end
-
-      self.class.teal_methods.each do |name, blk|
-        define_teal_method name, blk
-      end
-    end
-
     def placeholder(string)
       @teal << string
     end
 
     def abi_hash
       self.class.abi_description.to_h
-    end
-
-    def rewrite_with_rewriter(string, rewriter)
-      process_source = RuboCop::ProcessedSource.new(string, RUBY_VERSION[/\d\.\d/].to_f)
-      rewriter.new.rewrite(process_source.buffer, process_source.ast)
-    end
-
-    def rewrite(string)
-      [ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
-        string = rewrite_with_rewriter(string, rw)
-      end
-
-      puts '**** TEALrb ****'
-      puts string
-      puts '**** TEALrb ****'
-      string
     end
 
     def compile_string(string)
@@ -200,6 +145,24 @@ module TEALrb
       line_num = e.backtrace.first.split(':')[1].to_i
       puts "EXCEPTION: #{new_source.lines[line_num - 1].strip}"
       raise e
+    end
+
+    private
+
+    def rewrite_with_rewriter(string, rewriter)
+      process_source = RuboCop::ProcessedSource.new(string, RUBY_VERSION[/\d\.\d/].to_f)
+      rewriter.new.rewrite(process_source.buffer, process_source.ast)
+    end
+
+    def rewrite(string)
+      [ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
+        string = rewrite_with_rewriter(string, rw)
+      end
+
+      puts '**** TEALrb ****'
+      puts string
+      puts '**** TEALrb ****'
+      string
     end
   end
 end

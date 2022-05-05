@@ -17,7 +17,7 @@ module TEALrb
 
     def on_send(node)
       remove node.loc.selector if node.loc.selector.source == 'subroutine' || node.loc.selector.source == 'teal'
-      
+
       # @teal_methods[:name] = ->(*args) { ... } becomes ->(*args) { ... }
       if ['@teal_methods', '@subroutines'].include? node.children[0]&.source
         replace node.source_range, node.children[3].body.source
