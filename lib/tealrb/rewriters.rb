@@ -7,14 +7,7 @@ module TEALrb
 
   class MethodRewriter < Rewriter
     def on_def(node)
-      r = remove node.loc.name
-      r.remove node.loc.keyword
-      r.remove node.loc.end
-      super
-    end
-
-    def on_args(node)
-      remove(node.loc.expression) if node.loc.expression
+      replace node.source_range, node.body.source
       super
     end
 
@@ -27,9 +20,9 @@ module TEALrb
   class AssignRewriter < Rewriter
     def on_lvasgn(node)
       rh = Parser::Source::Range.new(
-        node.loc.expression.source_buffer,
+        node.source_range.source_buffer,
         node.loc.operator.end_pos + 1,
-        node.loc.expression.end_pos
+        node.source_range.end_pos
       )
 
       wrap(rh, '-> { ', ' }')
@@ -43,9 +36,9 @@ module TEALrb
 
     def on_ivasgn(node)
       rh = Parser::Source::Range.new(
-        node.loc.expression.source_buffer,
+        node.source_range.source_buffer,
         node.loc.operator.end_pos + 1,
-        node.loc.expression.end_pos
+        node.source_range.end_pos
       )
 
       wrap(rh, '-> { ', ' }')
@@ -61,7 +54,7 @@ module TEALrb
   class ComparisonRewriter < Rewriter
     def on_send(node)
       if TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.keys.map(&:to_s).include? node.loc.selector.source
-        wrap(node.loc.expression, '(', ')')
+        wrap(node.source_range, '(', ')')
       end
       super
     end
@@ -74,7 +67,7 @@ module TEALrb
     end
 
     def on_and(node)
-      wrap(node.children[1].loc.expression, '(', ')')
+      wrap(node.children[1].source_range, '(', ')')
 
       op_loc = node.loc.operator
       op_loc = op_loc.resize(3) if op_loc.resize(3).source == '&& '
@@ -113,17 +106,17 @@ module TEALrb
     end
 
     def on_int(node)
-      wrap(node.loc.expression, 'int(', ')') if (@skips -= 1).negative?
+      wrap(node.source_range, 'int(', ')') if (@skips -= 1).negative?
       super
     end
 
     def on_str(node)
-      wrap(node.loc.expression, 'byte(', ')') if (@skips -= 1).negative?
+      wrap(node.source_range, 'byte(', ')') if (@skips -= 1).negative?
       super
     end
 
     def on_sym(node)
-      wrap(node.loc.expression, 'label(', ')') if node.loc.expression.source[/^:/] && (@skips -= 1).negative?
+      wrap(node.source_range, 'label(', ')') if node.source_range.source[/^:/] && (@skips -= 1).negative?
       super
     end
   end
@@ -137,7 +130,7 @@ module TEALrb
         replace(node.loc.keyword, 'end.elsif(')
       end
 
-      cond_expr = node.children.first.loc.expression
+      cond_expr = node.children.first.source_range
       replace(cond_expr, "#{cond_expr.source} ) do")
 
       replace(node.loc.else, 'end.else do') if node.loc.else && node.loc.else.source == 'else'
