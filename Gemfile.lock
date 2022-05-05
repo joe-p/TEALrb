@@ -3,6 +3,7 @@ PATH
   specs:
     tealrb (0.1.0)
       method_source
+      rubocop
 
 GEM
   remote: https://rubygems.org/
@@ -46,7 +47,6 @@ PLATFORMS
 DEPENDENCIES
   minitest
   pry
-  rubocop
   rubocop-minitest
   tealrb!
   yard

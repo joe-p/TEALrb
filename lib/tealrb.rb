@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'method_source'
-require 'ostruct'
-require 'parser'
 require 'rubocop'
 
 require_relative 'tealrb/constants'
