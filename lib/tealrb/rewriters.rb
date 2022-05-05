@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-require 'parser/current'
-
 module TEALrb
-  class MethodRewriter < Parser::TreeRewriter
+  class Rewriter < Parser::TreeRewriter
+    include RuboCop::AST::Traversal
+  end
+
+  class MethodRewriter < Rewriter
     def on_def(node)
       r = remove node.loc.name
       r.remove node.loc.keyword
@@ -22,7 +24,7 @@ module TEALrb
     end
   end
 
-  class AssignRewriter < Parser::TreeRewriter
+  class AssignRewriter < Rewriter
     def on_lvasgn(node)
       rh = Parser::Source::Range.new(
         node.loc.expression.source_buffer,
@@ -56,7 +58,7 @@ module TEALrb
     end
   end
 
-  class ComparisonRewriter < Parser::TreeRewriter
+  class ComparisonRewriter < Rewriter
     def on_send(node)
       if TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.keys.map(&:to_s).include? node.loc.selector.source
         wrap(node.loc.expression, '(', ')')
@@ -65,7 +67,12 @@ module TEALrb
     end
   end
 
-  class OpRewriter < Parser::TreeRewriter
+  class OpRewriter < Rewriter
+    def initialize
+      @skips = 0
+      super
+    end
+
     def on_and(node)
       wrap(node.children[1].loc.expression, '(', ')')
 
@@ -105,26 +112,23 @@ module TEALrb
       super
     end
 
-    def handler_missing(node)
-      if %i[int str sym].include? node&.type
-        @skips ||= 0
-        @skips -= 1
-        if @skips.negative?
-          case node&.type
-          when :int
-            wrap(node.loc.expression, 'int(', ')')
-          when :str
-            wrap(node.loc.expression, 'byte(', ')')
-          when :sym
-            wrap(node.loc.expression, 'label(', ')') if node.loc.expression.source[/^:/]
-          end
-        end
-      end
+    def on_int(node)
+      wrap(node.loc.expression, 'int(', ')') if (@skips -= 1).negative?
+      super
+    end
+
+    def on_str(node)
+      wrap(node.loc.expression, 'byte(', ')') if (@skips -= 1).negative?
+      super
+    end
+
+    def on_sym(node)
+      wrap(node.loc.expression, 'label(', ')') if node.loc.expression.source[/^:/] && (@skips -= 1).negative?
       super
     end
   end
 
-  class IfRewriter < Parser::TreeRewriter
+  class IfRewriter < Rewriter
     def on_if(node)
       case node.loc.keyword.source
       when 'if'

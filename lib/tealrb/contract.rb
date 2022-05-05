@@ -169,10 +169,8 @@ module TEALrb
     end
 
     def rewrite_with_rewriter(string, rewriter)
-      buffer = Parser::Source::Buffer.new('(string)')
-      buffer.source = string
-
-      rewriter.new.rewrite(buffer, Parser::CurrentRuby.new.parse(buffer))
+      process_source = RuboCop::ProcessedSource.new(string, RUBY_VERSION[/\d\.\d/].to_f)
+      rewriter.new.rewrite(process_source.buffer, process_source.ast)
     end
 
     def rewrite(string)

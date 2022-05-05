@@ -2,6 +2,8 @@
 
 require 'method_source'
 require 'ostruct'
+require 'parser'
+require 'rubocop'
 
 require_relative 'tealrb/constants'
 require_relative 'tealrb/types'
