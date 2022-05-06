@@ -212,7 +212,7 @@ module TEALrb
       warn "Backtrace location (#{@eval_tealrb_rescue_count + 1} / #{eval_locations.size}):"
 
       @eval_tealrb_rescue_count += 1
- 
+
       s.lines.each_with_index do |line, i|
         line_num = i + 1
         if error_line == line_num
