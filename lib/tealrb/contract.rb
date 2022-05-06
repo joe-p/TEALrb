@@ -100,7 +100,7 @@ module TEALrb
 
       new_source = "#{pre_string.string}#{new_source}"
       define_singleton_method(name) do |*_args|
-        eval(new_source) # rubocop:disable Security/Eval
+        eval_tealrb(new_source)
       end
 
       nil
@@ -134,17 +134,13 @@ module TEALrb
       end
 
       new_source = "#{pre_string.string}#{new_source}retsub"
-      eval(new_source) # rubocop:disable Security/Eval
+      eval_tealrb(new_source)
 
       define_singleton_method(name) do |*_args|
         callsub(name)
       end
 
       nil
-    rescue SyntaxError, StandardError => e
-      line_num = e.backtrace.first.split(':')[1].to_i
-      puts "EXCEPTION: #{new_source.lines[line_num - 1].strip}"
-      raise e
     end
 
     # insert comment into TEAL source
@@ -175,7 +171,7 @@ module TEALrb
     # @return [nil]
     def compile_string(string)
       TEALrb.current_teal[Thread.current] = @teal
-      eval(rewrite(string)) # rubocop:disable Security/Eval
+      eval_tealrb(rewrite(string))
       nil
     end
 
@@ -185,12 +181,7 @@ module TEALrb
       @teal << 'main:' if @teal.include? 'b main'
       main_source = method(:main).source
       new_source = rewrite(main_source)
-      self.class.class_eval(new_source)
-      main
-    rescue SyntaxError, StandardError => e
-      line_num = e.backtrace.first.split(':')[1].to_i
-      puts "EXCEPTION: #{new_source.lines[line_num - 1].strip}"
-      raise e
+      eval_tealrb rewrite_with_rewriter(new_source, MethodRewriter)
     end
 
     private
@@ -205,10 +196,34 @@ module TEALrb
         string = rewrite_with_rewriter(string, rw)
       end
 
-      puts '**** TEALrb ****'
-      puts string
-      puts '**** TEALrb ****'
       string
+    end
+
+    def eval_tealrb(s)
+      eval s # rubocop:disable Security/Eval
+    rescue SyntaxError, StandardError => e
+      @eval_tealrb_rescue_count ||= 0
+
+      eval_locations = e.backtrace.select {_1[/\(eval\)/]}
+      error_line = eval_locations[@eval_tealrb_rescue_count].split(':')[1].to_i
+
+      warn "'#{e}' when evaluating transpiled TEALrb source" if @eval_tealrb_rescue_count.zero?
+
+      warn "Backtrace location (#{@eval_tealrb_rescue_count + 1} / #{eval_locations.size}):"
+
+      @eval_tealrb_rescue_count += 1
+ 
+      s.lines.each_with_index do |line, i|
+        line_num = i + 1
+        if error_line == line_num
+          warn "=> #{line_num}: #{line}"
+        else
+          warn "   #{line_num}: #{line}"
+        end
+      end
+
+      warn ''
+      raise e
     end
   end
 end
