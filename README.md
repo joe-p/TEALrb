@@ -5,7 +5,7 @@ TEALrb is a Ruby-based DSL for writing Algorand smart contracts. The goal is to 
 
 ## Why Not pyTEAL?
 
-pyTEAL is a great language for writing smart contracts, but I found it to be a bit too opinionated for my personal taste. The goal of TEALrb is to create a way to write smart contracts with the efficiency of TEAL while also offer the QOL benefits of a higher-level language. 
+pyTEAL is a great language for writing smart contracts, but I found it to be a bit too opinionated for my personal taste. The goal of TEALrb is to create a way to write smart contracts with the efficiency of TEAL while also offering the QOL benefits of a higher-level language. 
 
 # Raw TEAL Exceptions
 TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby syntax therefore the TEALrb-specific syntax must be used.
