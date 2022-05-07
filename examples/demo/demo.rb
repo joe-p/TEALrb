@@ -9,10 +9,10 @@ class Approval < TEALrb::Contract
   # Specify ABI arg types, return type, and desc
   abi(
     args: {
-      x: { type: Uint64, desc: 'The first number' },
-      y: { type: Uint64, desc: 'The second number' }
+      x: { type: 'uint64', desc: 'The first number' },
+      y: { type: 'uint64', desc: 'The second number' }
     },
-    returns: Uint64,
+    returns: 'uint64',
     desc: 'Adds two numbers, subtracts two numbers, then multiplies two numbers'
   )
   # define subroutine

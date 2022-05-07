@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'rubocop'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'pry'
+  s.add_development_dependency 'redcarpet'
   s.add_development_dependency 'rubocop-minitest'
   s.add_development_dependency 'yard'
-  s.add_development_dependency 'redcarpet'
 end

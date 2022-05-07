@@ -4,7 +4,6 @@ module TEALrb
   class Contract
     include TEALrb
     include Opcodes
-    include Types
     include ABI
     include Rewriters
 
