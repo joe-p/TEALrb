@@ -84,7 +84,7 @@ module TEALrb
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
     # @return [nil]
     def define_teal_method(name, definition)
-      TEALrb.current_teal[Thread.current] = @teal
+      @teal.set_as_current
 
       new_source = rewrite(definition.source)
       new_source = rewrite_with_rewriter(new_source, MethodRewriter)
@@ -111,7 +111,7 @@ module TEALrb
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
     # @return [nil]
     def define_subroutine(name, definition)
-      TEALrb.current_teal[Thread.current] = @teal
+      @teal.set_as_current
 
       @teal << 'b main' unless @teal.include? 'b main'
 
@@ -170,14 +170,14 @@ module TEALrb
     # @param string [String] string to transpile
     # @return [nil]
     def compile_string(string)
-      TEALrb.current_teal[Thread.current] = @teal
+      @teal.set_as_current
       eval_tealrb(rewrite(string))
       nil
     end
 
     # transpiles #main
     def compile
-      TEALrb.current_teal[Thread.current] = @teal
+      @teal.set_as_current
       @teal << 'main:' if @teal.include? 'b main'
       main_source = method(:main).source
       new_source = rewrite(main_source)

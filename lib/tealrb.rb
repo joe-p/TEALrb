@@ -14,13 +14,17 @@ require_relative 'tealrb/contract'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 
 module TEALrb
-  class << self
-    attr_accessor :current_teal
-  end
-
-  @current_teal = {}
-
   class TEAL < Array
+    class << self
+      attr_accessor :current
+    end
+
+    @current = {}
+
+    def set_as_current
+      self.class.current[Thread.current] = self
+    end
+
     def teal
       flatten
     end

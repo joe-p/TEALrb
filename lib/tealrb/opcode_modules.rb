@@ -33,7 +33,7 @@ module TEALrb
         private
 
         def txn_type_int(type)
-          TEALrb.current_teal[Thread.current] << "int '#{type}'"
+          TEALrb::TEAL.current[Thread.current] << "int '#{type}'"
         end
       end
 
@@ -603,7 +603,7 @@ module TEALrb
       extend AppFields
 
       def self.opcode(field, app_id = nil)
-        @teal = TEALrb.current_teal[Thread.current]
+        @teal = TEALrb::TEAL.current[Thread.current]
         app_params_get field, app_id
       end
     end
@@ -613,7 +613,7 @@ module TEALrb
       extend AssetFields
 
       def self.opcode(field, asset = nil)
-        @teal = TEALrb.current_teal[Thread.current]
+        @teal = TEALrb::TEAL.current[Thread.current]
         asset_params_get field, asset
       end
     end
@@ -623,7 +623,7 @@ module TEALrb
       extend AccountFields
 
       def self.opcode(field, account = nil)
-        @teal = TEALrb.current_teal[Thread.current]
+        @teal = TEALrb::TEAL.current[Thread.current]
         acct_params_get field, account
       end
     end
@@ -642,7 +642,7 @@ module TEALrb
       extend Opcodes
 
       def self.opcode(field, index)
-        @teal = TEALrb.current_teal[Thread.current]
+        @teal = TEALrb::TEAL.current[Thread.current]
         gtxn index, field
       end
 
@@ -669,7 +669,7 @@ module TEALrb
       extend TxnFields
 
       def self.opcode(field, index)
-        @teal = TEALrb.current_teal[Thread.current]
+        @teal = TEALrb::TEAL.current[Thread.current]
         txna field, index
       end
     end
@@ -679,7 +679,7 @@ module TEALrb
       extend GlobalFields
 
       def self.opcode(field)
-        @teal = TEALrb.current_teal[Thread.current]
+        @teal = TEALrb::TEAL.current[Thread.current]
         global field
       end
 
