@@ -1,1 +1,3 @@
 lib/**/*.rb - README.md
+--markup-provider=redcarpet
+--markup=markdown
