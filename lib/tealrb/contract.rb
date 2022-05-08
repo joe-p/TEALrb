@@ -85,8 +85,7 @@ module TEALrb
     def define_teal_method(name, definition)
       @teal.set_as_current
 
-      new_source = rewrite(definition.source)
-      new_source = rewrite_with_rewriter(new_source, MethodRewriter)
+      new_source = rewrite(definition.source, method_rewriter: true)
 
       pre_string = StringIO.new
 
@@ -120,8 +119,7 @@ module TEALrb
       comment_content = "#{name}(#{comment_params})"
       comment(comment_content, inline: true)
 
-      new_source = rewrite(definition.source)
-      new_source = rewrite_with_rewriter(new_source, MethodRewriter)
+      new_source = rewrite(definition.source, method_rewriter: true)
 
       pre_string = StringIO.new
 
@@ -178,9 +176,7 @@ module TEALrb
     def compile
       @teal.set_as_current
       @teal << 'main:' if @teal.include? 'b main'
-      main_source = method(:main).source
-      new_source = rewrite(main_source)
-      eval_tealrb rewrite_with_rewriter(new_source, MethodRewriter)
+      eval_tealrb rewrite(method(:main).source, method_rewriter: true)
     end
 
     private
@@ -190,10 +186,12 @@ module TEALrb
       rewriter.new.rewrite(process_source.buffer, process_source.ast)
     end
 
-    def rewrite(string)
+    def rewrite(string, method_rewriter: false)
       [ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
+
+      string = rewrite_with_rewriter(string, MethodRewriter) if method_rewriter
 
       string
     end
