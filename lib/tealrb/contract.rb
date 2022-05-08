@@ -10,7 +10,7 @@ module TEALrb
     attr_reader :teal
 
     class << self
-      attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_description
+      attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_description, :debug
 
       private
 
@@ -20,6 +20,7 @@ module TEALrb
         klass.teal_methods = {}
         klass.abi_description = ABI::ABIDescription.new
         klass.abi_method_hash = {}
+        klass.debug = false
         super
       end
     end
@@ -98,7 +99,7 @@ module TEALrb
 
       new_source = "#{pre_string.string}#{new_source}"
       define_singleton_method(name) do |*_args|
-        eval_tealrb(new_source)
+        eval_tealrb(new_source, debug_context: "teal method: #{name}")
       end
 
       nil
@@ -131,7 +132,7 @@ module TEALrb
       end
 
       new_source = "#{pre_string.string}#{new_source}retsub"
-      eval_tealrb(new_source)
+      eval_tealrb(new_source, debug_context: "subroutine: #{name}")
 
       define_singleton_method(name) do |*_args|
         callsub(name)
@@ -168,7 +169,7 @@ module TEALrb
     # @return [nil]
     def compile_string(string)
       @teal.set_as_current
-      eval_tealrb(rewrite(string))
+      eval_tealrb(rewrite(string), debug_context: 'compile_string')
       nil
     end
 
@@ -176,7 +177,7 @@ module TEALrb
     def compile
       @teal.set_as_current
       @teal << 'main:' if @teal.include? 'b main'
-      eval_tealrb rewrite(method(:main).source, method_rewriter: true)
+      eval_tealrb(rewrite(method(:main).source, method_rewriter: true), debug_context: 'main')
     end
 
     private
@@ -187,17 +188,43 @@ module TEALrb
     end
 
     def rewrite(string, method_rewriter: false)
+      if self.class.debug
+        puts 'DEBUG: Rewriting the following code:'
+        puts string
+        puts ''
+      end
+
       [ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
 
       string = rewrite_with_rewriter(string, MethodRewriter) if method_rewriter
 
+      if self.class.debug
+        puts 'DEBUG: Resulting TEALrb code:'
+        puts string
+        puts ''
+      end
+
       string
     end
 
-    def eval_tealrb(s)
+    def eval_tealrb(s, debug_context:)
+      pre_teal = Array.new @teal
+
+      if self.class.debug
+        puts "DEBUG: Evaluating the following code (#{debug_context}):"
+        puts s
+        puts ''
+      end
+
       eval s # rubocop:disable Security/Eval
+
+      if self.class.debug
+        puts "DEBUG: Resulting TEAL (#{debug_context}):"
+        puts Array.new(@teal) - pre_teal
+        puts ''
+      end
     rescue SyntaxError, StandardError => e
       @eval_tealrb_rescue_count ||= 0
 
