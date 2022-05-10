@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = 'tealrb'
   s.required_ruby_version = '~> 2.7'
-  s.version     = '0.1.0'
+  s.version     = '0.2.0'
   s.licenses    = ['MIT']
   s.summary     = 'A DSL for building Algorand applications'
   s.authors     = ['Joe Polny']

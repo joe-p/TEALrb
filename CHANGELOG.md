@@ -13,6 +13,15 @@ Additional labels for pre-release and build metadata are available as extensions
 
 See https://semver.org/ for more information
 
+## 0.2.0 (05/10/2022)
+
+### Features
+- support for automatic comment rewriting
+
+### Bugfixes
+- remove quotes from enums (ie. `int 'pay'`)
+- ensure all subroutine methods are defined prior to generating the TEAL
+
 ## 0.1.0 (05/09/2022)
 - 100% opcode coverage
 - subroutine definition
