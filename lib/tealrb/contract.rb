@@ -151,11 +151,12 @@ module TEALrb
     # @param content [String] content of the comment
     # @param inline [Boolean] whether the comment should be on the previous TEAL line
     def comment(content, inline: false)
+      content = " #{content}" unless content[0] == ' '
       if inline
         last_line = @teal.pop
-        @teal << "#{last_line} // #{content}"
+        @teal << "#{last_line} //#{content}"
       else
-        @teal << "// #{content}"
+        @teal << "//#{content}"
       end
     end
 
