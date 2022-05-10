@@ -190,7 +190,7 @@ module TEALrb
 
     def rewrite_with_rewriter(string, rewriter)
       process_source = RuboCop::ProcessedSource.new(string, RUBY_VERSION[/\d\.\d/].to_f)
-      rewriter.new.rewrite(process_source.buffer, process_source.ast)
+      rewriter.new.rewrite(process_source)
     end
 
     def rewrite(string, method_rewriter: false)
@@ -200,7 +200,7 @@ module TEALrb
         puts ''
       end
 
-      [ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
+      [CommentRewriter, ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
 
