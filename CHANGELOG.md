@@ -13,7 +13,7 @@ Additional labels for pre-release and build metadata are available as extensions
 
 See https://semver.org/ for more information
 
-## 0.1.0 (04/24/2022)
+## 0.1.0 (05/09/2022)
 - 100% opcode coverage
 - subroutine definition
 - conditional support (if/elsif/else)
