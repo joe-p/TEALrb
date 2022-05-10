@@ -3,8 +3,9 @@
 require_relative '../../lib/tealrb'
 
 class Approval < TEALrb::Contract
-  abi_description.name = 'TEALrb_Demo'
-  abi_description.add_id(MAINNET, '1234')
+  @abi_description.name = 'TEALrb_Demo'
+  @abi_description.add_id(MAINNET, '1234')
+  @debug = true
 
   # Specify ABI arg types, return type, and desc
   abi(
