@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require '../lib/tealrb'
+require_relative '../lib/tealrb'
 class RawTealTests < Minitest::Test
   def compile_test(input, teal)
     contract = Class.new(TEALrb::Contract).new
