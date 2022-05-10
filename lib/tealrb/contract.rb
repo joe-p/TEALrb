@@ -70,6 +70,12 @@ module TEALrb
     def initialize
       @teal = TEAL.new ["#pragma version #{self.class.version}"]
 
+      self.class.subroutines.each_key do |name|
+        define_singleton_method(name) do |*_args|
+          callsub(name)
+        end
+      end
+
       self.class.subroutines.each do |name, blk|
         define_subroutine name, blk
       end
@@ -112,6 +118,10 @@ module TEALrb
     def define_subroutine(name, definition)
       @teal.set_as_current
 
+      define_singleton_method(name) do |*_args|
+        callsub(name)
+      end
+
       @teal << 'b main' unless @teal.include? 'b main'
 
       label(name) # add teal label
@@ -133,10 +143,6 @@ module TEALrb
 
       new_source = "#{pre_string.string}#{new_source}retsub"
       eval_tealrb(new_source, debug_context: "subroutine: #{name}")
-
-      define_singleton_method(name) do |*_args|
-        callsub(name)
-      end
 
       nil
     end
