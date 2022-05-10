@@ -7,6 +7,173 @@ TEALrb is a Ruby-based DSL for writing Algorand smart contracts. The goal is to 
 
 pyTEAL is a great language for writing smart contracts, but I found it to be a bit too opinionated for my personal taste. The goal of TEALrb is to create a way to write smart contracts with the efficiency of TEAL while also offering the QOL benefits of a higher-level language. 
 
+# Using TEALrb
+
+To create a smart contract with TEALrb you must require the gem, create a subclass of `TEALrb::Contract`, and define an instance method `main`. `main` is a special method that will be automatically converted to TEAL upon compilation. For example:
+
+
+```ruby
+require_relative 'lib/tealrb'
+
+class Approval < TEALrb::Contract
+  def main
+    1
+  end
+end
+
+approval = Approval.new
+approval.compile
+puts approval.teal
+```
+
+This script will output the following:
+
+```
+#pragma version 6
+int 1
+```
+
+## Specifying TEAL Version
+
+As seen in the above example, by default TEALrb will assume you are creating a contract for the latest TEAL version. To change this, you can change the value of the `@version` class instance variable:
+
+```ruby
+class Approval < TEALrb::Contract
+  @version = 2 # => #pragma version 2
+
+  def main
+```
+
+## Defining Subroutines
+
+There are two primary ways of defining a subroutine 
+
+### subroutine block
+
+The `subroutine` method takes a symbol and a block. The symbol is used for the name of the subroutine while the block is transpiled for the logic of the subroutine. 
+
+```ruby
+subroutine :subroutine_method do |x, y|
+  x + y
+end
+```
+
+### subroutine def
+The problem with the above syntax is that language servers (such as solargraph) will not recognize `subroutine_method` as a callable method. This means IDEs will not provide intellisense for subroutine calls. To solve this, it's useful to define an actual ruby method that is transpiled to the subroutine definition.
+
+Calling the `subroutine` method with just a symbol as an argument will tell TEALrb to transpile the instance method with the given name as a subroutine. For example:
+
+```ruby
+def subroutine_method(x, y)
+  x + y
+end
+subroutine :subroutine_method # => transpiles subroutine_method as a callable subroutine in the generated TEAL
+```
+
+Since the `def` keyword returns a symbol, you can directly pass the method definition as an argument to subroutine: 
+
+```ruby
+subroutine def subroutine_method(x, y)
+  x + y
+end
+```
+
+# How TEALrb Works
+
+At a high-level, TEALrb transpile Ruby into TEAL. For example, a string literal `'hello'` becomes `byte "hello"`. In reality, there are actually two stags of transpilation. First, the given Ruby is rewritten to use TEALrb methods and then that TEALrb mehotd is called, which is what actually generates the TEAL.
+
+For example, `'hello'` becomes `byte('hello')` which adds `byte "hello"` to the generated TEAL. The re-writing step is used for things such as string literals, integer literals, symbol literals (which become branch labels), and keywords such as `if` and `&&`.
+
+## Example
+
+If you create a contract with class instance variable `@debug = true` you will see this the steps of this process. For example:
+
+```ruby
+require_relative 'lib/tealrb'
+
+class Approval < TEALrb::Contract
+    @debug = true
+
+  subroutine def example_subroutine(x, y)
+    if x > y
+      'x is bigger'
+    else
+      'x is smaller'
+    end
+  end
+
+  def main
+    example_subroutine(1, 2)
+  end
+end
+
+approval = Approval.new
+approval.compile
+```
+
+```
+DEBUG: Rewriting the following code:
+  subroutine def example_subroutine(x, y)
+    if x > y
+      'x is bigger'
+    else
+      'x is smaller'
+    end
+  end
+
+DEBUG: Resulting TEALrb code:
+   IfBlock.new(@teal,  (x.call > y.call) ) do
+      byte('x is bigger')
+    end.else do
+      byte('x is smaller')
+    end
+
+DEBUG: Evaluating the following code (subroutine: example_subroutine):
+store 200
+comment('y', inline: true)
+y = -> { load 200; comment('y', inline: true) }
+store 201
+comment('x', inline: true)
+x = -> { load 201; comment('x', inline: true) }
+   IfBlock.new(@teal,  (x.call > y.call) ) do
+      byte('x is bigger')
+    end.else do
+      byte('x is smaller')
+    end
+retsub
+
+DEBUG: Resulting TEAL (subroutine: example_subroutine):
+store 200 // y
+store 201 // x
+load 201 // x
+load 200 // y
+>
+bz if0_else0
+byte "x is bigger"
+b if0_end
+if0_else0:
+byte "x is smaller"
+if0_end:
+retsub
+
+DEBUG: Rewriting the following code:
+  def main
+    example_subroutine(1, 2)
+  end
+
+DEBUG: Resulting TEALrb code:
+  example_subroutine(int(1), int(2))
+
+DEBUG: Evaluating the following code (main):
+  example_subroutine(int(1), int(2))
+
+DEBUG: Resulting TEAL (main):
+int 1
+int 2
+callsub example_subroutine
+```
+
+
 # Raw TEAL Exceptions
 TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby syntax therefore the TEALrb-specific syntax must be used.
 
