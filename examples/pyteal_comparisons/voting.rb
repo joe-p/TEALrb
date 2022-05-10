@@ -33,12 +33,12 @@ class VotingApproval < TEALrb::Contract
   end
 
   # get_vote_of_sender.hasValue()
-  teal def vote_of_sender_has_value?
+  def vote_of_sender_has_value?
     load(0)
   end
 
   # get_vote_of_sender.value()
-  teal def vote_of_sender_value
+  def vote_of_sender_value
     load(1)
   end
 
@@ -143,4 +143,4 @@ end
 
 contract = VotingApproval.new
 contract.compile
-puts contract.teal
+File.write('voting_tealrb.teal', contract.teal.join("\n"))

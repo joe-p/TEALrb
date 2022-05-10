@@ -11,15 +11,9 @@ module TEALrb
           line.strip!
           next if line[/^#/]
 
-          if line[%r{^//}]
-            line = %(comment("#{line.sub(%r{//}, '')}"))
-            output.puts line
-            next
-          elsif line[%r{//.*}]
-            comment = line[%r{(?<=//).*}]
-            line.sub!(%r{//.*}, '')
-            inline_comment = %(comment("#{comment}", inline: true))
-          end
+          comment = line[%r{//.*}]
+          comment&.sub!('//', '# //')
+          line.sub!(%r{//.*}, '')
 
           opcode = line.split.first
 
@@ -55,8 +49,11 @@ module TEALrb
             line = "#{opcode} #{args.join(', ')}"
           end
 
-          output.puts line
-          output.puts inline_comment if inline_comment
+          if line.empty?
+            output.puts comment
+          else
+            output.puts "#{line} #{comment}"
+          end
         end
 
         output.string
