@@ -69,9 +69,9 @@ load 0
 bz if1_else0
 load 1
 load 1
+app_global_get
 int 1
 -
-app_global_get
 app_global_put
 b if1_end
 if1_else0:

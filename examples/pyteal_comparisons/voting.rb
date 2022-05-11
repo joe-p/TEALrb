@@ -61,8 +61,8 @@ class VotingApproval < TEALrb::Contract
   teal def on_closeout
     get_vote_of_sender
 
-    if Global.round <= app_global_get('VoteEnd') && vote_of_sender_has_value?
-      app_global_put(vote_of_sender_value, app_global_get(vote_of_sender_value - 1))
+    if Global.round <= Global['VoteEnd'] && vote_of_sender_has_value?
+      Global[vote_of_sender_value] = Global[vote_of_sender_value] - 1
     end
 
     teal_return 1
