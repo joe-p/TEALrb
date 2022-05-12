@@ -4,6 +4,27 @@ module TEALrb
   module Rewriters
     class Rewriter < Parser::TreeRewriter
       include RuboCop::AST::Traversal
+
+      def rewrite(processed_source)
+        @comments = processed_source.comments
+        super(processed_source.buffer, processed_source.ast)
+      end
+    end
+
+    class CommentRewriter < Rewriter
+      def process(_)
+        @comments.each do |comment|
+          line = @source_rewriter.source_buffer.source_lines[comment.loc.expression.line - 1].strip
+
+          next unless comment.inline? && comment.text[%r{^#\s*//}]
+
+          inline_comment = line[/^#/].nil?
+          content = comment.text.sub('# ', '')
+          content.sub!('//', '')
+
+          replace comment.loc.expression, "; comment(%q(#{content}), inline: #{inline_comment})"
+        end
+      end
     end
 
     class MethodRewriter < Rewriter

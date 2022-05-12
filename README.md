@@ -1,12 +1,42 @@
-**Note:** Right now I am in the process of a complete rewrite that uses AST parsing. This branch is a current WIP.
-
 # TEALrb
 TEALrb is a Ruby-based DSL for writing Algorand smart contracts. The goal is to create a way to easily write contracts without adding too much unavoidable abstraction on top of raw TEAL. It's designed to support raw teal (as much as possible within the confines of Ruby syntax) while also providing some useful functionality such as conditionals, variables, methods, and ABI support. 
 
-## Why Not pyTEAL?
+## Why Not PyTeal?
 
-pyTEAL is a great language for writing smart contracts, but I found it to be a bit too opinionated for my personal taste. The goal of TEALrb is to create a way to write smart contracts with the efficiency of TEAL while also offering the QOL benefits of a higher-level language. 
+PyTeal is a great language for writing smart contracts, but I found it to be a bit too opinionated for my personal taste. The goal of TEALrb is to create a way to write smart contracts with the efficiency of TEAL while also offering the QOL benefits of a higher-level language. 
 
+### Comparison
+#### PyTeal
+```python
+    on_closeout = Seq(
+        [
+            get_vote_of_sender,
+            If(
+                And(
+                    Global.round() <= App.globalGet(Bytes("VoteEnd")),
+                    get_vote_of_sender.hasValue(),
+                ),
+                App.globalPut(
+                    get_vote_of_sender.value(),
+                    App.globalGet(get_vote_of_sender.value()) - Int(1),
+                ),
+            ),
+            Return(Int(1)),
+        ]
+    )
+```
+#### TEALrb
+```ruby
+  teal def on_closeout
+    get_vote_of_sender
+
+    if Global.round <= Global['VoteEnd'] && vote_of_sender_has_value?
+      Global[vote_of_sender_value] = Global[vote_of_sender_value] - 1
+    end
+
+    teal_return 1
+  end
+```
 # Using TEALrb
 
 To create a smart contract with TEALrb you must require the gem, create a subclass of `TEALrb::Contract`, and define an instance method `main`. `main` is a special method that will be automatically converted to TEAL upon compilation. For example:
@@ -292,6 +322,23 @@ If an Opcode has required arguments, it must be called with the required argumen
 gtxna 0 1 2 # => SyntaxError
 gtxna 0, 1, 2 # => gtxna 0 1 2
 ```
+
+## Comments
+
+Comments in the Ruby source code that start with `# //` or `#//` will be included in the generated TEAL
+
+### Example
+```ruby
+# this comment won't be in the TEAL
+# // this comment will be in the TEAL
+1 # // this comment will be in the TEAL as an inline comment
+```
+
+```c
+// this comment will be in the TEAL
+int 1 // this comment will be in the TEAL as an inline comment
+```
+
 
 # Planned Features
 

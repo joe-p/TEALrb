@@ -46,7 +46,11 @@ class Approval < TEALrb::Contract
   end
 
   def main
-    comment 'raw teal'
+    # Comments start with // will show in TEAL. For example:
+    # // This comment will show in TEAL
+    # This comment will not show in TEAL
+
+    # // raw teal
     byte 'Key One'
     int 111
     app_global_put
@@ -55,27 +59,27 @@ class Approval < TEALrb::Contract
     int 200
     add # can't use some ruby operators (+ => add, - => subtract, * => multiply, etc.)
 
-    comment 'single method call'
+    # // single method call
     app_global_put('Key Two', 222)
 
-    comment 'two step method call'
-    'Key Three' # string literals are implicitly bytes
+    # // two step method call
+    'Key Three' # // string literals are implicitly bytes
     app_global_put 333
 
     # Variable assignment is a statement that doesn't evaluate to a TEALrb expression
-    comment 'using variables'
+    # // using variables
     @key_four = 'Key Four'         # => nil
     @key_four                      # => 'byte "Key Four"'
     key_four_value = 444           # => nil
     app_global_put(key_four_value) # => ['int 444', 'app_global_put']
 
-    comment 'combining raw teal with conditionals'
+    # // combining raw teal with conditionals
     byte 'Bad Key'
     if app_global_get
       err
     end
 
-    comment 'more complex conditionals'
+    # // more complex conditionals
     if app_global_get('First Word') == 'Hi'
       app_global_put('Second Word', 'Mom')
     elsif app_global_get('First Word') == 'Hello'
@@ -89,39 +93,39 @@ class Approval < TEALrb::Contract
     end
 
     # See header comments of each method for details
-    comment 'calling methods'
-    comment 'subroutine method'
+    # // calling methods
+    # // subroutine method
     subroutine_method(1, 2)
-    comment 'teal method'
+    # // teal method
     teal_method
-    comment 'ruby method'
+    # // ruby method
     int(ruby_method)
 
     # All of the following are the same
-    comment 'accessing specific indexes/fields'
+    # // accessing specific indexes/fields
     gtxn(0, 'Sender')
     Gtxn.sender(0)
     Gtxn[0].sender
 
-    comment 'manual branching'
+    # // manual branching
     b :manual_br
     app_global_get('Unreachable')
     :manual_br # Branch labels are prefiexed with ":" (literal symbol)
     app_global_get('Manual Br')
 
-    comment 'placeholders'
+    # // placeholders
     app_global_put('Some Key', placeholder('REPLACE_ME'))
     gtxn(1, 'ANOTHER_THING_TO_REPLACE')
 
-    comment 'Global put/get as hash'
+    # // Global put/get as hash
     Global['Key Four'] = 444
     Global['Key Five']
 
-    comment 'Local put/get as hash'
+    # // Local put/get as hash
     Local[Txn.sender]['Local Key'] = 'Some Value'
     Local[Txn.receiver]['Local Key']
 
-    comment 'TxnType enums'
+    # // TxnType enums
     TxnType.pay
 
     another_teal_method(1111, 2222)

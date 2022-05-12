@@ -1,3 +1,4 @@
+#pragma version 6
 txn Fee
 int 1000
 <
@@ -10,6 +11,7 @@ global ZeroAddress
 txn RekeyTo
 global ZeroAddress
 ==
+&&
 &&
 &&
 txn Receiver
@@ -28,6 +30,5 @@ int 3000
 >
 &&
 ||
-&&
 &&
 return

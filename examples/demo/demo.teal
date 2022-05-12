@@ -17,6 +17,7 @@ concat
 log
 retsub
 main:
+// This comment will show in TEAL
 // raw teal
 byte "Key One"
 int 111
@@ -29,7 +30,7 @@ byte "Key Two"
 int 222
 app_global_put
 // two step method call
-byte "Key Three"
+byte "Key Three" // string literals are implicitly bytes
 int 333
 app_global_put
 // using variables
@@ -121,7 +122,7 @@ txn Receiver
 byte "Local Key"
 app_local_get
 // TxnType enums
-int 'pay'
+int pay
 int 1111
 int 2222
 store 200 // b

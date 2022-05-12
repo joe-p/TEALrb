@@ -33,7 +33,7 @@ module TEALrb
         private
 
         def txn_type_int(type)
-          TEALrb::TEAL.current[Thread.current] << "int '#{type}'"
+          TEALrb::TEAL.current[Thread.current] << "int #{type}"
         end
       end
 

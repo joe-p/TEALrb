@@ -69,12 +69,13 @@ load 0
 bz if1_else0
 load 1
 load 1
+app_global_get
 int 1
 -
-app_global_get
 app_global_put
 b if1_end
 if1_else0:
+if1_end:
 int 1
 return
 b if0_end
@@ -121,7 +122,7 @@ int 0
 return
 b if2_end
 if2_else0:
-if_end:
+if2_end:
 txna ApplicationArgs 1
 txna ApplicationArgs 1
 app_global_get
@@ -136,5 +137,5 @@ int 1
 return
 b if0_end
 if0_else5:
-if_end:
+if0_end:
 return

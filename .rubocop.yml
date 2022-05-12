@@ -8,6 +8,8 @@
 # where the inspected file is and continue its way up to the root directory.
 #
 # See https://docs.rubocop.org/rubocop/configuration
+AllCops:
+  TargetRubyVersion: 2.7
 
 Style/FrozenStringLiteralComment:
   Exclude:

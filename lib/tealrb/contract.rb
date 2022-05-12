@@ -70,6 +70,12 @@ module TEALrb
     def initialize
       @teal = TEAL.new ["#pragma version #{self.class.version}"]
 
+      self.class.subroutines.each_key do |name|
+        define_singleton_method(name) do |*_args|
+          callsub(name)
+        end
+      end
+
       self.class.subroutines.each do |name, blk|
         define_subroutine name, blk
       end
@@ -112,6 +118,10 @@ module TEALrb
     def define_subroutine(name, definition)
       @teal.set_as_current
 
+      define_singleton_method(name) do |*_args|
+        callsub(name)
+      end
+
       @teal << 'b main' unless @teal.include? 'b main'
 
       label(name) # add teal label
@@ -134,10 +144,6 @@ module TEALrb
       new_source = "#{pre_string.string}#{new_source}retsub"
       eval_tealrb(new_source, debug_context: "subroutine: #{name}")
 
-      define_singleton_method(name) do |*_args|
-        callsub(name)
-      end
-
       nil
     end
 
@@ -145,11 +151,12 @@ module TEALrb
     # @param content [String] content of the comment
     # @param inline [Boolean] whether the comment should be on the previous TEAL line
     def comment(content, inline: false)
+      content = " #{content}" unless content[0] == ' '
       if inline
         last_line = @teal.pop
-        @teal << "#{last_line} // #{content}"
+        @teal << "#{last_line} //#{content}"
       else
-        @teal << "// #{content}"
+        @teal << "//#{content}"
       end
     end
 
@@ -184,7 +191,7 @@ module TEALrb
 
     def rewrite_with_rewriter(string, rewriter)
       process_source = RuboCop::ProcessedSource.new(string, RUBY_VERSION[/\d\.\d/].to_f)
-      rewriter.new.rewrite(process_source.buffer, process_source.ast)
+      rewriter.new.rewrite(process_source)
     end
 
     def rewrite(string, method_rewriter: false)
@@ -194,7 +201,7 @@ module TEALrb
         puts ''
       end
 
-      [ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
+      [CommentRewriter, ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
 
