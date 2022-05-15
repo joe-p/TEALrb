@@ -6,7 +6,7 @@ module TEALrb
       attr_accessor :id
     end
 
-    @id = {}
+    @id = {}.compare_by_identity
 
     def initialize(teal, _cond, &blk)
       self.class.id[teal] ||= 0
@@ -15,7 +15,6 @@ module TEALrb
       @id = self.class.id[@teal]
       @end_label = "if#{@id}_end:"
 
-      @id = self.class.id[@teal]
       self.class.id[@teal] += 1
 
       @teal << "bz if#{@id}_else0"
