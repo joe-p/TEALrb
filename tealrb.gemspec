@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = 'tealrb'
   s.required_ruby_version = '>= 2.7'
-  s.version     = '0.2.0'
+  s.version     = '0.3.0'
   s.licenses    = ['MIT']
   s.summary     = 'A DSL for building Algorand applications'
   s.authors     = ['Joe Polny']
@@ -17,5 +17,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', ['~> 13.0.1']
   s.add_development_dependency 'redcarpet', ['~> 3.5.1']
   s.add_development_dependency 'rubocop-minitest', ['~> 0.19.1']
+  s.add_development_dependency 'rubocop-rake', ['~> 0.6.0']
   s.add_development_dependency 'yard', ['~> 0.9.27']
 end

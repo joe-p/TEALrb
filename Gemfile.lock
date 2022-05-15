@@ -36,6 +36,8 @@ GEM
       parser (>= 3.1.1.0)
     rubocop-minitest (0.19.1)
       rubocop (>= 0.90, < 2.0)
+    rubocop-rake (0.6.0)
+      rubocop (~> 1.0)
     ruby-progressbar (1.11.0)
     unicode-display_width (2.1.0)
     webrick (1.7.0)
@@ -52,6 +54,7 @@ DEPENDENCIES
   rake (~> 13.0.1)
   redcarpet (~> 3.5.1)
   rubocop-minitest (~> 0.19.1)
+  rubocop-rake (~> 0.6.0)
   tealrb!
   yard (~> 0.9.27)
 

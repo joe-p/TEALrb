@@ -6,16 +6,17 @@ module TEALrb
       attr_accessor :id
     end
 
-    @id = 0
+    @id = {}
 
     def initialize(teal, _cond, &blk)
+      self.class.id[teal] ||= 0
       @teal = teal
       @else_count = 0
-      @id = self.class.id
+      @id = self.class.id[@teal]
       @end_label = "if#{@id}_end:"
 
-      @id = self.class.id
-      self.class.id += 1
+      @id = self.class.id[@teal]
+      self.class.id[@teal] += 1
 
       @teal << "bz if#{@id}_else0"
       blk.call
