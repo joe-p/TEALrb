@@ -13,6 +13,19 @@ Additional labels for pre-release and build metadata are available as extensions
 
 See https://semver.org/ for more information
 
+## 0.3.1 (05/10/2022)
+
+### Bugfixes
+- Fix improper if id counting
+
+## 0.3.0 (05/10/2022)
+
+### Features
+- Txna[] functionality
+
+### Bugfixes 
+- Made if block id/count thread-safe
+
 ## 0.2.0 (05/10/2022)
 
 ### Features

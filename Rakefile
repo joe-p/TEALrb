@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-task default: %w[clean test build]
+task default: %w[clean lint test build]
 
 desc 'Clean up build artifacts (.gem files)'
 task :clean do
