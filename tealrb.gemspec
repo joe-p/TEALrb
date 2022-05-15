@@ -17,5 +17,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', ['~> 13.0.1']
   s.add_development_dependency 'redcarpet', ['~> 3.5.1']
   s.add_development_dependency 'rubocop-minitest', ['~> 0.19.1']
+  s.add_development_dependency 'rubocop-rake', ['~> 0.6.0']
   s.add_development_dependency 'yard', ['~> 0.9.27']
 end
