@@ -13,6 +13,11 @@ Additional labels for pre-release and build metadata are available as extensions
 
 See https://semver.org/ for more information
 
+## 0.4.0 (05/16/2022)
+
+### Features
+- Proper Txna functionality
+
 ## 0.3.1 (05/10/2022)
 
 ### Bugfixes
