@@ -664,31 +664,40 @@ module TEALrb
       end
     end
 
-    class TxnArrayIndex
+    class TxnaField
       include Opcodes
-      include TxnFields
 
-      def initialize(index)
-        @index = index
+      def initialize(field, index = nil)
+        @field = field
+        @teal = TEALrb::TEAL.current[Thread.current]
+        txna(field, index) if index
       end
 
-      def opcode(field)
+      def [](index)
         @teal = TEALrb::TEAL.current[Thread.current]
-        txna field, @index
+        txna @field, index
       end
     end
 
     module Txna
-      extend Opcodes
-      extend TxnFields
-
-      def self.opcode(field, index)
-        @teal = TEALrb::TEAL.current[Thread.current]
-        txna field, index
+      def self.application_args(index = nil)
+        TxnaField.new('ApplicationArgs', index)
       end
 
-      def self.[](index)
-        TxnArrayIndex.new(index)
+      def self.accounts(index = nil)
+        TxnaField.new('Accounts', index)
+      end
+
+      def self.assets(index = nil)
+        TxnaField.new('Assets', index)
+      end
+
+      def self.applications(index = nil)
+        TxnaField.new('Applications', index)
+      end
+
+      def self.logs(index = nil)
+        TxnaField.new('Logs', index)
       end
     end
 
