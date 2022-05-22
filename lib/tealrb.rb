@@ -9,6 +9,7 @@ require_relative 'tealrb/opcodes'
 require_relative 'tealrb/opcode_modules'
 require_relative 'tealrb/rewriters'
 require_relative 'tealrb/if_block'
+require_relative 'tealrb/scratch'
 require_relative 'tealrb/contract'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 

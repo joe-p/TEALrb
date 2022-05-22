@@ -44,12 +44,13 @@ class SubroutineDefTest < TEALrb::Contract
 end
 
 class ModuleTests < Minitest::Test
-  SUBROUTINE_METHOD_TEAL = ['b main', 'subroutine_method: // subroutine_method(x, y)', 'store 200 // y',
-                            'store 201 // x', 'load 201 // x', 'load 200 // y', '/', 'retsub', 'main:', 'int 1',
-                            'int 2', 'callsub subroutine_method'].freeze
+  SUBROUTINE_METHOD_TEAL = ['b main', 'subroutine_method: // subroutine_method(x, y)',
+                            'store 0 // subroutine_method: y', 'store 1 // subroutine_method: x',
+                            'load 1 // subroutine_method: x', 'load 0 // subroutine_method: y', '/', 'retsub', 'main:',
+                            'int 1', 'int 2', 'callsub subroutine_method'].freeze
 
-  TEAL_METHOD_TEAL = ['int 1', 'int 2', 'store 200 // y', 'store 201 // x', 'load 201 // x', 'load 200 // y',
-                      '/'].freeze
+  TEAL_METHOD_TEAL = ['int 1', 'int 2', 'store 0 // teal_method: y', 'store 1 // teal_method: x',
+                      'load 1 // teal_method: x', 'load 0 // teal_method: y', '/'].freeze
 
   def method_test(contract_class, expected_teal)
     contract = contract_class.new

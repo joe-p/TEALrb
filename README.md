@@ -344,4 +344,3 @@ int 1 // this comment will be in the TEAL as an inline comment
 
 - Looping
 - ABI type encoding/decoding
-- Scratch space management

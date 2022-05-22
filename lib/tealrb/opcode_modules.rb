@@ -721,7 +721,7 @@ module TEALrb
 
     module AppArgs
       def self.[](index)
-        Txna.application_args index
+        Txna.application_args[index]
       end
     end
   end

@@ -66,7 +66,8 @@ module TEALrb
       end
 
       def on_ivar(node)
-        insert_after(node.loc.name, '.call') unless ['@teal', '@teal_methods', '@subroutines'].include? node.source
+        insert_after(node.loc.name, '.call') unless ['@teal', '@teal_methods', '@subroutines',
+                                                     '@scratch'].include? node.source
         super
       end
     end
@@ -116,6 +117,7 @@ module TEALrb
 
       def on_ivar(node)
         @skips = 2 if node.source == '@teal_methods'
+        @skips = 1 if node.source == '@scratch'
       end
 
       def on_send(node)
