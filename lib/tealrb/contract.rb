@@ -93,26 +93,8 @@ module TEALrb
     def define_teal_method(name, definition)
       @teal.set_as_current
 
-      new_source = rewrite(definition.source, method_rewriter: true)
+      new_source = generate_method_source(name, definition)
 
-      pre_string = StringIO.new
-
-      scratch_names = []
-      definition.parameters.reverse.each_with_index do |param, _i|
-        param_name = param.last
-        scratch_name = [name, param_name].map(&:to_s).join(': ')
-        scratch_names << scratch_name
-
-        pre_string.puts "@scratch.store('#{scratch_name}')"
-        pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
-      end
-
-      post_string = StringIO.new
-      scratch_names.each do |n|
-        post_string.puts "@scratch.delete '#{n}'"
-      end
-
-      new_source = "#{pre_string.string}#{new_source}#{post_string.string}"
       define_singleton_method(name) do |*_args|
         eval_tealrb(new_source, debug_context: "teal method: #{name}")
       end
@@ -139,26 +121,9 @@ module TEALrb
       comment_content = "#{name}(#{comment_params})"
       comment(comment_content, inline: true)
 
-      new_source = rewrite(definition.source, method_rewriter: true)
+      new_source = generate_method_source(name, definition)
+      new_source = "#{new_source}retsub"
 
-      pre_string = StringIO.new
-
-      scratch_names = []
-      definition.parameters.reverse.each_with_index do |param, _i|
-        param_name = param.last
-        scratch_name = [name, param_name].map(&:to_s).join(': ')
-        scratch_names << scratch_name
-
-        pre_string.puts "@scratch.store('#{scratch_name}')"
-        pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
-      end
-
-      post_string = StringIO.new
-      scratch_names.each do |n|
-        post_string.puts "@scratch.delete '#{n}'"
-      end
-
-      new_source = "#{pre_string.string}#{new_source}#{post_string.string}retsub"
       eval_tealrb(new_source, debug_context: "subroutine: #{name}")
 
       nil
@@ -205,6 +170,29 @@ module TEALrb
     end
 
     private
+
+    def generate_method_source(name, definition)
+      new_source = rewrite(definition.source, method_rewriter: true)
+
+      pre_string = StringIO.new
+
+      scratch_names = []
+      definition.parameters.reverse.each_with_index do |param, _i|
+        param_name = param.last
+        scratch_name = [name, param_name].map(&:to_s).join(': ')
+        scratch_names << scratch_name
+
+        pre_string.puts "@scratch.store('#{scratch_name}')"
+        pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
+      end
+
+      post_string = StringIO.new
+      scratch_names.each do |n|
+        post_string.puts "@scratch.delete '#{n}'"
+      end
+
+      "#{pre_string.string}#{new_source}#{post_string.string}"
+    end
 
     def rewrite_with_rewriter(string, rewriter)
       process_source = RuboCop::ProcessedSource.new(string, RUBY_VERSION[/\d\.\d/].to_f)
