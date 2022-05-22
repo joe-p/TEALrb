@@ -13,6 +13,14 @@ Additional labels for pre-release and build metadata are available as extensions
 
 See https://semver.org/ for more information
 
+## 0.5.0 (05/22/2022)
+
+### Features
+- Named scratch slots
+
+### Bugfixes
+- Fixed Txna.application_args call in AppArgs.[]
+
 ## 0.4.0 (05/16/2022)
 
 ### Features
