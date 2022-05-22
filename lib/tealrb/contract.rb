@@ -69,6 +69,7 @@ module TEALrb
     # sets the `#pragma version`, defines teal methods, and defines subroutines
     def initialize
       @teal = TEAL.new ["#pragma version #{self.class.version}"]
+      @scratch = Scratch.new(@teal)
 
       self.class.subroutines.each_key do |name|
         define_singleton_method(name) do |*_args|
@@ -96,14 +97,22 @@ module TEALrb
 
       pre_string = StringIO.new
 
-      definition.parameters.reverse.each_with_index do |param, i|
+      scratch_names = []
+      definition.parameters.reverse.each_with_index do |param, _i|
         param_name = param.last
-        pre_string.puts "store #{200 + i}"
-        pre_string.puts "comment('#{param_name}', inline: true)"
-        pre_string.puts "#{param_name} = -> { load #{200 + i}; comment('#{param_name}', inline: true) }"
+        scratch_name = [name, param_name].map(&:to_s).join(': ')
+        scratch_names << scratch_name
+
+        pre_string.puts "@scratch.store('#{scratch_name}')"
+        pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
       end
 
-      new_source = "#{pre_string.string}#{new_source}"
+      post_string = StringIO.new
+      scratch_names.each do |n|
+        post_string.puts "@scratch.delete '#{n}'"
+      end
+
+      new_source = "#{pre_string.string}#{new_source}#{post_string.string}"
       define_singleton_method(name) do |*_args|
         eval_tealrb(new_source, debug_context: "teal method: #{name}")
       end
@@ -134,14 +143,22 @@ module TEALrb
 
       pre_string = StringIO.new
 
-      definition.parameters.reverse.each_with_index do |param, i|
+      scratch_names = []
+      definition.parameters.reverse.each_with_index do |param, _i|
         param_name = param.last
-        pre_string.puts "store #{200 + i}"
-        pre_string.puts "comment('#{param_name}', inline: true)"
-        pre_string.puts "#{param_name} = -> { load #{200 + i}; comment('#{param_name}', inline: true) }"
+        scratch_name = [name, param_name].map(&:to_s).join(': ')
+        scratch_names << scratch_name
+
+        pre_string.puts "@scratch.store('#{scratch_name}')"
+        pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
       end
 
-      new_source = "#{pre_string.string}#{new_source}retsub"
+      post_string = StringIO.new
+      scratch_names.each do |n|
+        post_string.puts "@scratch.delete '#{n}'"
+      end
+
+      new_source = "#{pre_string.string}#{new_source}#{post_string.string}retsub"
       eval_tealrb(new_source, debug_context: "subroutine: #{name}")
 
       nil

@@ -130,6 +130,15 @@ class Approval < TEALrb::Contract
 
     another_teal_method(1111, 2222)
     yet_another_teal_method(3333, 4444)
+
+    # // store/load to named scratch slots
+    @scratch['some key'] = 123
+    @scratch['some key']
+    @scratch['another key'] = 321
+    @scratch['another key']
+
+    @scratch.delete 'some_key'
+    @scratch.delete 'another key'
   end
 end
 

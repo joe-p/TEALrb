@@ -1,16 +1,16 @@
 #pragma version 6
 b main
 subroutine_method: // subroutine_method(x, y)
-store 200 // y
-store 201 // x
-load 201 // x
-load 200 // y
+store 0 // subroutine_method: y
+store 1 // subroutine_method: x
+load 1 // subroutine_method: x
+load 0 // subroutine_method: y
 +
-load 201 // x
-load 200 // y
+load 1 // subroutine_method: x
+load 0 // subroutine_method: y
 -
-load 201 // x
-load 200 // y
+load 1 // subroutine_method: x
+load 0 // subroutine_method: y
 *
 itob
 concat
@@ -125,15 +125,22 @@ app_local_get
 int pay
 int 1111
 int 2222
-store 200 // b
-store 201 // a
-load 201 // a
-load 200 // b
+store 2 // another_teal_method: b
+store 3 // another_teal_method: a
+load 3 // another_teal_method: a
+load 2 // another_teal_method: b
 /
 int 3333
 int 4444
-store 200 // arg2
-store 201 // arg1
-load 201 // arg1
-load 200 // arg2
+store 4 // yet_another_teal_method: arg2
+store 5 // yet_another_teal_method: arg1
+load 5 // yet_another_teal_method: arg1
+load 4 // yet_another_teal_method: arg2
 %
+// store/load to named scratch slots
+int 123
+store 6 // some key
+load 6 // some key
+int 321
+store 7 // another key
+load 7 // another key

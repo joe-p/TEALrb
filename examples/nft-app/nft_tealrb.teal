@@ -1,14 +1,14 @@
 #pragma version 5
 b main
 pay: // pay(receiver, amount)
-store 200 // amount
-store 201 // receiver
+store 0 // pay: amount
+store 1 // pay: receiver
 itxn_begin
 int pay
 itxn_field TypeEnum
-load 201 // receiver
+load 1 // pay: receiver
 itxn_field Receiver
-load 200 // amount
+load 0 // pay: amount
 int 1000
 -
 itxn_field Amount
