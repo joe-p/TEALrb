@@ -31,3 +31,11 @@ desc 'Run rubocop --auto-correct'
 task :fix do
   sh 'rubocop --auto-correct'
 end
+
+desc 'Run all examples'
+task :examples do
+  Dir.chdir('examples/demo/') { ruby 'demo.rb' }
+  Dir.chdir('examples/nft-app/') { ruby 'nft.rb' }
+  Dir.chdir('examples/pyteal_comparisons/') { ruby 'atomic_swap.rb' }
+  Dir.chdir('examples/pyteal_comparisons/') { ruby 'voting.rb' }
+end
