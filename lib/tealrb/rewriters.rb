@@ -130,8 +130,8 @@ module TEALrb
             params = TEALrb::Opcodes.instance_method(meth_name).parameters
             @skips = params.count { |param| param[0] == :req }
           end
-        elsif %i[comment placeholder].include? meth_name
-          @skips = 1
+        elsif %i[comment placeholder rb].include? meth_name
+          @skips = node.children.last.children.size
         end
         super
       end

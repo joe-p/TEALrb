@@ -139,6 +139,8 @@ class Approval < TEALrb::Contract
 
     @scratch.delete 'some_key'
     @scratch.delete 'another key'
+
+    puts rb('HERE') # 'HERE' not transpiled to TEAL
   end
 end
 

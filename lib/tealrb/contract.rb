@@ -86,6 +86,11 @@ module TEALrb
       end
     end
 
+    # return the input without transpiling to TEAL
+    def rb(input)
+      input
+    end
+
     # defines a method that is transpiled to TEAL
     # @param name [Symbol] name of the method
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
