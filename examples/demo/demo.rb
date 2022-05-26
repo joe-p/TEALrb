@@ -141,6 +141,11 @@ class Approval < TEALrb::Contract
     @scratch.delete 'another key'
 
     puts rb('HERE') # 'HERE' not transpiled to TEAL
+
+    # // while loops
+    while Global['counter'] < 3
+      Global['counter'] = Global['counter'] + 1
+    end
   end
 end
 

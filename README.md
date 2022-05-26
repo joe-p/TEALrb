@@ -341,6 +341,4 @@ int 1 // this comment will be in the TEAL as an inline comment
 
 
 # Planned Features
-
-- Looping
 - ABI type encoding/decoding

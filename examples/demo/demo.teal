@@ -144,3 +144,18 @@ load 6 // some key
 int 321
 store 7 // another key
 load 7 // another key
+// while loops
+while0:
+byte "counter"
+app_global_get
+int 3
+<
+bz end_while0
+byte "counter"
+byte "counter"
+app_global_get
+int 1
++
+app_global_put
+b while0
+end_while0:

@@ -168,5 +168,30 @@ module TEALrb
         super
       end
     end
+
+    class WhileRewriter < Rewriter
+      class << self
+        attr_accessor :while_count
+      end
+
+      def initialize(*args)
+        self.class.while_count = {}
+        self.class.while_count[Thread.current] ||= 0
+        super
+      end
+
+      def while_count
+        self.class.while_count[Thread.current]
+      end
+
+      def on_while(node)
+        cond_node = node.children.first
+        replace(node.loc.keyword, ":while#{while_count}\n#{cond_node.source}\nbz :end_while#{while_count}")
+        replace(node.loc.begin, '') if node.loc.begin
+        replace(node.loc.end, "b :while#{while_count}\n:end_while#{while_count}")
+        replace(cond_node.loc.expression, '')
+        super
+      end
+    end
   end
 end
