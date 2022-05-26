@@ -19,10 +19,10 @@ class VotingApproval < TEALrb::Contract
   teal def on_creation
     app_global_put('Creator', Txn.sender)
     assert(Txn.num_app_args == 4)
-    app_global_put('RegBegin', btoi(Txna.application_args(0)))
-    app_global_put('RegEnd', btoi(Txna.application_args(1)))
-    app_global_put('VoteBegin', btoi(Txna.application_args(2)))
-    app_global_put('VoteEnd', btoi(Txna.application_args(3)))
+    app_global_put('RegBegin', btoi(Txna.application_args[0]))
+    app_global_put('RegEnd', btoi(Txna.application_args[1]))
+    app_global_put('VoteBegin', btoi(Txna.application_args[2]))
+    app_global_put('VoteEnd', btoi(Txna.application_args[3]))
   end
 
   # get_vote_of_sender = App.localGetEx(Int(0), App.id(), Bytes("voted"))
@@ -109,7 +109,7 @@ class VotingApproval < TEALrb::Contract
     on_register = teal_return(Global.round >= app_global_get('RegBegin') && Global.round >= app_global_get('RegEnd'))
 
     # choice = Txn.application_args[1]
-    @choice = Txna.application_args 1
+    @choice = Txna.application_args[1]
 
     # choice_tally = App.globalGet(choice)
     @choice_tally = app_global_get(@choice)
@@ -132,7 +132,7 @@ class VotingApproval < TEALrb::Contract
       on_closeout
     elsif Txn.on_completion == int('OptIn')
       on_register
-    elsif Txna.application_args(0) == 'vote'
+    elsif Txna.application_args[0] == 'vote'
       on_vote
     end
 
