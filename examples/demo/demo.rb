@@ -51,7 +51,7 @@ class Approval < TEALrb::Contract
     # This comment will not show in TEAL
 
     # // raw teal
-    byte 'Key One'
+    byte 'Key One' # // this will be an in-line comment
     int 111
     app_global_put
 
@@ -65,6 +65,14 @@ class Approval < TEALrb::Contract
     # // two step method call
     'Key Three' # // string literals are implicitly bytes
     app_global_put 333
+
+    # // Global put/get as hash
+    Global['Key Four'] = 444
+    Global['Key Five']
+
+    # // Local put/get as hash
+    Local[Txn.sender]['Local Key'] = 'Some Value'
+    Local[Txn.receiver]['Local Key']
 
     # Variable assignment is a statement that doesn't evaluate to a TEALrb expression
     # // using variables
@@ -100,12 +108,18 @@ class Approval < TEALrb::Contract
     teal_method
     # // ruby method
     int(ruby_method)
+    # // another_teal_method
+    another_teal_method(1111, 2222)
+    # // yet_another_teal_method
+    yet_another_teal_method(3333, 4444)
 
     # All of the following are the same
     # // accessing specific indexes/fields
-    gtxn(0, 'Sender')
-    Gtxn.sender(0)
-    Gtxn[0].sender
+    gtxn(0, 'Sender') # // gtxn(0, 'Sender')
+    Gtxn.sender(0) # // Gtxn.sender(0)
+    Gtxn[0].sender # // Gtxn[0].sender
+    gtxn_var = Gtxn[0]
+    gtxn_var.sender # // gtxn_var.sender
 
     # // manual branching
     b :manual_br
@@ -117,19 +131,8 @@ class Approval < TEALrb::Contract
     app_global_put('Some Key', placeholder('REPLACE_ME'))
     gtxn(1, 'ANOTHER_THING_TO_REPLACE')
 
-    # // Global put/get as hash
-    Global['Key Four'] = 444
-    Global['Key Five']
-
-    # // Local put/get as hash
-    Local[Txn.sender]['Local Key'] = 'Some Value'
-    Local[Txn.receiver]['Local Key']
-
     # // TxnType enums
     TxnType.pay
-
-    another_teal_method(1111, 2222)
-    yet_another_teal_method(3333, 4444)
 
     # // store/load to named scratch slots
     @scratch['some key'] = 123

@@ -19,7 +19,7 @@ retsub
 main:
 // This comment will show in TEAL
 // raw teal
-byte "Key One"
+byte "Key One" // this will be an in-line comment
 int 111
 app_global_put
 int 100
@@ -33,6 +33,20 @@ app_global_put
 byte "Key Three" // string literals are implicitly bytes
 int 333
 app_global_put
+// Global put/get as hash
+byte "Key Four"
+int 444
+app_global_put
+byte "Key Five"
+app_global_get
+// Local put/get as hash
+txn Sender
+byte "Local Key"
+byte "Some Value"
+app_local_put
+txn Receiver
+byte "Local Key"
+app_local_get
 // using variables
 byte "Key Four"
 int 444
@@ -91,10 +105,27 @@ int 4
 +
 // ruby method
 int 11
+// another_teal_method
+int 1111
+int 2222
+store 2 // another_teal_method: b
+store 3 // another_teal_method: a
+load 3 // another_teal_method: a
+load 2 // another_teal_method: b
+/
+// yet_another_teal_method
+int 3333
+int 4444
+store 4 // yet_another_teal_method: arg2
+store 5 // yet_another_teal_method: arg1
+load 5 // yet_another_teal_method: arg1
+load 4 // yet_another_teal_method: arg2
+%
 // accessing specific indexes/fields
-gtxn 0 Sender
-gtxn 0 Sender
-gtxn 0 Sender
+gtxn 0 Sender // gtxn(0, 'Sender')
+gtxn 0 Sender // Gtxn.sender(0)
+gtxn 0 Sender // Gtxn[0].sender
+gtxn 0 Sender // gtxn_var.sender
 // manual branching
 b manual_br
 byte "Unreachable"
@@ -107,36 +138,8 @@ byte "Some Key"
 REPLACE_ME
 app_global_put
 gtxn 1 ANOTHER_THING_TO_REPLACE
-// Global put/get as hash
-byte "Key Four"
-int 444
-app_global_put
-byte "Key Five"
-app_global_get
-// Local put/get as hash
-txn Sender
-byte "Local Key"
-byte "Some Value"
-app_local_put
-txn Receiver
-byte "Local Key"
-app_local_get
 // TxnType enums
 int pay
-int 1111
-int 2222
-store 2 // another_teal_method: b
-store 3 // another_teal_method: a
-load 3 // another_teal_method: a
-load 2 // another_teal_method: b
-/
-int 3333
-int 4444
-store 4 // yet_another_teal_method: arg2
-store 5 // yet_another_teal_method: arg1
-load 5 // yet_another_teal_method: arg1
-load 4 // yet_another_teal_method: arg2
-%
 // store/load to named scratch slots
 int 123
 store 6 // some key
