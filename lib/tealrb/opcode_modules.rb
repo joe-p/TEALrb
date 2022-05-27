@@ -667,10 +667,8 @@ module TEALrb
     class TxnaField
       include Opcodes
 
-      def initialize(field, index = nil)
+      def initialize(field)
         @field = field
-        @teal = TEALrb::TEAL.current[Thread.current]
-        txna(field, index) if index
       end
 
       def [](index)
@@ -680,24 +678,24 @@ module TEALrb
     end
 
     module Txna
-      def self.application_args(index = nil)
-        TxnaField.new('ApplicationArgs', index)
+      def self.application_args
+        TxnaField.new('ApplicationArgs')
       end
 
-      def self.accounts(index = nil)
-        TxnaField.new('Accounts', index)
+      def self.accounts
+        TxnaField.new('Accounts')
       end
 
-      def self.assets(index = nil)
-        TxnaField.new('Assets', index)
+      def self.assets
+        TxnaField.new('Assets')
       end
 
-      def self.applications(index = nil)
-        TxnaField.new('Applications', index)
+      def self.applications
+        TxnaField.new('Applications')
       end
 
-      def self.logs(index = nil)
-        TxnaField.new('Logs', index)
+      def self.logs
+        TxnaField.new('Logs')
       end
     end
 

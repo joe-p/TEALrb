@@ -16,3 +16,7 @@ Style/CaseLikeIf:
 # Numeric predicates (#zero?, #positive?, #negative?) are not yet supported
 Style/NumericPredicate:
   EnforcedStyle: comparison
+
+# Single-line while loops are not supported (yet)
+Style/WhileUntilModifier:
+  Enabled: false

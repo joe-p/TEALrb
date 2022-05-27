@@ -86,6 +86,11 @@ module TEALrb
       end
     end
 
+    # return the input without transpiling to TEAL
+    def rb(input)
+      input
+    end
+
     # defines a method that is transpiled to TEAL
     # @param name [Symbol] name of the method
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
@@ -206,7 +211,7 @@ module TEALrb
         puts ''
       end
 
-      [CommentRewriter, ComparisonRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
+      [CommentRewriter, ComparisonRewriter, WhileRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
 

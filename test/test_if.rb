@@ -5,7 +5,7 @@ require_relative '../lib/tealrb'
 
 class IfTest < TEALrb::Contract
   def main
-    if 1 # rubocop:disable Style/GuardClause, Style/IfUnlessModifier, Lint/LiteralAsCondition
+    if 1 # rubocop:disable Style/GuardClause, Lint/LiteralAsCondition
       2
     end
   end

@@ -12,6 +12,12 @@ Additional labels for pre-release and build metadata are available as extensions
 ```
 
 See https://semver.org/ for more information
+## 0.6.0 (05/26/2022)
+
+### Features
+- removed parameters from Txna method calls
+- `rb` method for skipping literal transpilation
+- while loop support
 
 ## 0.5.0 (05/22/2022)
 
