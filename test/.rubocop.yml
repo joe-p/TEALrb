@@ -1,5 +1,5 @@
 require: rubocop-minitest
-inherit_from: ../.rubocop.yml
+inherit_from: ../examples/.rubocop.yml
 
 Minitest/AssertInDelta: # new in 0.10
   Enabled: true
