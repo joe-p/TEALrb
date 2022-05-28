@@ -162,3 +162,6 @@ int 1
 app_global_put
 b while0
 end_while0:
+byte 0x80 // bool(true)
+byte 0x0018 // uint32(24)
+byte 0x7b // ufixed16x2(1.23)

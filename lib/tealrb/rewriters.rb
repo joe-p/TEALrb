@@ -132,6 +132,8 @@ module TEALrb
           end
         elsif %i[comment placeholder rb].include? meth_name
           @skips = node.children.last.children.size
+        elsif meth_name == :push_encoded
+          @skips = 2
         end
         super
       end

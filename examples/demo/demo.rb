@@ -92,7 +92,7 @@ class Approval < TEALrb::Contract
       app_global_put('Second Word', 'Mom')
     elsif app_global_get('First Word') == 'Hello'
       byte 'Second Word'
-      byte 'World'
+      byte 'World' 
       app_global_put
     elsif app_global_get('First Word') == 'Howdy'
       app_global_put('Second Word', 'Partner')
@@ -149,6 +149,10 @@ class Approval < TEALrb::Contract
     while Global['counter'] < 3
       Global['counter'] = Global['counter'] + 1
     end
+
+    push_encoded(:bool, true)
+    push_encoded(:uint32, 24)
+    push_encoded(:ufixed16x2, 1.23)
   end
 end
 
