@@ -25,19 +25,23 @@ module TEALrb
       encode_uint(bits, data * (10**precision))
     end
 
+    def encode_bool(data)
+      (data ? 128 : 0).to_s(16)
+    end
+
     def push_encoded(type, data)
       type = type.to_s
 
-      if type == 'bool'
-        val = (data ? 128 : 0).to_s(16)
-      elsif type[/^uint/]
-        bits = type[/(?<=uint)\d+/].to_i
-        val = encode_uint(bits, data)
-      elsif type[/^ufixed/]
-        bits = type[/(?<=ufixed)\d+/].to_i
-        precision = type[/(?<=x)\d+/].to_i
-        val = encode_ufixed(bits, precision, data)
-      end
+      val = if type == 'bool'
+              encode_bool(data)
+            elsif type[/^uint/]
+              bits = type[/(?<=uint)\d+/].to_i
+              encode_uint(bits, data)
+            elsif type[/^ufixed/]
+              bits = type[/(?<=ufixed)\d+/].to_i
+              precision = type[/(?<=x)\d+/].to_i
+              encode_ufixed(bits, precision, data)
+            end
 
       @teal << "byte 0x#{val}"
       comment("#{type}(#{data})", inline: true)
