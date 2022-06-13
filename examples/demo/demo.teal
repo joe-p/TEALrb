@@ -162,3 +162,34 @@ int 1
 app_global_put
 b while0
 end_while0:
+// opcodes with "maybe" values
+// using ex_app_global_exists? and ex_app_global_value
+int 1337
+byte "some_key"
+app_global_get_ex
+swap
+pop
+bz if2_else0
+int 1337
+byte "some_key"
+app_global_get_ex
+pop
+b if2_end
+if2_else0:
+byte "some_key does not exist"
+log
+if2_end:
+// using app_global_get_ex and store/load
+int 1337
+byte "some_key"
+app_local_get_ex
+store 0
+store 1
+load 0
+bz if3_else0
+load 1
+b if3_end
+if3_else0:
+byte "some_key does not exist"
+log
+if3_end:

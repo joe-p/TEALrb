@@ -722,5 +722,63 @@ module TEALrb
         Txna.application_args[index]
       end
     end
+
+    module MaybeOps
+      include Opcodes
+
+      def app_param_exists?(field, _app_id = nil)
+        @teal = TEALrb::TEAL.current[Thread.current]
+        app_params_get field
+        swap
+        pop
+      end
+
+      def app_param_value(field, _app_id = nil)
+        @teal = TEALrb::TEAL.current[Thread.current]
+        app_params_get field
+        pop
+      end
+
+      def asset_param_exists?(field, _asset_id = nil)
+        @teal = TEALrb::TEAL.current[Thread.current]
+        asset_params_get field
+        swap
+        pop
+      end
+
+      def asset_param_value(field, _asset_id = nil)
+        @teal = TEALrb::TEAL.current[Thread.current]
+        asset_params_get field
+        pop
+      end
+
+      def ex_app_local_exists?(_account = nil, _applicaiton = nil, _key = nil)
+        @teal = TEALrb::TEAL.current[Thread.current]
+        app_local_get_ex
+        swap
+        pop
+      end
+
+      def ex_app_local_value(_account = nil, _applicaiton = nil, _key = nil)
+        @teal = TEALrb::TEAL.current[Thread.current]
+        app_local_get_ex
+        pop
+      end
+
+      def ex_app_global_exists?(_account = nil, _applicaiton = nil, _key = nil)
+        @teal = TEALrb::TEAL.current[Thread.current]
+        app_global_get_ex
+        swap
+        pop
+      end
+
+      def ex_app_global_value(_account = nil, _applicaiton = nil, _key = nil)
+        @teal = TEALrb::TEAL.current[Thread.current]
+        app_global_get_ex
+        pop
+      end
+
+
+    end
   end
 end
