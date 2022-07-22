@@ -165,3 +165,4 @@ end_while0:
 byte 0x80 // bool(true)
 byte 0x0018 // uint32(24)
 byte 0x7b // ufixed16x2(1.23)
+byte 0x7b9c // fixed_array([1.23, 1.56])

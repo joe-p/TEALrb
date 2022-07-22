@@ -153,6 +153,7 @@ class Approval < TEALrb::Contract
     push_encoded(true, :bool)
     push_encoded(24, :uint32)
     push_encoded(1.23, :ufixed16x2)
+    push_encoded([1.23, 1.56], :fixed_array, :ufixed16x2)
   end
 end
 

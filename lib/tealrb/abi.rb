@@ -9,8 +9,19 @@ module TEALrb
     end
 
     # TODO
-    # encode_array(data, type)
+    # encoding bools in tuple
+    # encode_variable_array(data, type)
     # encode_tuple(data, types)
+
+    def encode_fixed_array(data, type)
+      val = ''
+
+      data.each do |x|
+        val += get_encoded(x, type)
+      end
+
+      val
+    end
 
     def encode_uint(data, bits)
       data_input = data
@@ -20,9 +31,11 @@ module TEALrb
 
       val = data.to_s(16)
 
-      raise ArgumentError, "#{data} is not a valid #{bits}-bit uint" if val.length > bits
+      bytes = bits / 8
 
-      val.rjust(bits / 8, '0')
+      raise ArgumentError, "#{data} is not a valid #{bits}-bit uint" if val.length > bytes
+
+      val.rjust(bytes, '0')
     end
 
     def encode_ufixed(data, bits, precision)
@@ -33,21 +46,25 @@ module TEALrb
       (data ? 128 : 0).to_s(16)
     end
 
-    def push_encoded(data, type)
+    def get_encoded(data, type, tuple_types = nil)
       type = type.to_s
 
-      val = if type == 'bool'
-              encode_bool(data)
-            elsif type[/^uint/]
-              bits = type[/(?<=uint)\d+/].to_i
-              encode_uint(data, bits)
-            elsif type[/^ufixed/]
-              bits = type[/(?<=ufixed)\d+/].to_i
-              precision = type[/(?<=x)\d+/].to_i
-              encode_ufixed(data, bits, precision)
-            end
+      if type == 'bool'
+        encode_bool(data)
+      elsif type[/^uint/]
+        bits = type[/(?<=uint)\d+/].to_i
+        encode_uint(data, bits)
+      elsif type[/^ufixed/]
+        bits = type[/(?<=ufixed)\d+/].to_i
+        precision = type[/(?<=x)\d+/].to_i
+        encode_ufixed(data, bits, precision)
+      elsif type == 'fixed_array'
+        encode_fixed_array(data, tuple_types)
+      end
+    end
 
-      @teal << "byte 0x#{val}"
+    def push_encoded(data, type, tuple_types = nil)
+      @teal << "byte 0x#{get_encoded(data, type, tuple_types)}"
       comment("#{type}(#{data})", inline: true)
     end
 
