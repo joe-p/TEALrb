@@ -150,9 +150,9 @@ class Approval < TEALrb::Contract
       Global['counter'] = Global['counter'] + 1
     end
 
-    push_encoded(:bool, true)
-    push_encoded(:uint32, 24)
-    push_encoded(:ufixed16x2, 1.23)
+    push_encoded(true, :bool)
+    push_encoded(24, :uint32)
+    push_encoded(1.23, :ufixed16x2)
   end
 end
 

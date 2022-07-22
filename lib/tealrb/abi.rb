@@ -8,7 +8,11 @@ module TEALrb
       log(concat('151f7c75', data.teal).teal)
     end
 
-    def encode_uint(bits, data)
+    # TODO
+    # encode_array(data, type)
+    # encode_tuple(data, types)
+
+    def encode_uint(data, bits)
       data_input = data
       data = data.to_i
 
@@ -21,26 +25,26 @@ module TEALrb
       val.rjust(bits / 8, '0')
     end
 
-    def encode_ufixed(bits, precision, data)
-      encode_uint(bits, data * (10**precision))
+    def encode_ufixed(data, bits, precision)
+      encode_uint(data * (10**precision), bits)
     end
 
     def encode_bool(data)
       (data ? 128 : 0).to_s(16)
     end
 
-    def push_encoded(type, data)
+    def push_encoded(data, type)
       type = type.to_s
 
       val = if type == 'bool'
               encode_bool(data)
             elsif type[/^uint/]
               bits = type[/(?<=uint)\d+/].to_i
-              encode_uint(bits, data)
+              encode_uint(data, bits)
             elsif type[/^ufixed/]
               bits = type[/(?<=ufixed)\d+/].to_i
               precision = type[/(?<=x)\d+/].to_i
-              encode_ufixed(bits, precision, data)
+              encode_ufixed(data, bits, precision)
             end
 
       @teal << "byte 0x#{val}"
