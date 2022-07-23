@@ -4,7 +4,8 @@ module TEALrb
   class Contract
     include TEALrb
     include Opcodes
-    include ABI
+    include ABI::Offchain
+    include ABI::Onchain
     include Rewriters
 
     attr_reader :teal
