@@ -4,7 +4,41 @@ require 'json'
 
 module TEALrb
   module ABI
+    module Utils
+      def get_type(type, tuple_types = nil, length = 0)
+        case type
+        when :variable_array
+          "#{tuple_types}[]"
+        when :fixed_array
+          "#{tuple_types}[#{length}]"
+        when :tuple
+          types = tuple_types.map { get_type _1 }
+          "(#{types.join(', ')})"
+        else
+          type.to_s
+        end
+      end
+    end
+
     module Offchain
+      include Utils
+      # TODO
+      # encoding bools in tuple
+      # encode dynamic types in tuple
+
+      def encode_tuple(data, types)
+        val = { head: '', tail: '' }
+
+        raise Argument "Tuple type length mismatch: #{data.length} != #{types.length}" if data.length != types.length
+
+        types.each_with_index do |type, i|
+          data_item = data[i]
+          val[:head] += get_encoded(data_item, type)
+        end
+
+        val[:head] + val[:tail]
+      end
+
       def encode_fixed_array(data, type)
         val = ''
 
@@ -58,17 +92,16 @@ module TEALrb
           encode_fixed_array(data, tuple_types)
         elsif type == 'variable_array'
           encode_variable_array(data, tuple_types)
+        elsif type == 'tuple'
+          encode_tuple(data, tuple_types)
         end
       end
 
       def push_encoded(data, type, tuple_types = nil)
         @teal << "byte 0x#{get_encoded(data, type, tuple_types)}"
-        comment("#{type}(#{data})", inline: true)
+        type_string = get_type(type, tuple_types, (data.length if data.is_a? Array))
+        comment("#{type_string}: #{data}", inline: true)
       end
-
-      # TODO
-      # encoding bools in tuple
-      # encode_tuple(data, types)
     end
 
     module Onchain
