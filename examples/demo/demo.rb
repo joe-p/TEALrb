@@ -92,7 +92,7 @@ class Approval < TEALrb::Contract
       app_global_put('Second Word', 'Mom')
     elsif app_global_get('First Word') == 'Hello'
       byte 'Second Word'
-      byte 'World' 
+      byte 'World'
       app_global_put
     elsif app_global_get('First Word') == 'Howdy'
       app_global_put('Second Word', 'Partner')
