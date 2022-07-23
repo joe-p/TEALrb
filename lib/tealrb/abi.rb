@@ -10,7 +10,6 @@ module TEALrb
 
     # TODO
     # encoding bools in tuple
-    # encode_variable_array(data, type)
     # encode_tuple(data, types)
 
     def encode_fixed_array(data, type)
@@ -21,6 +20,11 @@ module TEALrb
       end
 
       val
+    end
+
+    def encode_variable_array(data, types)
+      # TODO: is uint16 the correct encoding for the length?
+      encode_uint(data.length, 16) + encode_fixed_array(data, types)
     end
 
     def encode_uint(data, bits)
@@ -60,6 +64,8 @@ module TEALrb
         encode_ufixed(data, bits, precision)
       elsif type == 'fixed_array'
         encode_fixed_array(data, tuple_types)
+      elsif type == 'variable_array'
+        encode_variable_array(data, tuple_types)
       end
     end
 
