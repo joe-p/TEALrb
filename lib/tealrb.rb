@@ -16,13 +16,18 @@ require_relative 'tealrb/cmd_line/teal2tealrb'
 module TEALrb
   class TEAL < Array
     class << self
-      attr_accessor :current
+      attr_writer :instance
+
+      def instance
+        raise 'TEALrb does not support multi-threading' if Thread.current != Thread.main
+
+        @instance
+      end
     end
 
-    @current = {}
-
-    def set_as_current
-      self.class.current[Thread.current] = self
+    def initialize(teal_array)
+      self.class.instance = self
+      super
     end
 
     def teal

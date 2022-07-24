@@ -152,7 +152,7 @@ DEBUG: Rewriting the following code:
   end
 
 DEBUG: Resulting TEALrb code:
-   IfBlock.new(@teal,  (x.call > y.call) ) do
+   IfBlock.new((x.call > y.call) ) do
       byte('x is bigger')
     end.else do
       byte('x is smaller')
@@ -165,7 +165,7 @@ y = -> { load 200; comment('y', inline: true) }
 store 201
 comment('x', inline: true)
 x = -> { load 201; comment('x', inline: true) }
-   IfBlock.new(@teal,  (x.call > y.call) ) do
+   IfBlock.new((x.call > y.call) ) do
       byte('x is bigger')
     end.else do
       byte('x is smaller')
