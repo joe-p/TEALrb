@@ -42,192 +42,192 @@ module TEALrb
     }.freeze
 
     def acct_params_get(field, _account = nil)
-      TEALrb::TEAL.current[Thread.current] << "acct_params_get #{field}"
+      TEAL.instance << "acct_params_get #{field}"
     end
 
     def add(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '+'
+      TEAL.instance << '+'
     end
 
     def addr(address)
-      TEALrb::TEAL.current[Thread.current] << "addr #{address}"
+      TEAL.instance << "addr #{address}"
     end
 
     def addw(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'addw'
+      TEAL.instance << 'addw'
     end
 
     def app_global_del(_key = nil)
-      TEALrb::TEAL.current[Thread.current] << 'app_global_del'
+      TEAL.instance << 'app_global_del'
     end
 
     def app_global_get(_key = nil)
-      TEALrb::TEAL.current[Thread.current] << 'app_global_get'
+      TEAL.instance << 'app_global_get'
     end
 
     def app_global_get_ex(_app = nil, _key = nil)
-      TEALrb::TEAL.current[Thread.current] << 'app_global_get_ex'
+      TEAL.instance << 'app_global_get_ex'
     end
 
     def app_global_put(_key = nil, _value = nil)
-      TEALrb::TEAL.current[Thread.current] << 'app_global_put'
+      TEAL.instance << 'app_global_put'
     end
 
     def app_local_del(_account = nil, _key = nil)
-      TEALrb::TEAL.current[Thread.current] << 'app_local_del'
+      TEAL.instance << 'app_local_del'
     end
 
     def app_local_get(_account = nil, _key = nil)
-      TEALrb::TEAL.current[Thread.current] << 'app_local_get'
+      TEAL.instance << 'app_local_get'
     end
 
     def app_local_get_ex(_account = nil, _application = nil, _key = nil)
-      TEALrb::TEAL.current[Thread.current] << 'app_local_get_ex'
+      TEAL.instance << 'app_local_get_ex'
     end
 
     def app_local_put(_account = nil, _key = nil, _value = nil)
-      TEALrb::TEAL.current[Thread.current] << 'app_local_put'
+      TEAL.instance << 'app_local_put'
     end
 
     def app_opted_in(_account = nil, _app = nil)
-      TEALrb::TEAL.current[Thread.current] << 'app_opted_in'
+      TEAL.instance << 'app_opted_in'
     end
 
     def app_params_get(field, _app_id = nil)
-      TEALrb::TEAL.current[Thread.current] << "app_params_get #{field}"
+      TEAL.instance << "app_params_get #{field}"
     end
 
     def approve
-      TEALrb::TEAL.current[Thread.current] << 'int 1'
-      TEALrb::TEAL.current[Thread.current] << 'return'
+      TEAL.instance << 'int 1'
+      TEAL.instance << 'return'
     end
 
     def arg(index)
-      TEALrb::TEAL.current[Thread.current] << "arg #{index}"
+      TEAL.instance << "arg #{index}"
     end
 
     def arg_0 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'arg_0'
+      TEAL.instance << 'arg_0'
     end
 
     def arg_1 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'arg_1'
+      TEAL.instance << 'arg_1'
     end
 
     def arg_2 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'arg_2'
+      TEAL.instance << 'arg_2'
     end
 
     def arg_3 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'arg_3'
+      TEAL.instance << 'arg_3'
     end
 
     def args(_index = nil)
-      TEALrb::TEAL.current[Thread.current] << 'args'
+      TEAL.instance << 'args'
     end
 
     def assert(_expr = nil)
-      TEALrb::TEAL.current[Thread.current] << 'assert'
+      TEAL.instance << 'assert'
     end
 
     def asset_holding_get(field, _account = nil, _asset = nil)
-      TEALrb::TEAL.current[Thread.current] << "asset_holding_get #{field}"
+      TEAL.instance << "asset_holding_get #{field}"
     end
 
     def asset_params_get(field, _asset = nil)
-      TEALrb::TEAL.current[Thread.current] << "asset_params_get #{field}"
+      TEAL.instance << "asset_params_get #{field}"
     end
 
     def b(target)
-      TEALrb::TEAL.current[Thread.current] << "#{__method__} #{target}"
+      TEAL.instance << "#{__method__} #{target}"
     end
 
     def base32(input)
-      TEALrb::TEAL.current[Thread.current] << "byte base32(#{input})"
+      TEAL.instance << "byte base32(#{input})"
     end
 
     def balance(_account = nil)
-      TEALrb::TEAL.current[Thread.current] << 'balance'
+      TEAL.instance << 'balance'
     end
 
     def big_endian_add(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b+'
+      TEAL.instance << 'b+'
     end
 
     def big_endian_divide(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b/'
+      TEAL.instance << 'b/'
     end
 
     def big_endian_equal(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b=='
+      TEAL.instance << 'b=='
     end
 
     def big_endian_less(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b<'
+      TEAL.instance << 'b<'
     end
 
     def big_endian_less_eq(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b<='
+      TEAL.instance << 'b<='
     end
 
     def big_endian_modulo(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b%'
+      TEAL.instance << 'b%'
     end
 
     def big_endian_more(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b>'
+      TEAL.instance << 'b>'
     end
 
     def big_endian_more_eq(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b>='
+      TEAL.instance << 'b>='
     end
 
     def big_endian_multiply(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b*'
+      TEAL.instance << 'b*'
     end
 
     def big_endian_not_equal(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b!='
+      TEAL.instance << 'b!='
     end
 
     def big_endian_subtract(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b-'
+      TEAL.instance << 'b-'
     end
 
     def bitlen(_input = nil)
-      TEALrb::TEAL.current[Thread.current] << 'bitlen'
+      TEAL.instance << 'bitlen'
     end
 
     def bitwise_and(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '&'
+      TEAL.instance << '&'
     end
 
     def bitwise_byte_invert(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b~'
+      TEAL.instance << 'b~'
     end
 
     def bitwise_invert(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '~'
+      TEAL.instance << '~'
     end
 
     def bitwise_or(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '|'
+      TEAL.instance << '|'
     end
 
     def bitwise_xor(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '^'
+      TEAL.instance << '^'
     end
 
     def bnz(target)
-      TEALrb::TEAL.current[Thread.current] << "#{__method__} #{target}"
+      TEAL.instance << "#{__method__} #{target}"
     end
 
     def bsqrt(_big_endian_uint = nil)
-      TEALrb::TEAL.current[Thread.current] << 'bsqrt'
+      TEAL.instance << 'bsqrt'
     end
 
     def btoi(_bytes = nil)
-      TEALrb::TEAL.current[Thread.current] << 'btoi'
+      TEAL.instance << 'btoi'
     end
 
     def byte(string, quote: true)
@@ -237,431 +237,431 @@ module TEALrb
                    "byte #{string}"
                  end
 
-      TEALrb::TEAL.current[Thread.current] << teal_str
+      TEAL.instance << teal_str
     end
 
     def bytec(index)
-      TEALrb::TEAL.current[Thread.current] << "bytec #{index}"
+      TEAL.instance << "bytec #{index}"
     end
 
     def bytec_0 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'bytec_0'
+      TEAL.instance << 'bytec_0'
     end
 
     def bytec_1 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'bytec_1'
+      TEAL.instance << 'bytec_1'
     end
 
     def bytec_2 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'bytec_2'
+      TEAL.instance << 'bytec_2'
     end
 
     def bytec_3 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'bytec_3'
+      TEAL.instance << 'bytec_3'
     end
 
     def bytecblock(*bytes)
-      TEALrb::TEAL.current[Thread.current] << "bytecblock #{bytes.join(' ')}"
+      TEAL.instance << "bytecblock #{bytes.join(' ')}"
     end
 
     def bz(target)
-      TEALrb::TEAL.current[Thread.current] << "#{__method__} #{target}"
+      TEAL.instance << "#{__method__} #{target}"
     end
 
     def bzero(_length = nil)
-      TEALrb::TEAL.current[Thread.current] << 'bzero'
+      TEAL.instance << 'bzero'
     end
 
     def callsub(name, *_args)
-      TEALrb::TEAL.current[Thread.current] << "callsub #{name}"
+      TEAL.instance << "callsub #{name}"
     end
 
     def concat(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'concat'
+      TEAL.instance << 'concat'
     end
 
     def cover(count)
-      TEALrb::TEAL.current[Thread.current] << "cover #{count}"
+      TEAL.instance << "cover #{count}"
     end
 
     def dig(index)
-      TEALrb::TEAL.current[Thread.current] << "dig #{index}"
+      TEAL.instance << "dig #{index}"
     end
 
     def divide(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '/'
+      TEAL.instance << '/'
     end
 
     def divmodw(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'divmodw'
+      TEAL.instance << 'divmodw'
     end
 
     def divw(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'divw'
+      TEAL.instance << 'divw'
     end
 
     def dup(_expr = nil)
-      TEALrb::TEAL.current[Thread.current] << 'dup'
+      TEAL.instance << 'dup'
     end
 
     def dup2(_expr_a = nil, _expr_b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'dup2'
+      TEAL.instance << 'dup2'
     end
 
     def ecdsa_pk_decompress(index, _input = nil)
-      TEALrb::TEAL.current[Thread.current] << "ecdsa_pk_decompress #{index}"
+      TEAL.instance << "ecdsa_pk_decompress #{index}"
     end
 
     def ecdsa_pk_recover(index, _input = nil)
-      TEALrb::TEAL.current[Thread.current] << "ecdsa_pk_recover #{index}"
+      TEAL.instance << "ecdsa_pk_recover #{index}"
     end
 
     def ecdsa_verify(index, _input = nil)
-      TEALrb::TEAL.current[Thread.current] << "ecdsa_verify #{index}"
+      TEAL.instance << "ecdsa_verify #{index}"
     end
 
     def ed25519verify(_input = nil)
-      TEALrb::TEAL.current[Thread.current] << 'ed25519verify'
+      TEAL.instance << 'ed25519verify'
     end
 
     def equal(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '=='
+      TEAL.instance << '=='
     end
 
     def err
-      TEALrb::TEAL.current[Thread.current] << 'err'
+      TEAL.instance << 'err'
     end
 
     def exp(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'exp'
+      TEAL.instance << 'exp'
     end
 
     def expw(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'expw'
+      TEAL.instance << 'expw'
     end
 
     def extract(start, length, _byte_array = nil)
-      TEALrb::TEAL.current[Thread.current] << "extract #{start} #{length}"
+      TEAL.instance << "extract #{start} #{length}"
     end
 
     def extract3(_byte_array = nil, _start = nil, _exclusive_end = nil)
-      TEALrb::TEAL.current[Thread.current] << 'extract3'
+      TEAL.instance << 'extract3'
     end
 
     def extract_uint16(_byte_array = nil, _start = nil)
-      TEALrb::TEAL.current[Thread.current] << 'extract_uint16'
+      TEAL.instance << 'extract_uint16'
     end
 
     def extract_uint32(_byte_array = nil, _start = nil)
-      TEALrb::TEAL.current[Thread.current] << 'extract_uint32'
+      TEAL.instance << 'extract_uint32'
     end
 
     def extract_uint64(_byte_array = nil, _start = nil)
-      TEALrb::TEAL.current[Thread.current] << 'extract_uint64'
+      TEAL.instance << 'extract_uint64'
     end
 
     def gaid(transaction_index)
-      TEALrb::TEAL.current[Thread.current] << "gaid #{transaction_index}"
+      TEAL.instance << "gaid #{transaction_index}"
     end
 
     def gaids(_transaction = nil)
-      TEALrb::TEAL.current[Thread.current] << 'gaids'
+      TEAL.instance << 'gaids'
     end
 
     def getbit(_input = nil, _bit_index = nil)
-      TEALrb::TEAL.current[Thread.current] << 'getbit'
+      TEAL.instance << 'getbit'
     end
 
     def getbyte(_input = nil, _byte_index = nil)
-      TEALrb::TEAL.current[Thread.current] << 'getbyte'
+      TEAL.instance << 'getbyte'
     end
 
     def gitxn(transaction_index, field)
-      TEALrb::TEAL.current[Thread.current] << "gitxn #{transaction_index} #{field}"
+      TEAL.instance << "gitxn #{transaction_index} #{field}"
     end
 
     def gitxna(transaction_index, field, index)
-      TEALrb::TEAL.current[Thread.current] << "gitxna #{transaction_index} #{field} #{index}"
+      TEAL.instance << "gitxna #{transaction_index} #{field} #{index}"
     end
 
     def gitxnas(transaction_index, field, _index = nil)
-      TEALrb::TEAL.current[Thread.current] << "gitxnas #{transaction_index} #{field}"
+      TEAL.instance << "gitxnas #{transaction_index} #{field}"
     end
 
     def gload(transaction_index, index)
-      TEALrb::TEAL.current[Thread.current] << "gload #{transaction_index} #{index}"
+      TEAL.instance << "gload #{transaction_index} #{index}"
     end
 
     def gloads(index, _transaction_index = nil)
-      TEALrb::TEAL.current[Thread.current] << "gloads #{index}"
+      TEAL.instance << "gloads #{index}"
     end
 
     def gloadss(_transaction = nil, _index = nil)
-      TEALrb::TEAL.current[Thread.current] << 'gloadss'
+      TEAL.instance << 'gloadss'
     end
 
     def global(field)
-      TEALrb::TEAL.current[Thread.current] << "global #{field}"
+      TEAL.instance << "global #{field}"
     end
 
     def greater(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '>'
+      TEAL.instance << '>'
     end
 
     def greater_eq(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '>='
+      TEAL.instance << '>='
     end
 
     def gtxn(index, field)
-      TEALrb::TEAL.current[Thread.current] << "gtxn #{index} #{field}"
+      TEAL.instance << "gtxn #{index} #{field}"
     end
 
     def gtxna(transaction_index, field, index)
-      TEALrb::TEAL.current[Thread.current] << "gtxna #{transaction_index} #{field} #{index}"
+      TEAL.instance << "gtxna #{transaction_index} #{field} #{index}"
     end
 
     def gtxns(field, _transaction_index = nil)
-      TEALrb::TEAL.current[Thread.current] << "gtxns #{field}"
+      TEAL.instance << "gtxns #{field}"
     end
 
     def gtxnsa(field, index, _transaction_index = nil)
-      TEALrb::TEAL.current[Thread.current] << "gtxnsa #{field} #{index}"
+      TEAL.instance << "gtxnsa #{field} #{index}"
     end
 
     def gtxnas(transaction_index, field, _index = nil)
-      TEALrb::TEAL.current[Thread.current] << "gtxnas #{transaction_index} #{field}"
+      TEAL.instance << "gtxnas #{transaction_index} #{field}"
     end
 
     def gtxnsas(field, _transaction_index = nil, _index = nil)
-      TEALrb::TEAL.current[Thread.current] << "gtxnsas #{field}"
+      TEAL.instance << "gtxnsas #{field}"
     end
 
     def int(integer)
-      TEALrb::TEAL.current[Thread.current] << "int #{integer}"
+      TEAL.instance << "int #{integer}"
     end
 
     def intc(index)
-      TEALrb::TEAL.current[Thread.current] << "intc #{index}"
+      TEAL.instance << "intc #{index}"
     end
 
     def intc_0 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'intc_0'
+      TEAL.instance << 'intc_0'
     end
 
     def intc_1 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'intc_1'
+      TEAL.instance << 'intc_1'
     end
 
     def intc_2 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'intc_2'
+      TEAL.instance << 'intc_2'
     end
 
     def intc_3 # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'intc_3'
+      TEAL.instance << 'intc_3'
     end
 
     def intcblock(*ints)
-      TEALrb::TEAL.current[Thread.current] << "intcblock #{ints.join(' ')}"
+      TEAL.instance << "intcblock #{ints.join(' ')}"
     end
 
     def itob(_bytes = nil)
-      TEALrb::TEAL.current[Thread.current] << 'itob'
+      TEAL.instance << 'itob'
     end
 
     def itxn_begin
-      TEALrb::TEAL.current[Thread.current] << 'itxn_begin'
+      TEAL.instance << 'itxn_begin'
     end
 
     def itxn_field(field, _value = nil)
-      TEALrb::TEAL.current[Thread.current] << "itxn_field #{field}"
+      TEAL.instance << "itxn_field #{field}"
     end
 
     def itxn_next
-      TEALrb::TEAL.current[Thread.current] << 'itxn_next'
+      TEAL.instance << 'itxn_next'
     end
 
     def itxn_submit
-      TEALrb::TEAL.current[Thread.current] << 'itxn_submit'
+      TEAL.instance << 'itxn_submit'
     end
 
     def itxna(field, index)
-      TEALrb::TEAL.current[Thread.current] << "itxna #{field} #{index}"
+      TEAL.instance << "itxna #{field} #{index}"
     end
 
     def itxnas(field, _index = nil)
-      TEALrb::TEAL.current[Thread.current] << "itxnas #{field}"
+      TEAL.instance << "itxnas #{field}"
     end
 
     def keccak256(_input = nil)
-      TEALrb::TEAL.current[Thread.current] << 'keccak256'
+      TEAL.instance << 'keccak256'
     end
 
     def label(label_name)
-      TEALrb::TEAL.current[Thread.current] << "#{label_name}:"
+      TEAL.instance << "#{label_name}:"
     end
 
     def len(_input = nil)
-      TEALrb::TEAL.current[Thread.current] << 'len'
+      TEAL.instance << 'len'
     end
 
     def less(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '<'
+      TEAL.instance << '<'
     end
 
     def less_eq(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '<='
+      TEAL.instance << '<='
     end
 
     def load(index)
-      TEALrb::TEAL.current[Thread.current] << "load #{index}"
+      TEAL.instance << "load #{index}"
     end
 
     def loads(_index = nil)
-      TEALrb::TEAL.current[Thread.current] << 'loads'
+      TEAL.instance << 'loads'
     end
 
     def log(_byte_array = nil)
-      TEALrb::TEAL.current[Thread.current] << 'log'
+      TEAL.instance << 'log'
     end
 
     def method_signature(signature)
-      TEALrb::TEAL.current[Thread.current] << %(method "#{signature}")
+      TEAL.instance << %(method "#{signature}")
     end
 
     def min_balance(_account = nil)
-      TEALrb::TEAL.current[Thread.current] << 'min_balance'
+      TEAL.instance << 'min_balance'
     end
 
     def modulo(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '%'
+      TEAL.instance << '%'
     end
 
     def multiply(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '*'
+      TEAL.instance << '*'
     end
 
     def mulw(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'mulw'
+      TEAL.instance << 'mulw'
     end
 
     def zero?(_expr = nil)
-      TEALrb::TEAL.current[Thread.current] << '!'
+      TEAL.instance << '!'
     end
 
     def not_equal(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '!='
+      TEAL.instance << '!='
     end
 
     def padded_bitwise_and(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b&'
+      TEAL.instance << 'b&'
     end
 
     def padded_bitwise_or(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b|'
+      TEAL.instance << 'b|'
     end
 
     def padded_bitwise_xor(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'b^'
+      TEAL.instance << 'b^'
     end
 
     def pop(_expr = nil)
-      TEALrb::TEAL.current[Thread.current] << 'pop'
+      TEAL.instance << 'pop'
     end
 
     def pushbytes(string)
-      TEALrb::TEAL.current[Thread.current] << "pushbytes \"#{string}\""
+      TEAL.instance << "pushbytes \"#{string}\""
     end
 
     def pushint(integer)
-      TEALrb::TEAL.current[Thread.current] << "pushint #{integer}"
+      TEAL.instance << "pushint #{integer}"
     end
 
     def retsub
-      TEALrb::TEAL.current[Thread.current] << 'retsub'
+      TEAL.instance << 'retsub'
     end
 
     def select(_expr_a = nil, _expr_b = nil, _expr_c = nil)
-      TEALrb::TEAL.current[Thread.current] << 'select'
+      TEAL.instance << 'select'
     end
 
     def setbit(_input = nil, _bit_index = nil, _value = nil)
-      TEALrb::TEAL.current[Thread.current] << 'setbit'
+      TEAL.instance << 'setbit'
     end
 
     def setbyte(_byte_array = nil, _byte_index = nil, _value = nil)
-      TEALrb::TEAL.current[Thread.current] << 'setbyte'
+      TEAL.instance << 'setbyte'
     end
 
     def sha256(_input = nil)
-      TEALrb::TEAL.current[Thread.current] << 'sha256'
+      TEAL.instance << 'sha256'
     end
 
     def sha512_256(_input = nil) # rubocop:disable Naming/VariableNumber
-      TEALrb::TEAL.current[Thread.current] << 'sha512_256'
+      TEAL.instance << 'sha512_256'
     end
 
     def shl(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'shl'
+      TEAL.instance << 'shl'
     end
 
     def shr(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'shr'
+      TEAL.instance << 'shr'
     end
 
     def sqrt(_integer = nil)
-      TEALrb::TEAL.current[Thread.current] << 'sqrt'
+      TEAL.instance << 'sqrt'
     end
 
     def store(index, _value = nil)
-      TEALrb::TEAL.current[Thread.current] << "store #{index}"
+      TEAL.instance << "store #{index}"
     end
 
     def stores(_index = nil, _value = nil)
-      TEALrb::TEAL.current[Thread.current] << 'stores'
+      TEAL.instance << 'stores'
     end
 
     def substring(start, exclusive_end, _byte_array = nil)
-      TEALrb::TEAL.current[Thread.current] << "substring #{start} #{exclusive_end}"
+      TEAL.instance << "substring #{start} #{exclusive_end}"
     end
 
     def substring3(_byte_array = nil, _start = nil, _exclusive_end = nil)
-      TEALrb::TEAL.current[Thread.current] << 'substring3'
+      TEAL.instance << 'substring3'
     end
 
     def subtract(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '-'
+      TEAL.instance << '-'
     end
 
     def swap(_expr_a = nil, _expr_b = nil)
-      TEALrb::TEAL.current[Thread.current] << 'swap'
+      TEAL.instance << 'swap'
     end
 
     def teal_return(_expr = nil)
-      TEALrb::TEAL.current[Thread.current] << 'return'
+      TEAL.instance << 'return'
     end
 
     def txn(field)
-      TEALrb::TEAL.current[Thread.current] << "txn #{field}"
+      TEAL.instance << "txn #{field}"
     end
 
     def txna(field, index)
-      TEALrb::TEAL.current[Thread.current] << "txna #{field} #{index}"
+      TEAL.instance << "txna #{field} #{index}"
     end
 
     def txnas(field, _index = nil)
-      TEALrb::TEAL.current[Thread.current] << "txnas #{field}"
+      TEAL.instance << "txnas #{field}"
     end
 
     def uncover(count)
-      TEALrb::TEAL.current[Thread.current] << "uncover #{count}"
+      TEAL.instance << "uncover #{count}"
     end
 
     def boolean_and(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '&&'
+      TEAL.instance << '&&'
     end
 
     def boolean_or(_a = nil, _b = nil)
-      TEALrb::TEAL.current[Thread.current] << '||'
+      TEAL.instance << '||'
     end
   end
 end

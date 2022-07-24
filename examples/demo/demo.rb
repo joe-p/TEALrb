@@ -159,6 +159,28 @@ class Approval < TEALrb::Contract
 
     int 1
     encode_as(Bool)
+    # // opcodes with "maybe" values
+
+    # // using ex_app_global_exists? and ex_app_global_value
+    if ex_app_global_exists?(1337, 'some_key')
+      ex_app_global_value(1337, 'some_key')
+    else
+      log 'some_key does not exist'
+    end
+
+    # // using app_global_get_ex and store/load
+    app_local_get_ex(1337, 'some_key')
+    store 0
+    store 1
+
+    exists = load 0
+    value = load 1
+
+    if exists
+      value
+    else
+      log 'some_key does not exist'
+    end
   end
 end
 

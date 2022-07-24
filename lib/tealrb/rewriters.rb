@@ -66,8 +66,7 @@ module TEALrb
       end
 
       def on_ivar(node)
-        insert_after(node.loc.name, '.call') unless ['@teal', '@teal_methods', '@subroutines',
-                                                     '@scratch'].include? node.source
+        insert_after(node.loc.name, '.call') unless ['@teal_methods', '@subroutines', '@scratch'].include? node.source
         super
       end
     end
@@ -162,7 +161,7 @@ module TEALrb
       def on_if(node)
         case node.loc.keyword.source
         when 'if'
-          replace(node.loc.keyword, 'IfBlock.new(@teal, ')
+          replace(node.loc.keyword, 'IfBlock.new(')
         when 'elsif'
           replace(node.loc.keyword, 'end.elsif(')
         end

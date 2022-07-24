@@ -7,6 +7,7 @@ module TEALrb
     include ABI
     include ABI::Types
     include Rewriters
+    include MaybeOps
 
     attr_reader :teal
 
@@ -70,7 +71,7 @@ module TEALrb
     # sets the `#pragma version`, defines teal methods, and defines subroutines
     def initialize
       @teal = TEAL.new ["#pragma version #{self.class.version}"]
-      @scratch = Scratch.new(@teal)
+      @scratch = Scratch.new
 
       self.class.subroutines.each_key do |name|
         define_singleton_method(name) do |*_args|
@@ -97,8 +98,6 @@ module TEALrb
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
     # @return [nil]
     def define_teal_method(name, definition)
-      @teal.set_as_current
-
       new_source = generate_method_source(name, definition)
 
       define_singleton_method(name) do |*_args|
@@ -113,13 +112,11 @@ module TEALrb
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
     # @return [nil]
     def define_subroutine(name, definition)
-      @teal.set_as_current
-
       define_singleton_method(name) do |*_args|
         callsub(name)
       end
 
-      @teal << 'b main' unless @teal.include? 'b main'
+      TEAL.instance << 'b main' unless TEAL.instance.include? 'b main'
 
       label(name) # add teal label
 
@@ -141,17 +138,17 @@ module TEALrb
     def comment(content, inline: false)
       content = " #{content}" unless content[0] == ' '
       if inline
-        last_line = @teal.pop
-        @teal << "#{last_line} //#{content}"
+        last_line = TEAL.instance.pop
+        TEAL.instance << "#{last_line} //#{content}"
       else
-        @teal << "//#{content}"
+        TEAL.instance << "//#{content}"
       end
     end
 
     # inserts a string into TEAL source
     # @param string [String] the string to insert
     def placeholder(string)
-      @teal << string
+      TEAL.instance << string
     end
 
     # the hash of the abi description
@@ -163,15 +160,13 @@ module TEALrb
     # @param string [String] string to transpile
     # @return [nil]
     def compile_string(string)
-      @teal.set_as_current
       eval_tealrb(rewrite(string), debug_context: 'compile_string')
       nil
     end
 
     # transpiles #main
     def compile
-      @teal.set_as_current
-      @teal << 'main:' if @teal.include? 'b main'
+      TEAL.instance << 'main:' if TEAL.instance.include? 'b main'
       eval_tealrb(rewrite(method(:main).source, method_rewriter: true), debug_context: 'main')
     end
 
@@ -228,7 +223,7 @@ module TEALrb
     end
 
     def eval_tealrb(s, debug_context:)
-      pre_teal = Array.new @teal
+      pre_teal = Array.new TEAL.instance
 
       if self.class.debug
         puts "DEBUG: Evaluating the following code (#{debug_context}):"
@@ -240,7 +235,7 @@ module TEALrb
 
       if self.class.debug
         puts "DEBUG: Resulting TEAL (#{debug_context}):"
-        puts Array.new(@teal) - pre_teal
+        puts Array.new(TEAL.instance) - pre_teal
         puts ''
       end
     rescue SyntaxError, StandardError => e
