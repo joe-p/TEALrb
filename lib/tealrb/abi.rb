@@ -95,9 +95,21 @@ module TEALrb
 
         private
 
-        # TODO
-        #   - Encode bool
-        #   - Encode dynamic types
+        # TODO: Encode bool
+        # If Ti is bool:
+        #   Let after be the largest integer such that all T(i+j) are bool, for 0 <= j <= after.
+        #   Let before be the largest integer such that all T(i-j) are bool, for 0 <= j <= before.
+        #   If before % 8 == 0:
+        #     head(x[i]) = enc(x[i]) | (enc(x[i+1]) >> 1) | ... | (enc(x[i + min(after,7)]) >> min(after,7)), where >> is bitwise right shift which pads with 0, | is bitwise or, and min(x,y) returns the minimum value of the integers x and y. 
+        #     tail(x[i]) = "" (the empty string)
+        #   Otherwise:
+        #     head(x[i]) = "" (the empty string)
+        #     tail(x[i]) = "" (the empty string)
+
+        # TODO: Encode dynamic types
+        # head(x[i]) = enc(len( head(x[1]) ... head(x[N]) tail(x[1]) ... tail(x[i-1]) ))
+        # tail(x[i]) = enc(x[i])
+
         def encode
           val = { head: '', tail: '' }
 
