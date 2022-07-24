@@ -2,9 +2,14 @@
 
 module TEALrb
   class Scratch
+    class << self
+      attr_accessor :instance
+    end
+
     def initialize
       @open_slots = (0..256).to_a
       @named_slots = {}
+      self.class.instance = self
     end
 
     def [](key)
