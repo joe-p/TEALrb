@@ -212,47 +212,47 @@ byte 0x00
 if4_end:
 int 24
 itob
-store 8 // Uint72_input_1658704019
-load 8 // Uint72_input_1658704019
+store 8 // Uint72_input
+load 8 // Uint72_input
 len
 int 9
 <
 bz if5_else0
 byte 0x000000000000000000
-load 8 // Uint72_input_1658704019
+load 8 // Uint72_input
 b|
 b if5_end
 if5_else0:
-load 8 // Uint72_input_1658704019
+load 8 // Uint72_input
 len
-store 9 // Uint72_input_len_1658704019
-load 8 // Uint72_input_1658704019
-load 9 // Uint72_input_len_1658704019
+store 9 // Uint72_input_len
+load 8 // Uint72_input
+load 9 // Uint72_input_len
 int 9
 -
-load 9 // Uint72_input_len_1658704019
+load 9 // Uint72_input_len
 substring3
 if5_end:
 int 24
 itob
-store 10 // Uint16_input_1658704019
-load 10 // Uint16_input_1658704019
+store 10 // Uint16_input
+load 10 // Uint16_input
 len
 int 2
 <
 bz if6_else0
 byte 0x0000
-load 10 // Uint16_input_1658704019
+load 10 // Uint16_input
 b|
 b if6_end
 if6_else0:
-load 10 // Uint16_input_1658704019
+load 10 // Uint16_input
 len
-store 11 // Uint16_input_len_1658704019
-load 10 // Uint16_input_1658704019
-load 11 // Uint16_input_len_1658704019
+store 11 // Uint16_input_len
+load 10 // Uint16_input
+load 11 // Uint16_input_len
 int 2
 -
-load 11 // Uint16_input_len_1658704019
+load 11 // Uint16_input_len
 substring3
 if6_end:

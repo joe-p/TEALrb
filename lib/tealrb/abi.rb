@@ -72,8 +72,8 @@ module TEALrb
           bytes = bits / 8
           empty_bytes = "0x#{'00' * bytes}"
 
-          input_key = "Uint#{bits}_input_#{Time.now.to_i}"
-          len_key = "Uint#{bits}_input_len_#{Time.now.to_i}"
+          input_key = "Uint#{bits}_input"
+          len_key = "Uint#{bits}_input_len"
 
           scratch.store(input_key)
 
