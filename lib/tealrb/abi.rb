@@ -9,7 +9,7 @@ module TEALrb
     end
 
     def abi_push(data)
-      @teal << "byte 0x#{data.encoded}"
+      TEAL.instance << "byte 0x#{data.encoded}"
       data_string = data.value
       data_string = data.value.map(&:value) if data.value.is_a? Array
 
@@ -40,8 +40,8 @@ module TEALrb
       class Bool < ABIType
         extend TEALrb::Opcodes
         def self.encode_from_stack
-          TEALrb::TEAL.current[Thread.current] << '// Encode bool from stack'
-          IfBlock.new(TEALrb::TEAL.current[Thread.current], zero?) do
+          TEALrb::TEAL.instance << '// Encode bool from stack'
+          IfBlock.new(zero?) do
             byte '0x80', quote: false
           end.else do # rubocop:disable Style/MultilineBlockChain
             byte '0x00', quote: false
