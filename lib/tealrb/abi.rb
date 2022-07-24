@@ -100,10 +100,11 @@ module TEALrb
           enc = @value.to_s(16)
 
           bytes = @bits / 8
+          byte_len = bytes * 2
 
-          raise ArgumentError, "#{data} is not a valid #{@bits}-bit uint" if enc.length > bytes
+          raise ArgumentError, "#{data} is not a valid #{@bits}-bit uint" if enc.length > byte_len
 
-          enc.rjust(bytes, '0')
+          enc.rjust(byte_len, '0')
         end
       end
 

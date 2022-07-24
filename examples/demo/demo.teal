@@ -195,11 +195,11 @@ log
 if3_end:
 // Off-chain encoding
 byte 0x80 // bool: true
-byte 0x0018 // uint32: 24
+byte 0x00000018 // uint32: 24
 byte 0x7b // ufixed16x2: 1.23
-byte 0x027b9c // ufixed16x2[2]: [1.23, 1.56]
+byte 0x00027b9c // ufixed16x2[2]: [1.23, 1.56]
 byte 0x7b9c // ufixed16x2[]: [1.23, 1.56]
-byte 0x8000187b // (bool, uint32, ufixed16x2): [true, 24, 1.23]
+byte 0x80000000187b // (bool, uint32, ufixed16x2): [true, 24, 1.23]
 // On-chain encoding
 int 1
 // Encode bool from stack
@@ -212,47 +212,47 @@ byte 0x00
 if4_end:
 int 24
 itob
-store 8 // Uint72_input_1658695869
-load 8 // Uint72_input_1658695869
+store 8 // Uint72_input_1658704019
+load 8 // Uint72_input_1658704019
 len
 int 9
 <
 bz if5_else0
 byte 0x000000000000000000
-load 8 // Uint72_input_1658695869
+load 8 // Uint72_input_1658704019
 b|
 b if5_end
 if5_else0:
-load 8 // Uint72_input_1658695869
+load 8 // Uint72_input_1658704019
 len
-store 9 // Uint72_input_len_1658695869
-load 8 // Uint72_input_1658695869
-load 9 // Uint72_input_len_1658695869
+store 9 // Uint72_input_len_1658704019
+load 8 // Uint72_input_1658704019
+load 9 // Uint72_input_len_1658704019
 int 9
 -
-load 9 // Uint72_input_len_1658695869
+load 9 // Uint72_input_len_1658704019
 substring3
 if5_end:
 int 24
 itob
-store 10 // Uint16_input_1658695869
-load 10 // Uint16_input_1658695869
+store 10 // Uint16_input_1658704019
+load 10 // Uint16_input_1658704019
 len
 int 2
 <
 bz if6_else0
 byte 0x0000
-load 10 // Uint16_input_1658695869
+load 10 // Uint16_input_1658704019
 b|
 b if6_end
 if6_else0:
-load 10 // Uint16_input_1658695869
+load 10 // Uint16_input_1658704019
 len
-store 11 // Uint16_input_len_1658695869
-load 10 // Uint16_input_1658695869
-load 11 // Uint16_input_len_1658695869
+store 11 // Uint16_input_len_1658704019
+load 10 // Uint16_input_1658704019
+load 11 // Uint16_input_len_1658704019
 int 2
 -
-load 11 // Uint16_input_len_1658695869
+load 11 // Uint16_input_len_1658704019
 substring3
 if6_end:
