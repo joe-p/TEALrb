@@ -180,13 +180,12 @@ module TEALrb
       end
 
       def initialize(*args)
-        self.class.while_count = {}
-        self.class.while_count[Thread.current] ||= 0
+        self.class.while_count ||= 0
         super
       end
 
       def while_count
-        self.class.while_count[Thread.current]
+        self.class.while_count
       end
 
       def on_while(node)
