@@ -21,6 +21,7 @@ module TEALrb
         attr_accessor :type_string, :value, :encoded
 
         def initialize(value)
+          @type_string ||= self.class.to_s.downcase.split('::').last # rubocop:disable Lint/DisjunctiveAssignmentInConstructor
           @value = value
           @encoded = encode
         end
@@ -46,9 +47,8 @@ module TEALrb
       end
 
       class Uint < ABIType
-        def initialize(bits:, value:)
-          @type_string = "uint#{bits}"
-          @bits = bits
+        def initialize(value)
+          @bits = self.class.to_s[/\d+/].to_i
           super(value)
         end
 
@@ -66,10 +66,9 @@ module TEALrb
       end
 
       class Ufixed < ABIType
-        def initialize(bits:, precision:, value:)
-          @type_string = "ufixed#{bits}x#{precision}"
-          @bits = bits
-          @precision = precision
+        def initialize(value)
+          @bits = self.class.to_s[/\d+(?=x)/].to_i
+          @precision = self.class.to_s[/(?<=x)\d+/].to_i
           super(value)
         end
 
@@ -86,6 +85,16 @@ module TEALrb
         end
       end
 
+      (8..512).each do |n|
+        next unless (n % 8).zero?
+
+        Object.const_set("Uint#{n}", Class.new(Uint))
+
+        (1..160).each do |m|
+          Object.const_set("Ufixed#{n}x#{m}", Class.new(Ufixed))
+        end
+      end
+
       class Tuple < ABIType
         def initialize(data)
           @type_string ||= "(#{data.map(&:type_string).join(', ')})" # rubocop:disable Lint/DisjunctiveAssignmentInConstructor
@@ -95,16 +104,18 @@ module TEALrb
 
         private
 
+        # rubocop:disable Layout/LineLength
         # TODO: Encode bool
         # If Ti is bool:
         #   Let after be the largest integer such that all T(i+j) are bool, for 0 <= j <= after.
         #   Let before be the largest integer such that all T(i-j) are bool, for 0 <= j <= before.
         #   If before % 8 == 0:
-        #     head(x[i]) = enc(x[i]) | (enc(x[i+1]) >> 1) | ... | (enc(x[i + min(after,7)]) >> min(after,7)), where >> is bitwise right shift which pads with 0, | is bitwise or, and min(x,y) returns the minimum value of the integers x and y. 
+        #     head(x[i]) = enc(x[i]) | (enc(x[i+1]) >> 1) | ... | (enc(x[i + min(after,7)]) >> min(after,7)), where >> is bitwise right shift which pads with 0, | is bitwise or, and min(x,y) returns the minimum value of the integers x and y.
         #     tail(x[i]) = "" (the empty string)
         #   Otherwise:
         #     head(x[i]) = "" (the empty string)
         #     tail(x[i]) = "" (the empty string)
+        # rubocop:enable Layout/LineLength
 
         # TODO: Encode dynamic types
         # head(x[i]) = enc(len( head(x[1]) ... head(x[N]) tail(x[1]) ... tail(x[i-1]) ))
@@ -113,7 +124,7 @@ module TEALrb
         def encode
           val = { head: '', tail: '' }
 
-          val[:head] += Uint.new(bits: 16, value: @value.length).encoded if instance_of? FixedArray
+          val[:head] += Uint16.new(@value.length).encoded if instance_of? FixedArray
 
           @value.each do |data|
             val[:head] += data.encoded

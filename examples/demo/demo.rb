@@ -151,22 +151,11 @@ class Approval < TEALrb::Contract
     end
 
     abi_push Bool.new(true)
-    abi_push Uint.new(bits: 32, value: 24)
-    abi_push Ufixed.new(bits: 16, precision: 2, value: 1.23)
-    abi_push FixedArray.new([
-                              Ufixed.new(bits: 16, precision: 2, value: 1.23),
-                              Ufixed.new(bits: 16, precision: 2, value: 1.56)
-                            ])
-    abi_push VariableArray.new([
-                                 Ufixed.new(bits: 16, precision: 2, value: 1.23),
-                                 Ufixed.new(bits: 16, precision: 2, value: 1.56)
-                               ])
-
-    abi_push Tuple.new([
-                         Bool.new(true),
-                         Uint.new(bits: 32, value: 24),
-                         Ufixed.new(bits: 16, precision: 2, value: 1.23)
-                       ])
+    abi_push Uint32.new(24)
+    abi_push Ufixed16x2.new(1.23)
+    abi_push FixedArray.new([Ufixed16x2.new(1.23), Ufixed16x2.new(1.56)])
+    abi_push VariableArray.new([Ufixed16x2.new(1.23), Ufixed16x2.new(1.56)])
+    abi_push Tuple.new([Bool.new(true), Uint32.new(24), Ufixed16x2.new(1.23)])
   end
 end
 

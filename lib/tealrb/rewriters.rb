@@ -112,8 +112,7 @@ module TEALrb
 
       def on_const(node)
         @skips = 1 if %w[Txna Gtxn AppArgs].include? node.loc.name.source
-        @skips = 2 if %w[Uint].include? node.loc.name.source
-        @skips = 3 if %w[Ufixed].include? node.loc.name.source
+        @skips = 1 if node.loc.name.source.include?('Uint') || node.loc.name.source.include?('Ufixed')
         super
       end
 
