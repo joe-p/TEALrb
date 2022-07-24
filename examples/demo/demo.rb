@@ -150,12 +150,23 @@ class Approval < TEALrb::Contract
       Global['counter'] = Global['counter'] + 1
     end
 
-    push_encoded(true, :bool)
-    push_encoded(24, :uint32)
-    push_encoded(1.23, :ufixed16x2)
-    push_encoded([1.23, 1.56], :fixed_array, :ufixed16x2)
-    push_encoded([1.23, 1.56], :variable_array, :ufixed16x2)
-    push_encoded([true, 24, 1.23], :tuple, %i[bool uint32 ufixed16x2])
+    abi_push Bool.new(true)
+    abi_push Uint.new(bits: 32, value: 24)
+    abi_push Ufixed.new(bits: 16, precision: 2, value: 1.23)
+    abi_push FixedArray.new([
+                              Ufixed.new(bits: 16, precision: 2, value: 1.23),
+                              Ufixed.new(bits: 16, precision: 2, value: 1.56)
+                            ])
+    abi_push VariableArray.new([
+                                 Ufixed.new(bits: 16, precision: 2, value: 1.23),
+                                 Ufixed.new(bits: 16, precision: 2, value: 1.56)
+                               ])
+
+    abi_push Tuple.new([
+                         Bool.new(true),
+                         Uint.new(bits: 32, value: 24),
+                         Ufixed.new(bits: 16, precision: 2, value: 1.23)
+                       ])
   end
 end
 

@@ -165,6 +165,6 @@ end_while0:
 byte 0x80 // bool: true
 byte 0x0018 // uint32: 24
 byte 0x7b // ufixed16x2: 1.23
-byte 0x7b9c // ufixed16x2[2]: [1.23, 1.56]
-byte 0x027b9c // ufixed16x2[]: [1.23, 1.56]
+byte 0x027b9c // ufixed16x2[2]: [1.23, 1.56]
+byte 0x7b9c // ufixed16x2[]: [1.23, 1.56]
 byte 0x8000187b // (bool, uint32, ufixed16x2): [true, 24, 1.23]

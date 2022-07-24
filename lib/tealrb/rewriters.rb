@@ -112,6 +112,8 @@ module TEALrb
 
       def on_const(node)
         @skips = 1 if %w[Txna Gtxn AppArgs].include? node.loc.name.source
+        @skips = 2 if %w[Uint].include? node.loc.name.source
+        @skips = 3 if %w[Ufixed].include? node.loc.name.source
         super
       end
 
@@ -132,8 +134,6 @@ module TEALrb
           end
         elsif %i[comment placeholder rb].include? meth_name
           @skips = node.children.last.children.size
-        elsif meth_name == :push_encoded
-          @skips = 2
         end
         super
       end

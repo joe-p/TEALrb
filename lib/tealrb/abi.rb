@@ -4,109 +4,133 @@ require 'json'
 
 module TEALrb
   module ABI
-    module Utils
-      def get_type(type, tuple_types = nil, length = 0)
-        case type
-        when :variable_array
-          "#{tuple_types}[]"
-        when :fixed_array
-          "#{tuple_types}[#{length}]"
-        when :tuple
-          types = tuple_types.map { get_type _1 }
-          "(#{types.join(', ')})"
-        else
-          type.to_s
-        end
-      end
+    def abi_return(data)
+      log(concat('151f7c75', data.teal).teal)
     end
 
-    module Offchain
-      include Utils
-      # TODO
-      # encoding bools in tuple
-      # encode dynamic types in tuple
+    def abi_push(data)
+      @teal << "byte 0x#{data.encoded}"
+      data_string = data.value
+      data_string = data.value.map(&:value) if data.value.is_a? Array
 
-      def encode_tuple(data, types)
-        val = { head: '', tail: '' }
-
-        raise Argument "Tuple type length mismatch: #{data.length} != #{types.length}" if data.length != types.length
-
-        types.each_with_index do |type, i|
-          data_item = data[i]
-          val[:head] += get_encoded(data_item, type)
-        end
-
-        val[:head] + val[:tail]
-      end
-
-      def encode_fixed_array(data, type)
-        val = ''
-
-        data.each do |x|
-          val += get_encoded(x, type)
-        end
-
-        val
-      end
-
-      def encode_variable_array(data, types)
-        encode_uint(data.length, 16) + encode_fixed_array(data, types)
-      end
-
-      def encode_uint(data, bits)
-        data_input = data
-        data = data.to_i
-
-        raise ArgumentError, "#{data_input} is not an integer" if data_input != data
-
-        val = data.to_s(16)
-
-        bytes = bits / 8
-
-        raise ArgumentError, "#{data} is not a valid #{bits}-bit uint" if val.length > bytes
-
-        val.rjust(bytes, '0')
-      end
-
-      def encode_ufixed(data, bits, precision)
-        encode_uint(data * (10**precision), bits)
-      end
-
-      def encode_bool(data)
-        (data ? 128 : 0).to_s(16)
-      end
-
-      def get_encoded(data, type, tuple_types = nil)
-        type = type.to_s
-
-        if type == 'bool'
-          encode_bool(data)
-        elsif type[/^uint/]
-          bits = type[/(?<=uint)\d+/].to_i
-          encode_uint(data, bits)
-        elsif type[/^ufixed/]
-          bits = type[/(?<=ufixed)\d+/].to_i
-          precision = type[/(?<=x)\d+/].to_i
-          encode_ufixed(data, bits, precision)
-        elsif type == 'fixed_array'
-          encode_fixed_array(data, tuple_types)
-        elsif type == 'variable_array'
-          encode_variable_array(data, tuple_types)
-        elsif type == 'tuple'
-          encode_tuple(data, tuple_types)
-        end
-      end
-
-      def push_encoded(data, type, tuple_types = nil)
-        @teal << "byte 0x#{get_encoded(data, type, tuple_types)}"
-        type_string = get_type(type, tuple_types, (data.length if data.is_a? Array))
-        comment("#{type_string}: #{data}", inline: true)
-      end
+      comment("#{data.type_string}: #{data_string}", inline: true)
     end
 
-    module Onchain
-      def abi_return(data)
-        log(concat('151f7c75', data.teal).teal)
+    module Types
+      class ABIType
+        attr_accessor :type_string, :value, :encoded
+
+        def initialize(value)
+          @value = value
+          @encoded = encode
+        end
+
+        private
+
+        def encode
+          @value
+        end
+      end
+
+      class Bool < ABIType
+        def initialize(value)
+          @type_string = 'bool'
+          super(value)
+        end
+
+        private
+
+        def encode
+          (@value ? 128 : 0).to_s(16)
+        end
+      end
+
+      class Uint < ABIType
+        def initialize(bits:, value:)
+          @type_string = "uint#{bits}"
+          @bits = bits
+          super(value)
+        end
+
+        private
+
+        def encode
+          enc = @value.to_s(16)
+
+          bytes = @bits / 8
+
+          raise ArgumentError, "#{data} is not a valid #{@bits}-bit uint" if enc.length > bytes
+
+          enc.rjust(bytes, '0')
+        end
+      end
+
+      class Ufixed < ABIType
+        def initialize(bits:, precision:, value:)
+          @type_string = "ufixed#{bits}x#{precision}"
+          @bits = bits
+          @precision = precision
+          super(value)
+        end
+
+        private
+
+        def encode
+          enc = (@value * (10**@precision)).to_i.to_s(16)
+
+          bytes = @bits / 8
+
+          raise ArgumentError, "#{data} is not a valid #{@bits}-bit uint" if enc.length > bytes
+
+          enc.rjust(bytes, '0')
+        end
+      end
+
+      class Tuple < ABIType
+        def initialize(data)
+          @type_string ||= "(#{data.map(&:type_string).join(', ')})" # rubocop:disable Lint/DisjunctiveAssignmentInConstructor
+
+          super(data)
+        end
+
+        private
+
+        # TODO
+        #   - Encode bool
+        #   - Encode dynamic types
+        def encode
+          val = { head: '', tail: '' }
+
+          val[:head] += Uint.new(bits: 16, value: @value.length).encoded if instance_of? FixedArray
+
+          @value.each do |data|
+            val[:head] += data.encoded
+          end
+
+          val[:head] + val[:tail]
+        end
+      end
+
+      class FixedArray < Tuple
+        def initialize(data)
+          types = data.map(&:type_string).uniq
+
+          raise 'FixedArray can only have one type' if types.size > 1
+
+          @type_string = "#{types.first}[#{data.size}]"
+          super
+        end
+      end
+
+      class VariableArray < Tuple
+        def initialize(data)
+          types = data.map(&:type_string).uniq
+
+          raise 'VariableArray can only have one type' if types.size > 1
+
+          @type_string = "#{types.first}[]"
+          super
+        end
       end
     end
 
