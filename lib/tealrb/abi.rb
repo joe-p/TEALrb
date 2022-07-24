@@ -16,6 +16,10 @@ module TEALrb
       comment("#{data.type_string}: #{data_string}", inline: true)
     end
 
+    def encode_as(type)
+      type.encode_from_stack
+    end
+
     module Types
       class ABIType
         attr_accessor :type_string, :value, :encoded
@@ -34,6 +38,16 @@ module TEALrb
       end
 
       class Bool < ABIType
+        extend TEALrb::Opcodes
+        def self.encode_from_stack
+          TEALrb::TEAL.current[Thread.current] << '// Encode bool from stack'
+          IfBlock.new(TEALrb::TEAL.current[Thread.current], zero?) do
+            byte '0x80', quote: false
+          end.else do # rubocop:disable Style/MultilineBlockChain
+            byte '0x00', quote: false
+          end
+        end
+
         def initialize(value)
           @type_string = 'bool'
           super(value)

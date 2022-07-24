@@ -156,6 +156,9 @@ class Approval < TEALrb::Contract
     abi_push FixedArray.new([Ufixed16x2.new(1.23), Ufixed16x2.new(1.56)])
     abi_push VariableArray.new([Ufixed16x2.new(1.23), Ufixed16x2.new(1.56)])
     abi_push Tuple.new([Bool.new(true), Uint32.new(24), Ufixed16x2.new(1.23)])
+
+    int 1
+    encode_as(Bool)
   end
 end
 
