@@ -61,6 +61,34 @@ module TEALrb
       end
 
       class Uint < ABIType
+        extend Opcodes
+
+        def self.encode_from_stack
+          # Assume on the stack is a byte array for the integer
+          scratch = TEALrb::Scratch.instance
+
+          bits = to_s[/\d+/].to_i
+
+          bytes = bits / 8
+          empty_bytes = "0x#{'00' * bytes}"
+
+          input_key = "Uint#{bits}_input_#{Time.now.to_i}"
+          len_key = "Uint#{bits}_input_len_#{Time.now.to_i}"
+
+          scratch.store(input_key)
+
+          IfBlock.new(len(scratch[input_key]) < int(bytes)) do
+            byte empty_bytes, quote: false
+            padded_bitwise_or(scratch[input_key])
+          end.else do # rubocop:disable Style/MultilineBlockChain
+            scratch[len_key] = len(scratch[input_key])
+            substring3(scratch[input_key], scratch[len_key] - int(bytes), scratch[len_key])
+          end
+
+          scratch.delete(input_key)
+          scratch.delete(len_key)
+        end
+
         def initialize(value)
           @bits = self.class.to_s[/\d+/].to_i
           super(value)

@@ -183,6 +183,14 @@ class Approval < TEALrb::Contract
     # // On-chain encoding
     int 1
     encode_as(Bool)
+
+    int 24
+    itob
+    encode_as(Uint72)
+
+    int 24
+    itob
+    encode_as(Uint16)
   end
 end
 
