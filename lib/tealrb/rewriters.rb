@@ -124,6 +124,11 @@ module TEALrb
       def on_send(node)
         meth_name = node.loc.selector.source.to_sym
 
+        if meth_name == :byte && node.source[/byte 0x\h+/]
+          hex = node.source[/(?<=byte )0x\h+/]
+          replace(node.loc.expression, "byte '#{hex}', quote: false")
+        end
+
         if OPCODE_METHODS.include? meth_name
           if meth_name[/(byte|int)cblock/]
             @skips = node.children.size - 2

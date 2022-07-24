@@ -230,8 +230,14 @@ module TEALrb
       TEALrb::TEAL.current[Thread.current] << 'btoi'
     end
 
-    def byte(string)
-      TEALrb::TEAL.current[Thread.current] << "byte \"#{string}\""
+    def byte(string, quote: true)
+      teal_str = if quote
+                   "byte \"#{string}\""
+                 else
+                   "byte #{string}"
+                 end
+
+      TEALrb::TEAL.current[Thread.current] << teal_str
     end
 
     def bytec(index)
