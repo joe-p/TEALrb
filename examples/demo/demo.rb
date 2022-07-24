@@ -149,16 +149,6 @@ class Approval < TEALrb::Contract
     while Global['counter'] < 3
       Global['counter'] = Global['counter'] + 1
     end
-
-    abi_push Bool.new(true)
-    abi_push Uint32.new(24)
-    abi_push Ufixed16x2.new(1.23)
-    abi_push FixedArray.new([Ufixed16x2.new(1.23), Ufixed16x2.new(1.56)])
-    abi_push VariableArray.new([Ufixed16x2.new(1.23), Ufixed16x2.new(1.56)])
-    abi_push Tuple.new([Bool.new(true), Uint32.new(24), Ufixed16x2.new(1.23)])
-
-    int 1
-    encode_as(Bool)
     # // opcodes with "maybe" values
 
     # // using ex_app_global_exists? and ex_app_global_value
@@ -181,6 +171,18 @@ class Approval < TEALrb::Contract
     else
       log 'some_key does not exist'
     end
+
+    # // Off-chain encoding
+    abi_push Bool.new(true)
+    abi_push Uint32.new(24)
+    abi_push Ufixed16x2.new(1.23)
+    abi_push FixedArray.new([Ufixed16x2.new(1.23), Ufixed16x2.new(1.56)])
+    abi_push VariableArray.new([Ufixed16x2.new(1.23), Ufixed16x2.new(1.56)])
+    abi_push Tuple.new([Bool.new(true), Uint32.new(24), Ufixed16x2.new(1.23)])
+
+    # // On-chain encoding
+    int 1
+    encode_as(Bool)
   end
 end
 

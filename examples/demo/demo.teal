@@ -162,21 +162,6 @@ int 1
 app_global_put
 b while0
 end_while0:
-byte 0x80 // bool: true
-byte 0x0018 // uint32: 24
-byte 0x7b // ufixed16x2: 1.23
-byte 0x027b9c // ufixed16x2[2]: [1.23, 1.56]
-byte 0x7b9c // ufixed16x2[]: [1.23, 1.56]
-byte 0x8000187b // (bool, uint32, ufixed16x2): [true, 24, 1.23]
-int 1
-// Encode bool from stack
-!
-bz if2_else0
-byte 0x80
-b if2_end
-if2_else0:
-byte 0x00
-if2_end:
 // opcodes with "maybe" values
 // using ex_app_global_exists? and ex_app_global_value
 int 1337
@@ -208,3 +193,20 @@ if3_else0:
 byte "some_key does not exist"
 log
 if3_end:
+// Off-chain encoding
+byte 0x80 // bool: true
+byte 0x0018 // uint32: 24
+byte 0x7b // ufixed16x2: 1.23
+byte 0x027b9c // ufixed16x2[2]: [1.23, 1.56]
+byte 0x7b9c // ufixed16x2[]: [1.23, 1.56]
+byte 0x8000187b // (bool, uint32, ufixed16x2): [true, 24, 1.23]
+// On-chain encoding
+int 1
+// Encode bool from stack
+!
+bz if4_else0
+byte 0x80
+b if4_end
+if4_else0:
+byte 0x00
+if4_end:
