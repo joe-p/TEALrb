@@ -70,6 +70,7 @@ module TEALrb
     # sets the `#pragma version`, defines teal methods, and defines subroutines
     def initialize
       @teal = TEAL.new ["#pragma version #{self.class.version}"]
+      IfBlock.id = 0
       @scratch = Scratch.new
 
       self.class.subroutines.each_key do |name|
