@@ -143,6 +143,11 @@ class Approval < TEALrb::Contract
     @scratch.delete 'some_key'
     @scratch.delete 'another key'
 
+    # // dot notation for named scratch slots
+    @scratch.dot_key = 123
+    @scratch.dot_key
+    @scratch.delete 'dot_key'
+
     puts rb('HERE') # 'HERE' not transpiled to TEAL
 
     # // while loops

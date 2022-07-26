@@ -33,5 +33,21 @@ module TEALrb
     def unreserve(slot)
       @open_slots << slot
     end
+
+    def respond_to_missing?
+      !!(meth[/=$/] || @named_slots.key?(meth.to_s))
+    end
+
+    def method_missing(meth, *args, &block)
+      super unless block.nil?
+
+      if meth[/=$/]
+        store(meth.to_s.chomp('='))
+      elsif @named_slots.key?(meth.to_s)
+        self[meth.to_s]
+      else
+        super
+      end
+    end
   end
 end

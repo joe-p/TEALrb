@@ -147,6 +147,10 @@ load 6 // some key
 int 321
 store 7 // another key
 load 7 // another key
+// dot notation for named scratch slots
+int 123
+store 8 // dot_key
+load 8 // dot_key
 // while loops
 while0:
 byte "counter"
