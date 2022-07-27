@@ -28,10 +28,10 @@ PyTeal is a great language for writing smart contracts, but I found it to be a b
 #### TEALrb
 ```ruby
   teal def on_closeout
-    get_vote_of_sender
+    vote_of_sender = ex_app_global_value(0, Txn.application_id, 'voted')
 
-    if Global.round <= Global['VoteEnd'] && vote_of_sender_has_value?
-      Global[vote_of_sender_value] = Global[vote_of_sender_value] - 1
+    if Global.round <= Global['VoteEnd'] && ex_app_global_exists?(0, Txn.application_id, 'voted')
+      Global[vote_of_sender] = Global[vote_of_sender] - 1
     end
 
     teal_return 1
