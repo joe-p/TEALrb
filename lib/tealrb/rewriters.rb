@@ -66,8 +66,7 @@ module TEALrb
       end
 
       def on_ivar(node)
-        insert_after(node.loc.name, '.call') unless ['@teal', '@teal_methods', '@subroutines',
-                                                     '@scratch'].include? node.source
+        insert_after(node.loc.name, '.call') unless ['@teal_methods', '@subroutines', '@scratch'].include? node.source
         super
       end
     end
@@ -83,7 +82,7 @@ module TEALrb
 
     class OpRewriter < Rewriter
       def initialize
-        @skips = 0
+        @skips = []
         super
       end
 
@@ -110,44 +109,62 @@ module TEALrb
 
       OPCODE_METHODS = TEALrb::Opcodes.instance_methods.freeze
 
-      def on_const(node)
-        @skips = 1 if %w[Txna Gtxn AppArgs].include? node.loc.name.source
-        super
-      end
-
-      def on_ivar(node)
-        @skips = 2 if node.source == '@teal_methods'
-        @skips = 1 if node.source == '@scratch'
-      end
-
       def on_send(node)
-        meth_name = node.loc.selector.source.to_sym
+        meth_name = node.children[1]
 
         if OPCODE_METHODS.include? meth_name
           if meth_name[/(byte|int)cblock/]
-            @skips = node.children.size - 2
+            @skips += node.children[2..]
           else
             params = TEALrb::Opcodes.instance_method(meth_name).parameters
-            @skips = params.count { |param| param[0] == :req }
+            req_params = params.count { |param| param[0] == :req }
+            @skips += node.children[2..(1 + req_params.size)] unless req_params.zero?
           end
-        elsif %i[comment placeholder rb].include? meth_name
-          @skips = node.children.last.children.size
+        elsif %i[comment placeholder rb].include?(meth_name) ||
+              (%i[[] []=].include?(meth_name) &&
+                  (
+                    %i[@scratch @teal_methods Gtxn
+                       AppArgs].include?(node.children[0].children.last) ||
+                    node.children[0].children.first&.children&.last == :Txna
+                  ))
+
+          @skips << node.children[2]
+        elsif node.children.first&.children&.last == :@scratch && meth_name[/=$/]
+          nil
+        elsif %i[@scratch Gtxn].include? node.children.first&.children&.last
+          @skips << node.children.last
         end
+
         super
       end
 
       def on_int(node)
-        wrap(node.source_range, 'int(', ')') if (@skips -= 1).negative?
+        if @skips.include? node
+          @skips.delete(node)
+        else
+          wrap(node.source_range, 'int(', ')')
+        end
+
         super
       end
 
       def on_str(node)
-        wrap(node.source_range, 'byte(', ')') if (@skips -= 1).negative?
+        if @skips.include? node
+          @skips.delete(node)
+        else
+          wrap(node.source_range, 'byte(', ')')
+        end
+
         super
       end
 
       def on_sym(node)
-        wrap(node.source_range, 'label(', ')') if node.source_range.source[/^:/] && (@skips -= 1).negative?
+        if @skips.include? node
+          @skips.delete(node)
+        elsif node.source_range.source[/^:/]
+          wrap(node.source_range, 'label(', ')')
+        end
+
         super
       end
     end
@@ -156,7 +173,7 @@ module TEALrb
       def on_if(node)
         case node.loc.keyword.source
         when 'if'
-          replace(node.loc.keyword, 'IfBlock.new(@teal, ')
+          replace(node.loc.keyword, 'IfBlock.new(')
         when 'elsif'
           replace(node.loc.keyword, 'end.elsif(')
         end

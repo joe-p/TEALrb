@@ -2,14 +2,13 @@
 
 module TEALrb
   class Scratch
-    def initialize(teal)
-      @teal = teal
+    def initialize
       @open_slots = (0..256).to_a
       @named_slots = {}
     end
 
     def [](key)
-      @teal << "load #{@named_slots[key]} // #{key}"
+      TEAL.instance << "load #{@named_slots[key]} // #{key}"
     end
 
     def []=(key, _value)
@@ -17,7 +16,7 @@ module TEALrb
     end
 
     def store(key)
-      @teal << "store #{@named_slots[key] ||= @open_slots.shift} // #{key}"
+      TEAL.instance << "store #{@named_slots[key] ||= @open_slots.shift} // #{key}"
     end
 
     def delete(key)
@@ -33,6 +32,22 @@ module TEALrb
 
     def unreserve(slot)
       @open_slots << slot
+    end
+
+    def respond_to_missing?
+      !!(meth[/=$/] || @named_slots.key?(meth.to_s))
+    end
+
+    def method_missing(meth, *args, &block)
+      super unless block.nil?
+
+      if meth[/=$/]
+        store(meth.to_s.chomp('='))
+      elsif @named_slots.key?(meth.to_s)
+        self[meth.to_s]
+      else
+        super
+      end
     end
   end
 end

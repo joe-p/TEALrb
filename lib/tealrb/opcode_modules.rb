@@ -33,7 +33,7 @@ module TEALrb
         private
 
         def txn_type_int(type)
-          TEALrb::TEAL.current[Thread.current] << "int #{type}"
+          TEAL.instance << "int #{type}"
         end
       end
 
@@ -603,7 +603,6 @@ module TEALrb
       extend AppFields
 
       def self.opcode(field, app_id = nil)
-        @teal = TEALrb::TEAL.current[Thread.current]
         app_params_get field, app_id
       end
     end
@@ -613,7 +612,6 @@ module TEALrb
       extend AssetFields
 
       def self.opcode(field, asset = nil)
-        @teal = TEALrb::TEAL.current[Thread.current]
         asset_params_get field, asset
       end
     end
@@ -623,7 +621,6 @@ module TEALrb
       extend AccountFields
 
       def self.opcode(field, account = nil)
-        @teal = TEALrb::TEAL.current[Thread.current]
         acct_params_get field, account
       end
     end
@@ -642,7 +639,6 @@ module TEALrb
       extend Opcodes
 
       def self.opcode(field, index)
-        @teal = TEALrb::TEAL.current[Thread.current]
         gtxn index, field
       end
 
@@ -672,7 +668,6 @@ module TEALrb
       end
 
       def [](index)
-        @teal = TEALrb::TEAL.current[Thread.current]
         txna @field, index
       end
     end
@@ -704,7 +699,6 @@ module TEALrb
       extend GlobalFields
 
       def self.opcode(field)
-        @teal = TEALrb::TEAL.current[Thread.current]
         global field
       end
 
@@ -720,6 +714,54 @@ module TEALrb
     module AppArgs
       def self.[](index)
         Txna.application_args[index]
+      end
+    end
+
+    module MaybeOps
+      include Opcodes
+
+      def app_param_exists?(field, _app_id = nil)
+        app_params_get field
+        swap
+        pop
+      end
+
+      def app_param_value(field, _app_id = nil)
+        app_params_get field
+        pop
+      end
+
+      def asset_param_exists?(field, _asset_id = nil)
+        asset_params_get field
+        swap
+        pop
+      end
+
+      def asset_param_value(field, _asset_id = nil)
+        asset_params_get field
+        pop
+      end
+
+      def app_local_ex_exists?(_account = nil, _applicaiton = nil, _key = nil)
+        app_local_get_ex
+        swap
+        pop
+      end
+
+      def app_local_ex_value(_account = nil, _applicaiton = nil, _key = nil)
+        app_local_get_ex
+        pop
+      end
+
+      def app_global_ex_exists?(_account = nil, _applicaiton = nil, _key = nil)
+        app_global_get_ex
+        swap
+        pop
+      end
+
+      def app_global_ex_value(_account = nil, _applicaiton = nil, _key = nil)
+        app_global_get_ex
+        pop
       end
     end
   end

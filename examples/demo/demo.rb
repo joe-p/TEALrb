@@ -143,11 +143,39 @@ class Approval < TEALrb::Contract
     @scratch.delete 'some_key'
     @scratch.delete 'another key'
 
+    # // dot notation for named scratch slots
+    @scratch.dot_key = 123
+    @scratch.dot_key
+    @scratch.delete 'dot_key'
+
     puts rb('HERE') # 'HERE' not transpiled to TEAL
 
     # // while loops
     while Global['counter'] < 3
       Global['counter'] = Global['counter'] + 1
+    end
+
+    # // opcodes with "maybe" values
+
+    # // using app_global_ex_exists? and app_global_ex_value
+    if app_global_ex_exists?(1337, 'some_key')
+      app_global_ex_value(1337, 'some_key')
+    else
+      log 'some_key does not exist'
+    end
+
+    # // using app_global_get_ex and store/load
+    app_local_get_ex(1337, 'some_key')
+    store 0
+    store 1
+
+    exists = load 0
+    value = load 1
+
+    if exists
+      value
+    else
+      log 'some_key does not exist'
     end
   end
 end

@@ -6,39 +6,38 @@ module TEALrb
       attr_accessor :id
     end
 
-    @id = {}.compare_by_identity
+    @id = 0
 
-    def initialize(teal, _cond, &blk)
-      self.class.id[teal] ||= 0
-      @teal = teal
+    def initialize(_cond, &blk)
+      self.class.id ||= 0
       @else_count = 0
-      @id = self.class.id[@teal]
+      @id = self.class.id
       @end_label = "if#{@id}_end:"
 
-      self.class.id[@teal] += 1
+      self.class.id += 1
 
-      @teal << "bz if#{@id}_else0"
+      TEAL.instance << "bz if#{@id}_else0"
       blk.call
-      @teal << "b if#{@id}_end"
-      @teal << "if#{@id}_else0:"
-      @teal << @end_label
+      TEAL.instance << "b if#{@id}_end"
+      TEAL.instance << "if#{@id}_else0:"
+      TEAL.instance << @end_label
     end
 
     def elsif(_cond, &blk)
       @else_count += 1
-      @teal.delete @end_label
-      @teal << "bz if#{@id}_else#{@else_count}"
+      TEAL.instance.delete @end_label
+      TEAL.instance << "bz if#{@id}_else#{@else_count}"
       blk.call
-      @teal << "b if#{@id}_end"
-      @teal << "if#{@id}_else#{@else_count}:"
-      @teal << @end_label
+      TEAL.instance << "b if#{@id}_end"
+      TEAL.instance << "if#{@id}_else#{@else_count}:"
+      TEAL.instance << @end_label
       self
     end
 
     def else(&blk)
-      @teal.delete @end_label
+      TEAL.instance.delete @end_label
       blk.call
-      @teal << @end_label
+      TEAL.instance << @end_label
     end
   end
 end

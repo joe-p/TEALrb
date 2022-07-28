@@ -28,10 +28,10 @@ PyTeal is a great language for writing smart contracts, but I found it to be a b
 #### TEALrb
 ```ruby
   teal def on_closeout
-    get_vote_of_sender
+    vote_of_sender = app_global_ex_value(0, Txn.application_id, 'voted')
 
-    if Global.round <= Global['VoteEnd'] && vote_of_sender_has_value?
-      Global[vote_of_sender_value] = Global[vote_of_sender_value] - 1
+    if Global.round <= Global['VoteEnd'] && app_global_ex_exists?(0, Txn.application_id, 'voted')
+      Global[vote_of_sender] = Global[vote_of_sender] - 1
     end
 
     teal_return 1
@@ -110,7 +110,7 @@ end
 
 # How TEALrb Works
 
-At a high-level, TEALrb transpile Ruby into TEAL. For example, a string literal `'hello'` becomes `byte "hello"`. In reality, there are actually two stags of transpilation. First, the given Ruby is rewritten to use TEALrb methods and then that TEALrb mehotd is called, which is what actually generates the TEAL.
+At a high-level, TEALrb transpile Ruby into TEAL. For example, a string literal `'hello'` becomes `byte "hello"`. In reality, there are actually two stags of transpilation. First, the given Ruby is rewritten to use TEALrb methods and then that TEALrb method is called, which is what actually generates the TEAL.
 
 For example, `'hello'` becomes `byte('hello')` which adds `byte "hello"` to the generated TEAL. The re-writing step is used for things such as string literals, integer literals, symbol literals (which become branch labels), and keywords such as `if` and `&&`.
 
@@ -152,7 +152,7 @@ DEBUG: Rewriting the following code:
   end
 
 DEBUG: Resulting TEALrb code:
-   IfBlock.new(@teal,  (x.call > y.call) ) do
+   IfBlock.new((x.call > y.call) ) do
       byte('x is bigger')
     end.else do
       byte('x is smaller')
@@ -165,7 +165,7 @@ y = -> { load 200; comment('y', inline: true) }
 store 201
 comment('x', inline: true)
 x = -> { load 201; comment('x', inline: true) }
-   IfBlock.new(@teal,  (x.call > y.call) ) do
+   IfBlock.new((x.call > y.call) ) do
       byte('x is bigger')
     end.else do
       byte('x is smaller')
@@ -339,6 +339,52 @@ Comments in the Ruby source code that start with `# //` or `#//` will be include
 int 1 // this comment will be in the TEAL as an inline comment
 ```
 
+# Additional Features
+## Maybe Values
+TEAL has a couple of opcodes that return two values with one indicating the value actually exists and the other being the actual value (if it exists). 
+
+
+TEALrb offers some additional opcodes/methods for dealing with either of these return values. The methods are listed below
+
+| TEAL | TEALrb Exists | TEALrb Value
+|------|--------|---------|
+| `app_params_get` | `app_param_exists?` | `app_param_value` |
+| `asset_params_get` | `asset_params_exists?` | `asset_param_value` |
+| `app_local_get_ex` | `app_local_ex_exists?` | `app_local_ex_value` |
+| `app_global_get_ex` | `app_global_ex_exists?` | `ex_app_global_ex_value` |
+
+## Scratch Space Management
+
+With TEALrb you can call `load`/`store` manually or you can use the `@scratch` instance variable to reserve named scratch slots. For example:
+
+```rb
+@scratch.some_key = 123
+```
+
+Will save 123 in the first available scratch slot. Assuming this is the first named slot we've reserved, this will be `slot 0`. 
+
+```c
+int 123
+store 0 // some_key
+```
+
+Loading this value can be done by simply calling the key
+
+```rb
+@scratch.some_key
+```
+
+```c
+load 0 // some_key
+```
+
+To later free up this slot for a future named slot, call the delete method:
+
+```rb
+@scratch.delete 'some_key'
+```
+
+This will free up `slot 0` to be used in the future, but it will only get used after the other 255 slots are used first. 
 
 # Planned Features
 - ABI type encoding/decoding

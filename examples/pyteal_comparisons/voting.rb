@@ -25,23 +25,6 @@ class VotingApproval < TEALrb::Contract
     app_global_put('VoteEnd', btoi(Txna.application_args[3]))
   end
 
-  # get_vote_of_sender = App.localGetEx(Int(0), App.id(), Bytes("voted"))
-  teal def get_vote_of_sender # rubocop:disable Naming/AccessorMethodName
-    app_local_get_ex(0, Txn.application_id, 'voted')
-    store 1
-    store 0
-  end
-
-  # get_vote_of_sender.hasValue()
-  def vote_of_sender_has_value?
-    load(0)
-  end
-
-  # get_vote_of_sender.value()
-  def vote_of_sender_value
-    load(1)
-  end
-
   # on_closeout = Seq(
   #    [
   #        get_vote_of_sender,
@@ -59,10 +42,10 @@ class VotingApproval < TEALrb::Contract
   #    ]
   # )
   teal def on_closeout
-    get_vote_of_sender
+    vote_of_sender = app_global_ex_value(0, Txn.application_id, 'voted')
 
-    if Global.round <= Global['VoteEnd'] && vote_of_sender_has_value?
-      Global[vote_of_sender_value] = Global[vote_of_sender_value] - 1
+    if Global.round <= Global['VoteEnd'] && app_global_ex_exists?(0, Txn.application_id, 'voted')
+      Global[vote_of_sender] = Global[vote_of_sender] - 1
     end
 
     teal_return 1
@@ -85,9 +68,8 @@ class VotingApproval < TEALrb::Contract
   # )
   teal def on_vote
     assert(Global.round >= app_global_get('VoteBegin') && Global.round <= app_global_get('VoteEnd'))
-    get_vote_of_sender
 
-    if vote_of_sender_has_value?
+    if app_global_ex_exists?(0, Txn.application_id, 'voted')
       teal_return 0
     end
 

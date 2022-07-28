@@ -12,6 +12,20 @@ Additional labels for pre-release and build metadata are available as extensions
 ```
 
 See https://semver.org/ for more information
+
+## 0.7.0 (07/26/2022)
+
+### Features
+- Added `_exists?` and `_value` methods for dealing with opcodes that return two values
+- Support dot notation for named `@scratch` slots
+
+### Bugfixes
+- Improved rewriter code to improve transpilation detection and reduce transpiling errors
+
+### Other
+- Removed multi-threaded support to simplify codebase
+
+
 ## 0.6.0 (05/26/2022)
 
 ### Features
