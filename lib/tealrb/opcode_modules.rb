@@ -742,24 +742,24 @@ module TEALrb
         pop
       end
 
-      def ex_app_local_exists?(_account = nil, _applicaiton = nil, _key = nil)
+      def app_local_ex_exists?(_account = nil, _applicaiton = nil, _key = nil)
         app_local_get_ex
         swap
         pop
       end
 
-      def ex_app_local_value(_account = nil, _applicaiton = nil, _key = nil)
+      def app_local_ex_value(_account = nil, _applicaiton = nil, _key = nil)
         app_local_get_ex
         pop
       end
 
-      def ex_app_global_exists?(_account = nil, _applicaiton = nil, _key = nil)
+      def app_global_ex_exists?(_account = nil, _applicaiton = nil, _key = nil)
         app_global_get_ex
         swap
         pop
       end
 
-      def ex_app_global_value(_account = nil, _applicaiton = nil, _key = nil)
+      def app_global_ex_value(_account = nil, _applicaiton = nil, _key = nil)
         app_global_get_ex
         pop
       end

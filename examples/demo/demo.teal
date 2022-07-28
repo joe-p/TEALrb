@@ -147,6 +147,10 @@ load 6 // some key
 int 321
 store 7 // another key
 load 7 // another key
+// dot notation for named scratch slots
+int 123
+store 8 // dot_key
+load 8 // dot_key
 // while loops
 while0:
 byte "counter"
@@ -163,7 +167,7 @@ app_global_put
 b while0
 end_while0:
 // opcodes with "maybe" values
-// using ex_app_global_exists? and ex_app_global_value
+// using app_global_ex_exists? and app_global_ex_value
 int 1337
 byte "some_key"
 app_global_get_ex

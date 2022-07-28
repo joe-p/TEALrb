@@ -54,21 +54,28 @@ txn OnCompletion
 int CloseOut
 ==
 bz if0_else3
-int 0
-txn ApplicationID
-byte "voted"
-app_local_get_ex
-store 1
-store 0
 global Round
 byte "VoteEnd"
 app_global_get
 <=
-load 0
+int 0
+txn ApplicationID
+byte "voted"
+app_global_get_ex
+swap
+pop
 &&
 bz if1_else0
-load 1
-load 1
+int 0
+txn ApplicationID
+byte "voted"
+app_global_get_ex
+pop
+int 0
+txn ApplicationID
+byte "voted"
+app_global_get_ex
+pop
 app_global_get
 int 1
 -
@@ -113,10 +120,9 @@ assert
 int 0
 txn ApplicationID
 byte "voted"
-app_local_get_ex
-store 1
-store 0
-load 0
+app_global_get_ex
+swap
+pop
 bz if2_else0
 int 0
 return
