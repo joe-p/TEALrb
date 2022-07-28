@@ -32,4 +32,4 @@ end
 
 contract = AtomicSwap.new
 contract.compile
-File.write('atomic_swap_tealrb.teal', contract.teal.join("\n"))
+File.write("#{__dir__}/atomic_swap_tealrb.teal", contract.teal.join("\n"))
