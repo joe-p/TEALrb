@@ -157,9 +157,9 @@ class Approval < TEALrb::Contract
 
     # // opcodes with "maybe" values
 
-    # // using ex_app_global_exists? and ex_app_global_value
-    if ex_app_global_exists?(1337, 'some_key')
-      ex_app_global_value(1337, 'some_key')
+    # // using app_global_ex_exists? and app_global_ex_value
+    if app_global_ex_exists?(1337, 'some_key')
+      app_global_ex_value(1337, 'some_key')
     else
       log 'some_key does not exist'
     end

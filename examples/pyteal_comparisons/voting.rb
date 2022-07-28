@@ -42,9 +42,9 @@ class VotingApproval < TEALrb::Contract
   #    ]
   # )
   teal def on_closeout
-    vote_of_sender = ex_app_global_value(0, Txn.application_id, 'voted')
+    vote_of_sender = app_global_ex_value(0, Txn.application_id, 'voted')
 
-    if Global.round <= Global['VoteEnd'] && ex_app_global_exists?(0, Txn.application_id, 'voted')
+    if Global.round <= Global['VoteEnd'] && app_global_ex_exists?(0, Txn.application_id, 'voted')
       Global[vote_of_sender] = Global[vote_of_sender] - 1
     end
 
@@ -69,7 +69,7 @@ class VotingApproval < TEALrb::Contract
   teal def on_vote
     assert(Global.round >= app_global_get('VoteBegin') && Global.round <= app_global_get('VoteEnd'))
 
-    if ex_app_global_exists?(0, Txn.application_id, 'voted')
+    if app_global_ex_exists?(0, Txn.application_id, 'voted')
       teal_return 0
     end
 
