@@ -5,7 +5,6 @@ require_relative '../../lib/tealrb'
 class Approval < TEALrb::Contract
   @abi_description.name = 'TEALrb_Demo'
   @abi_description.add_id(MAINNET, '1234')
-  @debug = true
 
   # Specify ABI arg types, return type, and desc
   abi(
@@ -148,7 +147,7 @@ class Approval < TEALrb::Contract
     @scratch.dot_key
     @scratch.delete 'dot_key'
 
-    puts rb('HERE') # 'HERE' not transpiled to TEAL
+    rb('HERE') # 'HERE' not transpiled to TEAL
 
     # // while loops
     while Global['counter'] < 3
@@ -201,6 +200,5 @@ end
 
 approval = Approval.new
 approval.compile
-puts approval.teal
 File.write('demo.teal', approval.teal.join("\n"))
 File.write('demo.json', JSON.pretty_generate(approval.abi_hash))
