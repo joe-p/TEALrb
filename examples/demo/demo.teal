@@ -226,6 +226,7 @@ byte 0x00
 if5_end:
 int 24
 itob
+// Encode uint72 from stack
 store 9 // Uint72_input
 load 9 // Uint72_input
 len
@@ -249,6 +250,7 @@ substring3
 if6_end:
 int 24
 itob
+// Encode uint16 from stack
 store 11 // Uint16_input
 load 11 // Uint16_input
 len

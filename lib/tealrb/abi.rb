@@ -17,6 +17,8 @@ module TEALrb
     end
 
     def encode_as(type)
+      type_string = type.to_s.downcase.split('::').last
+      TEALrb::TEAL.instance << "// Encode #{type_string} from stack"
       type.encode_from_stack
     end
 
@@ -40,7 +42,6 @@ module TEALrb
       class Bool < ABIType
         extend TEALrb::Opcodes
         def self.encode_from_stack
-          TEALrb::TEAL.instance << '// Encode bool from stack'
           IfBlock.new(zero?) do
             byte '0x80', quote: false
           end.else do # rubocop:disable Style/MultilineBlockChain
