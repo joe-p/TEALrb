@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tealrb (0.6.0)
+    tealrb (0.8.0)
       method_source (~> 1.0)
       rubocop (~> 1.27)
 
