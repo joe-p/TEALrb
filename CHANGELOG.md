@@ -13,6 +13,11 @@ Additional labels for pre-release and build metadata are available as extensions
 
 See https://semver.org/ for more information
 
+## 0.8.0 (07/30/2022)
+
+### Features
+- Adding automatic ABI method routing
+
 ## 0.7.0 (07/26/2022)
 
 ### Features

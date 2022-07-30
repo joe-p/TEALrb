@@ -157,5 +157,4 @@ end
 
 approval = Approval.new
 approval.compile
-puts approval.teal
-File.write('nft_tealrb.teal', approval.teal.join("\n"))
+File.write("#{__dir__}/nft_tealrb.teal", approval.teal.join("\n"))
