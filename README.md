@@ -384,7 +384,30 @@ To later free up this slot for a future named slot, call the delete method:
 @scratch.delete 'some_key'
 ```
 
-This will free up `slot 0` to be used in the future, but it will only get used after the other 255 slots are used first. 
+This will free up `slot 0` to be used in the future, but it will only get used after the other 255 slots are used first.
+
+## ABI Support
+TEALrb can automatically generate ABI interface JSON data and provide the logic for routing to ABI methods. To generate a proper interface, you must define the contract name, add at least one ID, and define some ABI methods. For example:
+
+
+```rb
+class Approval < TEALrb::Contract
+  @abi_description.name = 'TEALrb_example'
+  @abi_description.add_id(MAINNET, '1234')
+
+  abi(
+    args: {
+      x: { type: 'uint64', desc: 'The first number' },
+      y: { type: 'uint64', desc: 'The second number' }
+    },
+    returns: 'uint64',
+    desc: 'Adds two numbers'
+  )
+  # define subroutine
+  subroutine def add(x, y)
+```
+
+TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this, set `@disable_abi_routing` to false within your `TEALrb::Contract` subclass. 
 
 # Planned Features
 - ABI type encoding/decoding

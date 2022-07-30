@@ -11,7 +11,8 @@ module TEALrb
     attr_reader :teal
 
     class << self
-      attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_description, :debug
+      attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_description, :debug,
+                    :disable_abi_routing
 
       private
 
@@ -22,6 +23,7 @@ module TEALrb
         klass.abi_description = ABI::ABIDescription.new
         klass.abi_method_hash = {}
         klass.debug = false
+        klass.disable_abi_routing = false
         super
       end
     end
@@ -164,13 +166,27 @@ module TEALrb
       nil
     end
 
-    # transpiles #main
+    # transpiles #main and routes abi methods. To disable abi routing, set `@disable_abi_routing` to true in your
+    # Contract subclass
     def compile
       TEAL.instance << 'main:' if TEAL.instance.include? 'b main'
-      eval_tealrb(rewrite(method(:main).source, method_rewriter: true), debug_context: 'main')
+      route_abi_methods unless self.class.disable_abi_routing
+      eval_tealrb(rewrite(method(:main).source, method_rewriter: true), debug_context: 'main') if respond_to? :main
     end
 
     private
+
+    def route_abi_methods
+      self.class.abi_description.methods.each do |meth|
+        signature = "#{meth[:name]}(#{meth[:args].map{ _1[:type]}.join(',')})#{meth[:returns][:type]}"
+        selector = OpenSSL::Digest.new('SHA512-256').hexdigest(signature)[..7]
+
+        IfBlock.new(AppArgs[0] == byte(selector)) do
+          callsub(meth[:name])
+          approve
+        end
+      end
+    end
 
     def generate_method_source(name, definition)
       new_source = rewrite(definition.source, method_rewriter: true)

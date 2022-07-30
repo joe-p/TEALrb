@@ -17,6 +17,16 @@ concat
 log
 retsub
 main:
+txna ApplicationArgs 0
+byte "e80dc394"
+==
+bz if0_else0
+callsub subroutine_method
+int 1
+return
+b if0_end
+if0_else0:
+if0_end:
 // This comment will show in TEAL
 // raw teal
 byte "Key One" // this will be an in-line comment
@@ -54,46 +64,46 @@ app_global_put
 // combining raw teal with conditionals
 byte "Bad Key"
 app_global_get
-bz if0_else0
+bz if1_else0
 err
-b if0_end
-if0_else0:
-if0_end:
+b if1_end
+if1_else0:
+if1_end:
 // more complex conditionals
 byte "First Word"
 app_global_get
 byte "Hi"
 ==
-bz if1_else0
+bz if2_else0
 byte "Second Word"
 byte "Mom"
 app_global_put
-b if1_end
-if1_else0:
+b if2_end
+if2_else0:
 byte "First Word"
 app_global_get
 byte "Hello"
 ==
-bz if1_else1
+bz if2_else1
 byte "Second Word"
 byte "World"
 app_global_put
-b if1_end
-if1_else1:
+b if2_end
+if2_else1:
 byte "First Word"
 app_global_get
 byte "Howdy"
 ==
-bz if1_else2
+bz if2_else2
 byte "Second Word"
 byte "Partner"
 app_global_put
-b if1_end
-if1_else2:
+b if2_end
+if2_else2:
 byte "Second Word"
 byte "???"
 app_global_put
-if1_end:
+if2_end:
 // calling methods
 // subroutine method
 int 1
@@ -173,16 +183,16 @@ byte "some_key"
 app_global_get_ex
 swap
 pop
-bz if2_else0
+bz if3_else0
 int 1337
 byte "some_key"
 app_global_get_ex
 pop
-b if2_end
-if2_else0:
+b if3_end
+if3_else0:
 byte "some_key does not exist"
 log
-if2_end:
+if3_end:
 // using app_global_get_ex and store/load
 int 1337
 byte "some_key"
@@ -190,10 +200,10 @@ app_local_get_ex
 store 0
 store 1
 load 0
-bz if3_else0
+bz if4_else0
 load 1
-b if3_end
-if3_else0:
+b if4_end
+if4_else0:
 byte "some_key does not exist"
 log
-if3_end:
+if4_end:
