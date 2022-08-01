@@ -223,7 +223,8 @@ module TEALrb
         puts ''
       end
 
-      [CommentRewriter, ComparisonRewriter, WhileRewriter, IfRewriter, OpRewriter, AssignRewriter].each do |rw|
+      [CommentRewriter, ComparisonRewriter, WhileRewriter, InlineIfRewriter, IfRewriter, OpRewriter,
+       AssignRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
 

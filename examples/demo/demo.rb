@@ -176,6 +176,9 @@ class Approval < TEALrb::Contract
     else
       log 'some_key does not exist'
     end
+
+    # // inline if statement
+    b :label if btoi > 10
   end
 end
 

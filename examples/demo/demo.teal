@@ -207,3 +207,12 @@ if4_else0:
 byte "some_key does not exist"
 log
 if4_end:
+// inline if statement
+btoi
+int 10
+>
+bz if5_else0
+b label
+b if5_end
+if5_else0:
+if5_end:

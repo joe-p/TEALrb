@@ -169,6 +169,19 @@ module TEALrb
       end
     end
 
+    class InlineIfRewriter < Rewriter
+      def on_if(node)
+        unless node.loc.respond_to? :else
+          conditional = node.children[0].source
+          if_blk = node.children[1].source
+
+          replace(node.loc.expression, "if(#{conditional})\n#{if_blk}\nend")
+        end
+
+        super
+      end
+    end
+
     class IfRewriter < Rewriter
       def on_if(node)
         case node.loc.keyword.source
