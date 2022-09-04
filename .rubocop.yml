@@ -68,8 +68,6 @@ Lint/RefinementImportMethods: # new in 1.27
   Enabled: true
 Style/RedundantInitialize: # new in 1.27
   Enabled: true
-Gemspec/DateAssignment: # new in 1.10
-  Enabled: true
 Gemspec/RequireMFA: # new in 1.23
   Enabled: true
 Layout/LineEndStringConcatenationIndentation: # new in 1.18
@@ -171,4 +169,18 @@ Style/SelectByRegexp: # new in 1.22
 Style/StringChars: # new in 1.12
   Enabled: true
 Style/SwapValues: # new in 1.1
+  Enabled: true
+Layout/LineContinuationLeadingSpace: # new in 1.31
+  Enabled: true
+Layout/LineContinuationSpacing: # new in 1.31
+  Enabled: true
+Lint/ConstantOverwrittenInRescue: # new in 1.31
+  Enabled: true
+Lint/NonAtomicFileOperation: # new in 1.31
+  Enabled: true
+Lint/RequireRangeParentheses: # new in 1.32
+  Enabled: true
+Style/EmptyHeredoc: # new in 1.32
+  Enabled: true
+Style/MagicCommentFormat: # new in 1.35
   Enabled: true

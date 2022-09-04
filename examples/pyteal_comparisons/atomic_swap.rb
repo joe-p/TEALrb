@@ -22,7 +22,7 @@ class AtomicSwap < TEALrb::Contract
                   Txn.close_remainder_to == Global.zero_address && \
                   Txn.rekey_to == Global.zero_address
 
-    recv_cond = Txn.receiver == tmpl_seller && tmpl_hash_fn(Txn.arg(0)) == tmpl_secret
+    recv_cond = Txn.receiver == tmpl_seller && tmpl_hash_fn(arg(0)) == tmpl_secret
 
     esc_cond = Txn.receiver == tmpl_buyer && Txn.first_valid > tmpl_timeout
 

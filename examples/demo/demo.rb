@@ -195,6 +195,9 @@ class Approval < TEALrb::Contract
     int 24
     itob
     encode_as(Uint16)
+
+    # // inline if statement
+    b :label if btoi > 10
   end
 end
 
