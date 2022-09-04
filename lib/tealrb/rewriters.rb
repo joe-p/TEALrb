@@ -131,7 +131,7 @@ module TEALrb
           @skips << node.children[2]
         elsif node.children.first&.children&.last == :@scratch && meth_name[/=$/]
           nil
-        elsif %i[@scratch Gtxn].include? node.children.first&.children&.last
+        elsif %i[@scratch Gtxn Accounts ApplicationArgs Assets Apps Logs].include? node.children.first&.children&.last
           @skips << node.children.last
         end
 

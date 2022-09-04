@@ -7,21 +7,40 @@ class AssetTests < Minitest::Test
   include TestMethods
 
   {
-    asset_total: 'AssetTotal',
-    asset_decimals: 'AssetDecimals',
-    asset_default_frozen: 'AssetDefaultFrozen',
-    asset_unit_name: 'AssetUnitName',
-    asset_name: 'AssetName',
-    asset_url: 'AssetURL',
-    asset_metadata_hash: 'AssetMetadataHash',
-    asset_manager: 'AssetManager',
-    asset_reserve: 'AssetReserve',
-    asset_freeze: 'AssetFreeze',
-    asset_clawback: 'AssetClawback',
-    asset_creator: 'AssetCreator'
+    total: 'AssetTotal',
+    decimals: 'AssetDecimals',
+    default_frozen: 'AssetDefaultFrozen',
+    unit_name: 'AssetUnitName',
+    name: 'AssetName',
+    url: 'AssetURL',
+    metadata_hash: 'AssetMetadataHash',
+    manager: 'AssetManager',
+    reserve: 'AssetReserve',
+    freeze: 'AssetFreeze',
+    clawback: 'AssetClawback',
+    creator: 'AssetCreator'
   }.each do |meth, enum|
-    define_method("test_asset_#{meth}") do
-      compile_test_last("Asset.#{meth}", "asset_params_get #{enum}")
+    define_method("test_#{meth}") do
+      compile_test_last("Assets[0].#{meth}", ['txna Assets 0', "asset_params_get #{enum}", 'pop'], 3)
+    end
+  end
+
+  {
+    total?: 'AssetTotal',
+    decimals?: 'AssetDecimals',
+    default_frozen?: 'AssetDefaultFrozen',
+    unit_name?: 'AssetUnitName',
+    name?: 'AssetName',
+    url?: 'AssetURL',
+    metadata_hash?: 'AssetMetadataHash',
+    manager?: 'AssetManager',
+    reserve?: 'AssetReserve',
+    freeze?: 'AssetFreeze',
+    clawback?: 'AssetClawback',
+    creator?: 'AssetCreator'
+  }.each do |meth, enum|
+    define_method("test_#{meth}") do
+      compile_test_last("Assets[0].#{meth}", ['txna Assets 0', "asset_params_get #{enum}", 'swap', 'pop'], 4)
     end
   end
 end

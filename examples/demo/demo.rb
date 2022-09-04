@@ -179,6 +179,12 @@ class Approval < TEALrb::Contract
 
     # // inline if statement
     b :label if btoi > 10
+
+    # // Accessing arrays
+    # // Assets[0].creator
+    Assets[0].creator
+    # // Accounts[1].balance?
+    Accounts[1].balance?
   end
 end
 

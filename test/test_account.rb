@@ -7,12 +7,16 @@ class AppTests < Minitest::Test
   include TestMethods
 
   {
-    acct_balance: 'AcctBalance',
-    acct_min_balance: 'AcctMinBalance',
-    acct_auth_addr: 'AcctAuthAddr'
+    balance: 'AcctBalance',
+    min_balance: 'AcctMinBalance',
+    auth_addr: 'AcctAuthAddr'
   }.each do |meth, enum|
     define_method("test_account_#{meth}") do
-      compile_test_last("Account.#{meth}", "acct_params_get #{enum}")
+      compile_test_last("Accounts[0].#{meth}", ['txna Accounts 0', "acct_params_get #{enum}", 'pop'], 3)
     end
+  end
+
+  def test_account_balance?
+    compile_test_last('Accounts[0].balance?', ['txna Accounts 0', 'acct_params_get AcctBalance', 'swap', 'pop'], 4)
   end
 end

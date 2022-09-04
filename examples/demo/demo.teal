@@ -216,3 +216,13 @@ b label
 b if5_end
 if5_else0:
 if5_end:
+// Accessing arrays
+// Assets[0].creator
+txna Assets 0
+asset_params_get AssetCreator
+pop
+// Accounts[1].balance?
+txna Accounts 1
+acct_params_get AcctBalance
+swap
+pop
