@@ -4,9 +4,9 @@ module TEALrb
   class Contract
     include TEALrb
     include Opcodes
+    include Opcodes::AllOpcodes
     include ABI
     include Rewriters
-    include MaybeOps
 
     attr_reader :teal
 
@@ -178,7 +178,7 @@ module TEALrb
 
     def route_abi_methods
       self.class.abi_description.methods.each do |meth|
-        signature = "#{meth[:name]}(#{meth[:args].map{ _1[:type]}.join(',')})#{meth[:returns][:type]}"
+        signature = "#{meth[:name]}(#{meth[:args].map { _1[:type] }.join(',')})#{meth[:returns][:type]}"
         selector = OpenSSL::Digest.new('SHA512-256').hexdigest(signature)[..7]
 
         IfBlock.new(AppArgs[0] == byte(selector)) do
@@ -258,7 +258,7 @@ module TEALrb
     rescue SyntaxError, StandardError => e
       @eval_tealrb_rescue_count ||= 0
 
-      eval_locations = e.backtrace.select {_1[/\(eval\)/]}
+      eval_locations = e.backtrace.select { _1[/\(eval\)/] }
       error_line = eval_locations[@eval_tealrb_rescue_count].split(':')[1].to_i
 
       warn "'#{e}' when evaluating transpiled TEALrb source" if @eval_tealrb_rescue_count.zero?
