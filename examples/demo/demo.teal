@@ -272,3 +272,12 @@ int 2
 load 12 // Uint16_input_len
 substring3
 if7_end:
+// inline if statement
+btoi
+int 10
+>
+bz if8_else0
+b label
+b if8_end
+if8_else0:
+if8_end:

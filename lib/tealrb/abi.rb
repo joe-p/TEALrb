@@ -40,7 +40,7 @@ module TEALrb
       end
 
       class Bool < ABIType
-        extend TEALrb::Opcodes
+        extend TEALrb::Opcodes::AllOpcodes
         def self.encode_from_stack
           IfBlock.new(zero?) do
             byte '0x80', quote: false
@@ -62,7 +62,7 @@ module TEALrb
       end
 
       class Uint < ABIType
-        extend Opcodes
+        extend TEALrb::Opcodes::AllOpcodes
 
         def self.encode_from_stack
           # Assume on the stack is a byte array for the integer
