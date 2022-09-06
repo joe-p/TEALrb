@@ -90,6 +90,25 @@ module TEALrb
       end
     end
 
+    def teal_source
+      teal_lines = []
+
+      @teal.each do |line|
+        ln = line.strip
+
+        if (ln[%r{\S+:($| //)}] && !ln[/^if\d+/]) || ln == 'b main' || ln[/^#/]
+          teal_lines << ln
+        elsif ln == 'retsub'
+          teal_lines << "    #{ln}"
+          teal_lines << ''
+        else
+          teal_lines << "    #{ln}"
+        end
+      end
+
+      teal_lines.join("\n")
+    end
+
     # return the input without transpiling to TEAL
     def rb(input)
       input
@@ -143,6 +162,7 @@ module TEALrb
         last_line = TEAL.instance.pop
         TEAL.instance << "#{last_line} //#{content}"
       else
+        TEAL.instance << '' unless TEAL.instance.last[%r{^//}]
         TEAL.instance << "//#{content}"
       end
     end

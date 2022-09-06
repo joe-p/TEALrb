@@ -190,5 +190,5 @@ end
 
 approval = Approval.new
 approval.compile
-File.write("#{__dir__}/demo.teal", approval.teal.join("\n"))
+File.write("#{__dir__}/demo.teal", approval.teal_source)
 File.write("#{__dir__}/demo.json", JSON.pretty_generate(approval.abi_hash))
