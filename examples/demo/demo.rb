@@ -142,11 +142,6 @@ class Approval < TEALrb::Contract
     @scratch.delete 'some_key'
     @scratch.delete 'another key'
 
-    # // dot notation for named scratch slots
-    @scratch.dot_key = 123
-    @scratch.dot_key
-    @scratch.delete 'dot_key'
-
     rb('HERE') # 'HERE' not transpiled to TEAL
 
     # // while loops
@@ -176,10 +171,19 @@ class Approval < TEALrb::Contract
     else
       log 'some_key does not exist'
     end
+
+    # // inline if statement
+    b :label if btoi > 10
+
+    # // Accessing arrays
+    # // Assets[0].creator
+    Assets[0].creator
+    # // Accounts[1].balance?
+    Accounts[1].balance?
   end
 end
 
 approval = Approval.new
 approval.compile
-File.write("#{__dir__}/demo.teal", approval.teal.join("\n"))
+File.write("#{__dir__}/demo.teal", approval.teal_source)
 File.write("#{__dir__}/demo.json", JSON.pretty_generate(approval.abi_hash))

@@ -1,24 +1,18 @@
 # frozen_string_literal: true
 
 module TEALrb
-  module ExtendedOpcodes
-    extend Opcodes
-  end
-
   module Opcodes
     class AccountLocal
-      include TEALrb::Opcodes
-
       def initialize(account)
         @account = account
       end
 
       def [](key)
-        app_local_get @account, key
+        ExtendedOpcodes.app_local_get @account, key
       end
 
       def []=(key, value)
-        app_local_put @account, key, value
+        ExtendedOpcodes.app_local_put @account, key, value
       end
     end
 
@@ -393,132 +387,6 @@ module TEALrb
       end
     end
 
-    module AppFields
-      # @return [[]byte] Bytecode of Approval Program
-      def app_approval_program(*args)
-        opcode('AppApprovalProgram', *args)
-      end
-
-      # @return [[]byte] Bytecode of Clear State Program
-      def app_clear_state_program(*args)
-        opcode('AppClearStateProgram', *args)
-      end
-
-      # @return [uint64] Number of uint64 values allowed in Global State
-      def app_global_num_uint(*args)
-        opcode('AppGlobalNumUint', *args)
-      end
-
-      # @return [uint64] Number of byte array values allowed in Global State
-      def app_global_num_byte_slice(*args)
-        opcode('AppGlobalNumByteSlice', *args)
-      end
-
-      # @return [uint64] Number of uint64 values allowed in Local State
-      def app_local_num_uint(*args)
-        opcode('AppLocalNumUint', *args)
-      end
-
-      # @return [uint64] Number of byte array values allowed in Local State
-      def app_local_num_byte_slice(*args)
-        opcode('AppLocalNumByteSlice', *args)
-      end
-
-      # @return [uint64] Number of Extra Program Pages of code space
-      def app_extra_program_pages(*args)
-        opcode('AppExtraProgramPages', *args)
-      end
-
-      # @return [[]byte] Creator address
-      def app_creator(*args)
-        opcode('AppCreator', *args)
-      end
-
-      # @return [[]byte] Address for which this application has authority
-      def app_address(*args)
-        opcode('AppAddress', *args)
-      end
-    end
-
-    module AssetFields
-      # @return [uint64] Total number of units of this asset (v1)
-      def asset_total(*args)
-        opcode('AssetTotal', *args)
-      end
-
-      # @return [uint64] See AssetParams.Decimals (v1)
-      def asset_decimals(*args)
-        opcode('AssetDecimals', *args)
-      end
-
-      # @return [uint64] Frozen by default or not (v1)
-      def asset_default_frozen(*args)
-        opcode('AssetDefaultFrozen', *args)
-      end
-
-      # @return [[]byte] Asset unit name (v1)
-      def asset_unit_name(*args)
-        opcode('AssetUnitName', *args)
-      end
-
-      # @return [[]byte] Asset name (v1)
-      def asset_name(*args)
-        opcode('AssetName', *args)
-      end
-
-      # @return [[]byte] URL with additional info about the asset (v1)
-      def asset_url(*args)
-        opcode('AssetURL', *args)
-      end
-
-      # @return [[]byte] Arbitrary commitment (v1)
-      def asset_metadata_hash(*args)
-        opcode('AssetMetadataHash', *args)
-      end
-
-      # @return [[]byte] Manager commitment (v1)
-      def asset_manager(*args)
-        opcode('AssetManager', *args)
-      end
-
-      # @return [[]byte] Reserve address (v1)
-      def asset_reserve(*args)
-        opcode('AssetReserve', *args)
-      end
-
-      # @return [[]byte] Freeze address (v1)
-      def asset_freeze(*args)
-        opcode('AssetFreeze', *args)
-      end
-
-      # @return [[]byte] Clawback address (v1)
-      def asset_clawback(*args)
-        opcode('AssetClawback', *args)
-      end
-
-      # @return [[]byte] Creator address (v5)
-      def asset_creator(*args)
-        opcode('AssetCreator', *args)
-      end
-    end
-
-    module AccountFields
-      # @return [uint64] Account balance in microalgos
-      def acct_balance(*args)
-        opcode('AcctBalance', *args)
-      end
-
-      # @return [uint64] in microalgos (Minimum required blance for account)
-      def acct_min_balance(*args)
-        opcode('AcctMinBalance', *args)
-      end
-
-      # @return [[]byte] Address the account is rekeyed to.
-      def acct_auth_addr(*args)
-        opcode('AcctAuthAddr', *args)
-      end
-    end
-
     module GlobalFields
       # @return [uint64] microalgos (v1)
       def min_txn_fee(*args)
@@ -598,48 +466,19 @@ module TEALrb
       end
     end
 
-    module App
-      extend Opcodes
-      extend AppFields
-
-      def self.opcode(field, app_id = nil)
-        app_params_get field, app_id
-      end
-    end
-
-    module Asset
-      extend Opcodes
-      extend AssetFields
-
-      def self.opcode(field, asset = nil)
-        asset_params_get field, asset
-      end
-    end
-
-    module Account
-      extend Opcodes
-      extend AccountFields
-
-      def self.opcode(field, account = nil)
-        acct_params_get field, account
-      end
-    end
-
     module Txn
-      extend Opcodes
       extend TxnFields
 
       def self.opcode(field)
-        txn field
+        ExtendedOpcodes.txn field
       end
     end
 
     module Gtxn
       extend TxnFields
-      extend Opcodes
 
       def self.opcode(field, index)
-        gtxn index, field
+        ExtendedOpcodes.gtxn index, field
       end
 
       def self.[](index)
@@ -647,67 +486,325 @@ module TEALrb
       end
     end
 
+    module Gtxns
+      extend TxnFields
+
+      def self.opcode(field)
+        ExtendedOpcodes.gtxns field
+      end
+
+      def self.[](_index)
+        self
+      end
+    end
+
     class GroupTransaction
       include TxnFields
-      include Opcodes
 
       def initialize(index)
         @index = index
       end
 
       def opcode(field)
-        gtxn @index, field
+        ExtendedOpcodes.gtxn @index, field
       end
     end
 
-    class TxnaField
-      include Opcodes
+    class TxnArray
+      TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
+        define_method(meth) do |other|
+          ExtendedOpcodes.send(opcode, self, other)
+        end
+      end
 
-      def initialize(field)
-        @field = field
+      TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
+        define_method(meth) do
+          ExtendedOpcodes.send(opcode, self)
+        end
+      end
+
+      def self.[](index)
+        new[index]
       end
 
       def [](index)
-        txna @field, index
+        ExtendedOpcodes.txna @field, index
+        self
+      end
+    end
+
+    class ApplicationArgs < TxnArray
+      def initialize
+        super
+        @field = 'ApplicationArgs'
+      end
+    end
+
+    class Logs < TxnArray
+      def initialize
+        super
+        @field = 'Logs'
+      end
+    end
+
+    class Accounts < TxnArray
+      def initialize
+        super
+        @field = 'Accounts'
+      end
+
+      def min_balance
+        ExtendedOpcodes.acct_param_value 'AcctMinBalance'
+      end
+
+      def balance
+        ExtendedOpcodes.acct_param_value 'AcctBalance'
+      end
+
+      def auth_addr
+        ExtendedOpcodes.acct_param_value 'AcctAuthAddr'
+      end
+
+      def balance?
+        ExtendedOpcodes.acct_has_balance?
+      end
+    end
+
+    class Apps < TxnArray
+      def initialize
+        super
+        @field = 'Applications'
+      end
+
+      # @return [[]byte] Bytecode of Approval Program
+      def approval_program(*_args)
+        ExtendedOpcodes.app_param_value 'AppApprovalProgram'
+      end
+
+      # @return [[]byte] Bytecode of Clear State Program
+      def clear_state_program(*_args)
+        ExtendedOpcodes.app_param_value 'AppClearStateProgram'
+      end
+
+      # @return [uint64] Number of uint64 values allowed in Global State
+      def global_num_uint(*_args)
+        ExtendedOpcodes.app_param_value 'AppGlobalNumUint'
+      end
+
+      # @return [uint64] Number of byte array values allowed in Global State
+      def global_num_byte_slice(*_args)
+        ExtendedOpcodes.app_param_value 'AppGlobalNumByteSlice'
+      end
+
+      # @return [uint64] Number of uint64 values allowed in Local State
+      def local_num_uint(*_args)
+        ExtendedOpcodes.app_param_value 'AppLocalNumUint'
+      end
+
+      # @return [uint64] Number of byte array values allowed in Local State
+      def local_num_byte_slice(*_args)
+        ExtendedOpcodes.app_param_value 'AppLocalNumByteSlice'
+      end
+
+      # @return [uint64] Number of Extra Program Pages of code space
+      def extra_program_pages(*_args)
+        ExtendedOpcodes.app_param_value 'AppExtraProgramPages'
+      end
+
+      # @return [[]byte] Creator address
+      def creator(*_args)
+        ExtendedOpcodes.app_param_value 'AppCreator'
+      end
+
+      # @return [[]byte] Address for which this application has authority
+      def address(*_args)
+        ExtendedOpcodes.app_param_value 'AppAddress'
+      end
+
+      # @return [[]byte] Bytecode of Approval Program
+      def approval_program?(*_args)
+        ExtendedOpcodes.app_param_exists? 'AppApprovalProgram'
+      end
+
+      # @return [[]byte] Bytecode of Clear State Program
+      def clear_state_program?(*_args)
+        ExtendedOpcodes.app_param_exists? 'AppClearStateProgram'
+      end
+
+      # @return [uint64] Number of uint64 values allowed in Global State
+      def global_num_uint?(*_args)
+        ExtendedOpcodes.app_param_exists? 'AppGlobalNumUint'
+      end
+
+      # @return [uint64] Number of byte array values allowed in Global State
+      def global_num_byte_slice?(*_args)
+        ExtendedOpcodes.app_param_exists? 'AppGlobalNumByteSlice'
+      end
+
+      # @return [uint64] Number of uint64 values allowed in Local State
+      def local_num_uint?(*_args)
+        ExtendedOpcodes.app_param_exists? 'AppLocalNumUint'
+      end
+
+      # @return [uint64] Number of byte array values allowed in Local State
+      def local_num_byte_slice?(*_args)
+        ExtendedOpcodes.app_param_exists? 'AppLocalNumByteSlice'
+      end
+
+      # @return [uint64] Number of Extra Program Pages of code space
+      def extra_program_pages?(*_args)
+        ExtendedOpcodes.app_param_exists? 'AppExtraProgramPages'
+      end
+
+      # @return [[]byte] Creator address
+      def creator?(*_args)
+        ExtendedOpcodes.app_param_exists? 'AppCreator'
+      end
+
+      # @return [[]byte] Address for which this application has authority
+      def address?(*_args)
+        ExtendedOpcodes.app_param_exists? 'AppAddress'
+      end
+    end
+
+    class Assets < TxnArray
+      def initialize
+        super
+        @field = 'Assets'
+      end
+
+      def total
+        ExtendedOpcodes.asset_param_value 'AssetTotal'
+      end
+
+      def decimals
+        ExtendedOpcodes.asset_param_value 'AssetDecimals'
+      end
+
+      def default_frozen
+        ExtendedOpcodes.asset_param_value 'AssetDefaultFrozen'
+      end
+
+      def name
+        ExtendedOpcodes.asset_param_value 'AssetName'
+      end
+
+      def unit_name
+        ExtendedOpcodes.asset_param_value 'AssetUnitName'
+      end
+
+      def url
+        ExtendedOpcodes.asset_param_value 'AssetURL'
+      end
+
+      def metadata_hash
+        ExtendedOpcodes.asset_param_value 'AssetMetadataHash'
+      end
+
+      def manager
+        ExtendedOpcodes.asset_param_value 'AssetManager'
+      end
+
+      def reserve
+        ExtendedOpcodes.asset_param_value 'AssetReserve'
+      end
+
+      def freeze
+        ExtendedOpcodes.asset_param_value 'AssetFreeze'
+      end
+
+      def clawback
+        ExtendedOpcodes.asset_param_value 'AssetClawback'
+      end
+
+      def creator
+        ExtendedOpcodes.asset_param_value 'AssetCreator'
+      end
+
+      def total?
+        ExtendedOpcodes.asset_param_exists? 'AssetTotal'
+      end
+
+      def decimals?
+        ExtendedOpcodes.asset_param_exists? 'AssetDecimals'
+      end
+
+      def default_frozen?
+        ExtendedOpcodes.asset_param_exists? 'AssetDefaultFrozen'
+      end
+
+      def name?
+        ExtendedOpcodes.asset_param_exists? 'AssetName'
+      end
+
+      def unit_name?
+        ExtendedOpcodes.asset_param_exists? 'AssetUnitName'
+      end
+
+      def url?
+        ExtendedOpcodes.asset_param_exists? 'AssetURL'
+      end
+
+      def metadata_hash?
+        ExtendedOpcodes.asset_param_exists? 'AssetMetadataHash'
+      end
+
+      def manager?
+        ExtendedOpcodes.asset_param_exists? 'AssetManager'
+      end
+
+      def reserve?
+        ExtendedOpcodes.asset_param_exists? 'AssetReserve'
+      end
+
+      def freeze?
+        ExtendedOpcodes.asset_param_exists? 'AssetFreeze'
+      end
+
+      def clawback?
+        ExtendedOpcodes.asset_param_exists? 'AssetClawback'
+      end
+
+      def creator?
+        ExtendedOpcodes.asset_param_exists? 'AssetCreator'
       end
     end
 
     module Txna
       def self.application_args
-        TxnaField.new('ApplicationArgs')
+        ApplicationArgs.new
       end
 
       def self.accounts
-        TxnaField.new('Accounts')
+        Accounts.new
       end
 
       def self.assets
-        TxnaField.new('Assets')
+        Assets.new
       end
 
       def self.applications
-        TxnaField.new('Applications')
+        Apps.new
       end
 
       def self.logs
-        TxnaField.new('Logs')
+        Logs.new
       end
     end
 
     module Global
-      extend Opcodes
       extend GlobalFields
 
       def self.opcode(field)
-        global field
+        ExtendedOpcodes.global field
       end
 
       def self.[](key)
-        app_global_get key
+        ExtendedOpcodes.app_global_get key
       end
 
       def self.[]=(key, value)
-        app_global_put key, value
+        ExtendedOpcodes.app_global_put key, value
       end
     end
 
@@ -718,8 +815,6 @@ module TEALrb
     end
 
     module MaybeOps
-      include Opcodes
-
       def app_param_exists?(field, _app_id = nil)
         app_params_get field
         swap
@@ -739,6 +834,17 @@ module TEALrb
 
       def asset_param_value(field, _asset_id = nil)
         asset_params_get field
+        pop
+      end
+
+      def acct_has_balance?(_asset_id = nil)
+        acct_params_get 'AcctBalance'
+        swap
+        pop
+      end
+
+      def acct_param_value(field, _asset_id = nil)
+        acct_params_get field
         pop
       end
 
@@ -763,6 +869,15 @@ module TEALrb
         app_global_get_ex
         pop
       end
+    end
+
+    module AllOpcodes
+      include TEALOpcodes
+      include MaybeOps
+    end
+
+    module ExtendedOpcodes
+      extend AllOpcodes
     end
   end
 end

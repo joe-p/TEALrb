@@ -107,7 +107,7 @@ module TEALrb
         super
       end
 
-      OPCODE_METHODS = TEALrb::Opcodes.instance_methods.freeze
+      OPCODE_METHODS = TEALrb::Opcodes::AllOpcodes.instance_methods.freeze
 
       def on_send(node)
         meth_name = node.children[1]
@@ -116,7 +116,7 @@ module TEALrb
           if meth_name[/(byte|int)cblock/]
             @skips += node.children[2..]
           else
-            params = TEALrb::Opcodes.instance_method(meth_name).parameters
+            params = TEALrb::Opcodes::AllOpcodes.instance_method(meth_name).parameters
             req_params = params.count { |param| param[0] == :req }
             @skips += node.children[2..(1 + req_params.size)] unless req_params.zero?
           end
@@ -131,7 +131,7 @@ module TEALrb
           @skips << node.children[2]
         elsif node.children.first&.children&.last == :@scratch && meth_name[/=$/]
           nil
-        elsif %i[@scratch Gtxn].include? node.children.first&.children&.last
+        elsif %i[@scratch Gtxn Accounts ApplicationArgs Assets Apps Logs].include? node.children.first&.children&.last
           @skips << node.children.last
         end
 
@@ -163,6 +163,19 @@ module TEALrb
           @skips.delete(node)
         elsif node.source_range.source[/^:/]
           wrap(node.source_range, 'label(', ')')
+        end
+
+        super
+      end
+    end
+
+    class InlineIfRewriter < Rewriter
+      def on_if(node)
+        unless node.loc.respond_to? :else
+          conditional = node.children[0].source
+          if_blk = node.children[1].source
+
+          replace(node.loc.expression, "if(#{conditional})\n#{if_blk}\nend")
         end
 
         super

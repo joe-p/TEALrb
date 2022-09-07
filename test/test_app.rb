@@ -7,18 +7,34 @@ class AppTests < Minitest::Test
   include TestMethods
 
   {
-    app_approval_program: 'AppApprovalProgram',
-    app_clear_state_program: 'AppClearStateProgram',
-    app_global_num_uint: 'AppGlobalNumUint',
-    app_global_num_byte_slice: 'AppGlobalNumByteSlice',
-    app_local_num_uint: 'AppLocalNumUint',
-    app_local_num_byte_slice: 'AppLocalNumByteSlice',
-    app_extra_program_pages: 'AppExtraProgramPages',
-    app_creator: 'AppCreator',
-    app_address: 'AppAddress'
+    approval_program: 'AppApprovalProgram',
+    clear_state_program: 'AppClearStateProgram',
+    global_num_uint: 'AppGlobalNumUint',
+    global_num_byte_slice: 'AppGlobalNumByteSlice',
+    local_num_uint: 'AppLocalNumUint',
+    local_num_byte_slice: 'AppLocalNumByteSlice',
+    extra_program_pages: 'AppExtraProgramPages',
+    creator: 'AppCreator',
+    address: 'AppAddress'
   }.each do |meth, enum|
-    define_method("test_app_#{meth}") do
-      compile_test_last("App.#{meth}", "app_params_get #{enum}")
+    define_method("test_#{meth}") do
+      compile_test_last("Apps[0].#{meth}", ['txna Applications 0', "app_params_get #{enum}", 'pop'], 3)
+    end
+  end
+
+  {
+    approval_program?: 'AppApprovalProgram',
+    clear_state_program?: 'AppClearStateProgram',
+    global_num_uint?: 'AppGlobalNumUint',
+    global_num_byte_slice?: 'AppGlobalNumByteSlice',
+    local_num_uint?: 'AppLocalNumUint',
+    local_num_byte_slice?: 'AppLocalNumByteSlice',
+    extra_program_pages?: 'AppExtraProgramPages',
+    creator?: 'AppCreator',
+    address?: 'AppAddress'
+  }.each do |meth, enum|
+    define_method("test_#{meth}") do
+      compile_test_last("Apps[0].#{meth}", ['txna Applications 0', "app_params_get #{enum}", 'swap', 'pop'], 4)
     end
   end
 end

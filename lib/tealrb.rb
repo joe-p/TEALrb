@@ -44,13 +44,13 @@ module TEALrb
 
     TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do |other|
-        ExtendedOpcodes.send(opcode, self, other)
+        TEALrb::Opcodes::ExtendedOpcodes.send(opcode, self, other)
       end
     end
 
     TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do
-        ExtendedOpcodes.send(opcode, self)
+        TEALrb::Opcodes::ExtendedOpcodes.send(opcode, self)
       end
     end
   end
