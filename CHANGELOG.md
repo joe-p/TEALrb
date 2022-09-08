@@ -13,6 +13,14 @@ Additional labels for pre-release and build metadata are available as extensions
 
 See https://semver.org/ for more information
 
+## 0.9.0 (09/07/2022)
+
+### Features
+- `Contract#teal_source` method for generating TEAL source code that uses whitespace for increased readability
+- Refactor of `Txna` and app arrays (ie. `Assets[0].creator?`)
+- Removed dot key notation support for `Scratch`
+- Inline `if` support
+
 ## 0.8.0 (07/30/2022)
 
 ### Features

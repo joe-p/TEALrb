@@ -1,147 +1,147 @@
 #pragma version 2
-txn ApplicationID
-int 0
-==
-bz if0_else0
-byte "Creator"
-txn Sender
-app_global_put
-txn NumAppArgs
-int 4
-==
-assert
-byte "RegBegin"
-txna ApplicationArgs 0
-btoi
-app_global_put
-byte "RegEnd"
-txna ApplicationArgs 1
-btoi
-app_global_put
-byte "VoteBegin"
-txna ApplicationArgs 2
-btoi
-app_global_put
-byte "VoteEnd"
-txna ApplicationArgs 3
-btoi
-app_global_put
-b if0_end
-if0_else0:
-txn OnCompletion
-int DeleteApplication
-==
-bz if0_else1
-txn Sender
-byte "Creator"
-app_global_get
-==
-return
-b if0_end
-if0_else1:
-txn OnCompletion
-int UpdateApplication
-==
-bz if0_else2
-txn Sender
-byte "Creator"
-app_global_get
-==
-return
-b if0_end
-if0_else2:
-txn OnCompletion
-int CloseOut
-==
-bz if0_else3
-global Round
-byte "VoteEnd"
-app_global_get
-<=
-int 0
-txn ApplicationID
-byte "voted"
-app_global_get_ex
-swap
-pop
-&&
-bz if1_else0
-int 0
-txn ApplicationID
-byte "voted"
-app_global_get_ex
-pop
-int 0
-txn ApplicationID
-byte "voted"
-app_global_get_ex
-pop
-app_global_get
-int 1
--
-app_global_put
-b if1_end
-if1_else0:
-if1_end:
-int 1
-return
-b if0_end
-if0_else3:
-txn OnCompletion
-int OptIn
-==
-bz if0_else4
-global Round
-byte "RegBegin"
-app_global_get
->=
-global Round
-byte "RegEnd"
-app_global_get
->=
-&&
-return
-b if0_end
-if0_else4:
-txna ApplicationArgs 0
-byte "vote"
-==
-bz if0_else5
-global Round
-byte "VoteBegin"
-app_global_get
->=
-global Round
-byte "VoteEnd"
-app_global_get
-<=
-&&
-assert
-int 0
-txn ApplicationID
-byte "voted"
-app_global_get_ex
-swap
-pop
-bz if2_else0
-int 0
-return
-b if2_end
-if2_else0:
-if2_end:
-txna ApplicationArgs 1
-txna ApplicationArgs 1
-app_global_get
-int 1
-+
-app_global_put
-int 0
-byte "voted"
-txna ApplicationArgs 1
-app_local_put
-int 1
-return
-b if0_end
-if0_else5:
-if0_end:
-return
+    txn ApplicationID
+    int 0
+    ==
+    bz if0_else0
+    byte "Creator"
+    txn Sender
+    app_global_put
+    txn NumAppArgs
+    int 4
+    ==
+    assert
+    byte "RegBegin"
+    txna ApplicationArgs 0
+    btoi
+    app_global_put
+    byte "RegEnd"
+    txna ApplicationArgs 1
+    btoi
+    app_global_put
+    byte "VoteBegin"
+    txna ApplicationArgs 2
+    btoi
+    app_global_put
+    byte "VoteEnd"
+    txna ApplicationArgs 3
+    btoi
+    app_global_put
+    b if0_end
+    if0_else0:
+    txn OnCompletion
+    int DeleteApplication
+    ==
+    bz if0_else1
+    txn Sender
+    byte "Creator"
+    app_global_get
+    ==
+    return
+    b if0_end
+    if0_else1:
+    txn OnCompletion
+    int UpdateApplication
+    ==
+    bz if0_else2
+    txn Sender
+    byte "Creator"
+    app_global_get
+    ==
+    return
+    b if0_end
+    if0_else2:
+    txn OnCompletion
+    int CloseOut
+    ==
+    bz if0_else3
+    global Round
+    byte "VoteEnd"
+    app_global_get
+    <=
+    int 0
+    txn ApplicationID
+    byte "voted"
+    app_global_get_ex
+    swap
+    pop
+    &&
+    bz if1_else0
+    int 0
+    txn ApplicationID
+    byte "voted"
+    app_global_get_ex
+    pop
+    int 0
+    txn ApplicationID
+    byte "voted"
+    app_global_get_ex
+    pop
+    app_global_get
+    int 1
+    -
+    app_global_put
+    b if1_end
+    if1_else0:
+    if1_end:
+    int 1
+    return
+    b if0_end
+    if0_else3:
+    txn OnCompletion
+    int OptIn
+    ==
+    bz if0_else4
+    global Round
+    byte "RegBegin"
+    app_global_get
+    >=
+    global Round
+    byte "RegEnd"
+    app_global_get
+    >=
+    &&
+    return
+    b if0_end
+    if0_else4:
+    txna ApplicationArgs 0
+    byte "vote"
+    ==
+    bz if0_else5
+    global Round
+    byte "VoteBegin"
+    app_global_get
+    >=
+    global Round
+    byte "VoteEnd"
+    app_global_get
+    <=
+    &&
+    assert
+    int 0
+    txn ApplicationID
+    byte "voted"
+    app_global_get_ex
+    swap
+    pop
+    bz if2_else0
+    int 0
+    return
+    b if2_end
+    if2_else0:
+    if2_end:
+    txna ApplicationArgs 1
+    txna ApplicationArgs 1
+    app_global_get
+    int 1
+    +
+    app_global_put
+    int 0
+    byte "voted"
+    txna ApplicationArgs 1
+    app_local_put
+    int 1
+    return
+    b if0_end
+    if0_else5:
+    if0_end:
+    return

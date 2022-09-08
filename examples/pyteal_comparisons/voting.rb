@@ -125,4 +125,4 @@ end
 
 contract = VotingApproval.new
 contract.compile
-File.write("#{__dir__}/voting_tealrb.teal", contract.teal.join("\n"))
+File.write("#{__dir__}/voting_tealrb.teal", contract.teal_source)
