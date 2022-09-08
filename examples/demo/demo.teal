@@ -192,113 +192,6 @@ while0:
     app_global_put
     b while0
 end_while0:
-<<<<<<< HEAD
-// opcodes with "maybe" values
-// using app_global_ex_exists? and app_global_ex_value
-int 1337
-byte "some_key"
-app_global_get_ex
-swap
-pop
-bz if3_else0
-int 1337
-byte "some_key"
-app_global_get_ex
-pop
-b if3_end
-if3_else0:
-byte "some_key does not exist"
-log
-if3_end:
-// using app_global_get_ex and store/load
-int 1337
-byte "some_key"
-app_local_get_ex
-store 0
-store 1
-load 0
-bz if4_else0
-load 1
-b if4_end
-if4_else0:
-byte "some_key does not exist"
-log
-if4_end:
-// Off-chain encoding
-byte 0x80 // bool: true
-byte 0x00000018 // uint32: 24
-byte 0x007b // ufixed16x2: 1.23
-byte 0x0002007b009c // ufixed16x2[2]: [1.23, 1.56]
-byte 0x007b009c // ufixed16x2[]: [1.23, 1.56]
-byte 0x8000000018007b // (bool, uint32, ufixed16x2): [true, 24, 1.23]
-// On-chain encoding
-int 1
-// Encode bool from stack
-!
-bz if5_else0
-byte 0x80
-b if5_end
-if5_else0:
-byte 0x00
-if5_end:
-int 24
-itob
-// Encode uint72 from stack
-store 9 // Uint72_input
-load 9 // Uint72_input
-len
-int 9
-<
-bz if6_else0
-byte 0x000000000000000000
-load 9 // Uint72_input
-b|
-b if6_end
-if6_else0:
-load 9 // Uint72_input
-len
-store 10 // Uint72_input_len
-load 9 // Uint72_input
-load 10 // Uint72_input_len
-int 9
--
-load 10 // Uint72_input_len
-substring3
-if6_end:
-int 24
-itob
-// Encode uint16 from stack
-store 11 // Uint16_input
-load 11 // Uint16_input
-len
-int 2
-<
-bz if7_else0
-byte 0x0000
-load 11 // Uint16_input
-b|
-b if7_end
-if7_else0:
-load 11 // Uint16_input
-len
-store 12 // Uint16_input_len
-load 11 // Uint16_input
-load 12 // Uint16_input_len
-int 2
--
-load 12 // Uint16_input_len
-substring3
-if7_end:
-// inline if statement
-btoi
-int 10
->
-bz if8_else0
-b label
-b if8_end
-if8_else0:
-if8_end:
-=======
     
     // opcodes with "maybe" values
     // using app_global_ex_exists? and app_global_ex_value
@@ -333,15 +226,82 @@ if8_end:
     log
     if4_end:
     
+    // Off-chain encoding
+    byte 0x80 // bool: true
+    byte 0x00000018 // uint32: 24
+    byte 0x007b // ufixed16x2: 1.23
+    byte 0x0002007b009c // ufixed16x2[2]: [1.23, 1.56]
+    byte 0x007b009c // ufixed16x2[]: [1.23, 1.56]
+    byte 0x8000000018007b // (bool, uint32, ufixed16x2): [true, 24, 1.23]
+    
+    // On-chain encoding
+    int 1
+    // Encode bool from stack
+    !
+    bz if5_else0
+    byte 0x80
+    b if5_end
+    if5_else0:
+    byte 0x00
+    if5_end:
+    int 24
+    itob
+    // Encode uint72 from stack
+    store 8 // Uint72_input
+    load 8 // Uint72_input
+    len
+    int 9
+    <
+    bz if6_else0
+    byte 0x000000000000000000
+    load 8 // Uint72_input
+    b|
+    b if6_end
+    if6_else0:
+    load 8 // Uint72_input
+    len
+    store 9 // Uint72_input_len
+    load 8 // Uint72_input
+    load 9 // Uint72_input_len
+    int 9
+    -
+    load 9 // Uint72_input_len
+    substring3
+    if6_end:
+    int 24
+    itob
+    // Encode uint16 from stack
+    store 10 // Uint16_input
+    load 10 // Uint16_input
+    len
+    int 2
+    <
+    bz if7_else0
+    byte 0x0000
+    load 10 // Uint16_input
+    b|
+    b if7_end
+    if7_else0:
+    load 10 // Uint16_input
+    len
+    store 11 // Uint16_input_len
+    load 10 // Uint16_input
+    load 11 // Uint16_input_len
+    int 2
+    -
+    load 11 // Uint16_input_len
+    substring3
+    if7_end:
+    
     // inline if statement
     btoi
     int 10
     >
-    bz if5_else0
+    bz if8_else0
     b label
-    b if5_end
-    if5_else0:
-    if5_end:
+    b if8_end
+    if8_else0:
+    if8_end:
     
     // Accessing arrays
     // Assets[0].creator
@@ -354,4 +314,3 @@ if8_end:
     acct_params_get AcctBalance
     swap
     pop
->>>>>>> dev

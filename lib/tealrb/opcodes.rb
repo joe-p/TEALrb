@@ -233,13 +233,13 @@ module TEALrb
 
       def byte(string, quote: true)
         teal_str = if quote
-                   "byte \"#{string}\""
+                     "byte \"#{string}\""
                    else
-                   "byte #{string}"
-                 end
+                     "byte #{string}"
+                   end
 
-      TEAL.instance << teal_str
-    end
+        TEAL.instance << teal_str
+      end
 
       def bytec(index)
         TEAL.instance << "bytec #{index}"
@@ -293,9 +293,9 @@ module TEALrb
         TEAL.instance << '/'
       end
 
-    def divmodw(_a = nil, _b = nil)
-      TEAL.instance << 'divmodw'
-    end
+      def divmodw(_a = nil, _b = nil)
+        TEAL.instance << 'divmodw'
+      end
 
       def divw(_a = nil, _b = nil)
         TEAL.instance << 'divw'
