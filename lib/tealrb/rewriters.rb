@@ -69,6 +69,24 @@ module TEALrb
         insert_after(node.loc.name, '.call') unless ['@teal_methods', '@subroutines', '@scratch'].include? node.source
         super
       end
+
+      def on_gvasgn(node)
+        unless RuboCop::Cop::Style::GlobalVars::BUILT_IN_VARS.include? node.loc.name.source.to_sym
+          var_name = node.loc.name.source[1..]
+          replace(node.loc.name, "@scratch[:#{var_name}]")
+        end
+
+        super
+      end
+
+      def on_gvar(node)
+        unless RuboCop::Cop::Style::GlobalVars::BUILT_IN_VARS.include? node.loc.name.source.to_sym
+          var_name = node.loc.name.source[1..]
+          replace(node.loc.name, "@scratch[:#{var_name}]")
+        end
+
+        super
+      end
     end
 
     class ComparisonRewriter < Rewriter
