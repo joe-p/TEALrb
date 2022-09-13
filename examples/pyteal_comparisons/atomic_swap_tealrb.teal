@@ -1,4 +1,3 @@
-
 #pragma version 6
     txn Fee
     int 1000
