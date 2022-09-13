@@ -1,49 +1,17 @@
 # TEALrb
-TEALrb is a Ruby-based DSL for writing Algorand smart contracts. The goal is to create a way to easily write contracts without adding too much unavoidable abstraction on top of raw TEAL. It's designed to support raw teal (as much as possible within the confines of Ruby syntax) while also providing some useful functionality such as conditionals, variables, methods, and ABI support. 
+TEALrb is a Ruby-based DSL for writing Algorand smart contracts. The goal is to make smart contracts easy to read and write. It's designed to support raw teal (as much as possible within the confines of Ruby syntax) while also providing some useful functionality and abstraction.
 
-## Why Not PyTeal?
+# Installation
 
-PyTeal is a great language for writing smart contracts, but I found it to be a bit too opinionated for my personal taste. The goal of TEALrb is to create a way to write smart contracts with the efficiency of TEAL while also offering the QOL benefits of a higher-level language. 
+TEALrb can be installed by adding `tealrb` to your Gemfile or running `gem install tealrb`
 
-### Comparison
-#### PyTeal
-```python
-    on_closeout = Seq(
-        [
-            get_vote_of_sender,
-            If(
-                And(
-                    Global.round() <= App.globalGet(Bytes("VoteEnd")),
-                    get_vote_of_sender.hasValue(),
-                ),
-                App.globalPut(
-                    get_vote_of_sender.value(),
-                    App.globalGet(get_vote_of_sender.value()) - Int(1),
-                ),
-            ),
-            Return(Int(1)),
-        ]
-    )
-```
-#### TEALrb
-```ruby
-  teal def on_closeout
-    vote_of_sender = app_global_ex_value(0, Txn.application_id, 'voted')
-
-    if Global.round <= Global['VoteEnd'] && app_global_ex_exists?(0, Txn.application_id, 'voted')
-      Global[vote_of_sender] = Global[vote_of_sender] - 1
-    end
-
-    teal_return 1
-  end
-```
 # Using TEALrb
 
 To create a smart contract with TEALrb you must require the gem, create a subclass of `TEALrb::Contract`, and define an instance method `main`. `main` is a special method that will be automatically converted to TEAL upon compilation. For example:
 
 
 ```ruby
-require_relative 'lib/tealrb'
+require 'tealrb'
 
 class Approval < TEALrb::Contract
   def main
@@ -53,14 +21,14 @@ end
 
 approval = Approval.new
 approval.compile
-puts approval.teal
+puts approval.teal_source
 ```
 
 This script will output the following:
 
 ```
 #pragma version 6
-int 1
+    int 1
 ```
 
 ## Specifying TEAL Version
@@ -108,101 +76,95 @@ subroutine def subroutine_method(x, y)
 end
 ```
 
-# How TEALrb Works
+# Features
+## Maybe Values
+TEAL has a couple of opcodes that return two values with one indicating the value actually exists and the other being the actual value (if it exists). 
 
-At a high-level, TEALrb transpile Ruby into TEAL. For example, a string literal `'hello'` becomes `byte "hello"`. In reality, there are actually two stags of transpilation. First, the given Ruby is rewritten to use TEALrb methods and then that TEALrb method is called, which is what actually generates the TEAL.
+TEALrb offers some additional opcodes/methods for dealing with either of these return values. The methods are listed below
 
-For example, `'hello'` becomes `byte('hello')` which adds `byte "hello"` to the generated TEAL. The re-writing step is used for things such as string literals, integer literals, symbol literals (which become branch labels), and keywords such as `if` and `&&`.
+| TEAL | TEALrb Exists | TEALrb Value
+|------|--------|---------|
+| `app_params_get` | `app_param_exists?` | `app_param_value` |
+| `asset_params_get` | `asset_params_exists?` | `asset_param_value` |
+| `app_local_get_ex` | `app_local_ex_exists?` | `app_local_ex_value` |
+| `app_global_get_ex` | `app_global_ex_exists?` | `ex_app_global_ex_value` |
 
-## Example
+## Scratch Space Management
 
-If you create a contract with class instance variable `@debug = true` you will see this the steps of this process. For example:
+With TEALrb you can call `load`/`store` manually or you can use the `@scratch` instance variable to reserve named scratch slots. For example:
+
+```rb
+@scratch['some_key'] = 123
+```
+
+Will save 123 in the first available scratch slot. Assuming this is the first named slot we've reserved, this will be `slot 0`. 
+
+```c
+int 123
+store 0 // some_key
+```
+
+Loading this value can be done by simply calling the key
+
+```rb
+@scratch['some_key']
+```
+
+```c
+load 0 // some_key
+```
+
+To later free up this slot for a future named slot, call the delete method:
+
+```rb
+@scratch.delete 'some_key'
+```
+
+This will free up `slot 0` to be used in the future, but it will only get used after the other 255 slots are used first.
+
+### $ Syntax
+
+Rather than typing out `@scratch['some_key']`, you can also use `$some_key`. For example
 
 ```ruby
-require_relative 'lib/tealrb'
+$some_key = 123
+$some_key
+```
 
+```c
+int 123
+store 0
+load 0
+```
+
+## App Arrays
+
+Foreign apps, assets, and accounts can be access via the `Apps`, `Assets`, and `Accounts` classes. For example, to access the first foreign asset, simply use `Assets[0]`. 
+
+### Parameters
+Each of these classes also have methods that can be used for getting the respective parameters. For example `Assets[0].unit_name?` will be a boolean value determining if the asset has a unit name and `Assets[0].unit_name` will get the value of the unit name for the asset.
+
+## ABI Support
+TEALrb can automatically generate ABI interface JSON data and provide the logic for routing to ABI methods. To generate a proper interface, you must define the contract name, add at least one ID, and define some ABI methods. For example:
+
+```rb
 class Approval < TEALrb::Contract
-    @debug = true
+  @abi_description.name = 'TEALrb_example'
+  @abi_description.add_id(MAINNET, '1234')
 
-  subroutine def example_subroutine(x, y)
-    if x > y
-      'x is bigger'
-    else
-      'x is smaller'
-    end
-  end
-
-  def main
-    example_subroutine(1, 2)
-  end
-end
-
-approval = Approval.new
-approval.compile
+  abi(
+    args: {
+      x: { type: 'uint64', desc: 'The first number' },
+      y: { type: 'uint64', desc: 'The second number' }
+    },
+    returns: 'uint64',
+    desc: 'Adds two numbers'
+  )
+  # define subroutine
+  subroutine def add(x, y)
 ```
 
-```
-DEBUG: Rewriting the following code:
-  subroutine def example_subroutine(x, y)
-    if x > y
-      'x is bigger'
-    else
-      'x is smaller'
-    end
-  end
-
-DEBUG: Resulting TEALrb code:
-   IfBlock.new((x.call > y.call) ) do
-      byte('x is bigger')
-    end.else do
-      byte('x is smaller')
-    end
-
-DEBUG: Evaluating the following code (subroutine: example_subroutine):
-store 200
-comment('y', inline: true)
-y = -> { load 200; comment('y', inline: true) }
-store 201
-comment('x', inline: true)
-x = -> { load 201; comment('x', inline: true) }
-   IfBlock.new((x.call > y.call) ) do
-      byte('x is bigger')
-    end.else do
-      byte('x is smaller')
-    end
-retsub
-
-DEBUG: Resulting TEAL (subroutine: example_subroutine):
-store 200 // y
-store 201 // x
-load 201 // x
-load 200 // y
->
-bz if0_else0
-byte "x is bigger"
-b if0_end
-if0_else0:
-byte "x is smaller"
-if0_end:
-retsub
-
-DEBUG: Rewriting the following code:
-  def main
-    example_subroutine(1, 2)
-  end
-
-DEBUG: Resulting TEALrb code:
-  example_subroutine(int(1), int(2))
-
-DEBUG: Evaluating the following code (main):
-  example_subroutine(int(1), int(2))
-
-DEBUG: Resulting TEAL (main):
-int 1
-int 2
-callsub example_subroutine
-```
-
+TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this, set `@disable_abi_routing` to false within your `TEALrb::Contract` subclass. 
 
 # Raw TEAL Exceptions
 TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby syntax therefore the TEALrb-specific syntax must be used.
@@ -338,76 +300,6 @@ Comments in the Ruby source code that start with `# //` or `#//` will be include
 // this comment will be in the TEAL
 int 1 // this comment will be in the TEAL as an inline comment
 ```
-
-# Additional Features
-## Maybe Values
-TEAL has a couple of opcodes that return two values with one indicating the value actually exists and the other being the actual value (if it exists). 
-
-
-TEALrb offers some additional opcodes/methods for dealing with either of these return values. The methods are listed below
-
-| TEAL | TEALrb Exists | TEALrb Value
-|------|--------|---------|
-| `app_params_get` | `app_param_exists?` | `app_param_value` |
-| `asset_params_get` | `asset_params_exists?` | `asset_param_value` |
-| `app_local_get_ex` | `app_local_ex_exists?` | `app_local_ex_value` |
-| `app_global_get_ex` | `app_global_ex_exists?` | `ex_app_global_ex_value` |
-
-## Scratch Space Management
-
-With TEALrb you can call `load`/`store` manually or you can use the `@scratch` instance variable to reserve named scratch slots. For example:
-
-```rb
-@scratch.some_key = 123
-```
-
-Will save 123 in the first available scratch slot. Assuming this is the first named slot we've reserved, this will be `slot 0`. 
-
-```c
-int 123
-store 0 // some_key
-```
-
-Loading this value can be done by simply calling the key
-
-```rb
-@scratch.some_key
-```
-
-```c
-load 0 // some_key
-```
-
-To later free up this slot for a future named slot, call the delete method:
-
-```rb
-@scratch.delete 'some_key'
-```
-
-This will free up `slot 0` to be used in the future, but it will only get used after the other 255 slots are used first.
-
-## ABI Support
-TEALrb can automatically generate ABI interface JSON data and provide the logic for routing to ABI methods. To generate a proper interface, you must define the contract name, add at least one ID, and define some ABI methods. For example:
-
-
-```rb
-class Approval < TEALrb::Contract
-  @abi_description.name = 'TEALrb_example'
-  @abi_description.add_id(MAINNET, '1234')
-
-  abi(
-    args: {
-      x: { type: 'uint64', desc: 'The first number' },
-      y: { type: 'uint64', desc: 'The second number' }
-    },
-    returns: 'uint64',
-    desc: 'Adds two numbers'
-  )
-  # define subroutine
-  subroutine def add(x, y)
-```
-
-TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this, set `@disable_abi_routing` to false within your `TEALrb::Contract` subclass. 
 
 # Planned Features
 - ABI type encoding/decoding
