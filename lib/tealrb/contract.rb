@@ -100,7 +100,7 @@ module TEALrb
       @teal.each_with_index do |line, i|
         ln = line.strip
 
-        teal_lines << '' if VOID_OPS.include? @teal[i - 1][/\S+/]
+        teal_lines << '' if i != 0 && VOID_OPS.include?(@teal[i - 1][/\S+/])
 
         if (ln[%r{\S+:($| //)}] && !ln[/^if\d+/]) || ln == 'b main' || ln[/^#/]
           teal_lines << ln
