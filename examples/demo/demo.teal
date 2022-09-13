@@ -1,8 +1,11 @@
 #pragma version 6
 b main
+
 subroutine_method: // subroutine_method(x, y)
     store 0 // subroutine_method: y
+
     store 1 // subroutine_method: x
+
     load 1 // subroutine_method: x
     load 0 // subroutine_method: y
     +
@@ -15,6 +18,7 @@ subroutine_method: // subroutine_method(x, y)
     itob
     concat
     log
+
     retsub
 
 main:
@@ -22,10 +26,14 @@ main:
     byte "e80dc394"
     ==
     bz if0_else0
+
     callsub subroutine_method
+
     int 1
     return
+
     b if0_end
+
     if0_else0:
     if0_end:
     
@@ -34,6 +42,7 @@ main:
     byte "Key One" // this will be an in-line comment
     int 111
     app_global_put
+
     int 100
     int 200
     +
@@ -42,16 +51,19 @@ main:
     byte "Key Two"
     int 222
     app_global_put
+
     
     // two step method call
     byte "Key Three" // string literals are implicitly bytes
     int 333
     app_global_put
+
     
     // Global put/get as hash
     byte "Key Four"
     int 444
     app_global_put
+
     byte "Key Five"
     app_global_get
     
@@ -60,6 +72,7 @@ main:
     byte "Local Key"
     byte "Some Value"
     app_local_put
+
     txn Receiver
     byte "Local Key"
     app_local_get
@@ -68,13 +81,17 @@ main:
     byte "Key Four"
     int 444
     app_global_put
+
     
     // combining raw teal with conditionals
     byte "Bad Key"
     app_global_get
     bz if1_else0
+
     err
+
     b if1_end
+
     if1_else0:
     if1_end:
     
@@ -84,34 +101,44 @@ main:
     byte "Hi"
     ==
     bz if2_else0
+
     byte "Second Word"
     byte "Mom"
     app_global_put
+
     b if2_end
+
     if2_else0:
     byte "First Word"
     app_global_get
     byte "Hello"
     ==
     bz if2_else1
+
     byte "Second Word"
     byte "World"
     app_global_put
+
     b if2_end
+
     if2_else1:
     byte "First Word"
     app_global_get
     byte "Howdy"
     ==
     bz if2_else2
+
     byte "Second Word"
     byte "Partner"
     app_global_put
+
     b if2_end
+
     if2_else2:
     byte "Second Word"
     byte "???"
     app_global_put
+
     if2_end:
     
     // calling methods
@@ -119,6 +146,7 @@ main:
     int 1
     int 2
     callsub subroutine_method
+
     
     // teal method
     int 3
@@ -132,7 +160,9 @@ main:
     int 1111
     int 2222
     store 2 // another_teal_method: b
+
     store 3 // another_teal_method: a
+
     load 3 // another_teal_method: a
     load 2 // another_teal_method: b
     /
@@ -141,7 +171,9 @@ main:
     int 3333
     int 4444
     store 4 // yet_another_teal_method: arg2
+
     store 5 // yet_another_teal_method: arg1
+
     load 5 // yet_another_teal_method: arg1
     load 4 // yet_another_teal_method: arg2
     %
@@ -154,6 +186,7 @@ main:
     
     // manual branching
     b manual_br
+
     byte "Unreachable"
     app_global_get
 manual_br:
@@ -164,6 +197,7 @@ manual_br:
     byte "Some Key"
     REPLACE_ME
     app_global_put
+
     gtxn 1 ANOTHER_THING_TO_REPLACE
     
     // TxnType enums
@@ -172,9 +206,11 @@ manual_br:
     // store/load to named scratch slots
     int 123
     store 6 // some key
+
     load 6 // some key
     int 321
     store 7 // another key
+
     load 7 // another key
     
     // while loops
@@ -184,13 +220,16 @@ while0:
     int 3
     <
     bz end_while0
+
     byte "counter"
     byte "counter"
     app_global_get
     int 1
     +
     app_global_put
+
     b while0
+
 end_while0:
     
     // opcodes with "maybe" values
@@ -201,14 +240,17 @@ end_while0:
     swap
     pop
     bz if3_else0
+
     int 1337
     byte "some_key"
     app_global_get_ex
     pop
     b if3_end
+
     if3_else0:
     byte "some_key does not exist"
     log
+
     if3_end:
     
     // using app_global_get_ex and store/load
@@ -216,14 +258,19 @@ end_while0:
     byte "some_key"
     app_local_get_ex
     store 0
+
     store 1
+
     load 0
     bz if4_else0
+
     load 1
     b if4_end
+
     if4_else0:
     byte "some_key does not exist"
     log
+
     if4_end:
     
     // inline if statement
@@ -231,8 +278,11 @@ end_while0:
     int 10
     >
     bz if5_else0
+
     b label
+
     b if5_end
+
     if5_else0:
     if5_end:
     
@@ -247,3 +297,9 @@ end_while0:
     acct_params_get AcctBalance
     swap
     pop
+    
+    // sratch var shorthand with $
+    int 123
+    store 8 // another_scatch_var
+
+    load 8 // another_scatch_var

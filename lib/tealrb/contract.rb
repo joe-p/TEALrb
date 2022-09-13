@@ -90,11 +90,17 @@ module TEALrb
       end
     end
 
+    VOID_OPS = %w[assert err return app_global_put b bnz bz store
+                  stores app_local_put app_global_del app_local_del callsub retsub
+                  log itxn_submit itxn_next].freeze
+
     def teal_source
       teal_lines = []
 
-      @teal.each do |line|
+      @teal.each_with_index do |line, i|
         ln = line.strip
+
+        teal_lines << '' if VOID_OPS.include? @teal[i - 1][/\S+/]
 
         if (ln[%r{\S+:($| //)}] && !ln[/^if\d+/]) || ln == 'b main' || ln[/^#/]
           teal_lines << ln
@@ -104,6 +110,10 @@ module TEALrb
         else
           teal_lines << "    #{ln}"
         end
+      end
+
+      teal_lines.delete_if.with_index do |t, i|
+        t.empty? && teal_lines[i - 1].empty?
       end
 
       teal_lines.join("\n")
