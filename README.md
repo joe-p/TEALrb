@@ -44,57 +44,28 @@ class Approval < TEALrb::Contract
 
 ## Defining Subroutines
 
-There are two primary ways of defining a subroutine 
-
-### subroutine block
-
-The `subroutine` method takes a symbol and a block. The symbol is used for the name of the subroutine while the block is transpiled for the logic of the subroutine. 
+Subroutines can be defined in two ways:
 
 ```ruby
-subroutine :subroutine_method do |x, y|
-  x + y
+subroutine :add do |x, y|
+  abi_return(x + y)
 end
 ```
 
-### subroutine def
-The problem with the above syntax is that language servers (such as solargraph) will not recognize `subroutine_method` as a callable method. This means IDEs will not provide intellisense for subroutine calls. To solve this, it's useful to define an actual ruby method that is transpiled to the subroutine definition.
-
-Calling the `subroutine` method with just a symbol as an argument will tell TEALrb to transpile the instance method with the given name as a subroutine. For example:
-
 ```ruby
-def subroutine_method(x, y)
-  x + y
-end
-subroutine :subroutine_method # => transpiles subroutine_method as a callable subroutine in the generated TEAL
-```
-
-Since the `def` keyword returns a symbol, you can directly pass the method definition as an argument to subroutine: 
-
-```ruby
-subroutine def subroutine_method(x, y)
-  x + y
+subroutine def add(x, y)
+  abi_return(x + y)
 end
 ```
 
-# Features
-## Maybe Values
-TEAL has a couple of opcodes that return two values with one indicating the value actually exists and the other being the actual value (if it exists). 
-
-TEALrb offers some additional opcodes/methods for dealing with either of these return values. The methods are listed below
-
-| TEAL | TEALrb Exists | TEALrb Value
-|------|--------|---------|
-| `app_params_get` | `app_param_exists?` | `app_param_value` |
-| `asset_params_get` | `asset_params_exists?` | `asset_param_value` |
-| `app_local_get_ex` | `app_local_ex_exists?` | `app_local_ex_value` |
-| `app_global_get_ex` | `app_global_ex_exists?` | `ex_app_global_ex_value` |
+The first is more standard ruby syntax while the second will allow any Ruby IDE to know that `add` is a callable method.
 
 ## Scratch Space Management
 
-With TEALrb you can call `load`/`store` manually or you can use the `@scratch` instance variable to reserve named scratch slots. For example:
+With TEALrb you can call `load`/`store` manually or you can use the `$` prefix on variables to reserve named scratch slots. For example:
 
 ```rb
-@scratch['some_key'] = 123
+$some_key = 123
 ```
 
 Will save 123 in the first available scratch slot. Assuming this is the first named slot we've reserved, this will be `slot 0`. 
@@ -104,45 +75,80 @@ int 123
 store 0 // some_key
 ```
 
-Loading this value can be done by simply calling the key
+Loading this value can be done by simply calling the variable
 
 ```rb
-@scratch['some_key']
+$some_key
 ```
 
 ```c
 load 0 // some_key
 ```
 
-To later free up this slot for a future named slot, call the delete method:
+To later free up this slot for a future named slot, call the `delete` method on `@sratch`:
 
 ```rb
-@scratch.delete 'some_key'
+@scratch.delete :some_key
 ```
 
 This will free up `slot 0` to be used in the future, but it will only get used after the other 255 slots are used first.
 
-### $ Syntax
+## Conditionals
 
-Rather than typing out `@scratch['some_key']`, you can also use `$some_key`. For example
+`if`, `else`, and `elsif` statements are supported by TEALrb. They can multi or single line.
 
-```ruby
-$some_key = 123
-$some_key
+```rb
+err if $some_condition != 0
+
+if $some_variable > 100
+  log('Variable is great than 100!')
+elsif $some_variable > 10
+  log('Variable is greater than 10!')
+else
+  log('Variable is less than 10!')
+end
 ```
 
-```c
-int 123
-store 0
-load 0
+## While Loops
+
+```rb
+$counter = 0
+while($counter < 10) do
+    $counter = $counter + 1
+end
 ```
 
 ## App Arrays
 
-Foreign apps, assets, and accounts can be access via the `Apps`, `Assets`, and `Accounts` classes. For example, to access the first foreign asset, simply use `Assets[0]`. 
+Foreign apps, assets, and accounts can be access via the `Apps`, `Assets`, and `Accounts` classes.
 
 ### Parameters
-Each of these classes also have methods that can be used for getting the respective parameters. For example `Assets[0].unit_name?` will be a boolean value determining if the asset has a unit name and `Assets[0].unit_name` will get the value of the unit name for the asset.
+Each of these classes also have methods that can be used for getting the respective parameters (and whether they exist or not).
+
+```rb
+$asa = Assets[0]
+
+Global['Unit Name'] = $asa.unit_name if $asa.unit_name?
+```
+
+## Global and Local Storage
+
+Global and local storage can be accessed via `Global` and `Local` respectively
+
+```rb
+Global["Last favorite color"] = Local[Txn.sender]['Favorite color']
+```
+
+## Grouped Transactions
+
+Grouped transactions can be accessed via `Gtxn` or `Gtxns`. `Gtxns` must be used when the index is not static.
+
+```rb
+$payment_txn = Gtxns[Txn.group_index + 1]
+
+assert $payment_txn.receiver == Global.current_application_address
+assert $payment_txn.amount == 100_000
+```
 
 ## ABI Support
 TEALrb can automatically generate ABI interface JSON data and provide the logic for routing to ABI methods. To generate a proper interface, you must define the contract name, add at least one ID, and define some ABI methods. For example:
@@ -164,7 +170,8 @@ class Approval < TEALrb::Contract
   subroutine def add(x, y)
 ```
 
-TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this, set `@disable_abi_routing` to false within your `TEALrb::Contract` subclass. 
+TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this, set `@disable_abi_routing` to true within your `TEALrb::Contract` subclass. 
+
 
 # Raw TEAL Exceptions
 TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby syntax therefore the TEALrb-specific syntax must be used.
@@ -301,5 +308,19 @@ Comments in the Ruby source code that start with `# //` or `#//` will be include
 int 1 // this comment will be in the TEAL as an inline comment
 ```
 
+## Maybe Values
+TEAL has a couple of opcodes that return two values with one indicating the value actually exists and the other being the actual value (if it exists). 
+
+TEALrb offers some additional opcodes/methods for dealing with either of these return values. The methods are listed below
+
+| TEAL | TEALrb Exists | TEALrb Value
+|------|--------|---------|
+| `app_params_get` | `app_param_exists?` | `app_param_value` |
+| `asset_params_get` | `asset_params_exists?` | `asset_param_value` |
+| `app_local_get_ex` | `app_local_ex_exists?` | `app_local_ex_value` |
+| `app_global_get_ex` | `app_global_ex_exists?` | `ex_app_global_ex_value` |
+
+
 # Planned Features
 - ABI type encoding/decoding
+- Inner transaction abstraction
