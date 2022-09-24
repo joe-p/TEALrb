@@ -1,5 +1,5 @@
 {
-  "name": "TEALrb_Demo",
+  "name": "AnotherName",
   "networks": {
     "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=": {
       "appID": "1234"
@@ -8,17 +8,26 @@
   "methods": [
     {
       "name": "subroutine_method",
-      "desc": "Adds two numbers, subtracts two numbers, then multiplies two numbers",
+      "desc": "Does some stuff",
       "args": [
         {
-          "type": "uint64",
-          "desc": "The first number",
-          "name": "x"
+          "type": "asset",
+          "desc": "Some asset",
+          "name": "asa"
+        },
+        {
+          "type": "axfer",
+          "desc": "A axfer txn",
+          "name": "payment_txn"
+        },
+        {
+          "type": "application",
+          "desc": "Another app",
+          "name": "another_app"
         },
         {
           "type": "uint64",
-          "desc": "The second number",
-          "name": "y"
+          "name": "some_number"
         }
       ],
       "returns": {

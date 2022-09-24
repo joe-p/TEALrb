@@ -2,24 +2,28 @@
 
 require_relative '../../lib/tealrb'
 
-class Approval < TEALrb::Contract
-  @abi_description.name = 'TEALrb_Demo'
-  @abi_description.add_id(MAINNET, '1234')
+class DemoContract < TEALrb::Contract
+  @abi_interface.name = 'AnotherName'
+  @abi_interface.add_id(MAINNET, '1234')
 
   # Specify ABI arg types, return type, and desc
   abi(
     args: {
-      x: { type: 'uint64', desc: 'The first number' },
-      y: { type: 'uint64', desc: 'The second number' }
+      asa: { type: 'asset', desc: 'Some asset' },
+      payment_txn: { type: 'axfer', desc: 'A axfer txn' },
+      another_app: { type: 'application', desc: 'Another app' },
+      some_number: { type: 'uint64' }
     },
     returns: 'uint64',
-    desc: 'Adds two numbers, subtracts two numbers, then multiplies two numbers'
+    desc: 'Does some stuff'
   )
   # define subroutine
-  subroutine def subroutine_method(x, y)
-    x + y
-    x - y
-    abi_return(itob(x * y))
+  subroutine def subroutine_method(asa, payment_txn, another_app, some_number)
+    assert asa.unit_name?
+    assert payment_txn.sender == Txn.sender
+    assert another_app.extra_program_pages?
+
+    abi_return(some_number + 1)
   end
 
   # Evaluate all code in the method as TEALrb expressions
@@ -187,7 +191,7 @@ class Approval < TEALrb::Contract
   end
 end
 
-approval = Approval.new
+approval = DemoContract.new
 approval.compile
 File.write("#{__dir__}/demo.teal", approval.teal_source)
 File.write("#{__dir__}/demo.json", JSON.pretty_generate(approval.abi_hash))

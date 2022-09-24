@@ -151,23 +151,47 @@ assert $payment_txn.amount == 100_000
 ```
 
 ## ABI Support
-TEALrb can automatically generate ABI interface JSON data and provide the logic for routing to ABI methods. To generate a proper interface, you must define the contract name, add at least one ID, and define some ABI methods. For example:
+
+### ABI Interface JSON
+TEALrb can generate an ABI Inerface JSON file from a `Contract` subclass. By default, the interface name will be the name of the subclass. To change the name simply change the value of `@abi_interface.name` as the class level:
 
 ```rb
-class Approval < TEALrb::Contract
-  @abi_description.name = 'TEALrb_example'
-  @abi_description.add_id(MAINNET, '1234')
+class DemoContract < TEALrb::Contract
+  @abi_interface.name = 'AnotherName'
+```
 
+To add network app IDs:
+
+```rb
+class DemoContract < TEALrb::Contract
+  @abi_interface.add_id(MAINNET, '1234')
+```
+
+Method interfaces will be defined automatically as seen below.
+
+### ABI Methods
+Defining a method interface with `abi` before a subroutine definition will allow TEALrb to perform automatic routing and properly load the ABI method arguments.
+
+```rb
+  # Specify ABI arg types, return type, and desc
   abi(
     args: {
-      x: { type: 'uint64', desc: 'The first number' },
-      y: { type: 'uint64', desc: 'The second number' }
+      asa: { type: 'asset', desc: 'Some asset' },
+      payment_txn: { type: 'axfer', desc: 'A axfer txn' },
+      another_app: { type: 'application', desc: 'Another app' },
+      some_number: { type: 'uint64' }
     },
     returns: 'uint64',
-    desc: 'Adds two numbers'
+    desc: 'Does some stuff'
   )
   # define subroutine
-  subroutine def add(x, y)
+  subroutine def subroutine_method(asa, payment_txn, another_app, some_number)
+    assert asa.unit_name?
+    assert payment_txn.sender == Txn.sender
+    assert another_app.extra_program_pages?
+
+    abi_return(some_number + 1)
+  end
 ```
 
 TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this, set `@disable_abi_routing` to true within your `TEALrb::Contract` subclass. 

@@ -1,23 +1,42 @@
 #pragma version 6
 b main
 
-subroutine_method: // subroutine_method(x, y)
-    txna ApplicationArgs 1
-    store 0 // uint64(x) - The first number
+subroutine_method: // subroutine_method(asa, payment_txn, another_app, some_number)
+    txna Assets 0
+    store 0 // asset(asa) - Some asset
 
-    txna ApplicationArgs 2
-    store 1 // uint64(y) - The second number
-
-    load 0 // uint64(x) - The first number
-    load 1 // uint64(y) - The second number
-    +
-    load 0 // uint64(x) - The first number
-    load 1 // uint64(y) - The second number
+    txn GroupIndex
+    int 1
     -
-    load 0 // uint64(x) - The first number
-    load 1 // uint64(y) - The second number
-    *
-    itob
+    store 1 // axfer(payment_txn) - A axfer txn
+
+    txna Applications 0
+    store 2 // application(another_app) - Another app
+
+    txna ApplicationArgs 1
+    store 3 // uint64(some_number)
+
+    load 0 // asset(asa) - Some asset
+    asset_params_get AssetUnitName
+    swap
+    pop
+    assert
+
+    load 1 // axfer(payment_txn) - A axfer txn
+    gtxns Sender
+    txn Sender
+    ==
+    assert
+
+    load 2 // application(another_app) - Another app
+    app_params_get AppExtraProgramPages
+    swap
+    pop
+    assert
+
+    load 3 // uint64(some_number)
+    int 1
+    +
     concat
     log
 
@@ -25,7 +44,7 @@ subroutine_method: // subroutine_method(x, y)
 
 main:
     txna ApplicationArgs 0
-    byte "e80dc394"
+    byte "ad361841"
     ==
     bz if0_else0
 
@@ -161,23 +180,23 @@ main:
     // another_teal_method
     int 1111
     int 2222
-    store 2 // another_teal_method: b
+    store 4 // another_teal_method: b
 
-    store 3 // another_teal_method: a
+    store 5 // another_teal_method: a
 
-    load 3 // another_teal_method: a
-    load 2 // another_teal_method: b
+    load 5 // another_teal_method: a
+    load 4 // another_teal_method: b
     /
     
     // yet_another_teal_method
     int 3333
     int 4444
-    store 4 // yet_another_teal_method: arg2
+    store 6 // yet_another_teal_method: arg2
 
-    store 5 // yet_another_teal_method: arg1
+    store 7 // yet_another_teal_method: arg1
 
-    load 5 // yet_another_teal_method: arg1
-    load 4 // yet_another_teal_method: arg2
+    load 7 // yet_another_teal_method: arg1
+    load 6 // yet_another_teal_method: arg2
     %
     
     // accessing specific indexes/fields
@@ -207,13 +226,13 @@ manual_br:
     
     // store/load to named scratch slots
     int 123
-    store 6 // some key
+    store 8 // some key
 
-    load 6 // some key
+    load 8 // some key
     int 321
-    store 7 // another key
+    store 9 // another key
 
-    load 7 // another key
+    load 9 // another key
     
     // while loops
 while0:
@@ -302,6 +321,6 @@ end_while0:
     
     // sratch var shorthand with $
     int 123
-    store 8 // another_scatch_var
+    store 10 // another_scatch_var
 
-    load 8 // another_scatch_var
+    load 10 // another_scatch_var

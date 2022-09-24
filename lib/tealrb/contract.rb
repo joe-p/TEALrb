@@ -11,7 +11,7 @@ module TEALrb
     attr_reader :teal
 
     class << self
-      attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_description, :debug,
+      attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_interface, :debug,
                     :disable_abi_routing
 
       private
@@ -20,7 +20,8 @@ module TEALrb
         klass.version = 6
         klass.subroutines = {}
         klass.teal_methods = {}
-        klass.abi_description = ABI::ABIDescription.new
+        klass.abi_interface = ABI::ABIDescription.new
+        klass.abi_interface.name = klass.to_s
         klass.abi_method_hash = {}
         klass.debug = false
         klass.disable_abi_routing = false
@@ -50,7 +51,7 @@ module TEALrb
     #  @yield [*args] the definition of the subroutine
     def self.subroutine(name, &blk)
       @subroutines[name] = (blk || instance_method(name))
-      abi_description.add_method(**({ name: name.to_s }.merge abi_method_hash)) unless abi_method_hash.empty?
+      abi_interface.add_method(**({ name: name.to_s }.merge abi_method_hash)) unless abi_method_hash.empty?
       @abi_method_hash = {}
       nil
     end
@@ -190,7 +191,7 @@ module TEALrb
 
     # the hash of the abi description
     def abi_hash
-      self.class.abi_description.to_h
+      self.class.abi_interface.to_h
     end
 
     # transpiles the given string to TEAL
@@ -212,7 +213,7 @@ module TEALrb
     private
 
     def route_abi_methods
-      self.class.abi_description.methods.each do |meth|
+      self.class.abi_interface.methods.each do |meth|
         signature = "#{meth[:name]}(#{meth[:args].map { _1[:type] }.join(',')})#{meth[:returns][:type]}"
         selector = OpenSSL::Digest.new('SHA512-256').hexdigest(signature)[..7]
 
@@ -267,7 +268,7 @@ module TEALrb
         param_name = param.last
 
         scratch_name = "#{abi_arg_types[i]}(#{param_name})"
-        scratch_name += " - #{abi_args[i][:desc]}"
+        scratch_name += " - #{abi_args[i][:desc]}" if abi_args[i][:desc]
         scratch_names << scratch_name
 
         if txn_types.include? abi_arg_types[i]
@@ -276,8 +277,6 @@ module TEALrb
         elsif abi_arg_types[i] == 'application'
           pre_string.puts "@scratch['#{scratch_name}'] = Apps[#{app_param_index += 1}]"
         elsif abi_arg_types[i] == 'asset'
-          require 'pry'
-          binding.pry
           pre_string.puts "@scratch['#{scratch_name}'] = Assets[#{asset_param_index += 1}]"
         elsif abi_arg_types[i] == 'account'
           pre_string.puts "@scratch['#{scratch_name}'] = Accounts[#{account_param_index += 1}]"
