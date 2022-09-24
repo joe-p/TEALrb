@@ -155,7 +155,12 @@ module TEALrb
       comment_content = "#{name}(#{comment_params})"
       comment(comment_content, inline: true)
 
-      new_source = generate_method_source(name, definition)
+      new_source = if abi_hash['methods'].find { _1[:name] == name.to_s }
+                     generate_abi_method_source(name, definition)
+                   else
+                     generate_method_source(name, definition)
+                   end
+
       new_source = "#{new_source}retsub"
 
       eval_tealrb(new_source, debug_context: "subroutine: #{name}")
@@ -230,6 +235,55 @@ module TEALrb
         scratch_names << scratch_name
 
         pre_string.puts "@scratch.store('#{scratch_name}')"
+        pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
+      end
+
+      post_string = StringIO.new
+      scratch_names.each do |n|
+        post_string.puts "@scratch.delete '#{n}'"
+      end
+
+      "#{pre_string.string}#{new_source}#{post_string.string}"
+    end
+
+    def generate_abi_method_source(name, definition)
+      new_source = rewrite(definition.source, method_rewriter: true)
+
+      pre_string = StringIO.new
+
+      scratch_names = []
+
+      txn_types = %w[txn pay keyreg acfg axfer afrz appl]
+
+      abi_args = abi_hash['methods'].find { _1[:name] == name.to_s }[:args]
+      abi_arg_types = abi_args.map { _1[:type] }
+      txn_params = abi_arg_types.select { txn_types.include? _1 }.count
+      app_param_index = -1
+      asset_param_index = -1
+      account_param_index = 0
+      args_index = 0
+
+      definition.parameters.each_with_index do |param, i|
+        param_name = param.last
+
+        scratch_name = [name, param_name].map(&:to_s).join(': ')
+        scratch_names << scratch_name
+
+        if txn_types.include? abi_arg_types[i]
+          pre_string.puts "@scratch['#{scratch_name}'] = Gtxns[Txn.group_index - int(#{txn_params})]"
+          txn_params -= 1
+        elsif abi_arg_types[i] == 'application'
+          pre_string.puts "@scratch['#{scratch_name}'] = Apps[#{app_param_index += 1}]"
+        elsif abi_arg_types[i] == 'asset'
+          require 'pry'
+          binding.pry
+          pre_string.puts "@scratch['#{scratch_name}'] = Assets[#{asset_param_index += 1}]"
+        elsif abi_arg_types[i] == 'account'
+          pre_string.puts "@scratch['#{scratch_name}'] = Accounts[#{account_param_index += 1}]"
+        else
+          pre_string.puts "@scratch['#{scratch_name}'] = AppArgs[#{args_index += 1}]"
+        end
+
         pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
       end
 
