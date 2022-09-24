@@ -2,18 +2,20 @@
 b main
 
 subroutine_method: // subroutine_method(x, y)
-    store 0 // subroutine_method: y
+    txna ApplicationArgs 1
+    store 0 // uint64(x) - The first number
 
-    store 1 // subroutine_method: x
+    txna ApplicationArgs 2
+    store 1 // uint64(y) - The second number
 
-    load 1 // subroutine_method: x
-    load 0 // subroutine_method: y
+    load 0 // uint64(x) - The first number
+    load 1 // uint64(y) - The second number
     +
-    load 1 // subroutine_method: x
-    load 0 // subroutine_method: y
+    load 0 // uint64(x) - The first number
+    load 1 // uint64(y) - The second number
     -
-    load 1 // subroutine_method: x
-    load 0 // subroutine_method: y
+    load 0 // uint64(x) - The first number
+    load 1 // uint64(y) - The second number
     *
     itob
     concat

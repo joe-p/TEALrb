@@ -266,7 +266,8 @@ module TEALrb
       definition.parameters.each_with_index do |param, i|
         param_name = param.last
 
-        scratch_name = [name, param_name].map(&:to_s).join(': ')
+        scratch_name = "#{abi_arg_types[i]}(#{param_name})"
+        scratch_name += " - #{abi_args[i][:desc]}"
         scratch_names << scratch_name
 
         if txn_types.include? abi_arg_types[i]
