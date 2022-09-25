@@ -474,6 +474,22 @@ module TEALrb
       end
     end
 
+    module ItxnField
+      extend TxnFields
+
+      def self.opcode(field, _value)
+        ExtendedOpcodes.itxn_field field
+      end
+
+      class << self
+        TxnFields.instance_methods.each do |m|
+          define_method("#{m}=") do |value|
+            send(m, value)
+          end
+        end
+      end
+    end
+
     module Gtxn
       extend TxnFields
 
