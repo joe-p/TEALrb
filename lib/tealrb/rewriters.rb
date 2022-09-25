@@ -34,7 +34,6 @@ module TEALrb
         method_name = node.loc.selector.source.to_sym
 
         if teal_methods.keys.include? method_name
-
           param_names = teal_methods[method_name].parameters.map(&:last)
 
           pre_string = StringIO.new

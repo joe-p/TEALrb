@@ -78,6 +78,10 @@ module TEALrb
 
       @@active_contract = self # rubocop:disable Style/ClassVars
 
+      self.class.teal_methods.each do |name, blk|
+        define_teal_method name, blk
+      end
+
       self.class.subroutines.each_key do |name|
         define_singleton_method(name) do |*_args|
           callsub(name)
@@ -86,10 +90,6 @@ module TEALrb
 
       self.class.subroutines.each do |name, blk|
         define_subroutine name, blk
-      end
-
-      self.class.teal_methods.each do |name, blk|
-        define_teal_method name, blk
       end
     end
 
