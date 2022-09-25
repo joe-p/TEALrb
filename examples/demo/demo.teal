@@ -179,24 +179,24 @@ main:
     
     // another_teal_method
     int 1111
+    store 4 // another_teal_method: a
+
     int 2222
-    store 4 // another_teal_method: b
+    store 5 // another_teal_method: b
 
-    store 5 // another_teal_method: a
-
-    load 5 // another_teal_method: a
-    load 4 // another_teal_method: b
+    load 4 // another_teal_method: a
+    load 5 // another_teal_method: b
     /
     
     // yet_another_teal_method
     int 3333
+    store 6 // yet_another_teal_method: arg1
+
     int 4444
-    store 6 // yet_another_teal_method: arg2
+    store 7 // yet_another_teal_method: arg2
 
-    store 7 // yet_another_teal_method: arg1
-
-    load 7 // yet_another_teal_method: arg1
-    load 6 // yet_another_teal_method: arg2
+    load 6 // yet_another_teal_method: arg1
+    load 7 // yet_another_teal_method: arg2
     %
     
     // accessing specific indexes/fields

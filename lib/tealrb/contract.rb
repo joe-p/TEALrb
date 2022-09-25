@@ -76,6 +76,8 @@ module TEALrb
       IfBlock.id = 0
       @scratch = Scratch.new
 
+      @@active_contract = self # rubocop:disable Style/ClassVars
+
       self.class.subroutines.each_key do |name|
         define_singleton_method(name) do |*_args|
           callsub(name)
@@ -130,7 +132,7 @@ module TEALrb
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
     # @return [nil]
     def define_teal_method(name, definition)
-      new_source = generate_method_source(name, definition)
+      new_source = generate_method_source(name, definition, subroutine: false)
 
       define_singleton_method(name) do |*_args|
         eval_tealrb(new_source, debug_context: "teal method: #{name}")
@@ -159,7 +161,7 @@ module TEALrb
       new_source = if abi_hash['methods'].find { _1[:name] == name.to_s }
                      generate_abi_method_source(name, definition)
                    else
-                     generate_method_source(name, definition)
+                     generate_method_source(name, definition, subroutine: true)
                    end
 
       new_source = "#{new_source}retsub"
@@ -224,7 +226,7 @@ module TEALrb
       end
     end
 
-    def generate_method_source(name, definition)
+    def generate_method_source(name, definition, subroutine: false)
       new_source = rewrite(definition.source, method_rewriter: true)
 
       pre_string = StringIO.new
@@ -235,7 +237,7 @@ module TEALrb
         scratch_name = [name, param_name].map(&:to_s).join(': ')
         scratch_names << scratch_name
 
-        pre_string.puts "@scratch.store('#{scratch_name}')"
+        pre_string.puts "@scratch.store('#{scratch_name}')" if subroutine
         pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
       end
 
@@ -308,7 +310,7 @@ module TEALrb
       end
 
       [CommentRewriter, ComparisonRewriter, WhileRewriter, InlineIfRewriter, IfRewriter, OpRewriter,
-       AssignRewriter].each do |rw|
+       AssignRewriter, InternalMethodRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
 

@@ -27,6 +27,30 @@ module TEALrb
       end
     end
 
+    class InternalMethodRewriter < Rewriter
+      def on_send(node)
+        teal_methods = TEALrb::Contract.class_variable_get(:@@active_contract).class.teal_methods
+
+        method_name = node.loc.selector.source.to_sym
+
+        if teal_methods.keys.include? method_name
+
+          param_names = teal_methods[method_name].parameters.map(&:last)
+
+          pre_string = StringIO.new
+          param_names.each_with_index do |param, i|
+            scratch_name = [method_name, param].map(&:to_s).join(': ')
+
+            pre_string.puts "@scratch.store('#{scratch_name}', #{node.children[i + 2].loc.expression.source})"
+          end
+
+          replace node.source_range, "#{pre_string.string}\n#{method_name}"
+        end
+
+        super
+      end
+    end
+
     class MethodRewriter < Rewriter
       def on_def(node)
         replace node.source_range, node.body.source
