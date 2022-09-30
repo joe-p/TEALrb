@@ -81,6 +81,10 @@ module TEALrb
       abi_hash['methods'].each do |method_hash|
         define_subroutine(method_hash[:name], method(method_hash[:name]))
       end
+
+      self.class.teal_methods.each do |name, definition|
+        define_teal_method(name, definition)
+      end
     end
 
     VOID_OPS = %w[assert err return app_global_put b bnz bz store

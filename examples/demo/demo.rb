@@ -100,8 +100,6 @@ class DemoContract < TEALrb::Contract
 
     # See header comments of each method for details
     # // calling methods
-    # // subroutine method
-    subroutine_method(1, 2)
     # // teal method
     teal_method
     # // ruby method
