@@ -21,6 +21,14 @@ class DemoContract < TEALrb::Contract
     abi_return(some_number + 1)
   end
 
+  # @subroutine
+  # @param n [uint64] Some number
+  # @param m [bytes] Some bytes
+  def some_subroutine(n, m)
+    log(m)
+    n + 1
+  end
+
   # @teal
   # Evaluate all code in the method as TEALrb expressions
   def teal_method
@@ -93,6 +101,8 @@ class DemoContract < TEALrb::Contract
 
     # See header comments of each method for details
     # // calling methods
+    # // subroutine
+    some_subroutine(1, 'one')
     # // teal method
     teal_method
     # // ruby method

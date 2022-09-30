@@ -42,6 +42,19 @@ some_abi_method: // some_abi_method(asa, payment_txn, another_app, some_number)
 
     retsub
 
+some_subroutine: // some_subroutine(n, m)
+    store 4 // m [bytes] Some bytes
+
+    store 5 // n [uint64] Some number
+
+    load 4 // m [bytes] Some bytes
+    log
+
+    load 5 // n [uint64] Some number
+    int 1
+    +
+    retsub
+
 main:
     txna ApplicationArgs 0
     byte "de28030f"
@@ -163,6 +176,12 @@ main:
     if2_end:
     
     // calling methods
+    // subroutine
+    int 1
+    byte "one"
+    callsub some_subroutine
+
+    
     // teal method
     int 3
     int 4
@@ -198,13 +217,13 @@ manual_br:
     
     // store/load to named scratch slots
     int 123
-    store 4 // some key
+    store 6 // some key
 
-    load 4 // some key
+    load 6 // some key
     int 321
-    store 5 // another key
+    store 7 // another key
 
-    load 5 // another key
+    load 7 // another key
     
     // while loops
 while0:
@@ -293,6 +312,6 @@ end_while0:
     
     // sratch var shorthand with $
     int 123
-    store 6 // another_scatch_var
+    store 8 // another_scatch_var
 
-    load 6 // another_scatch_var
+    load 8 // another_scatch_var
