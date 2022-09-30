@@ -31,13 +31,16 @@ module TEALrb
       def parse(klass)
         YARD::Tags::Library.define_tag('ABI Method', :abi)
         YARD::Tags::Library.define_tag('Subroutine', :subroutine)
+        YARD::Tags::Library.define_tag('TEAL Method', :teal)
 
         YARD.parse Object.const_source_location(klass.to_s).first
 
         YARD::Registry.all.each do |y|
           next unless y.type == :method
 
-          if y.tags.map(&:tag_name).include? 'abi'
+          tags = y.tags.map(&:tag_name)
+
+          if tags.include? 'abi'
             method_hash = { name: y.name.to_s, desc: y.base_docstring, args: [], returns: { type: 'void' } }
 
             y.tags.each do |t|
@@ -49,25 +52,13 @@ module TEALrb
             end
 
             klass.abi_interface.add_method(**method_hash)
-          elsif y.tags.map(&:tag_name).include? 'subroutine'
+          elsif tags.include? 'subroutine'
             nil
+          elsif tags.include? 'teal'
+            klass.teal_methods[y.name.to_s] = y
           end
         end
       end
-    end
-
-    # specifies a method to be defined upon intialization that will be transpiled to TEAL when called
-    # @return [nil]
-    # @overload subroutine(name)
-    #  @param name [Symbol] name of the method to use as the TEAL definition
-    #
-    # @overload subroutine(name)
-    #  @param name [Symbol] name of the method
-    #
-    #  @yield [*args] the definition of the TEAL method
-    def self.teal(name, &blk)
-      @teal_methods[name] = (blk || instance_method(name))
-      nil
     end
 
     # sets the `#pragma version`, defines teal methods, and defines subroutines

@@ -21,20 +21,13 @@ class DemoContract < TEALrb::Contract
     abi_return(some_number + 1)
   end
 
+  # @teal
   # Evaluate all code in the method as TEALrb expressions
-  teal def teal_method
+  def teal_method
     x = 3
     y = 4
     x + y # => ['int 3', 'int 4', '+']
   end
-
-  # Another way to define teal methods
-  teal :another_teal_method do |a, b|
-    a / b
-  end
-
-  # Yet another way to define teal methods
-  @teal_methods[:yet_another_teal_method] = ->(arg1, arg2) { arg1 % arg2 }
 
   # Only evalulates the return value as a TEALrb expression
   def ruby_method
@@ -104,10 +97,6 @@ class DemoContract < TEALrb::Contract
     teal_method
     # // ruby method
     int(ruby_method)
-    # // another_teal_method
-    another_teal_method(1111, 2222)
-    # // yet_another_teal_method
-    yet_another_teal_method(3333, 4444)
 
     # All of the following are the same
     # // accessing specific indexes/fields
