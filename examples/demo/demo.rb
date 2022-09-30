@@ -6,19 +6,14 @@ class DemoContract < TEALrb::Contract
   @abi_interface.name = 'AnotherName'
   @abi_interface.add_id(MAINNET, '1234')
 
-  # Specify ABI arg types, return type, and desc
-  abi(
-    args: {
-      asa: { type: 'asset', desc: 'Some asset' },
-      payment_txn: { type: 'axfer', desc: 'A axfer txn' },
-      another_app: { type: 'application', desc: 'Another app' },
-      some_number: { type: 'uint64' }
-    },
-    returns: 'uint64',
-    desc: 'Does some stuff'
-  )
-  # define subroutine
-  subroutine def subroutine_method(asa, payment_txn, another_app, some_number)
+  # @abi
+  # This is an abi method that does some stuff
+  # @param asa [asset] Some asset
+  # @param payment_txn [axfer] A axfer txn
+  # @param another_app [application] Another app
+  # @param some_number [uint64]
+  # @return [void]
+  def some_abi_method(asa, payment_txn, another_app, some_number)
     assert asa.unit_name?
     assert payment_txn.sender == Txn.sender
     assert another_app.extra_program_pages?

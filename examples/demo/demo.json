@@ -7,31 +7,34 @@
   },
   "methods": [
     {
-      "name": "subroutine_method",
-      "desc": "Does some stuff",
+      "name": "some_abi_method",
+      "desc": "This is an abi method that does some stuff",
       "args": [
         {
+          "name": "asa",
           "type": "asset",
-          "desc": "Some asset",
-          "name": "asa"
+          "desc": "Some asset"
         },
         {
+          "name": "payment_txn",
           "type": "axfer",
-          "desc": "A axfer txn",
-          "name": "payment_txn"
+          "desc": "A axfer txn"
         },
         {
+          "name": "another_app",
           "type": "application",
-          "desc": "Another app",
-          "name": "another_app"
+          "desc": "Another app"
         },
         {
+          "name": "some_number",
           "type": "uint64",
-          "name": "some_number"
+          "desc": ""
         }
       ],
       "returns": {
-        "type": "uint64"
+        "type": {
+          "type": "void"
+        }
       }
     }
   ]

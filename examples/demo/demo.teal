@@ -1,40 +1,40 @@
 #pragma version 6
 b main
 
-subroutine_method: // subroutine_method(asa, payment_txn, another_app, some_number)
+some_abi_method: // some_abi_method(asa, payment_txn, another_app, some_number)
     txna Assets 0
-    store 0 // asset(asa) - Some asset
+    store 0 // asa [asset] Some asset
 
     txn GroupIndex
     int 1
     -
-    store 1 // axfer(payment_txn) - A axfer txn
+    store 1 // payment_txn [axfer] A axfer txn
 
     txna Applications 0
-    store 2 // application(another_app) - Another app
+    store 2 // another_app [application] Another app
 
     txna ApplicationArgs 1
-    store 3 // uint64(some_number)
+    store 3 // some_number [uint64]
 
-    load 0 // asset(asa) - Some asset
+    load 0 // asa [asset] Some asset
     asset_params_get AssetUnitName
     swap
     pop
     assert
 
-    load 1 // axfer(payment_txn) - A axfer txn
+    load 1 // payment_txn [axfer] A axfer txn
     gtxns Sender
     txn Sender
     ==
     assert
 
-    load 2 // application(another_app) - Another app
+    load 2 // another_app [application] Another app
     app_params_get AppExtraProgramPages
     swap
     pop
     assert
 
-    load 3 // uint64(some_number)
+    load 3 // some_number [uint64]
     int 1
     +
     concat
@@ -44,11 +44,11 @@ subroutine_method: // subroutine_method(asa, payment_txn, another_app, some_numb
 
 main:
     txna ApplicationArgs 0
-    byte "ad361841"
+    byte "de28030f"
     ==
     bz if0_else0
 
-    callsub subroutine_method
+    callsub some_abi_method
 
     int 1
     return
@@ -57,270 +57,3 @@ main:
 
     if0_else0:
     if0_end:
-    
-    // This comment will show in TEAL
-    // raw teal
-    byte "Key One" // this will be an in-line comment
-    int 111
-    app_global_put
-
-    int 100
-    int 200
-    +
-    
-    // single method call
-    byte "Key Two"
-    int 222
-    app_global_put
-
-    
-    // two step method call
-    byte "Key Three" // string literals are implicitly bytes
-    int 333
-    app_global_put
-
-    
-    // Global put/get as hash
-    byte "Key Four"
-    int 444
-    app_global_put
-
-    byte "Key Five"
-    app_global_get
-    
-    // Local put/get as hash
-    txn Sender
-    byte "Local Key"
-    byte "Some Value"
-    app_local_put
-
-    txn Receiver
-    byte "Local Key"
-    app_local_get
-    
-    // using variables
-    byte "Key Four"
-    int 444
-    app_global_put
-
-    
-    // combining raw teal with conditionals
-    byte "Bad Key"
-    app_global_get
-    bz if1_else0
-
-    err
-
-    b if1_end
-
-    if1_else0:
-    if1_end:
-    
-    // more complex conditionals
-    byte "First Word"
-    app_global_get
-    byte "Hi"
-    ==
-    bz if2_else0
-
-    byte "Second Word"
-    byte "Mom"
-    app_global_put
-
-    b if2_end
-
-    if2_else0:
-    byte "First Word"
-    app_global_get
-    byte "Hello"
-    ==
-    bz if2_else1
-
-    byte "Second Word"
-    byte "World"
-    app_global_put
-
-    b if2_end
-
-    if2_else1:
-    byte "First Word"
-    app_global_get
-    byte "Howdy"
-    ==
-    bz if2_else2
-
-    byte "Second Word"
-    byte "Partner"
-    app_global_put
-
-    b if2_end
-
-    if2_else2:
-    byte "Second Word"
-    byte "???"
-    app_global_put
-
-    if2_end:
-    
-    // calling methods
-    // subroutine method
-    int 1
-    int 2
-    callsub subroutine_method
-
-    
-    // teal method
-    int 3
-    int 4
-    +
-    
-    // ruby method
-    int 11
-    
-    // another_teal_method
-    int 1111
-    store 4 // another_teal_method: a
-
-    int 2222
-    store 5 // another_teal_method: b
-
-    load 4 // another_teal_method: a
-    load 5 // another_teal_method: b
-    /
-    
-    // yet_another_teal_method
-    int 3333
-    store 6 // yet_another_teal_method: arg1
-
-    int 4444
-    store 7 // yet_another_teal_method: arg2
-
-    load 6 // yet_another_teal_method: arg1
-    load 7 // yet_another_teal_method: arg2
-    %
-    
-    // accessing specific indexes/fields
-    gtxn 0 Sender // gtxn(0, 'Sender')
-    gtxn 0 Sender // Gtxn.sender(0)
-    gtxn 0 Sender // Gtxn[0].sender
-    gtxn 0 Sender // gtxn_var.sender
-    
-    // manual branching
-    b manual_br
-
-    byte "Unreachable"
-    app_global_get
-manual_br:
-    byte "Manual Br"
-    app_global_get
-    
-    // placeholders
-    byte "Some Key"
-    REPLACE_ME
-    app_global_put
-
-    gtxn 1 ANOTHER_THING_TO_REPLACE
-    
-    // TxnType enums
-    int pay
-    
-    // store/load to named scratch slots
-    int 123
-    store 8 // some key
-
-    load 8 // some key
-    int 321
-    store 9 // another key
-
-    load 9 // another key
-    
-    // while loops
-while0:
-    byte "counter"
-    app_global_get
-    int 3
-    <
-    bz end_while0
-
-    byte "counter"
-    byte "counter"
-    app_global_get
-    int 1
-    +
-    app_global_put
-
-    b while0
-
-end_while0:
-    
-    // opcodes with "maybe" values
-    // using app_global_ex_exists? and app_global_ex_value
-    int 1337
-    byte "some_key"
-    app_global_get_ex
-    swap
-    pop
-    bz if3_else0
-
-    int 1337
-    byte "some_key"
-    app_global_get_ex
-    pop
-    b if3_end
-
-    if3_else0:
-    byte "some_key does not exist"
-    log
-
-    if3_end:
-    
-    // using app_global_get_ex and store/load
-    int 1337
-    byte "some_key"
-    app_local_get_ex
-    store 0
-
-    store 1
-
-    load 0
-    bz if4_else0
-
-    load 1
-    b if4_end
-
-    if4_else0:
-    byte "some_key does not exist"
-    log
-
-    if4_end:
-    
-    // inline if statement
-    btoi
-    int 10
-    >
-    bz if5_else0
-
-    b label
-
-    b if5_end
-
-    if5_else0:
-    if5_end:
-    
-    // Accessing arrays
-    // Assets[0].creator
-    txna Assets 0
-    asset_params_get AssetCreator
-    pop
-    
-    // Accounts[1].balance?
-    txna Accounts 1
-    acct_params_get AcctBalance
-    swap
-    pop
-    
-    // sratch var shorthand with $
-    int 123
-    store 10 // another_scatch_var
-
-    load 10 // another_scatch_var

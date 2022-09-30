@@ -11,7 +11,7 @@ module TEALrb
     attr_reader :teal
 
     class << self
-      attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_interface, :debug,
+      attr_accessor :subroutines, :version, :teal_methods, :abi_interface, :debug,
                     :disable_abi_routing
 
       private
@@ -22,38 +22,38 @@ module TEALrb
         klass.teal_methods = {}
         klass.abi_interface = ABI::ABIDescription.new
         klass.abi_interface.name = klass.to_s
-        klass.abi_method_hash = {}
         klass.debug = false
         klass.disable_abi_routing = false
+        parse(klass)
         super
       end
-    end
 
-    # abi description for the method
-    def self.abi(desc:, args:, returns:)
-      args = args.map do |name, h|
-        h[:name] = name.to_s
-        h[:type] = h[:type].to_s.split('::').last.downcase
-        h
+      def parse(klass)
+        YARD::Tags::Library.define_tag('ABI Method', :abi)
+        YARD::Tags::Library.define_tag('Subroutine', :subroutine)
+
+        YARD.parse Object.const_source_location(klass.to_s).first
+
+        YARD::Registry.all.each do |y|
+          next unless y.type == :method
+
+          if y.tags.map(&:tag_name).include? 'abi'
+            method_hash = { name: y.name.to_s, desc: y.base_docstring, args: [], returns: { type: 'void' } }
+
+            y.tags.each do |t|
+              method_hash[:returns] = { type: t.types.first } if t.tag_name == 'return'
+
+              next unless t.tag_name == 'param'
+
+              method_hash[:args] << { name: t.name, type: t.types.first, desc: t.text }
+            end
+
+            klass.abi_interface.add_method(**method_hash)
+          elsif y.tags.map(&:tag_name).include? 'subroutine'
+            nil
+          end
+        end
       end
-
-      self.abi_method_hash = { desc: desc, args: args, returns: returns.to_s.split('::').last.downcase }
-    end
-
-    # specifies a TEAL subroutine that will be defined upon intialization
-    # @return [nil]
-    # @overload subroutine(name)
-    #  @param name [Symbol] name of the subroutine and the method to use as the subroutine definition
-    #
-    # @overload subroutine(name)
-    #  @param name [Symbol] name of the subroutine
-    #
-    #  @yield [*args] the definition of the subroutine
-    def self.subroutine(name, &blk)
-      @subroutines[name] = (blk || instance_method(name))
-      abi_interface.add_method(**({ name: name.to_s }.merge abi_method_hash)) unless abi_method_hash.empty?
-      @abi_method_hash = {}
-      nil
     end
 
     # specifies a method to be defined upon intialization that will be transpiled to TEAL when called
@@ -78,18 +78,8 @@ module TEALrb
 
       @@active_contract = self # rubocop:disable Style/ClassVars
 
-      self.class.teal_methods.each do |name, blk|
-        define_teal_method name, blk
-      end
-
-      self.class.subroutines.each_key do |name|
-        define_singleton_method(name) do |*_args|
-          callsub(name)
-        end
-      end
-
-      self.class.subroutines.each do |name, blk|
-        define_subroutine name, blk
+      abi_hash['methods'].each do |method_hash|
+        define_subroutine(method_hash[:name], method(method_hash[:name]))
       end
     end
 
@@ -269,8 +259,7 @@ module TEALrb
       definition.parameters.each_with_index do |param, i|
         param_name = param.last
 
-        scratch_name = "#{abi_arg_types[i]}(#{param_name})"
-        scratch_name += " - #{abi_args[i][:desc]}" if abi_args[i][:desc]
+        scratch_name = "#{param_name} [#{abi_arg_types[i]}] #{abi_args[i][:desc]}"
         scratch_names << scratch_name
 
         if txn_types.include? abi_arg_types[i]
