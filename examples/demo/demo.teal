@@ -312,6 +312,14 @@ end_while0:
     swap
     pop
     
+    // Apps[1 + 1].creator
+    int 1
+    int 1
+    +
+    txnas Applications
+    app_params_get AppCreator
+    pop
+    
     // sratch var shorthand with $
     int 123
     store 8 // another_scatch_var

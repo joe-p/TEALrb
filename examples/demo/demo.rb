@@ -176,6 +176,8 @@ class DemoContract < TEALrb::Contract
     Assets[0].creator
     # // Accounts[1].balance?
     Accounts[1].balance?
+    # // Apps[1 + 1].creator
+    Apps[1 + 1].creator
 
     # // sratch var shorthand with $
     $another_scatch_var = 123
