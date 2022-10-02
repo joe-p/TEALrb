@@ -6,6 +6,13 @@ class DemoContract < TEALrb::Contract
   @abi_interface.name = 'AnotherName'
   @abi_interface.add_id(MAINNET, '1234')
 
+  # @subroutine
+  # @param asa_id [uint64]
+  def helper_method(asa_id)
+    $asa = Assets[asa_id]
+    log $asa.creator
+  end
+
   # @abi
   # This is an abi method that does some stuff
   # @param asa [asset] Some asset
@@ -18,6 +25,7 @@ class DemoContract < TEALrb::Contract
     assert payment_txn.sender == Txn.sender
     assert another_app.extra_program_pages?
 
+    helper_method(asa)
     return itob some_number + 1
   end
 

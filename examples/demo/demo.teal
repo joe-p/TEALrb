@@ -1,40 +1,57 @@
 #pragma version 6
 b main
 
+helper_method: // helper_method(asa_id)
+    store 0 // asa_id [uint64]
+
+    load 0 // asa_id [uint64]
+    txnas Assets
+    store 1 // asa
+
+    load 1 // asa
+    asset_params_get AssetCreator
+    pop
+    log
+
+    retsub
+
 some_abi_method: // some_abi_method(asa, payment_txn, another_app, some_number)
     txna Assets 0
-    store 0 // asa [asset] Some asset
+    store 2 // asa [asset] Some asset
 
     txn GroupIndex
     int 1
     -
-    store 1 // payment_txn [axfer] A axfer txn
+    store 3 // payment_txn [axfer] A axfer txn
 
     txna Applications 0
-    store 2 // another_app [application] Another app
+    store 4 // another_app [application] Another app
 
     txna ApplicationArgs 1
-    store 3 // some_number [uint64]
+    store 5 // some_number [uint64]
 
-    load 0 // asa [asset] Some asset
+    load 2 // asa [asset] Some asset
     asset_params_get AssetUnitName
     swap
     pop
     assert
 
-    load 1 // payment_txn [axfer] A axfer txn
+    load 3 // payment_txn [axfer] A axfer txn
     gtxns Sender
     txn Sender
     ==
     assert
 
-    load 2 // another_app [application] Another app
+    load 4 // another_app [application] Another app
     app_params_get AppExtraProgramPages
     swap
     pop
     assert
 
-    load 3 // some_number [uint64]
+    load 2 // asa [asset] Some asset
+    callsub helper_method
+
+    load 5 // some_number [uint64]
     int 1
     +
     itob
@@ -45,14 +62,14 @@ some_abi_method: // some_abi_method(asa, payment_txn, another_app, some_number)
     retsub
 
 some_subroutine: // some_subroutine(n, m)
-    store 4 // m [bytes] Some bytes
+    store 6 // m [bytes] Some bytes
 
-    store 5 // n [uint64] Some number
+    store 7 // n [uint64] Some number
 
-    load 4 // m [bytes] Some bytes
+    load 6 // m [bytes] Some bytes
     log
 
-    load 5 // n [uint64] Some number
+    load 7 // n [uint64] Some number
     int 1
     +
     retsub
@@ -219,13 +236,13 @@ manual_br:
     
     // store/load to named scratch slots
     int 123
-    store 6 // some key
+    store 8 // some key
 
-    load 6 // some key
+    load 8 // some key
     int 321
-    store 7 // another key
+    store 9 // another key
 
-    load 7 // another key
+    load 9 // another key
     
     // while loops
 while0:
@@ -322,6 +339,6 @@ end_while0:
     
     // sratch var shorthand with $
     int 123
-    store 8 // another_scatch_var
+    store 10 // another_scatch_var
 
-    load 8 // another_scatch_var
+    load 10 // another_scatch_var
