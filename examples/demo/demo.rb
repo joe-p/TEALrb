@@ -12,13 +12,13 @@ class DemoContract < TEALrb::Contract
   # @param payment_txn [axfer] A axfer txn
   # @param another_app [application] Another app
   # @param some_number [uint64]
-  # @return [void]
+  # @return [uint64]
   def some_abi_method(asa, payment_txn, another_app, some_number)
     assert asa.unit_name?
     assert payment_txn.sender == Txn.sender
     assert another_app.extra_program_pages?
 
-    abi_return(some_number + 1)
+    return itob some_number + 1
   end
 
   # @subroutine

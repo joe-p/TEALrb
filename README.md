@@ -170,27 +170,22 @@ class DemoContract < TEALrb::Contract
 Method interfaces will be defined automatically as seen below.
 
 ### ABI Methods
-Defining a method interface with `abi` before a subroutine definition will allow TEALrb to perform automatic routing and properly load the ABI method arguments.
+To define an ABI method, the YARD docstring must contain the `@abi` tag. For example:
 
 ```rb
-  # Specify ABI arg types, return type, and desc
-  abi(
-    args: {
-      asa: { type: 'asset', desc: 'Some asset' },
-      payment_txn: { type: 'axfer', desc: 'A axfer txn' },
-      another_app: { type: 'application', desc: 'Another app' },
-      some_number: { type: 'uint64' }
-    },
-    returns: 'uint64',
-    desc: 'Does some stuff'
-  )
-  # define subroutine
-  subroutine def subroutine_method(asa, payment_txn, another_app, some_number)
+  # @abi
+  # This is an abi method that does some stuff
+  # @param asa [asset] Some asset
+  # @param payment_txn [axfer] A axfer txn
+  # @param another_app [application] Another app
+  # @param some_number [uint64]
+  # @return [uint64]
+  def some_abi_method(asa, payment_txn, another_app, some_number)
     assert asa.unit_name?
     assert payment_txn.sender == Txn.sender
     assert another_app.extra_program_pages?
 
-    abi_return(some_number + 1)
+    return itob some_number + 1
   end
 ```
 

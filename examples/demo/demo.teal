@@ -37,6 +37,8 @@ some_abi_method: // some_abi_method(asa, payment_txn, another_app, some_number)
     load 3 // some_number [uint64]
     int 1
     +
+    itob
+    byte "151f7c75"
     concat
     log
 
@@ -57,7 +59,7 @@ some_subroutine: // some_subroutine(n, m)
 
 main:
     txna ApplicationArgs 0
-    byte "de28030f"
+    byte "a78bd94e"
     ==
     bz if0_else0
 

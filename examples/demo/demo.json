@@ -33,7 +33,7 @@
       ],
       "returns": {
         "type": {
-          "type": "void"
+          "type": "uint64"
         }
       }
     }

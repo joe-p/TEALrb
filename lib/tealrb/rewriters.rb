@@ -148,6 +148,12 @@ module TEALrb
         super
       end
 
+      def on_return(node)
+        replace node.loc.keyword, 'abi_return'
+
+        super
+      end
+
       OPCODE_METHODS = TEALrb::Opcodes::AllOpcodes.instance_methods.freeze
 
       def on_send(node)

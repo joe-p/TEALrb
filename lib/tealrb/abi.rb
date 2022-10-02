@@ -4,8 +4,10 @@ require 'json'
 
 module TEALrb
   module ABI
-    def abi_return(data)
-      log(concat('151f7c75', data.teal).teal)
+    def abi_return(_data)
+      byte('151f7c75')
+      concat
+      log
     end
 
     class ABIDescription
