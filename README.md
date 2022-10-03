@@ -346,6 +346,22 @@ TEALrb offers some additional opcodes/methods for dealing with either of these r
 | `app_local_get_ex` | `app_local_ex_exists?` | `app_local_ex_value` |
 | `app_global_get_ex` | `app_global_ex_exists?` | `ex_app_global_ex_value` |
 
-
 # Planned Features
 - ABI type encoding/decoding
+
+# Test Coverage
+
+TEALrb is a current work in progress. One benchmark for a full release is test coverage. While test coverage does not indicate proper testing, it is a useful benchmark for quanitfying tests.
+
+Generated on 2022-10-03 17:27:34 ([e9f0d11](https://github.com/joe-p/TEALrb/tree/e9f0d11))
+| File                                                         | Lines of Code | Coverage |
+|--------------------------------------------------------------|---------------|----------|
+| [lib/tealrb/constants.rb](lib/tealrb/constants.rb)           | 2             | 100.0%   |
+| [lib/tealrb/if_block.rb](lib/tealrb/if_block.rb)             | 29            | 100.0%   |
+| [lib/tealrb/opcodes.rb](lib/tealrb/opcodes.rb)               | 314           | 93.63%   |
+| [lib/tealrb/opcode_modules.rb](lib/tealrb/opcode_modules.rb) | 410           | 93.17%   |
+| [lib/tealrb.rb](lib/tealrb.rb)                               | 34            | 88.24%   |
+| [lib/tealrb/abi.rb](lib/tealrb/abi.rb)                       | 20            | 75.0%    |
+| [lib/tealrb/rewriters.rb](lib/tealrb/rewriters.rb)           | 151           | 74.17%   |
+| [lib/tealrb/scratch.rb](lib/tealrb/scratch.rb)               | 23            | 73.91%   |
+| [lib/tealrb/contract.rb](lib/tealrb/contract.rb)             | 207           | 66.18%   |
