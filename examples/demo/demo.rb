@@ -8,9 +8,16 @@ class DemoContract < TEALrb::Contract
 
   # @subroutine
   # @param asa_id [uint64]
-  def helper_method(asa_id)
+  def helper_subroutine(asa_id)
     $asa = Assets[asa_id]
     log $asa.creator
+  end
+
+  # @teal
+  # @param asa [asset]
+  def helper_teal_method(asa)
+    # // @teal writes in-place TEAL
+    log asa.creator
   end
 
   # @abi
@@ -25,7 +32,10 @@ class DemoContract < TEALrb::Contract
     assert payment_txn.sender == Txn.sender
     assert another_app.extra_program_pages?
 
-    helper_method(asa)
+    helper_subroutine(asa) # // calling helper_subroutine calls a subroutine
+    # // calling helper_teal_method writes TEAL in-place
+    helper_teal_method(asa) 
+
     return itob some_number + 1
   end
 

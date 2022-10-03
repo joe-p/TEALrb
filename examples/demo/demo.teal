@@ -1,7 +1,7 @@
 #pragma version 6
 b main
 
-helper_method: // helper_method(asa_id)
+helper_subroutine: // helper_subroutine(asa_id)
     store 0 // asa_id [uint64]
 
     load 0 // asa_id [uint64]
@@ -49,7 +49,14 @@ some_abi_method: // some_abi_method(asa, payment_txn, another_app, some_number)
     assert
 
     load 2 // asa [asset] Some asset
-    callsub helper_method
+    callsub helper_subroutine // calling helper_subroutine calls a subroutine
+
+    
+    // calling helper_teal_method writes TEAL in-place
+    load 2 // asa [asset] Some asset
+    asset_params_get AssetCreator
+    pop
+    log
 
     load 5 // some_number [uint64]
     int 1
