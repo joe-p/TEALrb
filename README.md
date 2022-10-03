@@ -152,7 +152,7 @@ class DemoContract < TEALrb::Contract
 Method interfaces will be defined automatically as seen below.
 
 ### ABI Methods
-To define an ABI method, the YARD docstring must contain the `@abi` tag. For example:
+To define an ABI method, the [YARD](https://rubydoc.info/gems/yard/file/docs/GettingStarted.md) docstring must contain the `@abi` tag. For example:
 
 ```rb
   # @abi
@@ -175,7 +175,7 @@ TEALrb will also add proper routing for the given methods in the compiled TEAL a
 
 ## Defining Subroutines
 
-Subroutines can be defined just like ABI Methods, except the yard tag is `@subroutine`. Unlike ABI methods, subroutines are not exposed via the ABI interface are intended to be used internally.
+Subroutines can be defined just like ABI Methods, except the yard tag is `@subroutine`. Unlike ABI methods, subroutines are not exposed via the ABI interface and are intended to be used internally.
 
 ```rb
   # @subroutine
@@ -349,4 +349,3 @@ TEALrb offers some additional opcodes/methods for dealing with either of these r
 
 # Planned Features
 - ABI type encoding/decoding
-- Inner transaction abstraction
