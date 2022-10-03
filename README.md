@@ -42,24 +42,6 @@ class Approval < TEALrb::Contract
   def main
 ```
 
-## Defining Subroutines
-
-Subroutines can be defined in two ways:
-
-```ruby
-subroutine :add do |x, y|
-  abi_return(x + y)
-end
-```
-
-```ruby
-subroutine def add(x, y)
-  abi_return(x + y)
-end
-```
-
-The first is more standard ruby syntax while the second will allow any Ruby IDE to know that `add` is a callable method.
-
 ## Scratch Space Management
 
 With TEALrb you can call `load`/`store` manually or you can use the `$` prefix on variables to reserve named scratch slots. For example:
@@ -176,11 +158,11 @@ To define an ABI method, the YARD docstring must contain the `@abi` tag. For exa
   # @abi
   # This is an abi method that does some stuff
   # @param asa [asset] Some asset
-  # @param payment_txn [axfer] A axfer txn
+  # @param axfer_txn [axfer] A axfer txn
   # @param another_app [application] Another app
   # @param some_number [uint64]
   # @return [uint64]
-  def some_abi_method(asa, payment_txn, another_app, some_number)
+  def some_abi_method(asa, axfer_txn, another_app, some_number)
     assert asa.unit_name?
     assert payment_txn.sender == Txn.sender
     assert another_app.extra_program_pages?
@@ -191,6 +173,31 @@ To define an ABI method, the YARD docstring must contain the `@abi` tag. For exa
 
 TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this, set `@disable_abi_routing` to true within your `TEALrb::Contract` subclass. 
 
+## Defining Subroutines
+
+Subroutines can be defined just like ABI Methods, except the yard tag is `@subroutine`. Unlike ABI methods, subroutines are not exposed via the ABI interface are intended to be used internally.
+
+```rb
+  # @subroutine
+  # @param asa [asset]
+  # @param axfer_txn [axfer]
+  def helper_subroutine(asa, axfer_txn)
+    assert axfer_txn.sender == asa.creator
+  end
+```
+
+## Defining TEAL methods
+
+TEAL methods are methods that result in TEAL being written in-place when called. They are defined with the `@teal` YARD tag.
+
+```rb
+  # @teal
+  # @param asa [asset]
+  # @param axfer_txn [axfer_txn]
+  def helper_teal_method(asa, axfer_txn)
+    assert axfer_txn.sender == asa.creator
+  end
+```
 
 # Raw TEAL Exceptions
 TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby syntax therefore the TEALrb-specific syntax must be used.

@@ -16,7 +16,6 @@ class DemoContract < TEALrb::Contract
   # @teal
   # @param asa [asset]
   def helper_teal_method(asa, axfer_txn)
-    # // @teal writes in-place TEAL
     assert axfer_txn.sender == asa.creator
   end
 
