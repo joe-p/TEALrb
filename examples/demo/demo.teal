@@ -2,13 +2,13 @@
 b main
 
 helper_subroutine: // helper_subroutine(asa, axfer_txn)
-    store 0 // axfer_txn [axfer]
+    store 0 // helper_subroutine: axfer_txn [axfer]
 
-    store 1 // asa [asset]
+    store 1 // helper_subroutine: asa [asset]
 
-    load 0 // axfer_txn [axfer]
+    load 0 // helper_subroutine: axfer_txn [axfer]
     gtxns Sender
-    load 1 // asa [asset]
+    load 1 // helper_subroutine: asa [asset]
     asset_params_get AssetCreator
     pop
     ==
@@ -18,52 +18,52 @@ helper_subroutine: // helper_subroutine(asa, axfer_txn)
 
 some_abi_method: // some_abi_method(asa, axfer_txn, another_app, some_number)
     txna Assets 0
-    store 2 // asa [asset] Some asset
+    store 2 // some_abi_method: asa [asset] Some asset
 
     txn GroupIndex
     int 1
     -
-    store 3 // axfer_txn [axfer] A axfer txn
+    store 3 // some_abi_method: axfer_txn [axfer] A axfer txn
 
     txna Applications 0
-    store 4 // another_app [application] Another app
+    store 4 // some_abi_method: another_app [application] Another app
 
     txna ApplicationArgs 1
-    store 5 // some_number [uint64]
+    store 5 // some_abi_method: some_number [uint64]
 
-    load 2 // asa [asset] Some asset
+    load 2 // some_abi_method: asa [asset] Some asset
     asset_params_get AssetUnitName
     swap
     pop
     assert
 
-    load 3 // axfer_txn [axfer] A axfer txn
+    load 3 // some_abi_method: axfer_txn [axfer] A axfer txn
     gtxns Sender
     txn Sender
     ==
     assert
 
-    load 4 // another_app [application] Another app
+    load 4 // some_abi_method: another_app [application] Another app
     app_params_get AppExtraProgramPages
     swap
     pop
     assert
 
-    load 2 // asa [asset] Some asset
-    load 3 // axfer_txn [axfer] A axfer txn
+    load 2 // some_abi_method: asa [asset] Some asset
+    load 3 // some_abi_method: axfer_txn [axfer] A axfer txn
     callsub helper_subroutine // calling helper_subroutine calls a subroutine
 
     
     // calling helper_teal_method writes TEAL in-place
-    load 2 // asa [asset] Some asset
-    load 3 // axfer_txn [axfer] A axfer txn
+    load 2 // some_abi_method: asa [asset] Some asset
+    load 3 // some_abi_method: axfer_txn [axfer] A axfer txn
     gtxns Sender
     asset_params_get AssetCreator
     pop
     ==
     assert
 
-    load 5 // some_number [uint64]
+    load 5 // some_abi_method: some_number [uint64]
     int 1
     +
     itob
@@ -74,14 +74,14 @@ some_abi_method: // some_abi_method(asa, axfer_txn, another_app, some_number)
     retsub
 
 some_subroutine: // some_subroutine(n, m)
-    store 6 // m [bytes] Some bytes
+    store 6 // some_subroutine: m [bytes] Some bytes
 
-    store 7 // n [uint64] Some number
+    store 7 // some_subroutine: n [uint64] Some number
 
-    load 6 // m [bytes] Some bytes
+    load 6 // some_subroutine: m [bytes] Some bytes
     log
 
-    load 7 // n [uint64] Some number
+    load 7 // some_subroutine: n [uint64] Some number
     int 1
     +
     retsub

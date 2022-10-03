@@ -6,7 +6,8 @@ require_relative '../../lib/tealrb'
 class Approval < TEALrb::Contract
   @version = 5
 
-  teal def init
+  # @teal
+  def init
     royalty_address = AppArgs[0]
     royalty_percent = btoi AppArgs[1]
     metadata = AppArgs[2]
@@ -26,7 +27,8 @@ class Approval < TEALrb::Contract
     approve
   end
 
-  teal def start_auction
+  # @teal
+  def start_auction
     payment = Gtxn[1]
     starting_price = btoi(AppArgs[1])
     duration = btoi(AppArgs[2])
@@ -40,7 +42,8 @@ class Approval < TEALrb::Contract
     approve
   end
 
-  teal def start_sale
+  # @teal
+  def start_sale
     price = btoi AppArgs[1]
 
     assert Global['TX Methods'] & 2
@@ -49,13 +52,15 @@ class Approval < TEALrb::Contract
     approve
   end
 
-  teal def end_sale
+  # @teal
+  def end_sale
     assert Txn.sender == Global['Owner']
     Global['Sale Price'] = 0
     approve
   end
 
-  teal def bid
+  # @teal
+  def bid
     payment = Gtxn[1]
     app_call = Gtxn[0]
     highest_bidder = Global['Highest Bidder']
@@ -74,7 +79,8 @@ class Approval < TEALrb::Contract
     approve
   end
 
-  subroutine def pay(receiver, amount)
+  # @subroutine
+  def pay(receiver, amount)
     itxn_begin
     itxn_field 'TypeEnum', TxnType.pay
     itxn_field 'Receiver', receiver
@@ -82,7 +88,8 @@ class Approval < TEALrb::Contract
     itxn_submit
   end
 
-  teal def end_auction
+  # @teal
+  def end_auction
     highest_bid = Global['Highest Bid']
     royalty_percent = Global['Royalty Percent']
     royalty_amount = highest_bid * royalty_percent / 100
@@ -98,7 +105,8 @@ class Approval < TEALrb::Contract
     approve
   end
 
-  teal def transfer
+  # @teal
+  def transfer
     receiver = AppArgs[1]
 
     assert Global['TX Methods'] & 1
@@ -107,7 +115,8 @@ class Approval < TEALrb::Contract
     approve
   end
 
-  teal def buy
+  # @teal
+  def buy
     royalty_payment = Gtxn[2]
     payment = Gtxn[1]
     royalty_amount = Global['Sale Price'] * Global['Royalty Percent'] / 100

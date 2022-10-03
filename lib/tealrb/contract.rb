@@ -119,7 +119,7 @@ module TEALrb
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
     # @return [nil]
     def define_teal_method(name, definition)
-      new_source = generate_method_source(name, definition, subroutine: false)
+      new_source = generate_method_source(name, definition)
 
       define_singleton_method(name) do |*_args|
         eval_tealrb(new_source, debug_context: "teal method: #{name}")
@@ -210,7 +210,7 @@ module TEALrb
       end
     end
 
-    def generate_method_source(name, definition, subroutine: false)
+    def generate_method_source(name, definition)
       new_source = rewrite(definition.source, method_rewriter: true)
 
       pre_string = StringIO.new
@@ -249,7 +249,9 @@ module TEALrb
         definition.parameters.each_with_index do |param, i|
           param_name = param.last
 
-          scratch_name = "#{param_name} [#{arg_types[i]}] #{args[i][:desc]}"
+          scratch_name = "#{definition.original_name}: #{param_name} [#{arg_types[i] || 'any'}] #{if args[i]
+                                                                                                    args[i][:desc]
+                                                                                                  end}"
           scratch_names << scratch_name
 
           if txn_types.include? arg_types[i]
@@ -275,7 +277,9 @@ module TEALrb
         definition.parameters.reverse.each_with_index do |param, i|
           param_name = param.last
 
-          scratch_name = "#{param_name} [#{arg_types[i] || 'any'}] #{args[i][:desc] if args[i]}"
+          scratch_name = "#{definition.original_name}: #{param_name} [#{arg_types[i] || 'any'}] #{if args[i]
+                                                                                                    args[i][:desc]
+                                                                                                  end}"
           scratch_names << scratch_name
 
           if txn_types.include? arg_types[i]
@@ -346,7 +350,9 @@ module TEALrb
       @eval_tealrb_rescue_count ||= 0
 
       eval_locations = e.backtrace.select { _1[/\(eval\)/] }
-      error_line = eval_locations[@eval_tealrb_rescue_count].split(':')[1].to_i if eval_locations[@eval_tealrb_rescue_count]
+      if eval_locations[@eval_tealrb_rescue_count]
+        error_line = eval_locations[@eval_tealrb_rescue_count].split(':')[1].to_i
+      end
 
       warn "'#{e}' when evaluating transpiled TEALrb source" if @eval_tealrb_rescue_count.zero?
 
