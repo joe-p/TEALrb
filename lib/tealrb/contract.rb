@@ -224,12 +224,7 @@ module TEALrb
         pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
       end
 
-      post_string = StringIO.new
-      scratch_names.each do |n|
-        post_string.puts "@scratch.delete '#{n}'"
-      end
-
-      "#{pre_string.string}#{new_source}#{post_string.string}"
+      "#{pre_string.string}#{new_source}"
     end
 
     def generate_subroutine_source(definition, method_hash)
@@ -273,23 +268,33 @@ module TEALrb
         end
 
       else
+        args.reverse!
+        arg_types.reverse!
+
         definition.parameters.reverse.each_with_index do |param, i|
           param_name = param.last
 
-          scratch_name = "#{param_name} [#{arg_types.reverse[i]}] #{args.reverse[i][:desc]}"
+          scratch_name = "#{param_name} [#{arg_types[i]}] #{args[i][:desc]}"
           scratch_names << scratch_name
-          pre_string.puts "@scratch.store('#{scratch_name}')"
+
+          if txn_types.include? arg_types[i]
+            pre_string.puts "@scratch['#{scratch_name}'] = Gtxns"
+          elsif arg_types[i] == 'application'
+            pre_string.puts "@scratch['#{scratch_name}'] = Applications.new"
+          elsif arg_types[i] == 'asset'
+            pre_string.puts "@scratch['#{scratch_name}'] = Assets.new"
+          elsif arg_types[i] == 'account'
+            pre_string.puts "@scratch['#{scratch_name}'] = Accounts.new"
+          else
+            pre_string.puts "@scratch.store('#{scratch_name}')"
+          end
+
           pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
         end
 
       end
 
-      post_string = StringIO.new
-      scratch_names.each do |n|
-        post_string.puts "@scratch.delete '#{n}'"
-      end
-
-      "#{pre_string.string}#{new_source}#{post_string.string}"
+      "#{pre_string.string}#{new_source}"
     end
 
     def rewrite_with_rewriter(string, rewriter)

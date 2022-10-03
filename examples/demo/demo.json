@@ -16,7 +16,7 @@
           "desc": "Some asset"
         },
         {
-          "name": "payment_txn",
+          "name": "axfer_txn",
           "type": "axfer",
           "desc": "A axfer txn"
         },

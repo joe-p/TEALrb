@@ -1,28 +1,29 @@
 #pragma version 6
 b main
 
-helper_subroutine: // helper_subroutine(asa_id)
-    store 0 // asa_id [uint64]
+helper_subroutine: // helper_subroutine(asa, axfer_txn)
+    store 0 // axfer_txn [axfer]
 
-    load 0 // asa_id [uint64]
-    txnas Assets
-    store 1 // asa
+    store 1 // asa [asset]
 
-    load 1 // asa
+    load 0 // axfer_txn [axfer]
+    gtxns Sender
+    load 1 // asa [asset]
     asset_params_get AssetCreator
     pop
-    log
+    ==
+    assert
 
     retsub
 
-some_abi_method: // some_abi_method(asa, payment_txn, another_app, some_number)
+some_abi_method: // some_abi_method(asa, axfer_txn, another_app, some_number)
     txna Assets 0
     store 2 // asa [asset] Some asset
 
     txn GroupIndex
     int 1
     -
-    store 3 // payment_txn [axfer] A axfer txn
+    store 3 // axfer_txn [axfer] A axfer txn
 
     txna Applications 0
     store 4 // another_app [application] Another app
@@ -36,7 +37,7 @@ some_abi_method: // some_abi_method(asa, payment_txn, another_app, some_number)
     pop
     assert
 
-    load 3 // payment_txn [axfer] A axfer txn
+    load 3 // axfer_txn [axfer] A axfer txn
     gtxns Sender
     txn Sender
     ==
@@ -49,14 +50,18 @@ some_abi_method: // some_abi_method(asa, payment_txn, another_app, some_number)
     assert
 
     load 2 // asa [asset] Some asset
+    load 3 // axfer_txn [axfer] A axfer txn
     callsub helper_subroutine // calling helper_subroutine calls a subroutine
 
     
     // calling helper_teal_method writes TEAL in-place
     load 2 // asa [asset] Some asset
+    load 3 // axfer_txn [axfer] A axfer txn
+    gtxns Sender
     asset_params_get AssetCreator
     pop
-    log
+    ==
+    assert
 
     load 5 // some_number [uint64]
     int 1

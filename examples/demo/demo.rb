@@ -7,34 +7,34 @@ class DemoContract < TEALrb::Contract
   @abi_interface.add_id(MAINNET, '1234')
 
   # @subroutine
-  # @param asa_id [uint64]
-  def helper_subroutine(asa_id)
-    $asa = Assets[asa_id]
-    log $asa.creator
+  # @param asa [asset]
+  # @param axfer_txn [axfer]
+  def helper_subroutine(asa, axfer_txn)
+    assert axfer_txn.sender == asa.creator
   end
 
   # @teal
   # @param asa [asset]
-  def helper_teal_method(asa)
+  def helper_teal_method(asa, axfer_txn)
     # // @teal writes in-place TEAL
-    log asa.creator
+    assert axfer_txn.sender == asa.creator
   end
 
   # @abi
   # This is an abi method that does some stuff
   # @param asa [asset] Some asset
-  # @param payment_txn [axfer] A axfer txn
+  # @param axfer_txn [axfer] A axfer txn
   # @param another_app [application] Another app
   # @param some_number [uint64]
   # @return [uint64]
-  def some_abi_method(asa, payment_txn, another_app, some_number)
+  def some_abi_method(asa, axfer_txn, another_app, some_number)
     assert asa.unit_name?
-    assert payment_txn.sender == Txn.sender
+    assert axfer_txn.sender == Txn.sender
     assert another_app.extra_program_pages?
 
-    helper_subroutine(asa) # // calling helper_subroutine calls a subroutine
+    helper_subroutine(asa, axfer_txn) # // calling helper_subroutine calls a subroutine
     # // calling helper_teal_method writes TEAL in-place
-    helper_teal_method(asa) 
+    helper_teal_method(asa, axfer_txn)
 
     return itob some_number + 1
   end
