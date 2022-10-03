@@ -4,17 +4,8 @@ require 'minitest/autorun'
 require_relative '../lib/tealrb'
 
 class TealTest < TEALrb::Contract
-  teal :teal_method do |x, y|
-    x / y
-  end
-
-  def main
-    teal_method 1, 2
-  end
-end
-
-class TealDefTest < TEALrb::Contract
-  teal def teal_method(x, y)
+  # @teal
+  def teal_method(x, y)
     x / y
   end
 
@@ -24,17 +15,8 @@ class TealDefTest < TEALrb::Contract
 end
 
 class SubroutineTest < TEALrb::Contract
-  subroutine :subroutine_method do |x, y|
-    x / y
-  end
-
-  def main
-    subroutine_method 1, 2
-  end
-end
-
-class SubroutineDefTest < TEALrb::Contract
-  subroutine def subroutine_method(x, y)
+  # @subroutine
+  def subroutine_method(x, y)
     x / y
   end
 
@@ -44,10 +26,8 @@ class SubroutineDefTest < TEALrb::Contract
 end
 
 class ModuleTests < Minitest::Test
-  SUBROUTINE_METHOD_TEAL = ['b main', 'subroutine_method: // subroutine_method(x, y)',
-                            'store 0 // subroutine_method: y', 'store 1 // subroutine_method: x',
-                            'load 1 // subroutine_method: x', 'load 0 // subroutine_method: y', '/', 'retsub', 'main:',
-                            'int 1', 'int 2', 'callsub subroutine_method'].freeze
+  SUBROUTINE_METHOD_TEAL = ['b main', 'subroutine_method: // subroutine_method(x, y)', 'store 0 // y [any] ',
+                            'store 1 // x [any] ', 'load 1 // x [any] ', 'load 0 // y [any] ', '/', 'retsub', 'main:', 'int 1', 'int 2', 'callsub subroutine_method'].freeze
 
   TEAL_METHOD_TEAL = ['int 1', 'int 2', 'store 0 // teal_method: y', 'store 1 // teal_method: x',
                       'load 1 // teal_method: x', 'load 0 // teal_method: y', '/'].freeze
@@ -62,15 +42,7 @@ class ModuleTests < Minitest::Test
     method_test(TealTest, TEAL_METHOD_TEAL)
   end
 
-  def test_teal_def
-    method_test(TealDefTest, TEAL_METHOD_TEAL)
-  end
-
   def test_subroutine
     method_test(SubroutineTest, SUBROUTINE_METHOD_TEAL)
-  end
-
-  def test_subroutine_def
-    method_test(SubroutineDefTest, SUBROUTINE_METHOD_TEAL)
   end
 end

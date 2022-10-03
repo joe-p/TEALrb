@@ -38,6 +38,7 @@ module TEALrb
 
         YARD::Registry.all.each do |y|
           next unless y.type == :method
+          next unless y.parent.to_s == klass.to_s
 
           tags = y.tags.map(&:tag_name)
 
@@ -216,11 +217,11 @@ module TEALrb
 
       scratch_names = []
       definition.parameters.reverse.each_with_index do |param, _i|
-        param_name = param.last
+        param_name = param.first
         scratch_name = [name, param_name].map(&:to_s).join(': ')
         scratch_names << scratch_name
 
-        pre_string.puts "@scratch.store('#{scratch_name}')" if subroutine
+        pre_string.puts "@scratch.store('#{scratch_name}')"
         pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
       end
 
@@ -236,8 +237,8 @@ module TEALrb
 
       txn_types = %w[txn pay keyreg acfg axfer afrz appl]
 
-      args = method_hash[:args]
-      arg_types = args.map { _1[:type] }
+      args = method_hash[:args] || []
+      arg_types = args.map { _1[:type] } || []
       txn_params = arg_types.select { txn_types.include? _1 }.count
       app_param_index = -1
       asset_param_index = -1
@@ -274,7 +275,7 @@ module TEALrb
         definition.parameters.reverse.each_with_index do |param, i|
           param_name = param.last
 
-          scratch_name = "#{param_name} [#{arg_types[i]}] #{args[i][:desc]}"
+          scratch_name = "#{param_name} [#{arg_types[i] || 'any'}] #{args[i][:desc] if args[i]}"
           scratch_names << scratch_name
 
           if txn_types.include? arg_types[i]
@@ -345,7 +346,7 @@ module TEALrb
       @eval_tealrb_rescue_count ||= 0
 
       eval_locations = e.backtrace.select { _1[/\(eval\)/] }
-      error_line = eval_locations[@eval_tealrb_rescue_count].split(':')[1].to_i
+      error_line = eval_locations[@eval_tealrb_rescue_count].split(':')[1].to_i if eval_locations[@eval_tealrb_rescue_count]
 
       warn "'#{e}' when evaluating transpiled TEALrb source" if @eval_tealrb_rescue_count.zero?
 
