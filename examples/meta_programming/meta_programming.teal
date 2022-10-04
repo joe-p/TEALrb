@@ -27,11 +27,11 @@
     ==
     assert
 
-    load 0 // asa
     byte "ASA total"
     app_global_del
 
     byte "ASA total"
+    load 0 // asa
     asset_params_get AssetTotal
     pop
     app_global_put
@@ -40,6 +40,7 @@
     app_global_del
 
     byte "ASA decimals"
+    load 0 // asa
     asset_params_get AssetDecimals
     pop
     app_global_put
@@ -48,6 +49,7 @@
     app_global_del
 
     byte "ASA default_frozen"
+    load 0 // asa
     asset_params_get AssetDefaultFrozen
     pop
     app_global_put
@@ -56,6 +58,7 @@
     app_global_del
 
     byte "ASA name"
+    load 0 // asa
     asset_params_get AssetName
     pop
     app_global_put
@@ -64,6 +67,7 @@
     app_global_del
 
     byte "ASA unit_name"
+    load 0 // asa
     asset_params_get AssetUnitName
     pop
     app_global_put
@@ -72,6 +76,7 @@
     app_global_del
 
     byte "ASA url"
+    load 0 // asa
     asset_params_get AssetURL
     pop
     app_global_put
@@ -80,6 +85,7 @@
     app_global_del
 
     byte "ASA metadata_hash"
+    load 0 // asa
     asset_params_get AssetMetadataHash
     pop
     app_global_put
@@ -88,6 +94,7 @@
     app_global_del
 
     byte "ASA manager"
+    load 0 // asa
     asset_params_get AssetManager
     pop
     app_global_put
@@ -96,6 +103,7 @@
     app_global_del
 
     byte "ASA reserve"
+    load 0 // asa
     asset_params_get AssetReserve
     pop
     app_global_put
@@ -104,6 +112,7 @@
     app_global_del
 
     byte "ASA freeze"
+    load 0 // asa
     asset_params_get AssetFreeze
     pop
     app_global_put
@@ -112,6 +121,7 @@
     app_global_del
 
     byte "ASA clawback"
+    load 0 // asa
     asset_params_get AssetClawback
     pop
     app_global_put
@@ -120,6 +130,7 @@
     app_global_del
 
     byte "ASA creator"
+    load 0 // asa
     asset_params_get AssetCreator
     pop
     app_global_put

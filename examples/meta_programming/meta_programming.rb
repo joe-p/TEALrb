@@ -3,7 +3,7 @@
 require_relative '../../lib/tealrb'
 
 class Approval < TEALrb::Contract
-  def populate_global_state(asa)
+  def populate_global_state
     params = %i[total decimals default_frozen name unit_name url
                 metadata_hash manager reserve freeze clawback creator]
 
@@ -11,7 +11,7 @@ class Approval < TEALrb::Contract
       key = "ASA #{param}"
 
       app_global_del(byte(key))
-      Global[byte(key)] = asa.send(param)
+      Global[byte(key)] = @scratch[:asa].send(param)
     end
   end
 
@@ -22,7 +22,7 @@ class Approval < TEALrb::Contract
     $asa = Assets[0]
     assert Gtxns[Txn.group_index - 1].xfer_asset == $asa
 
-    populate_global_state($asa)
+    populate_global_state
   end
 end
 
