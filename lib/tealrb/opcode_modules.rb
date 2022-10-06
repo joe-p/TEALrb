@@ -686,6 +686,22 @@ module TEALrb
       def address?(*_args)
         ExtendedOpcodes.app_param_exists? 'AppAddress'
       end
+
+      def num_approval_pages?
+        ExtendedOpcodes.app_param_exists? 'NumApprovalProgramPages'
+      end
+
+      def num_approval_pages
+        ExtendedOpcodes.app_param_value 'NumApprovalProgramPages'
+      end
+
+      def num_clear_pages?
+        ExtendedOpcodes.app_param_exists? 'NumClearProgramPages'
+      end
+
+      def num_clear_pages
+        ExtendedOpcodes.app_param_value 'NumClearProgramPages'
+      end
     end
 
     class Assets < TxnArray
