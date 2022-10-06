@@ -16,7 +16,9 @@ class VotingApproval < TEALrb::Contract
   #        Return(Int(1)),
   #    ]
   # )
-  teal def on_creation
+
+  # @teal
+  def on_creation
     Global['Creator'] = Txn.sender
     assert(Txn.num_app_args == 4)
     Global['RegBegin'] = btoi(AppArgs[0])
@@ -41,7 +43,9 @@ class VotingApproval < TEALrb::Contract
   #        Return(Int(1)),
   #    ]
   # )
-  teal def on_closeout
+
+  # @teal
+  def on_closeout
     vote_of_sender = app_global_ex_value(0, Txn.application_id, 'voted')
 
     if Global.round <= Global['VoteEnd'] && app_global_ex_exists?(0, Txn.application_id, 'voted')
@@ -66,7 +70,9 @@ class VotingApproval < TEALrb::Contract
   #        Return(Int(1)),
   #    ]
   # )
-  teal def on_vote
+
+  # @teal
+  def on_vote
     assert(Global.round >= Global['VoteBegin'] && Global.round <= Global['VoteEnd'])
 
     if app_global_ex_exists?(0, Txn.application_id, 'voted')

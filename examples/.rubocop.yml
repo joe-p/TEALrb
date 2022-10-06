@@ -24,3 +24,7 @@ Style/WhileUntilModifier:
 # The $ prefix is used for scratch variables
 Style/GlobalVars:
   Enabled: false
+
+# Allow returns in abi methods
+Style/RedundantReturn:
+  Enabled: false

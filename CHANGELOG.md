@@ -13,6 +13,10 @@ Additional labels for pre-release and build metadata are available as extensions
 
 See https://semver.org/ for more information
 
+## 0.11.0 (10/06/2022)
+### Features
+- YARD docstrings for defining ABI methods, internal subroutines, and TEAL methods
+ 
 ## 0.10.1 (09/13/2022)
 ### Bugfixes
 - Prevent blank first line in `teal_source`

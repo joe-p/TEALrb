@@ -11,8 +11,8 @@ module TEALrb
     attr_reader :teal
 
     class << self
-      attr_accessor :subroutines, :version, :teal_methods, :abi_method_hash, :abi_description, :debug,
-                    :disable_abi_routing
+      attr_accessor :subroutines, :version, :teal_methods, :abi_interface, :debug,
+                    :disable_abi_routing, :method_hashes
 
       private
 
@@ -20,53 +20,47 @@ module TEALrb
         klass.version = 6
         klass.subroutines = {}
         klass.teal_methods = {}
-        klass.abi_description = ABI::ABIDescription.new
-        klass.abi_method_hash = {}
+        klass.abi_interface = ABI::ABIDescription.new
+        klass.abi_interface.name = klass.to_s
+        klass.method_hashes = []
         klass.debug = false
         klass.disable_abi_routing = false
+        parse(klass)
         super
       end
-    end
 
-    # abi description for the method
-    def self.abi(desc:, args:, returns:)
-      args = args.map do |name, h|
-        h[:name] = name.to_s
-        h[:type] = h[:type].to_s.split('::').last.downcase
-        h
+      def parse(klass)
+        YARD::Tags::Library.define_tag('ABI Method', :abi)
+        YARD::Tags::Library.define_tag('Subroutine', :subroutine)
+        YARD::Tags::Library.define_tag('TEAL Method', :teal)
+
+        YARD.parse Object.const_source_location(klass.to_s).first
+
+        YARD::Registry.all.each do |y|
+          next unless y.type == :method
+          next unless y.parent.to_s == klass.to_s
+
+          tags = y.tags.map(&:tag_name)
+
+          if tags.include?('abi') || tags.include?('subroutine')
+            method_hash = { name: y.name.to_s, desc: y.base_docstring, args: [], returns: { type: 'void' } }
+
+            y.tags.each do |t|
+              method_hash[:returns] = { type: t.types&.first } if t.tag_name == 'return'
+
+              next unless t.tag_name == 'param'
+
+              method_hash[:args] << { name: t.name, type: t.types&.first, desc: t.text }
+            end
+
+            klass.method_hashes << method_hash
+
+            klass.abi_interface.add_method(**method_hash) if tags.include? 'abi'
+          elsif tags.include? 'teal'
+            klass.teal_methods[y.name.to_s] = y
+          end
+        end
       end
-
-      self.abi_method_hash = { desc: desc, args: args, returns: returns.to_s.split('::').last.downcase }
-    end
-
-    # specifies a TEAL subroutine that will be defined upon intialization
-    # @return [nil]
-    # @overload subroutine(name)
-    #  @param name [Symbol] name of the subroutine and the method to use as the subroutine definition
-    #
-    # @overload subroutine(name)
-    #  @param name [Symbol] name of the subroutine
-    #
-    #  @yield [*args] the definition of the subroutine
-    def self.subroutine(name, &blk)
-      @subroutines[name] = (blk || instance_method(name))
-      abi_description.add_method(**({ name: name.to_s }.merge abi_method_hash)) unless abi_method_hash.empty?
-      @abi_method_hash = {}
-      nil
-    end
-
-    # specifies a method to be defined upon intialization that will be transpiled to TEAL when called
-    # @return [nil]
-    # @overload subroutine(name)
-    #  @param name [Symbol] name of the method to use as the TEAL definition
-    #
-    # @overload subroutine(name)
-    #  @param name [Symbol] name of the method
-    #
-    #  @yield [*args] the definition of the TEAL method
-    def self.teal(name, &blk)
-      @teal_methods[name] = (blk || instance_method(name))
-      nil
     end
 
     # sets the `#pragma version`, defines teal methods, and defines subroutines
@@ -75,18 +69,14 @@ module TEALrb
       IfBlock.id = 0
       @scratch = Scratch.new
 
-      self.class.subroutines.each_key do |name|
-        define_singleton_method(name) do |*_args|
-          callsub(name)
-        end
+      @@active_contract = self # rubocop:disable Style/ClassVars
+
+      self.class.method_hashes.each do |mh|
+        define_subroutine(mh[:name], method(mh[:name]))
       end
 
-      self.class.subroutines.each do |name, blk|
-        define_subroutine name, blk
-      end
-
-      self.class.teal_methods.each do |name, blk|
-        define_teal_method name, blk
+      self.class.teal_methods.each do |name, definition|
+        define_teal_method(name, definition)
       end
     end
 
@@ -155,7 +145,9 @@ module TEALrb
       comment_content = "#{name}(#{comment_params})"
       comment(comment_content, inline: true)
 
-      new_source = generate_method_source(name, definition)
+      method_hash = self.class.method_hashes.find { _1[:name] == name.to_s }
+      new_source = generate_subroutine_source(definition, method_hash)
+
       new_source = "#{new_source}retsub"
 
       eval_tealrb(new_source, debug_context: "subroutine: #{name}")
@@ -185,7 +177,7 @@ module TEALrb
 
     # the hash of the abi description
     def abi_hash
-      self.class.abi_description.to_h
+      self.class.abi_interface.to_h
     end
 
     # transpiles the given string to TEAL
@@ -207,7 +199,7 @@ module TEALrb
     private
 
     def route_abi_methods
-      self.class.abi_description.methods.each do |meth|
+      self.class.abi_interface.methods.each do |meth|
         signature = "#{meth[:name]}(#{meth[:args].map { _1[:type] }.join(',')})#{meth[:returns][:type]}"
         selector = OpenSSL::Digest.new('SHA512-256').hexdigest(signature)[..7]
 
@@ -225,7 +217,7 @@ module TEALrb
 
       scratch_names = []
       definition.parameters.reverse.each_with_index do |param, _i|
-        param_name = param.last
+        param_name = param.first
         scratch_name = [name, param_name].map(&:to_s).join(': ')
         scratch_names << scratch_name
 
@@ -233,12 +225,81 @@ module TEALrb
         pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
       end
 
-      post_string = StringIO.new
-      scratch_names.each do |n|
-        post_string.puts "@scratch.delete '#{n}'"
+      "#{pre_string.string}#{new_source}"
+    end
+
+    def generate_subroutine_source(definition, method_hash)
+      new_source = rewrite(definition.source, method_rewriter: true)
+
+      pre_string = StringIO.new
+
+      scratch_names = []
+
+      txn_types = %w[txn pay keyreg acfg axfer afrz appl]
+
+      args = method_hash[:args] || []
+      arg_types = args.map { _1[:type] } || []
+      txn_params = arg_types.select { txn_types.include? _1 }.count
+      app_param_index = -1
+      asset_param_index = -1
+      account_param_index = 0
+      args_index = 0
+
+      if abi_hash['methods'].find { _1[:name] == method_hash[:name].to_s }
+        definition.parameters.each_with_index do |param, i|
+          param_name = param.last
+
+          scratch_name = "#{definition.original_name}: #{param_name} [#{arg_types[i] || 'any'}] #{if args[i]
+                                                                                                    args[i][:desc]
+                                                                                                  end}"
+          scratch_names << scratch_name
+
+          if txn_types.include? arg_types[i]
+            pre_string.puts "@scratch['#{scratch_name}'] = Gtxns[Txn.group_index - int(#{txn_params})]"
+            txn_params -= 1
+          elsif arg_types[i] == 'application'
+            pre_string.puts "@scratch['#{scratch_name}'] = Apps[#{app_param_index += 1}]"
+          elsif arg_types[i] == 'asset'
+            pre_string.puts "@scratch['#{scratch_name}'] = Assets[#{asset_param_index += 1}]"
+          elsif arg_types[i] == 'account'
+            pre_string.puts "@scratch['#{scratch_name}'] = Accounts[#{account_param_index += 1}]"
+          else
+            pre_string.puts "@scratch['#{scratch_name}'] = AppArgs[#{args_index += 1}]"
+          end
+
+          pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
+        end
+
+      else
+        args.reverse!
+        arg_types.reverse!
+
+        definition.parameters.reverse.each_with_index do |param, i|
+          param_name = param.last
+
+          scratch_name = "#{definition.original_name}: #{param_name} [#{arg_types[i] || 'any'}] #{if args[i]
+                                                                                                    args[i][:desc]
+                                                                                                  end}"
+          scratch_names << scratch_name
+
+          if txn_types.include? arg_types[i]
+            pre_string.puts "@scratch['#{scratch_name}'] = Gtxns"
+          elsif arg_types[i] == 'application'
+            pre_string.puts "@scratch['#{scratch_name}'] = Applications.new"
+          elsif arg_types[i] == 'asset'
+            pre_string.puts "@scratch['#{scratch_name}'] = Assets.new"
+          elsif arg_types[i] == 'account'
+            pre_string.puts "@scratch['#{scratch_name}'] = Accounts.new"
+          else
+            pre_string.puts "@scratch.store('#{scratch_name}')"
+          end
+
+          pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
+        end
+
       end
 
-      "#{pre_string.string}#{new_source}#{post_string.string}"
+      "#{pre_string.string}#{new_source}"
     end
 
     def rewrite_with_rewriter(string, rewriter)
@@ -254,7 +315,7 @@ module TEALrb
       end
 
       [CommentRewriter, ComparisonRewriter, WhileRewriter, InlineIfRewriter, IfRewriter, OpRewriter,
-       AssignRewriter].each do |rw|
+       AssignRewriter, InternalMethodRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
 
@@ -289,7 +350,9 @@ module TEALrb
       @eval_tealrb_rescue_count ||= 0
 
       eval_locations = e.backtrace.select { _1[/\(eval\)/] }
-      error_line = eval_locations[@eval_tealrb_rescue_count].split(':')[1].to_i
+      if eval_locations[@eval_tealrb_rescue_count]
+        error_line = eval_locations[@eval_tealrb_rescue_count].split(':')[1].to_i
+      end
 
       warn "'#{e}' when evaluating transpiled TEALrb source" if @eval_tealrb_rescue_count.zero?
 

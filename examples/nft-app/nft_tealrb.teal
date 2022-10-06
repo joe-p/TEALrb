@@ -2,16 +2,16 @@
 b main
 
 pay: // pay(receiver, amount)
-    store 0 // pay: amount
+    store 0 // pay: amount [any]
 
-    store 1 // pay: receiver
+    store 1 // pay: receiver [any]
 
     itxn_begin
     int pay
     itxn_field TypeEnum
-    load 1 // pay: receiver
+    load 1 // pay: receiver [any]
     itxn_field Receiver
-    load 0 // pay: amount
+    load 0 // pay: amount [any]
     int 1000
     -
     itxn_field Amount

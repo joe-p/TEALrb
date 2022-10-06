@@ -42,24 +42,6 @@ class Approval < TEALrb::Contract
   def main
 ```
 
-## Defining Subroutines
-
-Subroutines can be defined in two ways:
-
-```ruby
-subroutine :add do |x, y|
-  abi_return(x + y)
-end
-```
-
-```ruby
-subroutine def add(x, y)
-  abi_return(x + y)
-end
-```
-
-The first is more standard ruby syntax while the second will allow any Ruby IDE to know that `add` is a callable method.
-
 ## Scratch Space Management
 
 With TEALrb you can call `load`/`store` manually or you can use the `$` prefix on variables to reserve named scratch slots. For example:
@@ -151,27 +133,71 @@ assert $payment_txn.amount == 100_000
 ```
 
 ## ABI Support
-TEALrb can automatically generate ABI interface JSON data and provide the logic for routing to ABI methods. To generate a proper interface, you must define the contract name, add at least one ID, and define some ABI methods. For example:
+
+### ABI Interface JSON
+TEALrb can generate an ABI Inerface JSON file from a `Contract` subclass. By default, the interface name will be the name of the subclass. To change the name simply change the value of `@abi_interface.name` as the class level:
 
 ```rb
-class Approval < TEALrb::Contract
-  @abi_description.name = 'TEALrb_example'
-  @abi_description.add_id(MAINNET, '1234')
+class DemoContract < TEALrb::Contract
+  @abi_interface.name = 'AnotherName'
+```
 
-  abi(
-    args: {
-      x: { type: 'uint64', desc: 'The first number' },
-      y: { type: 'uint64', desc: 'The second number' }
-    },
-    returns: 'uint64',
-    desc: 'Adds two numbers'
-  )
-  # define subroutine
-  subroutine def add(x, y)
+To add network app IDs:
+
+```rb
+class DemoContract < TEALrb::Contract
+  @abi_interface.add_id(MAINNET, '1234')
+```
+
+Method interfaces will be defined automatically as seen below.
+
+### ABI Methods
+To define an ABI method, the [YARD](https://rubydoc.info/gems/yard/file/docs/GettingStarted.md) docstring must contain the `@abi` tag. For example:
+
+```rb
+  # @abi
+  # This is an abi method that does some stuff
+  # @param asa [asset] Some asset
+  # @param axfer_txn [axfer] A axfer txn
+  # @param another_app [application] Another app
+  # @param some_number [uint64]
+  # @return [uint64]
+  def some_abi_method(asa, axfer_txn, another_app, some_number)
+    assert asa.unit_name?
+    assert payment_txn.sender == Txn.sender
+    assert another_app.extra_program_pages?
+
+    return itob some_number + 1
+  end
 ```
 
 TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this, set `@disable_abi_routing` to true within your `TEALrb::Contract` subclass. 
 
+## Defining Subroutines
+
+Subroutines can be defined just like ABI Methods, except the yard tag is `@subroutine`. Unlike ABI methods, subroutines are not exposed via the ABI interface and are intended to be used internally.
+
+```rb
+  # @subroutine
+  # @param asa [asset]
+  # @param axfer_txn [axfer]
+  def helper_subroutine(asa, axfer_txn)
+    assert axfer_txn.sender == asa.creator
+  end
+```
+
+## Defining TEAL methods
+
+TEAL methods are methods that result in TEAL being written in-place when called. They are defined with the `@teal` YARD tag.
+
+```rb
+  # @teal
+  # @param asa [asset]
+  # @param axfer_txn [axfer_txn]
+  def helper_teal_method(asa, axfer_txn)
+    assert axfer_txn.sender == asa.creator
+  end
+```
 
 # Raw TEAL Exceptions
 TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby syntax therefore the TEALrb-specific syntax must be used.
@@ -320,7 +346,22 @@ TEALrb offers some additional opcodes/methods for dealing with either of these r
 | `app_local_get_ex` | `app_local_ex_exists?` | `app_local_ex_value` |
 | `app_global_get_ex` | `app_global_ex_exists?` | `ex_app_global_ex_value` |
 
-
 # Planned Features
 - ABI type encoding/decoding
-- Inner transaction abstraction
+
+# Test Coverage
+
+TEALrb is a current work in progress. One benchmark for a full release is test coverage. While test coverage does not indicate proper testing, it is a useful benchmark for quanitfying tests.
+
+Generated on 2022-10-03 17:27:34 ([e9f0d11](https://github.com/joe-p/TEALrb/tree/e9f0d11))
+| File                                                         | Lines of Code | Coverage |
+|--------------------------------------------------------------|---------------|----------|
+| [lib/tealrb/constants.rb](lib/tealrb/constants.rb)           | 2             | 100.0%   |
+| [lib/tealrb/if_block.rb](lib/tealrb/if_block.rb)             | 29            | 100.0%   |
+| [lib/tealrb/opcodes.rb](lib/tealrb/opcodes.rb)               | 314           | 93.63%   |
+| [lib/tealrb/opcode_modules.rb](lib/tealrb/opcode_modules.rb) | 410           | 93.17%   |
+| [lib/tealrb.rb](lib/tealrb.rb)                               | 34            | 88.24%   |
+| [lib/tealrb/abi.rb](lib/tealrb/abi.rb)                       | 20            | 75.0%    |
+| [lib/tealrb/rewriters.rb](lib/tealrb/rewriters.rb)           | 151           | 74.17%   |
+| [lib/tealrb/scratch.rb](lib/tealrb/scratch.rb)               | 23            | 73.91%   |
+| [lib/tealrb/contract.rb](lib/tealrb/contract.rb)             | 207           | 66.18%   |

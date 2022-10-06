@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+class TestContract < TEALrb::Contract; end
+
 module TestMethods
   def compile_test_last(input, teal, count = 1)
-    contract = Class.new(TEALrb::Contract).new
+    contract = TestContract.new
     contract.compile_string input
 
     if count == 1
@@ -13,7 +15,7 @@ module TestMethods
   end
 
   def compile_test(input, teal)
-    contract = Class.new(TEALrb::Contract).new
+    contract = TestContract.new
     contract.compile_string input
 
     assert_equal(teal, contract.teal[1..])
