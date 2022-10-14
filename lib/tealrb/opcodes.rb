@@ -147,6 +147,10 @@ module TEALrb
         TEAL.instance << "byte base32(#{input})"
       end
 
+      def base64_decode(encoding, _input = nil)
+        TEAL.instance << "base64_decode #{encoding}"
+      end
+
       def balance(_account = nil)
         TEAL.instance << 'balance'
       end
@@ -325,6 +329,10 @@ module TEALrb
         TEAL.instance << 'ed25519verify'
       end
 
+      def ed25519verify_bare(_input = nil)
+        TEAL.instance << 'ed25519verify_bare'
+      end
+
       def equal(_a = nil, _b = nil)
         TEAL.instance << '=='
       end
@@ -493,6 +501,10 @@ module TEALrb
         TEAL.instance << "itxnas #{field}"
       end
 
+      def json_ref(type, _object = nil, _key = nil)
+        TEAL.instance << "json_ref #{type}"
+      end
+
       def keccak256(_input = nil)
         TEAL.instance << 'keccak256'
       end
@@ -577,6 +589,14 @@ module TEALrb
         TEAL.instance << "pushint #{integer}"
       end
 
+      def replace(_a = nil, _b = nil, _c = nil)
+        TEAL.instance << 'replace'
+      end
+
+      def replace2(start, _a = nil, _b = nil)
+        TEAL.instance << "replace2 #{start}"
+      end
+
       def retsub
         TEAL.instance << 'retsub'
       end
@@ -595,6 +615,10 @@ module TEALrb
 
       def sha256(_input = nil)
         TEAL.instance << 'sha256'
+      end
+
+      def sha3_256(_input = nil) # rubocop:disable Naming/VariableNumber
+        TEAL.instance << 'sha3_256'
       end
 
       def sha512_256(_input = nil) # rubocop:disable Naming/VariableNumber
@@ -655,6 +679,10 @@ module TEALrb
 
       def uncover(count)
         TEAL.instance << "uncover #{count}"
+      end
+
+      def vrf_verify(standard, _message = nil, _proof = nil, _public_key = nil)
+        TEAL.instance << "vrf_verify #{standard}"
       end
 
       def boolean_and(_a = nil, _b = nil)

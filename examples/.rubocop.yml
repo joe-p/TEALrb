@@ -20,3 +20,11 @@ Style/NumericPredicate:
 # Single-line while loops are not supported (yet)
 Style/WhileUntilModifier:
   Enabled: false
+
+# The $ prefix is used for scratch variables
+Style/GlobalVars:
+  Enabled: false
+
+# Allow returns in abi methods
+Style/RedundantReturn:
+  Enabled: false

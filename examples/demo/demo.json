@@ -1,5 +1,5 @@
 {
-  "name": "TEALrb_Demo",
+  "name": "AnotherName",
   "networks": {
     "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=": {
       "appID": "1234"
@@ -7,22 +7,34 @@
   },
   "methods": [
     {
-      "name": "subroutine_method",
-      "desc": "Adds two numbers, subtracts two numbers, then multiplies two numbers",
+      "name": "some_abi_method",
+      "desc": "This is an abi method that does some stuff",
       "args": [
         {
-          "type": "uint64",
-          "desc": "The first number",
-          "name": "x"
+          "name": "asa",
+          "type": "asset",
+          "desc": "Some asset"
         },
         {
+          "name": "axfer_txn",
+          "type": "axfer",
+          "desc": "A axfer txn"
+        },
+        {
+          "name": "another_app",
+          "type": "application",
+          "desc": "Another app"
+        },
+        {
+          "name": "some_number",
           "type": "uint64",
-          "desc": "The second number",
-          "name": "y"
+          "desc": ""
         }
       ],
       "returns": {
-        "type": "uint64"
+        "type": {
+          "type": "uint64"
+        }
       }
     }
   ]

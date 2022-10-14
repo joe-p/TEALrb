@@ -1,18 +1,22 @@
 #pragma version 5
 b main
+
 pay: // pay(receiver, amount)
-    store 0 // pay: amount
-    store 1 // pay: receiver
+    store 0 // pay: amount [any]
+
+    store 1 // pay: receiver [any]
+
     itxn_begin
     int pay
     itxn_field TypeEnum
-    load 1 // pay: receiver
+    load 1 // pay: receiver [any]
     itxn_field Receiver
-    load 0 // pay: amount
+    load 0 // pay: amount [any]
     int 1000
     -
     itxn_field Amount
     itxn_submit
+
     retsub
 
 main:
@@ -20,158 +24,202 @@ main:
     int 0
     ==
     bz if0_else0
+
     byte "Royalty Address"
     txna ApplicationArgs 0
     app_global_put
+
     byte "Owner"
     txn Sender
     app_global_put
+
     byte "Highest Bidder"
     byte ""
     app_global_put
+
     byte "Metadata"
     txna ApplicationArgs 2
     app_global_put
+
     byte "Royalty Percent"
     txna ApplicationArgs 1
     btoi
     app_global_put
+
     byte "Auction End"
     int 0
     app_global_put
+
     byte "TX Methods"
     txna ApplicationArgs 3
     btoi
     app_global_put
+
     byte "Sale Price"
     int 0
     app_global_put
+
     byte "Highest Bid"
     int 0
     app_global_put
+
     int 1
     return
+
     b if0_end
+
     if0_else0:
     txna ApplicationArgs 0
     byte "start_auction"
     ==
     bz if0_else1
+
     byte "TX Methods"
     app_global_get
     int 4
     &
     assert
+
     gtxn 1 Receiver
     global CurrentApplicationAddress
     ==
     assert
+
     gtxn 1 Amount
     int 100000
     ==
     assert
+
     byte "Auction End"
     global LatestTimestamp
     txna ApplicationArgs 2
     btoi
     +
     app_global_put
+
     byte "Highest Bid"
     txna ApplicationArgs 1
     btoi
     app_global_put
+
     int 1
     return
+
     b if0_end
+
     if0_else1:
     txna ApplicationArgs 0
     byte "start_sale"
     ==
     bz if0_else2
+
     byte "TX Methods"
     app_global_get
     int 2
     &
     assert
+
     txn Sender
     byte "Owner"
     app_global_get
     ==
     assert
+
     byte "Sale Price"
     txna ApplicationArgs 1
     btoi
     app_global_put
+
     int 1
     return
+
     b if0_end
+
     if0_else2:
     txna ApplicationArgs 0
     byte "end_sale"
     ==
     bz if0_else3
+
     txn Sender
     byte "Owner"
     app_global_get
     ==
     assert
+
     byte "Sale Price"
     int 0
     app_global_put
+
     int 1
     return
+
     b if0_end
+
     if0_else3:
     txna ApplicationArgs 0
     byte "bid"
     ==
     bz if0_else4
+
     global LatestTimestamp
     byte "Auction End"
     app_global_get
     <
     assert
+
     gtxn 1 Amount
     byte "Highest Bid"
     app_global_get
     >
     assert
+
     gtxn 0 Sender
     gtxn 1 Sender
     ==
     assert
+
     byte "Highest Bidder"
     app_global_get
     byte ""
     !=
     bz if1_else0
+
     byte "Highest Bidder"
     app_global_get
     byte "Highest Bid"
     app_global_get
     callsub pay
+
     b if1_end
+
     if1_else0:
     if1_end:
     byte "Highest Bid"
     gtxn 1 Amount
     app_global_put
+
     byte "Highest Bidder"
     gtxn 1 Sender
     app_global_put
+
     int 1
     return
+
     b if0_end
+
     if0_else4:
     txna ApplicationArgs 0
     byte "end_auction"
     ==
     bz if0_else5
+
     global LatestTimestamp
     byte "Auction End"
     app_global_get
     >
     assert
+
     byte "Royalty Address"
     app_global_get
     byte "Highest Bid"
@@ -182,6 +230,7 @@ main:
     int 100
     /
     callsub pay
+
     byte "Owner"
     app_global_get
     byte "Highest Bid"
@@ -195,68 +244,86 @@ main:
     /
     -
     callsub pay
+
     byte "Auction End"
     int 0
     app_global_put
+
     byte "Owner"
     byte "Highest Bidder"
     app_global_get
     app_global_put
+
     byte "Highest Bidder"
     byte ""
     app_global_put
+
     int 1
     return
+
     b if0_end
+
     if0_else5:
     txna ApplicationArgs 0
     byte "transfer"
     ==
     bz if0_else6
+
     byte "TX Methods"
     app_global_get
     int 1
     &
     assert
+
     txn Sender
     byte "Owner"
     app_global_get
     ==
     assert
+
     byte "Owner"
     txna ApplicationArgs 1
     app_global_put
+
     int 1
     return
+
     b if0_end
+
     if0_else6:
     txna ApplicationArgs 0
     byte "buy"
     ==
     bz if0_else7
+
     byte "Sale Price"
     app_global_get
     int 0
     >
     assert
+
     gtxn 2 Sender
     gtxn 1 Sender
     ==
     assert
+
     txn Sender
     gtxn 1 Sender
     ==
     assert
+
     gtxn 2 Receiver
     byte "Royalty Address"
     app_global_get
     ==
     assert
+
     gtxn 1 Receiver
     byte "Owner"
     app_global_get
     ==
     assert
+
     gtxn 2 Amount
     byte "Sale Price"
     app_global_get
@@ -267,6 +334,7 @@ main:
     /
     ==
     assert
+
     gtxn 1 Amount
     byte "Sale Price"
     app_global_get
@@ -280,15 +348,21 @@ main:
     -
     ==
     assert
+
     byte "Owner"
     txn Sender
     app_global_put
+
     byte "Sale Price"
     int 0
     app_global_put
+
     int 1
     return
+
     b if0_end
+
     if0_else7:
     err
+
     if0_end:

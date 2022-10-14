@@ -10,21 +10,25 @@ module TEALrb
       @open_slots = (0..256).to_a
       @named_slots = {}
       self.class.instance = self
+      @values = {}
     end
 
     def [](key)
       TEAL.instance << "load #{@named_slots[key]} // #{key}"
+      @values[key]
     end
 
-    def []=(key, _value)
-      store(key)
+    def []=(key, value)
+      store(key, value)
     end
 
-    def store(key)
+    def store(key, value = TEAL.instance)
+      @values[key] = value
       TEAL.instance << "store #{@named_slots[key] ||= @open_slots.shift} // #{key}"
     end
 
     def delete(key)
+      @values.delete(key)
       @open_slots << @named_slots.delete(key)
     end
 

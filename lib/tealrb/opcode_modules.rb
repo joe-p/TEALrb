@@ -474,6 +474,22 @@ module TEALrb
       end
     end
 
+    module ItxnField
+      extend TxnFields
+
+      def self.opcode(field, _value)
+        ExtendedOpcodes.itxn_field field
+      end
+
+      class << self
+        TxnFields.instance_methods.each do |m|
+          define_method("#{m}=") do |value|
+            send(m, value)
+          end
+        end
+      end
+    end
+
     module Gtxn
       extend TxnFields
 
@@ -528,7 +544,12 @@ module TEALrb
       end
 
       def [](index)
-        ExtendedOpcodes.txna @field, index
+        if index.is_a? Integer
+          ExtendedOpcodes.txna @field, index
+        else
+          ExtendedOpcodes.txnas @field
+        end
+
         self
       end
     end
@@ -664,6 +685,22 @@ module TEALrb
       # @return [[]byte] Address for which this application has authority
       def address?(*_args)
         ExtendedOpcodes.app_param_exists? 'AppAddress'
+      end
+
+      def num_approval_pages?
+        ExtendedOpcodes.app_param_exists? 'NumApprovalProgramPages'
+      end
+
+      def num_approval_pages
+        ExtendedOpcodes.app_param_value 'NumApprovalProgramPages'
+      end
+
+      def num_clear_pages?
+        ExtendedOpcodes.app_param_exists? 'NumClearProgramPages'
+      end
+
+      def num_clear_pages
+        ExtendedOpcodes.app_param_value 'NumClearProgramPages'
       end
     end
 

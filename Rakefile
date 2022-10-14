@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 task default: %w[clean lint test examples build]
-multitask examples: %i[demo nft atomic_swap voting]
+multitask examples: %i[demo nft atomic_swap voting meta_programming]
 
 desc 'Clean up build artifacts (.gem files)'
 task :clean do
@@ -51,4 +51,9 @@ end
 desc 'Run voting example'
 task :voting do
   ruby 'examples/pyteal_comparisons/voting.rb'
+end
+
+desc 'Run meta_programming example'
+task :meta_programming do
+  ruby 'examples/meta_programming/meta_programming.rb'
 end

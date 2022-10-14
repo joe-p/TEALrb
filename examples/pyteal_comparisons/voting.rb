@@ -16,13 +16,15 @@ class VotingApproval < TEALrb::Contract
   #        Return(Int(1)),
   #    ]
   # )
-  teal def on_creation
-    app_global_put('Creator', Txn.sender)
+
+  # @teal
+  def on_creation
+    Global['Creator'] = Txn.sender
     assert(Txn.num_app_args == 4)
-    app_global_put('RegBegin', btoi(Txna.application_args[0]))
-    app_global_put('RegEnd', btoi(Txna.application_args[1]))
-    app_global_put('VoteBegin', btoi(Txna.application_args[2]))
-    app_global_put('VoteEnd', btoi(Txna.application_args[3]))
+    Global['RegBegin'] = btoi(AppArgs[0])
+    Global['RegEnd'] = btoi(AppArgs[1])
+    Global['VoteBegin'] = btoi(AppArgs[2])
+    Global['VoteEnd'] = btoi(AppArgs[3])
   end
 
   # on_closeout = Seq(
@@ -41,7 +43,9 @@ class VotingApproval < TEALrb::Contract
   #        Return(Int(1)),
   #    ]
   # )
-  teal def on_closeout
+
+  # @teal
+  def on_closeout
     vote_of_sender = app_global_ex_value(0, Txn.application_id, 'voted')
 
     if Global.round <= Global['VoteEnd'] && app_global_ex_exists?(0, Txn.application_id, 'voted')
@@ -66,21 +70,23 @@ class VotingApproval < TEALrb::Contract
   #        Return(Int(1)),
   #    ]
   # )
-  teal def on_vote
-    assert(Global.round >= app_global_get('VoteBegin') && Global.round <= app_global_get('VoteEnd'))
+
+  # @teal
+  def on_vote
+    assert(Global.round >= Global['VoteBegin'] && Global.round <= Global['VoteEnd'])
 
     if app_global_ex_exists?(0, Txn.application_id, 'voted')
       teal_return 0
     end
 
-    app_global_put(@choice, @choice_tally + 1)
-    app_local_put(0, 'voted', @choice)
+    Global[@choice] = @choice_tally + 1
+    Local[0]['voted'] = @choice
     teal_return 1
   end
 
   def main
     # is_creator = Txn.sender() == App.globalGet(Bytes("Creator"))
-    is_creator = Txn.sender == app_global_get('Creator')
+    is_creator = Txn.sender == Global['Creator']
 
     # on_register = Return(
     #    And(
@@ -88,13 +94,13 @@ class VotingApproval < TEALrb::Contract
     #        Global.round() <= App.globalGet(Bytes("RegEnd")),
     #    )
     # )
-    on_register = teal_return(Global.round >= app_global_get('RegBegin') && Global.round >= app_global_get('RegEnd'))
+    on_register = teal_return(Global.round >= Global['RegBegin'] && Global.round >= Global['RegEnd'])
 
     # choice = Txn.application_args[1]
     @choice = Txna.application_args[1]
 
     # choice_tally = App.globalGet(choice)
-    @choice_tally = app_global_get(@choice)
+    @choice_tally = Global[@choice]
 
     # program = Cond(
     #    [Txn.application_id() == Int(0), on_creation],

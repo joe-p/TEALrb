@@ -2,40 +2,57 @@
 
 require_relative '../../lib/tealrb'
 
-class Approval < TEALrb::Contract
-  @abi_description.name = 'TEALrb_Demo'
-  @abi_description.add_id(MAINNET, '1234')
+class DemoContract < TEALrb::Contract
+  @abi_interface.name = 'AnotherName'
+  @abi_interface.add_id(MAINNET, '1234')
 
-  # Specify ABI arg types, return type, and desc
-  abi(
-    args: {
-      x: { type: 'uint64', desc: 'The first number' },
-      y: { type: 'uint64', desc: 'The second number' }
-    },
-    returns: 'uint64',
-    desc: 'Adds two numbers, subtracts two numbers, then multiplies two numbers'
-  )
-  # define subroutine
-  subroutine def subroutine_method(x, y)
-    x + y
-    x - y
-    abi_return(itob(x * y))
+  # @subroutine
+  # @param asa [asset]
+  # @param axfer_txn [axfer]
+  def helper_subroutine(asa, axfer_txn)
+    assert axfer_txn.sender == asa.creator
   end
 
+  # @teal
+  # @param asa [asset]
+  def helper_teal_method(asa, axfer_txn)
+    assert axfer_txn.sender == asa.creator
+  end
+
+  # @abi
+  # This is an abi method that does some stuff
+  # @param asa [asset] Some asset
+  # @param axfer_txn [axfer] A axfer txn
+  # @param another_app [application] Another app
+  # @param some_number [uint64]
+  # @return [uint64]
+  def some_abi_method(asa, axfer_txn, another_app, some_number)
+    assert asa.unit_name?
+    assert axfer_txn.sender == Txn.sender
+    assert another_app.extra_program_pages?
+
+    helper_subroutine(asa, axfer_txn) # // calling helper_subroutine calls a subroutine
+    # // calling helper_teal_method writes TEAL in-place
+    helper_teal_method(asa, axfer_txn)
+
+    return itob some_number + 1
+  end
+
+  # @subroutine
+  # @param n [uint64] Some number
+  # @param m [bytes] Some bytes
+  def some_subroutine(n, m)
+    log(m)
+    n + 1
+  end
+
+  # @teal
   # Evaluate all code in the method as TEALrb expressions
-  teal def teal_method
+  def teal_method
     x = 3
     y = 4
     x + y # => ['int 3', 'int 4', '+']
   end
-
-  # Another way to define teal methods
-  teal :another_teal_method do |a, b|
-    a / b
-  end
-
-  # Yet another way to define teal methods
-  @teal_methods[:yet_another_teal_method] = ->(arg1, arg2) { arg1 % arg2 }
 
   # Only evalulates the return value as a TEALrb expression
   def ruby_method
@@ -101,16 +118,12 @@ class Approval < TEALrb::Contract
 
     # See header comments of each method for details
     # // calling methods
-    # // subroutine method
-    subroutine_method(1, 2)
+    # // subroutine
+    some_subroutine(1, 'one')
     # // teal method
     teal_method
     # // ruby method
     int(ruby_method)
-    # // another_teal_method
-    another_teal_method(1111, 2222)
-    # // yet_another_teal_method
-    yet_another_teal_method(3333, 4444)
 
     # All of the following are the same
     # // accessing specific indexes/fields
@@ -199,10 +212,16 @@ class Approval < TEALrb::Contract
     Assets[0].creator
     # // Accounts[1].balance?
     Accounts[1].balance?
+    # // Apps[1 + 1].creator
+    Apps[1 + 1].creator
+
+    # // sratch var shorthand with $
+    $another_scatch_var = 123
+    $another_scatch_var
   end
 end
 
-approval = Approval.new
+approval = DemoContract.new
 approval.compile
 File.write("#{__dir__}/demo.teal", approval.teal_source)
 File.write("#{__dir__}/demo.json", JSON.pretty_generate(approval.abi_hash))

@@ -2,6 +2,7 @@
 
 require 'method_source'
 require 'rubocop'
+require 'yard'
 
 require_relative 'tealrb/constants'
 require_relative 'tealrb/opcodes'

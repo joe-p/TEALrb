@@ -27,6 +27,29 @@ module TEALrb
       end
     end
 
+    class InternalMethodRewriter < Rewriter
+      def on_send(node)
+        teal_methods = TEALrb::Contract.class_variable_get(:@@active_contract).class.teal_methods
+
+        method_name = node.loc.selector.source.to_sym
+
+        if teal_methods.keys.include? method_name
+          param_names = teal_methods[method_name].parameters.map(&:last)
+
+          pre_string = StringIO.new
+          param_names.each_with_index do |param, i|
+            scratch_name = [method_name, param].map(&:to_s).join(': ')
+
+            pre_string.puts "@scratch.store('#{scratch_name}', #{node.children[i + 2].loc.expression.source})"
+          end
+
+          replace node.source_range, "#{pre_string.string}\n#{method_name}"
+        end
+
+        super
+      end
+    end
+
     class MethodRewriter < Rewriter
       def on_def(node)
         replace node.source_range, node.body.source
@@ -69,6 +92,24 @@ module TEALrb
         insert_after(node.loc.name, '.call') unless ['@teal_methods', '@subroutines', '@scratch'].include? node.source
         super
       end
+
+      def on_gvasgn(node)
+        unless RuboCop::Cop::Style::GlobalVars::BUILT_IN_VARS.include? node.loc.name.source.to_sym
+          var_name = node.loc.name.source[1..]
+          replace(node.loc.name, "@scratch[:#{var_name}]")
+        end
+
+        super
+      end
+
+      def on_gvar(node)
+        unless RuboCop::Cop::Style::GlobalVars::BUILT_IN_VARS.include? node.loc.name.source.to_sym
+          var_name = node.loc.name.source[1..]
+          replace(node.loc.name, "@scratch[:#{var_name}]")
+        end
+
+        super
+      end
     end
 
     class ComparisonRewriter < Rewriter
@@ -107,6 +148,12 @@ module TEALrb
         super
       end
 
+      def on_return(node)
+        replace node.loc.keyword, 'abi_return'
+
+        super
+      end
+
       OPCODE_METHODS = TEALrb::Opcodes::AllOpcodes.instance_methods.freeze
 
       def on_send(node)
@@ -136,10 +183,12 @@ module TEALrb
           @skips << node.children[2]
         elsif node.children.first&.children&.last == :@scratch && meth_name[/=$/]
           nil
-        elsif %i[@scratch Gtxn Accounts ApplicationArgs Assets Apps Logs].include? node.children.first&.children&.last
+        elsif %i[@scratch Gtxn].include? node.children.first&.children&.last
           @skips << node.children.last
         elsif meth_name == :new && node.children&.first&.children&.last
           @skips << node.children.last if node.children.first.children.last[/U(int)|(fixed)/]
+        elsif %i[Accounts ApplicationArgs Assets Apps Logs].include? node.children.first&.children&.last
+          @skips << node.children.last if node.children.last.int_type?
         end
 
         super

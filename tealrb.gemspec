@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = 'tealrb'
   s.required_ruby_version = '>= 2.7'
-  s.version     = '0.9.0'
+  s.version     = '0.11.0'
   s.licenses    = ['MIT']
   s.summary     = 'A DSL for building Algorand smart contracts'
   s.authors     = ['Joe Polny']
@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
                     'rubygems_mfa_required' => 'true' }
   s.add_runtime_dependency 'method_source', ['~> 1.0']
   s.add_runtime_dependency 'rubocop', ['~> 1.36']
+  s.add_runtime_dependency 'yard', ['~> 0.9.27']
   s.add_development_dependency 'minitest', ['~> 5.15']
   s.add_development_dependency 'pry', ['~> 0.14.1']
   s.add_development_dependency 'rake', ['~> 13.0.1']
@@ -19,5 +20,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rubocop-minitest', ['~> 0.19.1']
   s.add_development_dependency 'rubocop-rake', ['~> 0.6.0']
   s.add_development_dependency 'simplecov', ['~> 0.21.2']
-  s.add_development_dependency 'yard', ['~> 0.9.27']
+  s.add_development_dependency 'terminal-table', ['~> 3.0.2']
 end

@@ -2,6 +2,9 @@
 
 require 'simplecov'
 require 'minitest/autorun'
+require_relative 'simplecov_gh'
+
+SimpleCov.formatters = [SimpleCov::Formatter::GithubFormatter, SimpleCov::Formatter::HTMLFormatter]
 
 SimpleCov.start do
   add_filter 'test/'
