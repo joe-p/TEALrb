@@ -354,3 +354,11 @@ end_while0:
     store 10 // another_scatch_var
 
     load 10 // another_scatch_var
+    byte "some box"
+    int 40
+    box_create
+    byte "some box"
+    box_get
+    byte "some box"
+    byte "some other value"
+    box_put

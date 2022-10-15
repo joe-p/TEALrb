@@ -829,6 +829,16 @@ module TEALrb
       end
     end
 
+    class Box
+      def self.[](key)
+        ExtendedOpcodes.box_get key
+      end
+
+      def self.[]=(key, value)
+        ExtendedOpcodes.box_put key, value
+      end
+    end
+
     module Global
       extend GlobalFields
 

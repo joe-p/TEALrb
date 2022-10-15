@@ -227,6 +227,34 @@ module TEALrb
         TEAL.instance << "#{__method__} #{target}"
       end
 
+      def box_create(_name = nil, _length = nil)
+        TEAL.instance << 'box_create'
+      end
+
+      def box_extract(_name = nil, _offset = nil, _length = nil)
+        TEAL.instance << 'box_extract'
+      end
+
+      def box_replace(_name = nil, _offset = nil, _value = nil)
+        TEAL.instance << 'box_replace'
+      end
+
+      def box_del(_name = nil)
+        TEAL.instance << 'box_del'
+      end
+
+      def box_len(_name = nil)
+        TEAL.instance << 'box_len'
+      end
+
+      def box_get(_name = nil)
+        TEAL.instance << 'box_get'
+      end
+
+      def box_put(_name = nil, _value = nil)
+        TEAL.instance << 'box_put'
+      end
+
       def bsqrt(_big_endian_uint = nil)
         TEAL.instance << 'bsqrt'
       end

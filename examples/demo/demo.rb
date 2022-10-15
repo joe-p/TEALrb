@@ -14,7 +14,6 @@ class DemoContract < TEALrb::Contract
   end
 
   # @teal
-  # @param asa [asset]
   def helper_teal_method(asa, axfer_txn)
     assert axfer_txn.sender == asa.creator
   end
@@ -199,6 +198,10 @@ class DemoContract < TEALrb::Contract
     # // sratch var shorthand with $
     $another_scatch_var = 123
     $another_scatch_var
+
+    box_create 'some box', 40
+    Box['some box']
+    Box['some box'] = 'some other value'
   end
 end
 
