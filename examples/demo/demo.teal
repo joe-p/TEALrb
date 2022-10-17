@@ -1,356 +1,511 @@
 #pragma version 6
+
+// src_map:demo.rb:64
 b main
 
+// src_map:demo.rb:12
 helper_subroutine: // helper_subroutine(asa, axfer_txn)
-    store 0 // helper_subroutine: axfer_txn [axfer]
+	store 0 // helper_subroutine: axfer_txn [axfer]
 
-    store 1 // helper_subroutine: asa [asset]
+	store 1 // helper_subroutine: asa [asset]
 
-    load 0 // helper_subroutine: axfer_txn [axfer]
-    gtxns Sender
-    load 1 // helper_subroutine: asa [asset]
-    asset_params_get AssetCreator
-    pop
-    ==
-    assert
+	// src_map:demo.rb:13
+	load 0 // helper_subroutine: axfer_txn [axfer]
+	gtxns Sender
+	load 1 // helper_subroutine: asa [asset]
+	asset_params_get AssetCreator
+	pop
+	==
+	assert
 
-    retsub
+	// src_map:demo.rb:14
+	retsub
 
+// src_map:demo.rb:29
 some_abi_method: // some_abi_method(asa, axfer_txn, another_app, some_number)
-    txna Assets 0
-    store 2 // some_abi_method: asa [asset] Some asset
+	txna Assets 0
+	store 2 // some_abi_method: asa [asset] Some asset
 
-    txn GroupIndex
-    int 1
-    -
-    store 3 // some_abi_method: axfer_txn [axfer] A axfer txn
+	txn GroupIndex
+	int 1
+	-
+	store 3 // some_abi_method: axfer_txn [axfer] A axfer txn
 
-    txna Applications 0
-    store 4 // some_abi_method: another_app [application] Another app
+	txna Applications 0
+	store 4 // some_abi_method: another_app [application] Another app
 
-    txna ApplicationArgs 1
-    store 5 // some_abi_method: some_number [uint64]
+	txna ApplicationArgs 1
+	store 5 // some_abi_method: some_number [uint64]
 
-    load 2 // some_abi_method: asa [asset] Some asset
-    asset_params_get AssetUnitName
-    swap
-    pop
-    assert
+	// src_map:demo.rb:30
+	load 2 // some_abi_method: asa [asset] Some asset
+	asset_params_get AssetUnitName
+	swap
+	pop
+	assert
 
-    load 3 // some_abi_method: axfer_txn [axfer] A axfer txn
-    gtxns Sender
-    txn Sender
-    ==
-    assert
+	// src_map:demo.rb:31
+	load 3 // some_abi_method: axfer_txn [axfer] A axfer txn
+	gtxns Sender
+	txn Sender
+	==
+	assert
 
-    load 4 // some_abi_method: another_app [application] Another app
-    app_params_get AppExtraProgramPages
-    swap
-    pop
-    assert
+	// src_map:demo.rb:32
+	load 4 // some_abi_method: another_app [application] Another app
+	app_params_get AppExtraProgramPages
+	swap
+	pop
+	assert
 
-    load 2 // some_abi_method: asa [asset] Some asset
-    load 3 // some_abi_method: axfer_txn [axfer] A axfer txn
-    callsub helper_subroutine // calling helper_subroutine calls a subroutine
+	// src_map:demo.rb:34
+	load 2 // some_abi_method: asa [asset] Some asset
+	load 3 // some_abi_method: axfer_txn [axfer] A axfer txn
+	callsub helper_subroutine // calling helper_subroutine calls a subroutine
 
-    
-    // calling helper_teal_method writes TEAL in-place
-    load 2 // some_abi_method: asa [asset] Some asset
-    load 3 // some_abi_method: axfer_txn [axfer] A axfer txn
-    gtxns Sender
-    asset_params_get AssetCreator
-    pop
-    ==
-    assert
+	// src_map:demo.rb:35
+	// calling helper_teal_method writes TEAL in-place
+	// src_map:demo.rb:36
+	load 2 // some_abi_method: asa [asset] Some asset
+	load 3 // some_abi_method: axfer_txn [axfer] A axfer txn
+	gtxns Sender
+	asset_params_get AssetCreator
+	pop
+	==
+	assert
 
-    load 5 // some_abi_method: some_number [uint64]
-    int 1
-    +
-    itob
-    byte "151f7c75"
-    concat
-    log
+	// src_map:demo.rb:38
+	load 5 // some_abi_method: some_number [uint64]
+	int 1
+	+
+	itob
+	byte "151f7c75"
+	concat
+	log
 
-    retsub
+	// src_map:demo.rb:39
+	retsub
 
+// src_map:demo.rb:44
 some_subroutine: // some_subroutine(n, m)
-    store 6 // some_subroutine: m [bytes] Some bytes
+	store 6 // some_subroutine: m [bytes] Some bytes
 
-    store 7 // some_subroutine: n [uint64] Some number
+	store 7 // some_subroutine: n [uint64] Some number
 
-    load 6 // some_subroutine: m [bytes] Some bytes
-    log
+	// src_map:demo.rb:45
+	load 6 // some_subroutine: m [bytes] Some bytes
+	log
 
-    load 7 // some_subroutine: n [uint64] Some number
-    int 1
-    +
-    retsub
+	// src_map:demo.rb:46
+	load 7 // some_subroutine: n [uint64] Some number
+	int 1
+	+
+
+	// src_map:demo.rb:47
+	retsub
 
 main:
-    txna ApplicationArgs 0
-    byte "a78bd94e"
-    ==
-    bz if0_else0
+	txna ApplicationArgs 0
+	byte "a78bd94e"
+	==
+	bz if0_else0
 
-    callsub some_abi_method
+	callsub some_abi_method
 
-    int 1
-    return
+	int 1
+	return
 
-    b if0_end
+	b if0_end
 
-    if0_else0:
-    if0_end:
-    
-    // This comment will show in TEAL
-    // raw teal
-    byte "Key One" // this will be an in-line comment
-    int 111
-    app_global_put
+if0_else0:
 
-    int 100
-    int 200
-    +
-    
-    // single method call
-    byte "Key Two"
-    int 222
-    app_global_put
+// src_map:demo.rb:64
+if0_end:
 
-    
-    // two step method call
-    byte "Key Three" // string literals are implicitly bytes
-    int 333
-    app_global_put
+	// src_map:demo.rb:65
+	// src_map:demo.rb:66
+	// This comment will show in TEAL
+	// src_map:demo.rb:67
+	// src_map:demo.rb:69
+	// raw teal
+	// src_map:demo.rb:70
+	byte "Key One" // this will be an in-line comment
 
-    
-    // Global put/get as hash
-    byte "Key Four"
-    int 444
-    app_global_put
+	// src_map:demo.rb:71
+	int 111
 
-    byte "Key Five"
-    app_global_get
-    
-    // Local put/get as hash
-    txn Sender
-    byte "Local Key"
-    byte "Some Value"
-    app_local_put
+	// src_map:demo.rb:72
+	app_global_put
 
-    txn Receiver
-    byte "Local Key"
-    app_local_get
-    
-    // using variables
-    byte "Key Four"
-    int 444
-    app_global_put
+	// src_map:demo.rb:74
+	int 100
 
-    
-    // combining raw teal with conditionals
-    byte "Bad Key"
-    app_global_get
-    bz if1_else0
+	// src_map:demo.rb:75
+	int 200
 
-    err
+	// src_map:demo.rb:76
+	+
 
-    b if1_end
+	// src_map:demo.rb:78
+	// single method call
+	// src_map:demo.rb:79
+	byte "Key Two"
+	int 222
+	app_global_put
 
-    if1_else0:
-    if1_end:
-    
-    // more complex conditionals
-    byte "First Word"
-    app_global_get
-    byte "Hi"
-    ==
-    bz if2_else0
+	// src_map:demo.rb:81
+	// two step method call
+	// src_map:demo.rb:82
+	byte "Key Three" // string literals are implicitly bytes
 
-    byte "Second Word"
-    byte "Mom"
-    app_global_put
+	// src_map:demo.rb:83
+	int 333
+	app_global_put
 
-    b if2_end
+	// src_map:demo.rb:85
+	// Global put/get as hash
+	// src_map:demo.rb:86
+	byte "Key Four"
+	int 444
+	app_global_put
 
-    if2_else0:
-    byte "First Word"
-    app_global_get
-    byte "Hello"
-    ==
-    bz if2_else1
+	// src_map:demo.rb:87
+	byte "Key Five"
+	app_global_get
 
-    byte "Second Word"
-    byte "World"
-    app_global_put
+	// src_map:demo.rb:89
+	// Local put/get as hash
+	// src_map:demo.rb:90
+	txn Sender
+	byte "Local Key"
+	byte "Some Value"
+	app_local_put
 
-    b if2_end
+	// src_map:demo.rb:91
+	txn Receiver
+	byte "Local Key"
+	app_local_get
 
-    if2_else1:
-    byte "First Word"
-    app_global_get
-    byte "Howdy"
-    ==
-    bz if2_else2
+	// src_map:demo.rb:93
+	// src_map:demo.rb:94
+	// using variables
+	// src_map:demo.rb:96
+	// src_map:demo.rb:95
+	byte "Key Four"
 
-    byte "Second Word"
-    byte "Partner"
-    app_global_put
+	// src_map:demo.rb:98
+	// src_map:demo.rb:97
+	int 444
+	app_global_put
 
-    b if2_end
+	// src_map:demo.rb:100
+	// combining raw teal with conditionals
+	// src_map:demo.rb:101
+	byte "Bad Key"
 
-    if2_else2:
-    byte "Second Word"
-    byte "???"
-    app_global_put
+	// src_map:demo.rb:102
+	app_global_get
+	bz if1_else0
 
-    if2_end:
-    
-    // calling methods
-    // subroutine
-    int 1
-    byte "one"
-    callsub some_subroutine
+	// src_map:demo.rb:103
+	err
 
-    
-    // teal method
-    int 3
-    int 4
-    +
-    
-    // ruby method
-    int 11
-    
-    // accessing specific indexes/fields
-    gtxn 0 Sender // gtxn(0, 'Sender')
-    gtxn 0 Sender // Gtxn.sender(0)
-    gtxn 0 Sender // Gtxn[0].sender
-    gtxn 0 Sender // gtxn_var.sender
-    
-    // manual branching
-    b manual_br
+	// src_map:demo.rb:104
+	b if1_end
 
-    byte "Unreachable"
-    app_global_get
+if1_else0:
+
+if1_end:
+
+	// src_map:demo.rb:106
+	// more complex conditionals
+	// src_map:demo.rb:107
+	byte "First Word"
+	app_global_get
+	byte "Hi"
+	==
+	bz if2_else0
+
+	// src_map:demo.rb:108
+	byte "Second Word"
+	byte "Mom"
+	app_global_put
+
+	// src_map:demo.rb:109
+	b if2_end
+
+if2_else0:
+	byte "First Word"
+	app_global_get
+	byte "Hello"
+	==
+	bz if2_else1
+
+	// src_map:demo.rb:110
+	byte "Second Word"
+
+	// src_map:demo.rb:111
+	byte "World"
+
+	// src_map:demo.rb:112
+	app_global_put
+
+	// src_map:demo.rb:113
+	b if2_end
+
+if2_else1:
+	byte "First Word"
+	app_global_get
+	byte "Howdy"
+	==
+	bz if2_else2
+
+	// src_map:demo.rb:114
+	byte "Second Word"
+	byte "Partner"
+	app_global_put
+
+	// src_map:demo.rb:115
+	b if2_end
+
+if2_else2:
+
+	// src_map:demo.rb:116
+	byte "Second Word"
+	byte "???"
+	app_global_put
+
+// src_map:demo.rb:117
+if2_end:
+
+	// src_map:demo.rb:119
+	// src_map:demo.rb:120
+	// calling methods
+	// src_map:demo.rb:121
+	// subroutine
+	// src_map:demo.rb:122
+	int 1
+	byte "one"
+	callsub some_subroutine
+
+	// src_map:demo.rb:123
+	// teal method
+	// src_map:demo.rb:124
+	// src_map:demo.rb:54
+	// src_map:demo.rb:52
+	int 3
+
+	// src_map:demo.rb:53
+	int 4
+	+
+
+	// src_map:demo.rb:55
+	// src_map:demo.rb:125
+	// ruby method
+	// src_map:demo.rb:126
+	int 11
+
+	// src_map:demo.rb:128
+	// src_map:demo.rb:129
+	// accessing specific indexes/fields
+	// src_map:demo.rb:130
+	gtxn 0 Sender // gtxn(0, 'Sender')
+
+	// src_map:demo.rb:131
+	gtxn 0 Sender // Gtxn.sender(0)
+
+	// src_map:demo.rb:132
+	gtxn 0 Sender // Gtxn[0].sender
+
+	// src_map:demo.rb:134
+	// src_map:demo.rb:133
+	gtxn 0 Sender // gtxn_var.sender
+
+	// src_map:demo.rb:136
+	// manual branching
+	// src_map:demo.rb:137
+	b manual_br
+
+	// src_map:demo.rb:138
+	byte "Unreachable"
+	app_global_get
+
+// src_map:demo.rb:139
 manual_br:
-    byte "Manual Br"
-    app_global_get
-    
-    // placeholders
-    byte "Some Key"
-    REPLACE_ME
-    app_global_put
 
-    gtxn 1 ANOTHER_THING_TO_REPLACE
-    
-    // TxnType enums
-    int pay
-    
-    // store/load to named scratch slots
-    int 123
-    store 8 // some key
+	// src_map:demo.rb:140
+	byte "Manual Br"
+	app_global_get
 
-    load 8 // some key
-    int 321
-    store 9 // another key
+	// src_map:demo.rb:142
+	// placeholders
+	// src_map:demo.rb:143
+	byte "Some Key"
+	REPLACE_ME
+	app_global_put
 
-    load 9 // another key
-    
-    // while loops
+	// src_map:demo.rb:144
+	gtxn 1 ANOTHER_THING_TO_REPLACE
+
+	// src_map:demo.rb:146
+	// TxnType enums
+	// src_map:demo.rb:147
+	int pay
+
+	// src_map:demo.rb:149
+	// store/load to named scratch slots
+	// src_map:demo.rb:150
+	int 123
+	store 8 // some key
+
+	// src_map:demo.rb:151
+	load 8 // some key
+
+	// src_map:demo.rb:152
+	int 321
+	store 9 // another key
+
+	// src_map:demo.rb:153
+	load 9 // another key
+
+// src_map:demo.rb:155
+// src_map:demo.rb:156
+// src_map:demo.rb:158
+// src_map:demo.rb:160
+// while loops
+// src_map:demo.rb:161
 while0:
-    byte "counter"
-    app_global_get
-    int 3
-    <
-    bz end_while0
+	byte "counter"
+	app_global_get
+	int 3
+	<
+	bz end_while0
 
-    byte "counter"
-    byte "counter"
-    app_global_get
-    int 1
-    +
-    app_global_put
+	// src_map:demo.rb:162
+	byte "counter"
+	byte "counter"
+	app_global_get
+	int 1
+	+
+	app_global_put
 
-    b while0
+	// src_map:demo.rb:163
+	b while0
 
 end_while0:
-    
-    // opcodes with "maybe" values
-    // using app_global_ex_exists? and app_global_ex_value
-    int 1337
-    byte "some_key"
-    app_global_get_ex
-    swap
-    pop
-    bz if3_else0
 
-    int 1337
-    byte "some_key"
-    app_global_get_ex
-    pop
-    b if3_end
+	// src_map:demo.rb:165
+	// opcodes with "maybe" values
+	// src_map:demo.rb:167
+	// using app_global_ex_exists? and app_global_ex_value
+	// src_map:demo.rb:168
+	int 1337
+	byte "some_key"
+	app_global_get_ex
+	swap
+	pop
+	bz if3_else0
 
-    if3_else0:
-    byte "some_key does not exist"
-    log
+	// src_map:demo.rb:169
+	int 1337
+	byte "some_key"
+	app_global_get_ex
+	pop
 
-    if3_end:
-    
-    // using app_global_get_ex and store/load
-    int 1337
-    byte "some_key"
-    app_local_get_ex
-    store 0
+	// src_map:demo.rb:170
+	b if3_end
 
-    store 1
+if3_else0:
 
-    load 0
-    bz if4_else0
+	// src_map:demo.rb:171
+	byte "some_key does not exist"
+	log
 
-    load 1
-    b if4_end
+// src_map:demo.rb:172
+if3_end:
 
-    if4_else0:
-    byte "some_key does not exist"
-    log
+	// src_map:demo.rb:174
+	// using app_global_get_ex and store/load
+	// src_map:demo.rb:175
+	int 1337
+	byte "some_key"
+	app_local_get_ex
 
-    if4_end:
-    
-    // inline if statement
-    btoi
-    int 10
-    >
-    bz if5_else0
+	// src_map:demo.rb:176
+	store 0
 
-    b label
+	// src_map:demo.rb:177
+	store 1
 
-    b if5_end
+	// src_map:demo.rb:182
+	// src_map:demo.rb:179
+	load 0
+	bz if4_else0
 
-    if5_else0:
-    if5_end:
-    
-    // Accessing arrays
-    // Assets[0].creator
-    txna Assets 0
-    asset_params_get AssetCreator
-    pop
-    
-    // Accounts[1].balance?
-    txna Accounts 1
-    acct_params_get AcctBalance
-    swap
-    pop
-    
-    // Apps[1 + 1].creator
-    int 1
-    int 1
-    +
-    txnas Applications
-    app_params_get AppCreator
-    pop
-    
-    // sratch var shorthand with $
-    int 123
-    store 10 // another_scatch_var
+	// src_map:demo.rb:183
+	// src_map:demo.rb:180
+	load 1
 
-    load 10 // another_scatch_var
+	// src_map:demo.rb:184
+	b if4_end
+
+if4_else0:
+
+	// src_map:demo.rb:185
+	byte "some_key does not exist"
+	log
+
+// src_map:demo.rb:186
+if4_end:
+
+	// src_map:demo.rb:188
+	// inline if statement
+	// src_map:demo.rb:189
+	btoi
+	int 10
+	>
+	bz if5_else0
+
+	b label
+
+	b if5_end
+
+if5_else0:
+
+if5_end:
+
+	// src_map:demo.rb:191
+	// Accessing arrays
+	// src_map:demo.rb:192
+	// Assets[0].creator
+	// src_map:demo.rb:193
+	txna Assets 0
+	asset_params_get AssetCreator
+	pop
+
+	// src_map:demo.rb:194
+	// Accounts[1].balance?
+	// src_map:demo.rb:195
+	txna Accounts 1
+	acct_params_get AcctBalance
+	swap
+	pop
+
+	// src_map:demo.rb:196
+	// Apps[1 + 1].creator
+	// src_map:demo.rb:197
+	int 1
+	int 1
+	+
+	txnas Applications
+	app_params_get AppCreator
+	pop
+
+	// src_map:demo.rb:199
+	// sratch var shorthand with $
+	// src_map:demo.rb:200
+	int 123
+	store 10 // another_scatch_var
+
+	// src_map:demo.rb:201
+	load 10 // another_scatch_var

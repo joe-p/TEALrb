@@ -10,8 +10,10 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/joe-p/tealrb'
   s.metadata    = { 'source_code_uri' => 'https://github.com/joe-p/tealrb',
                     'rubygems_mfa_required' => 'true' }
+  s.add_runtime_dependency 'faraday', ['~> 2.6.0']
   s.add_runtime_dependency 'method_source', ['~> 1.0']
   s.add_runtime_dependency 'rubocop', ['~> 1.36']
+  s.add_runtime_dependency 'source_map'
   s.add_runtime_dependency 'yard', ['~> 0.9.27']
   s.add_development_dependency 'minitest', ['~> 5.15']
   s.add_development_dependency 'pry', ['~> 0.14.1']
