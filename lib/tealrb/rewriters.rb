@@ -73,8 +73,14 @@ module TEALrb
     end
 
     class AssignRewriter < Rewriter
+      def on_send(node)
+        @last_src_map_node = node if node.source[/src_map/]
+        super
+      end
+
       def on_lvasgn(node)
-        wrap(node.children[1].source_range, '-> { ', ' }')
+        wrap(node.children[1].source_range, "-> { #{@last_src_map_node.source}; ", ' }')
+        remove @last_src_map_node.source_range
         super
       end
 
@@ -84,7 +90,8 @@ module TEALrb
       end
 
       def on_ivasgn(node)
-        wrap(node.children[1].source_range, '-> { ', ' }')
+        wrap(node.children[1].source_range, "-> { #{@last_src_map_node.source}; ", ' }')
+        remove @last_src_map_node.source_range
         super
       end
 

@@ -12,7 +12,7 @@ module TEALrb
 
     class << self
       attr_accessor :subroutines, :version, :teal_methods, :abi_interface, :debug,
-                    :disable_abi_routing, :method_hashes
+                    :disable_abi_routing, :method_hashes, :src_map
 
       private
 
@@ -25,6 +25,7 @@ module TEALrb
         klass.method_hashes = []
         klass.debug = false
         klass.disable_abi_routing = false
+        klass.src_map = true
         parse(klass)
         super
       end
@@ -85,28 +86,113 @@ module TEALrb
                   log itxn_submit itxn_next].freeze
 
     def teal_source
-      teal_lines = []
+      TEAL.instance.compact.join("\n")
+    end
 
-      @teal.each_with_index do |line, i|
-        ln = line.strip
+    def generate_source_map(src)
+      last_location = nil
+      src_map_hash = {}
 
-        teal_lines << '' if i != 0 && VOID_OPS.include?(@teal[i - 1][/\S+/])
+      src.each_line.with_index do |ln, i|
+        if ln[/src_map:/]
+          last_location = ln[/(?<=src_map:)\S+/]
+          next
+        end
 
-        if (ln[%r{\S+:($| //)}] && !ln[/^if\d+/]) || ln == 'b main' || ln[/^#/]
-          teal_lines << ln
-        elsif ln == 'retsub'
-          teal_lines << "    #{ln}"
-          teal_lines << ''
+        src_map_hash[i + 1] ||= { location: last_location } if last_location
+      end
+
+      compile_response = Algod.new.compile(src)
+
+      if compile_response.status == 200
+        json_body = JSON.parse(compile_response.body)
+        pc_mapping = json_body['sourcemap']['mapping']
+
+        pc_array = pc_mapping.split(';').map do |v|
+          SourceMap::VLQ.decode_array(v)[2]
+        end
+
+        last_line = 1
+
+        line_to_pc = {}
+        pc_to_line = {}
+        pc_array.each_with_index do |line_delta, pc|
+          last_line += line_delta.to_i
+
+          next if last_line == 1
+
+          line_to_pc[last_line] ||= []
+          line_to_pc[last_line] << pc
+          pc_to_line[pc] = last_line
+        end
+
+      end
+
+      line_to_pc.each do |line, pcs|
+        src_map_hash[line][:pcs] = pcs
+      end
+
+      src_map_hash
+    end
+
+    def dump(directory = Dir.pwd, name: self.class.to_s.downcase, abi: true, src_map: true)
+      src = formatted_teal
+
+      File.write(File.join(directory, "#{name}.teal"), src)
+      File.write(File.join(directory, "#{name}.abi.json"), abi_hash.to_json) if abi
+
+      return unless src_map
+
+      src_map_json = JSON.pretty_generate(generate_source_map(src))
+      File.write(File.join(directory, "#{name}.src_map.json"), src_map_json)
+    end
+
+    def formatted_teal
+      new_lines = []
+      comments = []
+
+      TEAL.instance.compact.each do |ln|
+        ln = ln.strip
+
+        next if ln.empty?
+
+        if ln[/^#pragma/]
+          new_lines << { text: ln, void: true, comments: comments }
+          comments = []
+        elsif ln[%r{^//}]
+          comments << ln
         else
-          teal_lines << "    #{ln}"
+          op = ln.split.first
+          new_lines << { text: ln, void: VOID_OPS.include?(op), comments: comments, label: ln[%r{\S+:($| //)}] }
+          comments = []
         end
       end
 
-      teal_lines.delete_if.with_index do |t, i|
-        t.empty? && teal_lines[i - 1].empty?
+      output = []
+      under_label = false
+
+      new_lines.each do |ln|
+        output << '' if !output.last&.empty? && (ln[:label] || ln[:comments].any?)
+        under_label = true if ln[:label]
+
+        ln[:comments].each do |c|
+          output << if ln[:label] || !under_label
+                      c
+                    else
+                      "\t#{c}"
+                    end
+        end
+
+        output << if ln[:label] || !under_label
+                    ln[:text]
+                  else
+                    "\t#{ln[:text]}"
+                  end
+
+        output << '' if ln[:void] && !output.last.empty?
       end
 
-      teal_lines.join("\n")
+      output.join("\n")
     end
 
     # return the input without transpiling to TEAL
@@ -137,7 +223,16 @@ module TEALrb
         callsub(name)
       end
 
-      TEAL.instance << 'b main' unless TEAL.instance.include? 'b main'
+      unless TEAL.instance.include? 'b main'
+        if self.class.src_map
+          main_location = method(:main).source_location
+          main_file = File.basename(main_location.first)
+          main_line = main_location.last
+          src_map(main_file, main_line)
+        end
+
+        TEAL.instance << 'b main'
+      end
 
       label(name) # add teal label
 
@@ -164,7 +259,6 @@ module TEALrb
         last_line = TEAL.instance.pop
         TEAL.instance << "#{last_line} //#{content}"
       else
-        TEAL.instance << '' unless TEAL.instance.last[%r{^//}]
         TEAL.instance << "//#{content}"
       end
     end
@@ -193,7 +287,16 @@ module TEALrb
     def compile
       TEAL.instance << 'main:' if TEAL.instance.include? 'b main'
       route_abi_methods unless self.class.disable_abi_routing
-      eval_tealrb(rewrite(method(:main).source, method_rewriter: true), debug_context: 'main') if respond_to? :main
+      return unless respond_to? :main
+
+      eval_tealrb(
+        rewrite(
+          method(:main).source,
+          method_rewriter: true,
+          starting_location: method(:main).source_location
+        ),
+        debug_context: 'main'
+      )
     end
 
     private
@@ -211,7 +314,7 @@ module TEALrb
     end
 
     def generate_method_source(name, definition)
-      new_source = rewrite(definition.source, method_rewriter: true)
+      new_source = rewrite(definition.source, method_rewriter: true, starting_location: method(name).source_location)
 
       pre_string = StringIO.new
 
@@ -229,7 +332,7 @@ module TEALrb
     end
 
     def generate_subroutine_source(definition, method_hash)
-      new_source = rewrite(definition.source, method_rewriter: true)
+      new_source = rewrite(definition.source, method_rewriter: true, starting_location: definition.source_location)
 
       pre_string = StringIO.new
 
@@ -307,11 +410,42 @@ module TEALrb
       rewriter.new.rewrite(process_source)
     end
 
-    def rewrite(string, method_rewriter: false)
+    def rewrite(string, starting_location: nil, method_rewriter: false)
       if self.class.debug
         puts 'DEBUG: Rewriting the following code:'
         puts string
         puts ''
+      end
+
+      if starting_location && self.class.src_map
+        multi_line = false
+
+        string = string.lines.map.with_index do |ln, i|
+          line_num = i + starting_location.last
+          file = File.basename(starting_location.first)
+          ln.strip!
+
+          if ln[/^def /]
+            method_name = ln.split[1].split('(').first.strip.to_sym
+            yardoc = YARD::Registry.all.find { _1.name == method_name }
+
+            unless yardoc.has_tag? 'teal'
+              last_ln = TEAL.instance.pop
+              src_map(file, line_num)
+              TEAL.instance.push(last_ln)
+            end
+          elsif !multi_line && !ln.empty?
+            ln = "\nsrc_map(rb('#{file}'),rb(#{line_num}))\n#{ln.strip}"
+          end
+
+          multi_line = if ln[/\\$/]
+                         true
+                       else
+                         false
+                       end
+
+          "#{ln}\n"
+        end.join
       end
 
       [CommentRewriter, ComparisonRewriter, WhileRewriter, InlineIfRewriter, IfRewriter, OpRewriter,
@@ -328,6 +462,10 @@ module TEALrb
       end
 
       string
+    end
+
+    def src_map(file, location)
+      comment("src_map:#{file}:#{location}") unless TEAL.instance.empty?
     end
 
     def eval_tealrb(s, debug_context:)

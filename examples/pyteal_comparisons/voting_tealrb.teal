@@ -1,179 +1,250 @@
 #pragma version 2
-    txn ApplicationID
-    int 0
-    ==
-    bz if0_else0
 
-    byte "Creator"
-    txn Sender
-    app_global_put
+// src_map:voting.rb:88
+// src_map:voting.rb:91
+// src_map:voting.rb:92
+// src_map:voting.rb:93
+// src_map:voting.rb:94
+// src_map:voting.rb:95
+// src_map:voting.rb:96
+// src_map:voting.rb:99
+// src_map:voting.rb:102
+// src_map:voting.rb:105
+// src_map:voting.rb:106
+// src_map:voting.rb:107
+// src_map:voting.rb:108
+// src_map:voting.rb:109
+// src_map:voting.rb:110
+// src_map:voting.rb:111
+// src_map:voting.rb:112
+// src_map:voting.rb:113
+txn ApplicationID
+int 0
+==
+bz if0_else0
 
-    txn NumAppArgs
-    int 4
-    ==
-    assert
+// src_map:voting.rb:114
+// src_map:voting.rb:22
+byte "Creator"
+txn Sender
+app_global_put
 
-    byte "RegBegin"
-    txna ApplicationArgs 0
-    btoi
-    app_global_put
+// src_map:voting.rb:23
+txn NumAppArgs
+int 4
+==
+assert
 
-    byte "RegEnd"
-    txna ApplicationArgs 1
-    btoi
-    app_global_put
+// src_map:voting.rb:24
+byte "RegBegin"
+txna ApplicationArgs 0
+btoi
+app_global_put
 
-    byte "VoteBegin"
-    txna ApplicationArgs 2
-    btoi
-    app_global_put
+// src_map:voting.rb:25
+byte "RegEnd"
+txna ApplicationArgs 1
+btoi
+app_global_put
 
-    byte "VoteEnd"
-    txna ApplicationArgs 3
-    btoi
-    app_global_put
+// src_map:voting.rb:26
+byte "VoteBegin"
+txna ApplicationArgs 2
+btoi
+app_global_put
 
-    b if0_end
+// src_map:voting.rb:27
+byte "VoteEnd"
+txna ApplicationArgs 3
+btoi
+app_global_put
 
-    if0_else0:
-    txn OnCompletion
-    int DeleteApplication
-    ==
-    bz if0_else1
+// src_map:voting.rb:28
+// src_map:voting.rb:115
+b if0_end
 
-    txn Sender
-    byte "Creator"
-    app_global_get
-    ==
-    return
+if0_else0:
+	txn OnCompletion
+	int DeleteApplication
+	==
+	bz if0_else1
 
-    b if0_end
+	// src_map:voting.rb:116
+	// src_map:voting.rb:89
+	txn Sender
+	byte "Creator"
+	app_global_get
+	==
+	return
 
-    if0_else1:
-    txn OnCompletion
-    int UpdateApplication
-    ==
-    bz if0_else2
+	// src_map:voting.rb:117
+	b if0_end
 
-    txn Sender
-    byte "Creator"
-    app_global_get
-    ==
-    return
+if0_else1:
+	txn OnCompletion
+	int UpdateApplication
+	==
+	bz if0_else2
 
-    b if0_end
+	// src_map:voting.rb:118
+	// src_map:voting.rb:89
+	txn Sender
+	byte "Creator"
+	app_global_get
+	==
+	return
 
-    if0_else2:
-    txn OnCompletion
-    int CloseOut
-    ==
-    bz if0_else3
+	// src_map:voting.rb:119
+	b if0_end
 
-    global Round
-    byte "VoteEnd"
-    app_global_get
-    <=
-    int 0
-    txn ApplicationID
-    byte "voted"
-    app_global_get_ex
-    swap
-    pop
-    &&
-    bz if1_else0
+if0_else2:
+	txn OnCompletion
+	int CloseOut
+	==
+	bz if0_else3
 
-    int 0
-    txn ApplicationID
-    byte "voted"
-    app_global_get_ex
-    pop
-    int 0
-    txn ApplicationID
-    byte "voted"
-    app_global_get_ex
-    pop
-    app_global_get
-    int 1
-    -
-    app_global_put
+	// src_map:voting.rb:120
+	// src_map:voting.rb:51
+	global Round
+	byte "VoteEnd"
+	app_global_get
+	<=
+	int 0
+	txn ApplicationID
+	byte "voted"
+	app_global_get_ex
+	swap
+	pop
+	&&
+	bz if1_else0
 
-    b if1_end
+	// src_map:voting.rb:52
+	// src_map:voting.rb:49
+	int 0
+	txn ApplicationID
+	byte "voted"
+	app_global_get_ex
+	pop
 
-    if1_else0:
-    if1_end:
-    int 1
-    return
+	// src_map:voting.rb:49
+	int 0
+	txn ApplicationID
+	byte "voted"
+	app_global_get_ex
+	pop
+	app_global_get
+	int 1
+	-
+	app_global_put
 
-    b if0_end
+	// src_map:voting.rb:53
+	b if1_end
 
-    if0_else3:
-    txn OnCompletion
-    int OptIn
-    ==
-    bz if0_else4
+if1_else0:
 
-    global Round
-    byte "RegBegin"
-    app_global_get
-    >=
-    global Round
-    byte "RegEnd"
-    app_global_get
-    >=
-    &&
-    return
+if1_end:
 
-    b if0_end
+	// src_map:voting.rb:55
+	int 1
+	return
 
-    if0_else4:
-    txna ApplicationArgs 0
-    byte "vote"
-    ==
-    bz if0_else5
+	// src_map:voting.rb:56
+	// src_map:voting.rb:121
+	b if0_end
 
-    global Round
-    byte "VoteBegin"
-    app_global_get
-    >=
-    global Round
-    byte "VoteEnd"
-    app_global_get
-    <=
-    &&
-    assert
+if0_else3:
+	txn OnCompletion
+	int OptIn
+	==
+	bz if0_else4
 
-    int 0
-    txn ApplicationID
-    byte "voted"
-    app_global_get_ex
-    swap
-    pop
-    bz if2_else0
+	// src_map:voting.rb:122
+	// src_map:voting.rb:97
+	global Round
+	byte "RegBegin"
+	app_global_get
+	>=
+	global Round
+	byte "RegEnd"
+	app_global_get
+	>=
+	&&
+	return
 
-    int 0
-    return
+	// src_map:voting.rb:123
+	b if0_end
 
-    b if2_end
+if0_else4:
+	txna ApplicationArgs 0
+	byte "vote"
+	==
+	bz if0_else5
 
-    if2_else0:
-    if2_end:
-    txna ApplicationArgs 1
-    txna ApplicationArgs 1
-    app_global_get
-    int 1
-    +
-    app_global_put
+	// src_map:voting.rb:124
+	// src_map:voting.rb:76
+	global Round
+	byte "VoteBegin"
+	app_global_get
+	>=
+	global Round
+	byte "VoteEnd"
+	app_global_get
+	<=
+	&&
+	assert
 
-    int 0
-    byte "voted"
-    txna ApplicationArgs 1
-    app_local_put
+	// src_map:voting.rb:78
+	int 0
+	txn ApplicationID
+	byte "voted"
+	app_global_get_ex
+	swap
+	pop
+	bz if2_else0
 
-    int 1
-    return
+	// src_map:voting.rb:79
+	int 0
+	return
 
-    b if0_end
+	// src_map:voting.rb:80
+	b if2_end
 
-    if0_else5:
-    if0_end:
-    return
+if2_else0:
+
+if2_end:
+
+	// src_map:voting.rb:82
+	// src_map:voting.rb:100
+	txna ApplicationArgs 1
+
+	// src_map:voting.rb:103
+	// src_map:voting.rb:100
+	txna ApplicationArgs 1
+	app_global_get
+	int 1
+	+
+	app_global_put
+
+	// src_map:voting.rb:83
+	int 0
+	byte "voted"
+
+	// src_map:voting.rb:100
+	txna ApplicationArgs 1
+	app_local_put
+
+	// src_map:voting.rb:84
+	int 1
+	return
+
+	// src_map:voting.rb:85
+	// src_map:voting.rb:125
+	b if0_end
+
+if0_else5:
+
+if0_end:
+
+	// src_map:voting.rb:127
+	// src_map:voting.rb:128
+	return

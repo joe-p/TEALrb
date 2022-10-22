@@ -3,6 +3,8 @@
 require 'method_source'
 require 'rubocop'
 require 'yard'
+require 'faraday'
+require 'source_map'
 
 require_relative 'tealrb/constants'
 require_relative 'tealrb/abi'
@@ -11,6 +13,7 @@ require_relative 'tealrb/opcode_modules'
 require_relative 'tealrb/rewriters'
 require_relative 'tealrb/if_block'
 require_relative 'tealrb/scratch'
+require_relative 'tealrb/algod'
 require_relative 'tealrb/contract'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 

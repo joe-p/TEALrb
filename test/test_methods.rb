@@ -4,6 +4,8 @@ require 'minitest/autorun'
 require_relative '../lib/tealrb'
 
 class TealTest < TEALrb::Contract
+  @src_map = false
+
   # @teal
   def teal_method(x, y)
     x / y
@@ -15,6 +17,8 @@ class TealTest < TEALrb::Contract
 end
 
 class SubroutineTest < TEALrb::Contract
+  @src_map = false
+
   # @subroutine
   def subroutine_method(x, y)
     x / y

@@ -166,4 +166,4 @@ end
 
 approval = Approval.new
 approval.compile
-File.write("#{__dir__}/nft_tealrb.teal", approval.teal_source)
+approval.dump(__dir__, name: 'nft_tealrb', abi: false)
