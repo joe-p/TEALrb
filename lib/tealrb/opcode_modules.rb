@@ -733,11 +733,13 @@ module TEALrb
       # @return [[]byte] Creator address
       def creator(*_args)
         ExtendedOpcodes.app_param_value 'AppCreator'
+        Accounts.new
       end
 
       # @return [[]byte] Address for which this application has authority
       def address(*_args)
         ExtendedOpcodes.app_param_value 'AppAddress'
+        Accounts.new
       end
 
       # @return [[]byte] Bytecode of Approval Program
