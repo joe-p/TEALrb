@@ -14,8 +14,6 @@ module TEALrb
       attr_accessor :subroutines, :version, :teal_methods, :abi_interface, :debug,
                     :disable_abi_routing, :method_hashes, :src_map
 
-      private
-
       def inherited(klass)
         klass.version = 6
         klass.subroutines = {}
@@ -26,7 +24,6 @@ module TEALrb
         klass.debug = false
         klass.disable_abi_routing = false
         klass.src_map = true
-        parse(klass)
         super
       end
 
@@ -39,7 +36,7 @@ module TEALrb
 
         YARD::Registry.all.each do |y|
           next unless y.type == :method
-          next unless y.parent.to_s == klass.to_s
+          next unless klass.instance_methods.include? y.name
 
           tags = y.tags.map(&:tag_name)
 
@@ -66,6 +63,8 @@ module TEALrb
 
     # sets the `#pragma version`, defines teal methods, and defines subroutines
     def initialize
+      self.class.parse(self.class)
+
       @teal = TEAL.new ["#pragma version #{self.class.version}"]
       IfBlock.id = 0
       @scratch = Scratch.new
@@ -362,9 +361,8 @@ module TEALrb
         definition.parameters.each_with_index do |param, i|
           param_name = param.last
 
-          scratch_name = "#{definition.original_name}: #{param_name} [#{arg_types[i] || 'any'}] #{if args[i]
-                                                                                                    args[i][:desc]
-                                                                                                  end}"
+          scratch_name = "#{definition.original_name}: #{param_name} [#{arg_types[i] || 'any'}] #{
+            args[i][:desc] if args[i]}"
           scratch_names << scratch_name
 
           if txn_types.include? arg_types[i]
@@ -392,9 +390,8 @@ module TEALrb
         definition.parameters.reverse.each_with_index do |param, i|
           param_name = param.last
 
-          scratch_name = "#{definition.original_name}: #{param_name} [#{arg_types[i] || 'any'}] #{if args[i]
-                                                                                                    args[i][:desc]
-                                                                                                  end}"
+          scratch_name = "#{definition.original_name}: #{param_name} [#{arg_types[i] || 'any'}] #{
+            args[i][:desc] if args[i]}"
           scratch_names << scratch_name
 
           if txn_types.include? arg_types[i]
