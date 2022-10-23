@@ -444,6 +444,7 @@ module TEALrb
       # @return [[]byte] Address that the current application controls. Application mode only. (v5)
       def current_application_address(*args)
         opcode('CurrentApplicationAddress', *args)
+        Accounts.new
       end
 
       # @return [[]byte] ID of the transaction group. 32 zero bytes if the transaction is not part of a group. (v5)
