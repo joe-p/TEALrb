@@ -1059,6 +1059,28 @@ module TEALrb
     module ExtendedOpcodes
       extend AllOpcodes
     end
+
+    class TransactionBase
+      include TxnFields
+    end
+
+    class Pay < TransactionBase; end
+
+    class Keyreg < TransactionBase; end
+
+    class Keyreg < TransactionBase; end
+
+    class Axfer < TransactionBase; end
+
+    class Afrz < TransactionBase; end
+
+    class Appl < TransactionBase; end
+
+    class Account < Accounts; end
+
+    class Asset < Assets; end
+
+    class Application < Apps; end
   end
 end
 # rubocop:enable Lint/UnusedMethodArgument

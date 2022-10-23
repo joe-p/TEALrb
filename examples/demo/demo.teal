@@ -519,6 +519,7 @@ if5_end:
 	// src_map:demo.rb:203
 	byte "some box"
 	box_get
+	pop
 
 	// src_map:demo.rb:204
 	byte "some box"

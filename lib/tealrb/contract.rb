@@ -44,11 +44,11 @@ module TEALrb
             method_hash = { name: y.name.to_s, desc: y.base_docstring, args: [], returns: { type: 'void' } }
 
             y.tags.each do |t|
-              method_hash[:returns] = { type: t.types&.first } if t.tag_name == 'return'
+              method_hash[:returns] = { type: t.types&.first&.downcase } if t.tag_name == 'return'
 
               next unless t.tag_name == 'param'
 
-              method_hash[:args] << { name: t.name, type: t.types&.first, desc: t.text }
+              method_hash[:args] << { name: t.name, type: t.types&.first&.downcase, desc: t.text }
             end
 
             klass.method_hashes << method_hash
@@ -365,16 +365,18 @@ module TEALrb
             args[i][:desc] if args[i]}"
           scratch_names << scratch_name
 
-          if txn_types.include? arg_types[i]
+          type = arg_types[i].downcase
+
+          if txn_types.include? type
             pre_string.puts "@scratch['#{scratch_name}'] = Gtxns[Txn.group_index - int(#{txn_params})]"
             txn_params -= 1
-          elsif arg_types[i] == 'application'
+          elsif type == 'application'
             pre_string.puts "@scratch['#{scratch_name}'] = Apps[#{app_param_index += 1}]"
-          elsif arg_types[i] == 'asset'
+          elsif type == 'asset'
             pre_string.puts "@scratch['#{scratch_name}'] = Assets[#{asset_param_index += 1}]"
-          elsif arg_types[i] == 'account'
+          elsif type == 'account'
             pre_string.puts "@scratch['#{scratch_name}'] = Accounts[#{account_param_index += 1}]"
-          elsif arg_types[i] == 'uint64'
+          elsif type == 'uint64'
             pre_string.puts "@scratch['#{scratch_name}'] = btoi(AppArgs[#{args_index += 1}])"
           else
             pre_string.puts "@scratch['#{scratch_name}'] = AppArgs[#{args_index += 1}]"
@@ -394,13 +396,15 @@ module TEALrb
             args[i][:desc] if args[i]}"
           scratch_names << scratch_name
 
-          if txn_types.include? arg_types[i]
+          type = arg_types[i]&.downcase
+
+          if txn_types.include? type
             pre_string.puts "@scratch['#{scratch_name}'] = Gtxns"
-          elsif arg_types[i] == 'application'
+          elsif type == 'application'
             pre_string.puts "@scratch['#{scratch_name}'] = Applications.new"
-          elsif arg_types[i] == 'asset'
+          elsif type == 'asset'
             pre_string.puts "@scratch['#{scratch_name}'] = Assets.new"
-          elsif arg_types[i] == 'account'
+          elsif type == 'account'
             pre_string.puts "@scratch['#{scratch_name}'] = Accounts.new"
           else
             pre_string.puts "@scratch.store('#{scratch_name}')"
