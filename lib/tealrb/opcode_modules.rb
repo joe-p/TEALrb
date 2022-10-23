@@ -480,14 +480,26 @@ module TEALrb
       end
     end
 
-    module ItxnField
+    module InnerTxn
       extend TxnFields
 
-      def self.opcode(field, value)
-        ExtendedOpcodes.itxn_field field
-      end
-
       class << self
+        def opcode(field, value)
+          ExtendedOpcodes.itxn_field field
+        end
+
+        def begin
+          ExtendedOpcodes.itxn_begin
+        end
+
+        def submit
+          ExtendedOpcodes.itxn_submit
+        end
+
+        def next
+          ExtendedOpcodes.itxn_next
+        end
+
         # @!method tx_id=(value)
         # @!method application_id=(value)
         # @!method on_completion=(value)
