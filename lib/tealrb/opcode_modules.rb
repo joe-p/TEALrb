@@ -929,7 +929,7 @@ module TEALrb
 
     class Box
       def self.[](key)
-        ExtendedOpcodes.box_get key
+        ExtendedOpcodes.box_value key
       end
 
       def self.[]=(key, value)
@@ -1023,6 +1023,28 @@ module TEALrb
 
       def app_global_ex_value(account = nil, applicaiton = nil, key = nil)
         app_global_get_ex
+        pop
+      end
+
+      def box_value(name = nil)
+        box_get
+        pop
+      end
+
+      def box_exists?(name = nil)
+        box_get
+        swap
+        pop
+      end
+
+      def box_len_value(name = nil)
+        box_len
+        pop
+      end
+
+      def box_len_exists?(name = nil)
+        box_len
+        swap
         pop
       end
     end
