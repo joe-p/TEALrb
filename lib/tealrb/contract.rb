@@ -138,7 +138,7 @@ module TEALrb
       src = formatted_teal
 
       File.write(File.join(directory, "#{name}.teal"), src)
-      File.write(File.join(directory, "#{name}.abi.json"), abi_hash.to_json) if abi
+      File.write(File.join(directory, "#{name}.abi.json"), JSON.pretty_generate(abi_hash)) if abi
 
       return unless src_map
 
