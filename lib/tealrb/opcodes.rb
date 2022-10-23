@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/UnusedMethodArgument
+
 module TEALrb
   module Opcodes
     BINARY_OPCODE_METHOD_MAPPING = {
@@ -42,11 +44,11 @@ module TEALrb
     }.freeze
 
     module TEALOpcodes
-      def acct_params_get(field, _account = nil)
+      def acct_params_get(field, account = nil)
         TEAL.instance << "acct_params_get #{field}"
       end
 
-      def add(_a = nil, _b = nil)
+      def add(a = nil, b = nil)
         TEAL.instance << '+'
       end
 
@@ -54,47 +56,47 @@ module TEALrb
         TEAL.instance << "addr #{address}"
       end
 
-      def addw(_a = nil, _b = nil)
+      def addw(a = nil, b = nil)
         TEAL.instance << 'addw'
       end
 
-      def app_global_del(_key = nil)
+      def app_global_del(key = nil)
         TEAL.instance << 'app_global_del'
       end
 
-      def app_global_get(_key = nil)
+      def app_global_get(key = nil)
         TEAL.instance << 'app_global_get'
       end
 
-      def app_global_get_ex(_app = nil, _key = nil)
+      def app_global_get_ex(app = nil, key = nil)
         TEAL.instance << 'app_global_get_ex'
       end
 
-      def app_global_put(_key = nil, _value = nil)
+      def app_global_put(key = nil, value = nil)
         TEAL.instance << 'app_global_put'
       end
 
-      def app_local_del(_account = nil, _key = nil)
+      def app_local_del(account = nil, key = nil)
         TEAL.instance << 'app_local_del'
       end
 
-      def app_local_get(_account = nil, _key = nil)
+      def app_local_get(account = nil, key = nil)
         TEAL.instance << 'app_local_get'
       end
 
-      def app_local_get_ex(_account = nil, _application = nil, _key = nil)
+      def app_local_get_ex(account = nil, application = nil, key = nil)
         TEAL.instance << 'app_local_get_ex'
       end
 
-      def app_local_put(_account = nil, _key = nil, _value = nil)
+      def app_local_put(account = nil, key = nil, value = nil)
         TEAL.instance << 'app_local_put'
       end
 
-      def app_opted_in(_account = nil, _app = nil)
+      def app_opted_in(account = nil, app = nil)
         TEAL.instance << 'app_opted_in'
       end
 
-      def app_params_get(field, _app_id = nil)
+      def app_params_get(field, app_id = nil)
         TEAL.instance << "app_params_get #{field}"
       end
 
@@ -123,19 +125,19 @@ module TEALrb
         TEAL.instance << 'arg_3'
       end
 
-      def args(_index = nil)
+      def args(index = nil)
         TEAL.instance << 'args'
       end
 
-      def assert(_expr = nil)
+      def assert(expr = nil)
         TEAL.instance << 'assert'
       end
 
-      def asset_holding_get(field, _account = nil, _asset = nil)
+      def asset_holding_get(field, account = nil, asset = nil)
         TEAL.instance << "asset_holding_get #{field}"
       end
 
-      def asset_params_get(field, _asset = nil)
+      def asset_params_get(field, asset = nil)
         TEAL.instance << "asset_params_get #{field}"
       end
 
@@ -147,79 +149,79 @@ module TEALrb
         TEAL.instance << "byte base32(#{input})"
       end
 
-      def base64_decode(encoding, _input = nil)
+      def base64_decode(encoding, input = nil)
         TEAL.instance << "base64_decode #{encoding}"
       end
 
-      def balance(_account = nil)
+      def balance(account = nil)
         TEAL.instance << 'balance'
       end
 
-      def big_endian_add(_a = nil, _b = nil)
+      def big_endian_add(a = nil, b = nil)
         TEAL.instance << 'b+'
       end
 
-      def big_endian_divide(_a = nil, _b = nil)
+      def big_endian_divide(a = nil, b = nil)
         TEAL.instance << 'b/'
       end
 
-      def big_endian_equal(_a = nil, _b = nil)
+      def big_endian_equal(a = nil, b = nil)
         TEAL.instance << 'b=='
       end
 
-      def big_endian_less(_a = nil, _b = nil)
+      def big_endian_less(a = nil, b = nil)
         TEAL.instance << 'b<'
       end
 
-      def big_endian_less_eq(_a = nil, _b = nil)
+      def big_endian_less_eq(a = nil, b = nil)
         TEAL.instance << 'b<='
       end
 
-      def big_endian_modulo(_a = nil, _b = nil)
+      def big_endian_modulo(a = nil, b = nil)
         TEAL.instance << 'b%'
       end
 
-      def big_endian_more(_a = nil, _b = nil)
+      def big_endian_more(a = nil, b = nil)
         TEAL.instance << 'b>'
       end
 
-      def big_endian_more_eq(_a = nil, _b = nil)
+      def big_endian_more_eq(a = nil, b = nil)
         TEAL.instance << 'b>='
       end
 
-      def big_endian_multiply(_a = nil, _b = nil)
+      def big_endian_multiply(a = nil, b = nil)
         TEAL.instance << 'b*'
       end
 
-      def big_endian_not_equal(_a = nil, _b = nil)
+      def big_endian_not_equal(a = nil, b = nil)
         TEAL.instance << 'b!='
       end
 
-      def big_endian_subtract(_a = nil, _b = nil)
+      def big_endian_subtract(a = nil, b = nil)
         TEAL.instance << 'b-'
       end
 
-      def bitlen(_input = nil)
+      def bitlen(input = nil)
         TEAL.instance << 'bitlen'
       end
 
-      def bitwise_and(_a = nil, _b = nil)
+      def bitwise_and(a = nil, b = nil)
         TEAL.instance << '&'
       end
 
-      def bitwise_byte_invert(_a = nil, _b = nil)
+      def bitwise_byte_invert(a = nil, b = nil)
         TEAL.instance << 'b~'
       end
 
-      def bitwise_invert(_a = nil, _b = nil)
+      def bitwise_invert(a = nil, b = nil)
         TEAL.instance << '~'
       end
 
-      def bitwise_or(_a = nil, _b = nil)
+      def bitwise_or(a = nil, b = nil)
         TEAL.instance << '|'
       end
 
-      def bitwise_xor(_a = nil, _b = nil)
+      def bitwise_xor(a = nil, b = nil)
         TEAL.instance << '^'
       end
 
@@ -227,39 +229,39 @@ module TEALrb
         TEAL.instance << "#{__method__} #{target}"
       end
 
-      def box_create(_name = nil, _length = nil)
+      def box_create(name = nil, length = nil)
         TEAL.instance << 'box_create'
       end
 
-      def box_extract(_name = nil, _offset = nil, _length = nil)
+      def box_extract(name = nil, offset = nil, length = nil)
         TEAL.instance << 'box_extract'
       end
 
-      def box_replace(_name = nil, _offset = nil, _value = nil)
+      def box_replace(name = nil, offset = nil, value = nil)
         TEAL.instance << 'box_replace'
       end
 
-      def box_del(_name = nil)
+      def box_del(name = nil)
         TEAL.instance << 'box_del'
       end
 
-      def box_len(_name = nil)
+      def box_len(name = nil)
         TEAL.instance << 'box_len'
       end
 
-      def box_get(_name = nil)
+      def box_get(name = nil)
         TEAL.instance << 'box_get'
       end
 
-      def box_put(_name = nil, _value = nil)
+      def box_put(name = nil, value = nil)
         TEAL.instance << 'box_put'
       end
 
-      def bsqrt(_big_endian_uint = nil)
+      def bsqrt(big_endian_uint = nil)
         TEAL.instance << 'bsqrt'
       end
 
-      def btoi(_bytes = nil)
+      def btoi(bytes = nil)
         TEAL.instance << 'btoi'
       end
 
@@ -295,7 +297,7 @@ module TEALrb
         TEAL.instance << "#{__method__} #{target}"
       end
 
-      def bzero(_length = nil)
+      def bzero(length = nil)
         TEAL.instance << 'bzero'
       end
 
@@ -303,7 +305,7 @@ module TEALrb
         TEAL.instance << "callsub #{name}"
       end
 
-      def concat(_a = nil, _b = nil)
+      def concat(a = nil, b = nil)
         TEAL.instance << 'concat'
       end
 
@@ -315,47 +317,47 @@ module TEALrb
         TEAL.instance << "dig #{index}"
       end
 
-      def divide(_a = nil, _b = nil)
+      def divide(a = nil, b = nil)
         TEAL.instance << '/'
       end
 
-      def divmodw(_a = nil, _b = nil)
+      def divmodw(a = nil, b = nil)
         TEAL.instance << 'divmodw'
       end
 
-      def divw(_a = nil, _b = nil)
+      def divw(a = nil, b = nil)
         TEAL.instance << 'divw'
       end
 
-      def dup(_expr = nil)
+      def dup(expr = nil)
         TEAL.instance << 'dup'
       end
 
-      def dup2(_expr_a = nil, _expr_b = nil)
+      def dup2(expr_a = nil, expr_b = nil)
         TEAL.instance << 'dup2'
       end
 
-      def ecdsa_pk_decompress(index, _input = nil)
+      def ecdsa_pk_decompress(index, input = nil)
         TEAL.instance << "ecdsa_pk_decompress #{index}"
       end
 
-      def ecdsa_pk_recover(index, _input = nil)
+      def ecdsa_pk_recover(index, input = nil)
         TEAL.instance << "ecdsa_pk_recover #{index}"
       end
 
-      def ecdsa_verify(index, _input = nil)
+      def ecdsa_verify(index, input = nil)
         TEAL.instance << "ecdsa_verify #{index}"
       end
 
-      def ed25519verify(_input = nil)
+      def ed25519verify(input = nil)
         TEAL.instance << 'ed25519verify'
       end
 
-      def ed25519verify_bare(_input = nil)
+      def ed25519verify_bare(input = nil)
         TEAL.instance << 'ed25519verify_bare'
       end
 
-      def equal(_a = nil, _b = nil)
+      def equal(a = nil, b = nil)
         TEAL.instance << '=='
       end
 
@@ -363,31 +365,31 @@ module TEALrb
         TEAL.instance << 'err'
       end
 
-      def exp(_a = nil, _b = nil)
+      def exp(a = nil, b = nil)
         TEAL.instance << 'exp'
       end
 
-      def expw(_a = nil, _b = nil)
+      def expw(a = nil, b = nil)
         TEAL.instance << 'expw'
       end
 
-      def extract(start, length, _byte_array = nil)
+      def extract(start, length, byte_array = nil)
         TEAL.instance << "extract #{start} #{length}"
       end
 
-      def extract3(_byte_array = nil, _start = nil, _exclusive_end = nil)
+      def extract3(byte_array = nil, start = nil, exclusive_end = nil)
         TEAL.instance << 'extract3'
       end
 
-      def extract_uint16(_byte_array = nil, _start = nil)
+      def extract_uint16(byte_array = nil, start = nil)
         TEAL.instance << 'extract_uint16'
       end
 
-      def extract_uint32(_byte_array = nil, _start = nil)
+      def extract_uint32(byte_array = nil, start = nil)
         TEAL.instance << 'extract_uint32'
       end
 
-      def extract_uint64(_byte_array = nil, _start = nil)
+      def extract_uint64(byte_array = nil, start = nil)
         TEAL.instance << 'extract_uint64'
       end
 
@@ -395,15 +397,15 @@ module TEALrb
         TEAL.instance << "gaid #{transaction_index}"
       end
 
-      def gaids(_transaction = nil)
+      def gaids(transaction = nil)
         TEAL.instance << 'gaids'
       end
 
-      def getbit(_input = nil, _bit_index = nil)
+      def getbit(input = nil, bit_index = nil)
         TEAL.instance << 'getbit'
       end
 
-      def getbyte(_input = nil, _byte_index = nil)
+      def getbyte(input = nil, byte_index = nil)
         TEAL.instance << 'getbyte'
       end
 
@@ -415,7 +417,7 @@ module TEALrb
         TEAL.instance << "gitxna #{transaction_index} #{field} #{index}"
       end
 
-      def gitxnas(transaction_index, field, _index = nil)
+      def gitxnas(transaction_index, field, index = nil)
         TEAL.instance << "gitxnas #{transaction_index} #{field}"
       end
 
@@ -423,11 +425,11 @@ module TEALrb
         TEAL.instance << "gload #{transaction_index} #{index}"
       end
 
-      def gloads(index, _transaction_index = nil)
+      def gloads(index, transaction_index = nil)
         TEAL.instance << "gloads #{index}"
       end
 
-      def gloadss(_transaction = nil, _index = nil)
+      def gloadss(transaction = nil, index = nil)
         TEAL.instance << 'gloadss'
       end
 
@@ -435,11 +437,11 @@ module TEALrb
         TEAL.instance << "global #{field}"
       end
 
-      def greater(_a = nil, _b = nil)
+      def greater(a = nil, b = nil)
         TEAL.instance << '>'
       end
 
-      def greater_eq(_a = nil, _b = nil)
+      def greater_eq(a = nil, b = nil)
         TEAL.instance << '>='
       end
 
@@ -451,19 +453,19 @@ module TEALrb
         TEAL.instance << "gtxna #{transaction_index} #{field} #{index}"
       end
 
-      def gtxns(field, _transaction_index = nil)
+      def gtxns(field, transaction_index = nil)
         TEAL.instance << "gtxns #{field}"
       end
 
-      def gtxnsa(field, index, _transaction_index = nil)
+      def gtxnsa(field, index, transaction_index = nil)
         TEAL.instance << "gtxnsa #{field} #{index}"
       end
 
-      def gtxnas(transaction_index, field, _index = nil)
+      def gtxnas(transaction_index, field, index = nil)
         TEAL.instance << "gtxnas #{transaction_index} #{field}"
       end
 
-      def gtxnsas(field, _transaction_index = nil, _index = nil)
+      def gtxnsas(field, transaction_index = nil, index = nil)
         TEAL.instance << "gtxnsas #{field}"
       end
 
@@ -495,7 +497,7 @@ module TEALrb
         TEAL.instance << "intcblock #{ints.join(' ')}"
       end
 
-      def itob(_bytes = nil)
+      def itob(bytes = nil)
         TEAL.instance << 'itob'
       end
 
@@ -503,7 +505,7 @@ module TEALrb
         TEAL.instance << 'itxn_begin'
       end
 
-      def itxn_field(field, _value = nil)
+      def itxn_field(field, value = nil)
         TEAL.instance << "itxn_field #{field}"
       end
 
@@ -519,15 +521,15 @@ module TEALrb
         TEAL.instance << "itxna #{field} #{index}"
       end
 
-      def itxnas(field, _index = nil)
+      def itxnas(field, index = nil)
         TEAL.instance << "itxnas #{field}"
       end
 
-      def json_ref(type, _object = nil, _key = nil)
+      def json_ref(type, object = nil, key = nil)
         TEAL.instance << "json_ref #{type}"
       end
 
-      def keccak256(_input = nil)
+      def keccak256(input = nil)
         TEAL.instance << 'keccak256'
       end
 
@@ -535,15 +537,15 @@ module TEALrb
         TEAL.instance << "#{label_name}:"
       end
 
-      def len(_input = nil)
+      def len(input = nil)
         TEAL.instance << 'len'
       end
 
-      def less(_a = nil, _b = nil)
+      def less(a = nil, b = nil)
         TEAL.instance << '<'
       end
 
-      def less_eq(_a = nil, _b = nil)
+      def less_eq(a = nil, b = nil)
         TEAL.instance << '<='
       end
 
@@ -551,11 +553,11 @@ module TEALrb
         TEAL.instance << "load #{index}"
       end
 
-      def loads(_index = nil)
+      def loads(index = nil)
         TEAL.instance << 'loads'
       end
 
-      def log(_byte_array = nil)
+      def log(byte_array = nil)
         TEAL.instance << 'log'
       end
 
@@ -563,43 +565,43 @@ module TEALrb
         TEAL.instance << %(method "#{signature}")
       end
 
-      def min_balance(_account = nil)
+      def min_balance(account = nil)
         TEAL.instance << 'min_balance'
       end
 
-      def modulo(_a = nil, _b = nil)
+      def modulo(a = nil, b = nil)
         TEAL.instance << '%'
       end
 
-      def multiply(_a = nil, _b = nil)
+      def multiply(a = nil, b = nil)
         TEAL.instance << '*'
       end
 
-      def mulw(_a = nil, _b = nil)
+      def mulw(a = nil, b = nil)
         TEAL.instance << 'mulw'
       end
 
-      def zero?(_expr = nil)
+      def zero?(expr = nil)
         TEAL.instance << '!'
       end
 
-      def not_equal(_a = nil, _b = nil)
+      def not_equal(a = nil, b = nil)
         TEAL.instance << '!='
       end
 
-      def padded_bitwise_and(_a = nil, _b = nil)
+      def padded_bitwise_and(a = nil, b = nil)
         TEAL.instance << 'b&'
       end
 
-      def padded_bitwise_or(_a = nil, _b = nil)
+      def padded_bitwise_or(a = nil, b = nil)
         TEAL.instance << 'b|'
       end
 
-      def padded_bitwise_xor(_a = nil, _b = nil)
+      def padded_bitwise_xor(a = nil, b = nil)
         TEAL.instance << 'b^'
       end
 
-      def pop(_expr = nil)
+      def pop(expr = nil)
         TEAL.instance << 'pop'
       end
 
@@ -611,11 +613,11 @@ module TEALrb
         TEAL.instance << "pushint #{integer}"
       end
 
-      def replace(_a = nil, _b = nil, _c = nil)
+      def replace(a = nil, b = nil, c = nil)
         TEAL.instance << 'replace'
       end
 
-      def replace2(start, _a = nil, _b = nil)
+      def replace2(start, a = nil, b = nil)
         TEAL.instance << "replace2 #{start}"
       end
 
@@ -623,67 +625,67 @@ module TEALrb
         TEAL.instance << 'retsub'
       end
 
-      def select(_expr_a = nil, _expr_b = nil, _expr_c = nil)
+      def select(expr_a = nil, expr_b = nil, expr_c = nil)
         TEAL.instance << 'select'
       end
 
-      def setbit(_input = nil, _bit_index = nil, _value = nil)
+      def setbit(input = nil, bit_index = nil, value = nil)
         TEAL.instance << 'setbit'
       end
 
-      def setbyte(_byte_array = nil, _byte_index = nil, _value = nil)
+      def setbyte(byte_array = nil, byte_index = nil, value = nil)
         TEAL.instance << 'setbyte'
       end
 
-      def sha256(_input = nil)
+      def sha256(input = nil)
         TEAL.instance << 'sha256'
       end
 
-      def sha3_256(_input = nil) # rubocop:disable Naming/VariableNumber
+      def sha3_256(input = nil) # rubocop:disable Naming/VariableNumber
         TEAL.instance << 'sha3_256'
       end
 
-      def sha512_256(_input = nil) # rubocop:disable Naming/VariableNumber
+      def sha512_256(input = nil) # rubocop:disable Naming/VariableNumber
         TEAL.instance << 'sha512_256'
       end
 
-      def shl(_a = nil, _b = nil)
+      def shl(a = nil, b = nil)
         TEAL.instance << 'shl'
       end
 
-      def shr(_a = nil, _b = nil)
+      def shr(a = nil, b = nil)
         TEAL.instance << 'shr'
       end
 
-      def sqrt(_integer = nil)
+      def sqrt(integer = nil)
         TEAL.instance << 'sqrt'
       end
 
-      def store(index, _value = nil)
+      def store(index, value = nil)
         TEAL.instance << "store #{index}"
       end
 
-      def stores(_index = nil, _value = nil)
+      def stores(index = nil, value = nil)
         TEAL.instance << 'stores'
       end
 
-      def substring(start, exclusive_end, _byte_array = nil)
+      def substring(start, exclusive_end, byte_array = nil)
         TEAL.instance << "substring #{start} #{exclusive_end}"
       end
 
-      def substring3(_byte_array = nil, _start = nil, _exclusive_end = nil)
+      def substring3(byte_array = nil, start = nil, exclusive_end = nil)
         TEAL.instance << 'substring3'
       end
 
-      def subtract(_a = nil, _b = nil)
+      def subtract(a = nil, b = nil)
         TEAL.instance << '-'
       end
 
-      def swap(_expr_a = nil, _expr_b = nil)
+      def swap(expr_a = nil, expr_b = nil)
         TEAL.instance << 'swap'
       end
 
-      def teal_return(_expr = nil)
+      def teal_return(expr = nil)
         TEAL.instance << 'return'
       end
 
@@ -695,7 +697,7 @@ module TEALrb
         TEAL.instance << "txna #{field} #{index}"
       end
 
-      def txnas(field, _index = nil)
+      def txnas(field, index = nil)
         TEAL.instance << "txnas #{field}"
       end
 
@@ -703,17 +705,19 @@ module TEALrb
         TEAL.instance << "uncover #{count}"
       end
 
-      def vrf_verify(standard, _message = nil, _proof = nil, _public_key = nil)
+      def vrf_verify(standard, message = nil, proof = nil, public_key = nil)
         TEAL.instance << "vrf_verify #{standard}"
       end
 
-      def boolean_and(_a = nil, _b = nil)
+      def boolean_and(a = nil, b = nil)
         TEAL.instance << '&&'
       end
 
-      def boolean_or(_a = nil, _b = nil)
+      def boolean_or(a = nil, b = nil)
         TEAL.instance << '||'
       end
     end
   end
 end
+
+# rubocop:enable Lint/UnusedMethodArgument

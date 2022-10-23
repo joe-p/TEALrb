@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/UnusedMethodArgument
+
 module TEALrb
   module Opcodes
     class AccountLocal
@@ -481,7 +483,7 @@ module TEALrb
     module ItxnField
       extend TxnFields
 
-      def self.opcode(field, _value)
+      def self.opcode(field, value)
         ExtendedOpcodes.itxn_field field
       end
 
@@ -577,7 +579,7 @@ module TEALrb
         ExtendedOpcodes.gtxns field
       end
 
-      def self.[](_index)
+      def self.[](index)
         self
       end
     end
@@ -642,19 +644,19 @@ module TEALrb
         @field = 'Accounts'
       end
 
-      def asset_balance?(_asa_id = nil)
+      def asset_balance?(asa_id = nil)
         ExtendedOpcodes.asset_holding_exists? 0
       end
 
-      def asset_balance(_asa_id = nil)
+      def asset_balance(asa_id = nil)
         ExtendedOpcodes.asset_holding_value 0
       end
 
-      def asset_frozen?(_asa_id = nil)
+      def asset_frozen?(asa_id = nil)
         ExtendedOpcodes.asset_frozen_exists? 1
       end
 
-      def asset_frozen_value(_asa_id = nil)
+      def asset_frozen_value(asa_id = nil)
         ExtendedOpcodes.asset_frozen_value 1
       end
 
@@ -946,68 +948,68 @@ module TEALrb
     end
 
     module MaybeOps
-      def asset_holding_value(field, _asset_id = nil)
+      def asset_holding_value(field, asset_id = nil)
         asset_holding_get field
         swap
         pop
       end
 
-      def asset_holding_exists?(field, _asset_id = nil)
+      def asset_holding_exists?(field, asset_id = nil)
         asset_holding_get field
         pop
       end
 
-      def app_param_exists?(field, _app_id = nil)
+      def app_param_exists?(field, app_id = nil)
         app_params_get field
         swap
         pop
       end
 
-      def app_param_value(field, _app_id = nil)
+      def app_param_value(field, app_id = nil)
         app_params_get field
         pop
       end
 
-      def asset_param_exists?(field, _asset_id = nil)
+      def asset_param_exists?(field, asset_id = nil)
         asset_params_get field
         swap
         pop
       end
 
-      def asset_param_value(field, _asset_id = nil)
+      def asset_param_value(field, asset_id = nil)
         asset_params_get field
         pop
       end
 
-      def acct_has_balance?(_asset_id = nil)
+      def acct_has_balance?(asset_id = nil)
         acct_params_get 'AcctBalance'
         swap
         pop
       end
 
-      def acct_param_value(field, _asset_id = nil)
+      def acct_param_value(field, asset_id = nil)
         acct_params_get field
         pop
       end
 
-      def app_local_ex_exists?(_account = nil, _applicaiton = nil, _key = nil)
+      def app_local_ex_exists?(account = nil, applicaiton = nil, key = nil)
         app_local_get_ex
         swap
         pop
       end
 
-      def app_local_ex_value(_account = nil, _applicaiton = nil, _key = nil)
+      def app_local_ex_value(account = nil, applicaiton = nil, key = nil)
         app_local_get_ex
         pop
       end
 
-      def app_global_ex_exists?(_account = nil, _applicaiton = nil, _key = nil)
+      def app_global_ex_exists?(account = nil, applicaiton = nil, key = nil)
         app_global_get_ex
         swap
         pop
       end
 
-      def app_global_ex_value(_account = nil, _applicaiton = nil, _key = nil)
+      def app_global_ex_value(account = nil, applicaiton = nil, key = nil)
         app_global_get_ex
         pop
       end
@@ -1023,3 +1025,4 @@ module TEALrb
     end
   end
 end
+# rubocop:enable Lint/UnusedMethodArgument
