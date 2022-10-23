@@ -126,10 +126,9 @@ module TEALrb
           pc_to_line[pc] = last_line
         end
 
-      end
-
-      line_to_pc.each do |line, pcs|
-        src_map_hash[line][:pcs] = pcs
+        line_to_pc.each do |line, pcs|
+          src_map_hash[line][:pcs] = pcs
+        end
       end
 
       src_map_hash
