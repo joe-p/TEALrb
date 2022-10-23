@@ -645,19 +645,19 @@ module TEALrb
       end
 
       def asset_balance?(asa_id = nil)
-        ExtendedOpcodes.asset_holding_exists? 0
+        ExtendedOpcodes.asset_holding_exists? 'AssetBalance'
       end
 
       def asset_balance(asa_id = nil)
-        ExtendedOpcodes.asset_holding_value 0
+        ExtendedOpcodes.asset_holding_value 'AssetBalance'
       end
 
       def asset_frozen?(asa_id = nil)
-        ExtendedOpcodes.asset_frozen_exists? 1
+        ExtendedOpcodes.asset_frozen_exists? 'AssetFrozen'
       end
 
       def asset_frozen_value(asa_id = nil)
-        ExtendedOpcodes.asset_frozen_value 1
+        ExtendedOpcodes.asset_frozen_value 'AssetFrozen'
       end
 
       def min_balance
@@ -948,13 +948,13 @@ module TEALrb
     end
 
     module MaybeOps
-      def asset_holding_value(field, asset_id = nil)
+      def asset_holding_value(field, account_index = nil, asset_id = nil)
         asset_holding_get field
         swap
         pop
       end
 
-      def asset_holding_exists?(field, asset_id = nil)
+      def asset_holding_exists?(field, account_index = nil, asset_id = nil)
         asset_holding_get field
         pop
       end
