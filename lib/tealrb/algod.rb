@@ -2,8 +2,10 @@
 
 module TEALrb
   class Algod
-    def initialize(url: 'https://mainnet-api.algonode.cloud')
-      @conn = Faraday.new(url: url)
+    def initialize(url: 'http://localhost:4001', token: 'a' * 64)
+      @conn = Faraday.new(url) do |conn|
+        conn.headers = { 'X-Algo-API-Token' => token }
+      end
     end
 
     def compile(source, source_map: true)
