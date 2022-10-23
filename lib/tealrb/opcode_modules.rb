@@ -65,6 +65,7 @@ module TEALrb
       # @return [[]byte] 32 byte address (v1)
       def sender(*args)
         opcode('Sender', *args)
+        Accounts.new
       end
 
       # @return [uint64] microalgos (v1)
@@ -100,6 +101,7 @@ module TEALrb
       # @return [[]byte] 32 byte address (v1)
       def receiver(*args)
         opcode('Receiver', *args)
+        Accounts.new
       end
 
       # @return [uint64] microalgos (v1)
@@ -110,6 +112,7 @@ module TEALrb
       # @return [[]byte] 32 byte address (v1)
       def close_remainder_to(*args)
         opcode('CloseRemainderTo', *args)
+        Accounts.new
       end
 
       # @return [[]byte] 32 byte address (v1)
@@ -574,6 +577,22 @@ module TEALrb
         @field = 'Accounts'
       end
 
+      def asset_balance?(_asa_id = nil)
+        ExtendedOpcodes.asset_holding_exists? 0
+      end
+
+      def asset_balance(_asa_id = nil)
+        ExtendedOpcodes.asset_holding_value 0
+      end
+
+      def asset_frozen?(_asa_id = nil)
+        ExtendedOpcodes.asset_frozen_exists? 1
+      end
+
+      def asset_frozen_value(_asa_id = nil)
+        ExtendedOpcodes.asset_frozen_value 1
+      end
+
       def min_balance
         ExtendedOpcodes.acct_param_value 'AcctMinBalance'
       end
@@ -862,6 +881,17 @@ module TEALrb
     end
 
     module MaybeOps
+      def asset_holding_value(field, _asset_id = nil)
+        asset_holding_get field
+        swap
+        pop
+      end
+
+      def asset_holding_exists?(field, _asset_id = nil)
+        asset_holding_get field
+        pop
+      end
+
       def app_param_exists?(field, _app_id = nil)
         app_params_get field
         swap
