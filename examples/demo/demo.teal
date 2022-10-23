@@ -35,6 +35,7 @@ some_abi_method: // some_abi_method(asa, axfer_txn, another_app, some_number)
 	store 4 // some_abi_method: another_app [application] Another app
 
 	txna ApplicationArgs 1
+	btoi
 	store 5 // some_abi_method: some_number [uint64]
 
 	// src_map:demo.rb:29

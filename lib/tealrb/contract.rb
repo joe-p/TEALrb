@@ -104,7 +104,18 @@ module TEALrb
 
       compile_response = Algod.new.compile(src)
 
-      if compile_response.status == 200
+      case compile_response.status
+      when 400
+        msg = JSON.parse(compile_response.body)['message']
+        puts 'Error(s) while attempting to compile TEAL:'
+        msg.each_line do |ln|
+          teal_line = ln.split(':').first.to_i
+          ln_msg = ln.split(':')[1..].join(':').strip
+          next if ln_msg == '"0"'
+
+          puts "  #{teal_line} - #{src_map_hash[teal_line][:location]}: #{ln_msg}"
+        end
+      when 200
         json_body = JSON.parse(compile_response.body)
         pc_mapping = json_body['sourcemap']['mapping']
 
@@ -365,6 +376,8 @@ module TEALrb
             pre_string.puts "@scratch['#{scratch_name}'] = Assets[#{asset_param_index += 1}]"
           elsif arg_types[i] == 'account'
             pre_string.puts "@scratch['#{scratch_name}'] = Accounts[#{account_param_index += 1}]"
+          elsif arg_types[i] == 'uint64'
+            pre_string.puts "@scratch['#{scratch_name}'] = btoi(AppArgs[#{args_index += 1}])"
           else
             pre_string.puts "@scratch['#{scratch_name}'] = AppArgs[#{args_index += 1}]"
           end
