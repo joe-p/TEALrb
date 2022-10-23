@@ -3,3 +3,4 @@ doc/
 *.gem
 coverage/
 .DS_Store
+.idea/
