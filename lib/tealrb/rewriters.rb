@@ -176,11 +176,11 @@ module TEALrb
           end
         elsif %i[comment placeholder rb].include?(meth_name) ||
               (%i[[] []=].include?(meth_name) &&
-                  (
-                    %i[@scratch @teal_methods Gtxn
-                       AppArgs].include?(node.children[0].children.last) ||
+                (
+                  %i[@scratch @teal_methods Gtxn
+                     AppArgs].include?(node.children[0].children.last) ||
                     node.children[0].children.first&.children&.last == :Txna
-                  ))
+                ))
 
           @skips << node.children[2]
         elsif node.children.first&.children&.last == :@scratch && meth_name[/=$/]
@@ -229,7 +229,13 @@ module TEALrb
       def on_if(node)
         unless node.loc.respond_to? :else
           conditional = node.children[0].source
-          if_blk = node.children[1].source
+
+          if_blk = if node.keyword == 'unless'
+                     node.children[2].source
+                     conditional = "!(#{conditional})"
+                   else
+                     node.children[1].source
+                   end
 
           replace(node.loc.expression, "if(#{conditional})\n#{if_blk}\nend")
         end
@@ -242,13 +248,15 @@ module TEALrb
       def on_if(node)
         case node.loc.keyword.source
         when 'if'
-          replace(node.loc.keyword, 'IfBlock.new(')
+          replace(node.loc.keyword, 'IfBlock.new((')
+        when 'unless'
+          replace(node.loc.keyword, 'IfBlock.new(!(')
         when 'elsif'
-          replace(node.loc.keyword, 'end.elsif(')
+          replace(node.loc.keyword, 'end.elsif((')
         end
 
         cond_expr = node.children.first.source_range
-        replace(cond_expr, "#{cond_expr.source} ) do")
+        replace(cond_expr, "#{cond_expr.source} )) do")
 
         replace(node.loc.else, 'end.else do') if node.loc.else && node.loc.else.source == 'else'
         super
