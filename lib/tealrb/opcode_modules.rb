@@ -650,7 +650,7 @@ module TEALrb
       end
     end
 
-    class Accounts < TxnArray
+    class Account < TxnArray
       def initialize
         super
         @field = 'Accounts'
@@ -689,7 +689,7 @@ module TEALrb
       end
     end
 
-    class Apps < TxnArray
+    class Application < TxnArray
       def initialize
         super
         @field = 'Applications'
@@ -739,7 +739,7 @@ module TEALrb
       # @return [[]byte] Address for which this application has authority
       def address(*_args)
         ExtendedOpcodes.app_param_value 'AppAddress'
-        Accounts.new
+        Account.new
       end
 
       # @return [[]byte] Bytecode of Approval Program
@@ -804,7 +804,7 @@ module TEALrb
       end
     end
 
-    class Assets < TxnArray
+    class Asset < TxnArray
       def initialize
         super
         @field = 'Assets'
@@ -1076,11 +1076,11 @@ module TEALrb
 
     class Appl < TransactionBase; end
 
-    class Account < Accounts; end
+    class Accounts < Account; end
 
-    class Asset < Assets; end
+    class Assets < Asset; end
 
-    class Application < Apps; end
+    class Apps < Application; end
   end
 end
 # rubocop:enable Lint/UnusedMethodArgument
