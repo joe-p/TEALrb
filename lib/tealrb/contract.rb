@@ -34,9 +34,17 @@ module TEALrb
 
         YARD.parse Object.const_source_location(klass.to_s).first
 
+        parsed_methods = {}
         YARD::Registry.all.each do |y|
           next unless y.type == :method
           next unless klass.instance_methods.include? y.name
+          next if y.parent.type == :class && y.parent.to_s != klass.to_s
+
+          if parsed_methods.keys.include? y.name
+            raise "#{y.name} defined in two locations: \n  #{parsed_methods[y.name]}\n  #{y.file}:#{y.line}"
+          end
+
+          parsed_methods[y.name] = "#{y.file}:#{y.line}"
 
           tags = y.tags.map(&:tag_name)
 
