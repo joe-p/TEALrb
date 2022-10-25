@@ -1054,9 +1054,20 @@ module TEALrb
       end
     end
 
+    module ByteOpcodes
+      def byte_b64(b64)
+        TEAL.instance << "byte b64 #{b64}"
+      end
+
+      def byte_b32(b32)
+        TEAL.instance << "byte b32 #{b32}"
+      end
+    end
+
     module AllOpcodes
       include TEALOpcodes
       include MaybeOps
+      include ByteOpcodes
     end
 
     module ExtendedOpcodes
