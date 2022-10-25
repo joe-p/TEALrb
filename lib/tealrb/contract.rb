@@ -31,6 +31,8 @@ module TEALrb
         YARD::Tags::Library.define_tag('ABI Method', :abi)
         YARD::Tags::Library.define_tag('Subroutine', :subroutine)
         YARD::Tags::Library.define_tag('TEAL Method', :teal)
+        YARD::Tags::Library.define_tag('OnCompletes', :on_completion)
+        YARD::Tags::Library.define_tag('Create', :create)
 
         YARD.parse Object.const_source_location(klass.to_s).first
 
@@ -49,11 +51,13 @@ module TEALrb
           tags = y.tags.map(&:tag_name)
 
           if tags.include?('abi') || tags.include?('subroutine')
-            method_hash = { name: y.name.to_s, desc: y.base_docstring, args: [], returns: { type: 'void' } }
+            method_hash = { name: y.name.to_s, desc: y.base_docstring, args: [], returns: { type: 'void' },
+                            on_completion: ['NoOp'], create: y.has_tag?('create') }
 
             y.tags.each do |t|
               method_hash[:returns] = { type: t.types&.first&.downcase } if t.tag_name == 'return'
 
+              method_hash[:on_completion] = t.text[1..-2].split(',').map(&:strip) if t.tag_name == 'on_completion'
               next unless t.tag_name == 'param'
 
               method_hash[:args] << { name: t.name, type: t.types&.first&.downcase, desc: t.text }
@@ -368,6 +372,16 @@ module TEALrb
       asset_param_index = -1
       account_param_index = 0
       args_index = 0
+
+      method_hash[:on_completion].each_with_index do |oc, i|
+        Txn.on_completion
+        int(oc)
+        equal
+        boolean_or unless i.zero?
+      end
+      assert
+
+      assert(Txn.application_id == int(0)) if method_hash[:create]
 
       if abi_hash['methods'].find { _1[:name] == method_hash[:name].to_s }
         definition.parameters.each_with_index do |param, i|

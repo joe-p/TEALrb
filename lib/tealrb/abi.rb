@@ -20,7 +20,7 @@ module TEALrb
         @methods = []
       end
 
-      def add_method(name:, desc:, args:, returns:)
+      def add_method(name:, desc:, args:, returns:, **_kwargs)
         @methods << {
           name: name,
           desc: desc,

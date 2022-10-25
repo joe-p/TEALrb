@@ -30,9 +30,10 @@ class SubroutineTest < TEALrb::Contract
 end
 
 class ModuleTests < Minitest::Test
-  SUBROUTINE_METHOD_TEAL = ['b main', 'subroutine_method: // subroutine_method(x, y)',
-                            'store 0 // subroutine_method: y [any] ', 'store 1 // subroutine_method: x [any] ',
-                            'load 1 // subroutine_method: x [any] ', 'load 0 // subroutine_method: y [any] ', '/',
+  SUBROUTINE_METHOD_TEAL = ['b main', 'subroutine_method: // subroutine_method(x, y)', 'txn OnCompletion', 'int NoOp',
+                            '==', 'assert', 'store 0 // subroutine_method: y [any] ',
+                            'store 1 // subroutine_method: x [any] ', 'load 1 // subroutine_method: x [any] ',
+                            'load 0 // subroutine_method: y [any] ', '/',
                             'retsub', 'main:', 'int 1', 'int 2', 'callsub subroutine_method'].freeze
 
   TEAL_METHOD_TEAL = ['int 1', 'int 2', 'store 0 // teal_method: y', 'store 1 // teal_method: x',

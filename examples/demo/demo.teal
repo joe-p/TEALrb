@@ -5,6 +5,11 @@ b main
 
 // src_map:demo.rb:12
 helper_subroutine: // helper_subroutine(asa, axfer_txn)
+	txn OnCompletion
+	int NoOp
+	==
+	assert
+
 	store 0 // helper_subroutine: axfer_txn [axfer]
 
 	store 1 // helper_subroutine: asa [asset]
@@ -23,6 +28,11 @@ helper_subroutine: // helper_subroutine(asa, axfer_txn)
 
 // src_map:demo.rb:28
 some_abi_method: // some_abi_method(asa, axfer_txn, another_app, some_number)
+	txn OnCompletion
+	int NoOp
+	==
+	assert
+
 	txna Assets 0
 	store 2 // some_abi_method: asa [asset] Some asset
 
@@ -89,6 +99,11 @@ some_abi_method: // some_abi_method(asa, axfer_txn, another_app, some_number)
 
 // src_map:demo.rb:43
 some_subroutine: // some_subroutine(n, m)
+	txn OnCompletion
+	int NoOp
+	==
+	assert
+
 	store 6 // some_subroutine: m [bytes] Some bytes
 
 	store 7 // some_subroutine: n [uint64] Some number

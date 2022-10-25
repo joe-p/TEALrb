@@ -5,6 +5,11 @@ b main
 
 // src_map:nft.rb:83
 pay: // pay(receiver, amount)
+	txn OnCompletion
+	int NoOp
+	==
+	assert
+
 	store 0 // pay: amount [any]
 
 	store 1 // pay: receiver [any]
