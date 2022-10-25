@@ -373,12 +373,14 @@ module TEALrb
       # @return [uint64] Asset ID allocated by the creation of an ASA (only with itxn in v5). Application mode only (v5)
       def created_asset_id(*args)
         opcode('CreatedAssetID', *args)
+        Asset.new
       end
 
       # @return [uint64] ApplicationID allocated by the creation of an application (only with itxn in v5).
       #   Application mode only (v5)
       def created_application_id(*args)
         opcode('CreatedApplicationID', *args)
+        Application.new
       end
 
       # @return [[]byte] The last message emitted. Empty bytes if none were emitted. Application mode only (v6)
@@ -463,6 +465,7 @@ module TEALrb
       #   0 if this application is at the top-level. Application mode only. (v6)
       def caller_application_id(*args)
         opcode('CallerApplicationID', *args)
+        Application.new
       end
 
       # @return [[]byte] The application address of the application that called this application.
@@ -651,8 +654,8 @@ module TEALrb
     end
 
     class Account < TxnArray
-      def initialize
-        super
+      def initialize(account = nil)
+        super()
         @field = 'Accounts'
       end
 
@@ -690,8 +693,8 @@ module TEALrb
     end
 
     class Application < TxnArray
-      def initialize
-        super
+      def initialize(app = nil)
+        super()
         @field = 'Applications'
       end
 
@@ -805,8 +808,8 @@ module TEALrb
     end
 
     class Asset < TxnArray
-      def initialize
-        super
+      def initialize(asset = nil)
+        super()
         @field = 'Assets'
       end
 
