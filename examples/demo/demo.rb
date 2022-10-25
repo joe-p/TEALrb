@@ -91,9 +91,9 @@ class DemoContract < TEALrb::Contract
 
     # Variable assignment is a statement that doesn't evaluate to a TEALrb expression
     # // using variables
-    @key_four = 'Key Four'         # => nil
-    @key_four                      # => 'byte "Key Four"'
-    key_four_value = 444           # => nil
+    @key_four = 'Key Four' # => nil
+    @key_four # => 'byte "Key Four"'
+    key_four_value = 444 # => nil
     app_global_put(key_four_value) # => ['int 444', 'app_global_put']
 
     # // combining raw teal with conditionals
@@ -206,6 +206,5 @@ class DemoContract < TEALrb::Contract
 end
 
 approval = DemoContract.new
-approval.compile
 File.write("#{__dir__}/demo.teal", approval.formatted_teal)
 File.write("#{__dir__}/demo.json", JSON.pretty_generate(approval.abi_hash))

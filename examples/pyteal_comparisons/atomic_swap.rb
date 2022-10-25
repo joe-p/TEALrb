@@ -9,7 +9,7 @@ class AtomicSwap < TEALrb::Contract
     tmpl_seller = addr '6ZHGHH5Z5CTPCF5WCESXMGRSVK7QJETR63M3NY5FJCUYDHO57VTCMJOBGY'
     tmpl_buyer = addr '7Z5PWO2C6LFNQFGHWKSK5H47IQP5OJW2M3HA2QPXTY3WTNP5NU2MHBW27M'
     tmpl_fee = 1000
-    tmpl_secret =  base32 '2323232323232323'
+    tmpl_secret = base32 '2323232323232323'
     tmpl_timeout = 3000
 
     fee_cond = Txn.fee < tmpl_fee
@@ -26,5 +26,4 @@ class AtomicSwap < TEALrb::Contract
 end
 
 contract = AtomicSwap.new
-contract.compile
 File.write("#{__dir__}/atomic_swap_tealrb.teal", contract.formatted_teal)

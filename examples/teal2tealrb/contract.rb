@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/tealrb'
+
 class Approval < TEALrb::Contract
   @version = 5
 
@@ -76,5 +77,4 @@ class Approval < TEALrb::Contract
 end
 
 c = Approval.new
-c.compile
 File.write('complex_tealrb.teal', c.teal.join("\n"))

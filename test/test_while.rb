@@ -15,9 +15,8 @@ end
 
 class WhileTests < Minitest::Test
   def while_test(contract_class, expected_teal)
-    contract = contract_class.new
     contract_class.src_map = false
-    contract.compile
+    contract = contract_class.new
     assert_equal(expected_teal, contract.teal[1..])
   end
 

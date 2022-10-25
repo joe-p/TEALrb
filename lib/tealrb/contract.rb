@@ -90,6 +90,8 @@ module TEALrb
       self.class.teal_methods.each do |name, definition|
         define_teal_method(name, definition)
       end
+
+      compile
     end
 
     VOID_OPS = %w[assert err return app_global_put b bnz bz store
@@ -118,18 +120,20 @@ module TEALrb
       case compile_response.status
       when 400
         msg = JSON.parse(compile_response.body)['message']
-        puts 'Error(s) while attempting to compile TEAL:'
+        e_msg = StringIO.new
+        e_msg.puts 'Error(s) while attempting to compile TEAL'
         msg.each_line do |ln|
           teal_line = ln.split(':').first.to_i
           ln_msg = ln.split(':')[1..].join(':').strip
           next if ln_msg == '"0"'
 
           if src_map_hash[teal_line]
-            puts "  #{teal_line} - #{src_map_hash[teal_line][:location]}: #{ln_msg}"
+            e_msg.puts "  #{teal_line} - #{src_map_hash[teal_line][:location]}: #{ln_msg}"
           else
-            puts "  #{ln}"
+            e_msg.puts "  #{ln}"
           end
         end
+        raise e_msg.string
       when 200
         json_body = JSON.parse(compile_response.body)
         pc_mapping = json_body['sourcemap']['mapping']
@@ -322,6 +326,14 @@ module TEALrb
         ),
         debug_context: 'main'
       )
+    end
+
+    def compiled_program
+      compile_response = Algod.new.compile(formatted_teal)
+
+      generate_source_map(formatted_teal) if compile_response.status != 200
+
+      JSON.parse(compile_response.body)['result']
     end
 
     private

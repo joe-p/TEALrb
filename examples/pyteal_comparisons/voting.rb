@@ -130,5 +130,4 @@ class VotingApproval < TEALrb::Contract
 end
 
 contract = VotingApproval.new
-contract.compile
 File.write("#{__dir__}/voting_tealrb.teal", contract.formatted_teal)

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class TestContract < TEALrb::Contract; end
+class TestContract < TEALrb::Contract
+  @src_map = false
+end
 
 module TestMethods
   def compile_test_last(input, teal, count = 1)

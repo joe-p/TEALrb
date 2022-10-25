@@ -27,5 +27,4 @@ class Approval < TEALrb::Contract
 end
 
 approval = Approval.new
-approval.compile
 File.write("#{__dir__}/meta_programming.teal", approval.formatted_teal)

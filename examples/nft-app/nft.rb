@@ -165,5 +165,4 @@ class Approval < TEALrb::Contract
 end
 
 approval = Approval.new
-approval.compile
 approval.dump(__dir__, name: 'nft_tealrb', abi: false)

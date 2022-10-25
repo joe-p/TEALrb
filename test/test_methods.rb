@@ -41,7 +41,6 @@ class ModuleTests < Minitest::Test
 
   def method_test(contract_class, expected_teal)
     contract = contract_class.new
-    contract.compile
     assert_equal(expected_teal, contract.teal[1..])
   end
 
