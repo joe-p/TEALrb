@@ -120,7 +120,11 @@ module TEALrb
           ln_msg = ln.split(':')[1..].join(':').strip
           next if ln_msg == '"0"'
 
-          puts "  #{teal_line} - #{src_map_hash[teal_line][:location]}: #{ln_msg}"
+          if src_map_hash[teal_line]
+            puts "  #{teal_line} - #{src_map_hash[teal_line][:location]}: #{ln_msg}"
+          else
+            puts "  #{ln}"
+          end
         end
       when 200
         json_body = JSON.parse(compile_response.body)
