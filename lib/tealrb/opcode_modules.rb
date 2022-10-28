@@ -66,8 +66,7 @@ module TEALrb
     module TxnFields
       # @return [[]byte] 32 byte address (v1)
       def sender(*args)
-        opcode('Sender', *args)
-        Accounts.new
+        Account.new opcode('Sender', *args)
       end
 
       # @return [uint64] microalgos (v1)
@@ -102,8 +101,7 @@ module TEALrb
 
       # @return [[]byte] 32 byte address (v1)
       def receiver(*args)
-        opcode('Receiver', *args)
-        Accounts.new
+        Account.new opcode('Receiver', *args)
       end
 
       # @return [uint64] microalgos (v1)
@@ -113,8 +111,7 @@ module TEALrb
 
       # @return [[]byte] 32 byte address (v1)
       def close_remainder_to(*args)
-        opcode('CloseRemainderTo', *args)
-        Accounts.new
+        Account.new opcode('CloseRemainderTo', *args)
       end
 
       # @return [[]byte] 32 byte address (v1)
@@ -154,7 +151,7 @@ module TEALrb
 
       # @return [uint64] Asset ID (v1)
       def xfer_asset(*args)
-        opcode('XferAsset', *args)
+        Asset.new opcode('XferAsset', *args)
       end
 
       # @return [uint64] value in Asset's units (v1)
@@ -165,17 +162,17 @@ module TEALrb
       # @return [[]byte] 32 byte address. Causes clawback of all value of asset from AssetSender if
       #   Sender is the Clawback address of the asset. (v1)
       def asset_sender(*args)
-        opcode('AssetSender', *args)
+        Account.new opcode('AssetSender', *args)
       end
 
       # @return [[]byte] 32 byte address (v1)
       def asset_receiver(*args)
-        opcode('AssetReceiver', *args)
+        Account.new opcode('AssetReceiver', *args)
       end
 
       # @return [[]byte] 32 byte address (v1)
       def asset_close_to(*args)
-        opcode('AssetCloseTo', *args)
+        Account.new opcode('AssetCloseTo', *args)
       end
 
       # @return [uint64] Position of this transaction within an atomic transaction group.
@@ -191,7 +188,7 @@ module TEALrb
 
       # @return [uint64] ApplicationID from ApplicationCall transaction (v2)
       def application_id(*args)
-        opcode('ApplicationID', *args)
+        Application.new opcode('ApplicationID', *args)
       end
 
       # @return [uint64] ApplicationCall transaction on completion action (v2)
@@ -276,32 +273,32 @@ module TEALrb
 
       # @return [[]byte] 32 byte address (v2)
       def config_asset_manager(*args)
-        opcode('ConfigAssetManager', *args)
+        Account.new opcode('ConfigAssetManager', *args)
       end
 
       # @return [[]byte] 32 byte address (v2)
       def config_asset_reserve(*args)
-        opcode('ConfigAssetReserve', *args)
+        Account.new opcode('ConfigAssetReserve', *args)
       end
 
       # @return [[]byte] 32 byte address (v2)
       def config_asset_freeze(*args)
-        opcode('ConfigAssetFreeze', *args)
+        Account.new opcode('ConfigAssetFreeze', *args)
       end
 
       # @return [[]byte] 32 byte address (v2)
       def config_asset_clawback(*args)
-        opcode('ConfigAssetClawback', *args)
+        Account.new opcode('ConfigAssetClawback', *args)
       end
 
       # @return [uint64] Asset ID being frozen or un-frozen (v2)
       def freeze_asset(*args)
-        opcode('FreezeAsset', *args)
+        Asset.new opcode('FreezeAsset', *args)
       end
 
       # @return [[]byte] 32 byte address of the account whose asset slot is being frozen or un-frozen (v2)
       def freeze_asset_account(*args)
-        opcode('FreezeAssetAccount', *args)
+        Account.new opcode('FreezeAssetAccount', *args)
       end
 
       # @return [uint64] The new frozen value, 0 or 1 (v2)
@@ -372,15 +369,13 @@ module TEALrb
 
       # @return [uint64] Asset ID allocated by the creation of an ASA (only with itxn in v5). Application mode only (v5)
       def created_asset_id(*args)
-        opcode('CreatedAssetID', *args)
-        Asset.new
+        Asset.new opcode('CreatedAssetID', *args)
       end
 
       # @return [uint64] ApplicationID allocated by the creation of an application (only with itxn in v5).
       #   Application mode only (v5)
       def created_application_id(*args)
-        opcode('CreatedApplicationID', *args)
-        Application.new
+        Application.new opcode('CreatedApplicationID', *args)
       end
 
       # @return [[]byte] The last message emitted. Empty bytes if none were emitted. Application mode only (v6)
@@ -804,6 +799,22 @@ module TEALrb
 
       def num_clear_pages
         ExtendedOpcodes.app_param_value 'NumClearProgramPages'
+      end
+
+      def global_value(key)
+        ExtendedOpcodes.app_global_ex_value
+      end
+
+      def global_exists?(key)
+        ExtendedOpcodes.app_global_ex_exists?
+      end
+
+      def local_value(account, key)
+        ExtendedOpcodes.app_local_ex_value
+      end
+
+      def local_exists?(account, key)
+        ExtendedOpcodes.app_local_ex_exists?
       end
     end
 
