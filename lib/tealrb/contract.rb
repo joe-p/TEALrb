@@ -3,8 +3,7 @@
 module TEALrb
   class Contract
     include TEALrb
-    include Opcodes
-    include Opcodes::AllOpcodes
+    include Opcodes::TEALOpcodes
     include ABI
     include Rewriters
 

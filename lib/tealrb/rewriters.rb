@@ -161,7 +161,7 @@ module TEALrb
         super
       end
 
-      OPCODE_METHODS = TEALrb::Opcodes::AllOpcodes.instance_methods.freeze
+      OPCODE_METHODS = TEALrb::Opcodes::TEALOpcodes.instance_methods.freeze
 
       def on_send(node)
         meth_name = node.children[1]
@@ -170,7 +170,7 @@ module TEALrb
           if meth_name[/(byte|int)cblock/]
             @skips += node.children[2..]
           else
-            params = TEALrb::Opcodes::AllOpcodes.instance_method(meth_name).parameters
+            params = TEALrb::Opcodes::TEALOpcodes.instance_method(meth_name).parameters
             req_params = params.count { |param| param[0] == :req }
             @skips += node.children[2..(1 + req_params.size)] unless req_params.zero?
           end
