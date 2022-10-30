@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-task default: %w[clean lint test examples build]
+task default: %w[future]
 multitask examples: %i[demo nft atomic_swap voting meta_programming]
 
 desc 'Clean up build artifacts (.gem files)'
@@ -36,6 +36,11 @@ end
 desc 'Run demo example'
 task :demo do
   ruby 'examples/demo/demo.rb'
+end
+
+desc 'Run future example'
+task :future do
+  ruby 'examples/future/future.rb'
 end
 
 desc 'Run nft example'
