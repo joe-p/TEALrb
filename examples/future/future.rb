@@ -18,6 +18,13 @@ class Future < TEALrb::Contract
     asa.unit_name if asa.unit_name?
   end
 
+  # @teal
+  def teal_meth
+    1
+    2
+    add
+  end
+
   def main
     1
     2
@@ -69,6 +76,7 @@ class Future < TEALrb::Contract
     end
 
     sub_meth(assets[1])
+    teal_meth(assets[1])
   end
 end
 

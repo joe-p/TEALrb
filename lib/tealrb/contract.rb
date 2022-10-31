@@ -300,8 +300,10 @@ module TEALrb
     # @return [nil]
     def define_teal_method(name, definition)
       new_source = generate_method_source(name, definition)
+      loc = method(name).source_location
 
       define_singleton_method(name) do |*_args|
+        @eval_location = loc
         eval_tealrb(new_source, debug_context: "teal method: #{name}")
       end
 
