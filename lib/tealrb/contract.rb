@@ -16,13 +16,12 @@ module TEALrb
     attr_accessor :teal, :if_count
 
     class << self
-      attr_accessor :subroutines, :version, :teal_methods, :abi_interface, :debug,
+      attr_accessor :subroutines, :version, :abi_interface, :debug,
                     :disable_abi_routing, :method_hashes, :src_map
 
       def inherited(klass)
         klass.version = 6
         klass.subroutines = {}
-        klass.teal_methods = {}
         klass.abi_interface = ABI::ABIDescription.new
         klass.abi_interface.name = klass.to_s
         klass.method_hashes = []
@@ -35,7 +34,6 @@ module TEALrb
       def parse(klass)
         YARD::Tags::Library.define_tag('ABI Method', :abi)
         YARD::Tags::Library.define_tag('Subroutine', :subroutine)
-        YARD::Tags::Library.define_tag('TEAL Method', :teal)
         YARD::Tags::Library.define_tag('OnCompletes', :on_completion)
         YARD::Tags::Library.define_tag('Create', :create)
 
@@ -55,25 +53,23 @@ module TEALrb
 
           tags = y.tags.map(&:tag_name)
 
-          if tags.include?('abi') || tags.include?('subroutine')
-            method_hash = { name: y.name.to_s, desc: y.base_docstring, args: [], returns: { type: 'void' },
-                            on_completion: ['NoOp'], create: y.has_tag?('create') }
+          next unless tags.include?('abi') || tags.include?('subroutine')
 
-            y.tags.each do |t|
-              method_hash[:returns] = { type: t.types&.first&.downcase } if t.tag_name == 'return'
+          method_hash = { name: y.name.to_s, desc: y.base_docstring, args: [], returns: { type: 'void' },
+                          on_completion: ['NoOp'], create: y.has_tag?('create') }
 
-              method_hash[:on_completion] = t.text[1..-2].split(',').map(&:strip) if t.tag_name == 'on_completion'
-              next unless t.tag_name == 'param'
+          y.tags.each do |t|
+            method_hash[:returns] = { type: t.types&.first&.downcase } if t.tag_name == 'return'
 
-              method_hash[:args] << { name: t.name, type: t.types&.first&.downcase, desc: t.text }
-            end
+            method_hash[:on_completion] = t.text[1..-2].split(',').map(&:strip) if t.tag_name == 'on_completion'
+            next unless t.tag_name == 'param'
 
-            klass.method_hashes << method_hash
-
-            klass.abi_interface.add_method(**method_hash) if tags.include? 'abi'
-          elsif tags.include? 'teal'
-            klass.teal_methods[y.name.to_s] = y
+            method_hash[:args] << { name: t.name, type: t.types&.first&.downcase, desc: t.text }
           end
+
+          klass.method_hashes << method_hash
+
+          klass.abi_interface.add_method(**method_hash) if tags.include? 'abi'
         end
       end
     end
@@ -102,10 +98,6 @@ module TEALrb
 
       self.class.method_hashes.each do |mh|
         define_subroutine(mh[:name], method(mh[:name]))
-      end
-
-      self.class.teal_methods.each do |name, definition|
-        define_teal_method(name, definition)
       end
 
       compile
@@ -304,24 +296,6 @@ module TEALrb
     # return the input without transpiling to TEAL
     def rb(input)
       input
-    end
-
-    # defines a method that is transpiled to TEAL
-    # @param name [Symbol] name of the method
-    # @param definition [Lambda, Proc, UnboundMethod] the method definition
-    # @return [nil]
-    def define_teal_method(name, definition)
-      return if method(name).source_location.first == __FILE__
-
-      new_source = generate_method_source(name, definition)
-      loc = method(name).source_location
-
-      define_singleton_method(name) do |*_args|
-        @eval_location = loc
-        eval_tealrb(new_source, debug_context: "teal method: #{name}")
-      end
-
-      nil
     end
 
     # defines a TEAL subroutine
@@ -551,7 +525,7 @@ module TEALrb
       end
 
       [CommentRewriter, ComparisonRewriter, WhileRewriter, InlineIfRewriter, IfRewriter, OpRewriter,
-       AssignRewriter, InternalMethodRewriter].each do |rw|
+       AssignRewriter].each do |rw|
         string = rewrite_with_rewriter(string, rw)
       end
 
