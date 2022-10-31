@@ -12,6 +12,7 @@ require_relative 'tealrb/opcodes'
 require_relative 'tealrb/maybe_ops'
 require_relative 'tealrb/byte_opcodes'
 require_relative 'tealrb/txn_fields'
+require_relative 'tealrb/opcode_type'
 require_relative 'tealrb/account'
 require_relative 'tealrb/this_txn'
 require_relative 'tealrb/box'
@@ -24,7 +25,6 @@ require_relative 'tealrb/logs'
 require_relative 'tealrb/app_args'
 require_relative 'tealrb/local'
 require_relative 'tealrb/enums'
-require_relative 'tealrb/if_block'
 require_relative 'tealrb/scratch'
 require_relative 'tealrb/algod'
 require_relative 'tealrb/rewriters'
@@ -50,7 +50,7 @@ module TEALrb
       return super if caller.join['src_map']
       return super unless @contract.eval_location
 
-      eval_location = caller.find { _1[/^\(eval/] }&.split(':')
+      eval_location = caller.reverse.find { _1[/^\(eval/] }&.split(':')
       return super unless eval_location
 
       eval_line = eval_location[1].to_i

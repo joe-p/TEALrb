@@ -6,7 +6,7 @@ module TEALrb
 
     # @return [[]byte] 32 byte address (v1)
     def sender(*args)
-      txnfield_opcode('Sender', *args)
+      @contract.account txnfield_opcode('Sender', *args)
     end
 
     # @return [uint64] microalgos (v1)
@@ -41,7 +41,7 @@ module TEALrb
 
     # @return [[]byte] 32 byte address (v1)
     def receiver(*args)
-      txnfield_opcode('Receiver', *args)
+      @contract.account txnfield_opcode('Receiver', *args)
     end
 
     # @return [uint64] microalgos (v1)
@@ -51,7 +51,7 @@ module TEALrb
 
     # @return [[]byte] 32 byte address (v1)
     def close_remainder_to(*args)
-      txnfield_opcode('CloseRemainderTo', *args)
+      @contract.account txnfield_opcode('CloseRemainderTo', *args)
     end
 
     # @return [[]byte] 32 byte address (v1)
@@ -91,7 +91,7 @@ module TEALrb
 
     # @return [uint64] Asset ID (v1)
     def xfer_asset(*args)
-      txnfield_opcode('XferAsset', *args)
+      @contract.asset txnfield_opcode('XferAsset', *args)
     end
 
     # @return [uint64] value in Asset's units (v1)
@@ -102,17 +102,17 @@ module TEALrb
     # @return [[]byte] 32 byte address. Causes clawback of all value of asset from AssetSender if
     #   Sender is the Clawback address of the asset. (v1)
     def asset_sender(*args)
-      txnfield_opcode('AssetSender', *args)
+      @contract.account txnfield_opcode('AssetSender', *args)
     end
 
     # @return [[]byte] 32 byte address (v1)
     def asset_receiver(*args)
-      txnfield_opcode('AssetReceiver', *args)
+      @contract.account txnfield_opcode('AssetReceiver', *args)
     end
 
     # @return [[]byte] 32 byte address (v1)
     def asset_close_to(*args)
-      txnfield_opcode('AssetCloseTo', *args)
+      @contract.account txnfield_opcode('AssetCloseTo', *args)
     end
 
     # @return [uint64] Position of this transaction within an atomic transaction group.
@@ -128,7 +128,7 @@ module TEALrb
 
     # @return [uint64] ApplicationID from ApplicationCall transaction (v2)
     def application_id(*args)
-      txnfield_opcode('ApplicationID', *args)
+      @contract.app txnfield_opcode('ApplicationID', *args)
     end
 
     # @return [uint64] ApplicationCall transaction on completion action (v2)
@@ -168,12 +168,12 @@ module TEALrb
 
     # @return [[]byte] 32 byte Sender's new AuthAddr (v2)
     def rekey_to(*args)
-      txnfield_opcode('RekeyTo', *args)
+      @contract.account txnfield_opcode('RekeyTo', *args)
     end
 
     # @return [uint64] Asset ID in asset config transaction (v2)
     def config_asset(*args)
-      txnfield_opcode('ConfigAsset', *args)
+      @contract.asset txnfield_opcode('ConfigAsset', *args)
     end
 
     # @return [uint64] Total number of units of this asset created (v2)
@@ -213,32 +213,32 @@ module TEALrb
 
     # @return [[]byte] 32 byte address (v2)
     def config_asset_manager(*args)
-      txnfield_opcode('ConfigAssetManager', *args)
+      @contract.account txnfield_opcode('ConfigAssetManager', *args)
     end
 
     # @return [[]byte] 32 byte address (v2)
     def config_asset_reserve(*args)
-      txnfield_opcode('ConfigAssetReserve', *args)
+      @contract.account txnfield_opcode('ConfigAssetReserve', *args)
     end
 
     # @return [[]byte] 32 byte address (v2)
     def config_asset_freeze(*args)
-      txnfield_opcode('ConfigAssetFreeze', *args)
+      @contract.account txnfield_opcode('ConfigAssetFreeze', *args)
     end
 
     # @return [[]byte] 32 byte address (v2)
     def config_asset_clawback(*args)
-      txnfield_opcode('ConfigAssetClawback', *args)
+      @contract.account txnfield_opcode('ConfigAssetClawback', *args)
     end
 
     # @return [uint64] Asset ID being frozen or un-frozen (v2)
     def freeze_asset(*args)
-      txnfield_opcode('FreezeAsset', *args)
+      @contract.asset txnfield_opcode('FreezeAsset', *args)
     end
 
     # @return [[]byte] 32 byte address of the account whose asset slot is being frozen or un-frozen (v2)
     def freeze_asset_account(*args)
-      txnfield_opcode('FreezeAssetAccount', *args)
+      @contract.account txnfield_opcode('FreezeAssetAccount', *args)
     end
 
     # @return [uint64] The new frozen value, 0 or 1 (v2)
@@ -309,13 +309,13 @@ module TEALrb
 
     # @return [uint64] Asset ID allocated by the creation of an ASA (only with itxn in v5). Application mode only (v5)
     def created_asset_id(*args)
-      txnfield_opcode('CreatedAssetID', *args)
+      @contract.asset txnfield_opcode('CreatedAssetID', *args)
     end
 
     # @return [uint64] ApplicationID allocated by the creation of an application (only with itxn in v5).
     #   Application mode only (v5)
     def created_application_id(*args)
-      txnfield_opcode('CreatedApplicationID', *args)
+      @contract.app txnfield_opcode('CreatedApplicationID', *args)
     end
 
     # @return [[]byte] The last message emitted. Empty bytes if none were emitted. Application mode only (v6)

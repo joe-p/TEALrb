@@ -64,8 +64,7 @@ module TEALrb
 
     # @return [[]byte] Address that the current application controls. Application mode only. (v5)
     def current_application_address(*args)
-      @contract.global_opcode('CurrentApplicationAddress', *args)
-      Accounts.new
+      @contract.account @contract.global_opcode('CurrentApplicationAddress', *args)
     end
 
     # @return [[]byte] ID of the transaction group. 32 zero bytes if the transaction is not part of a group. (v5)
@@ -81,8 +80,7 @@ module TEALrb
     # @return [uint64] The application ID of the application that called this application.
     #   0 if this application is at the top-level. Application mode only. (v6)
     def caller_application_id(*args)
-      @contract.global_opcode('CallerApplicationID', *args)
-      Application.new
+      @contract.app @contract.global_opcode('CallerApplicationID', *args)
     end
 
     # @return [[]byte] The application address of the application that called this application.

@@ -3,21 +3,6 @@
   "networks": {
   },
   "methods": [
-    {
-      "name": "abi_meth",
-      "desc": "",
-      "args": [
-        {
-          "name": "asa",
-          "type": "asset",
-          "desc": ""
-        }
-      ],
-      "returns": {
-        "type": {
-          "type": "void"
-        }
-      }
-    }
+
   ]
 }

@@ -82,7 +82,11 @@ module TEALrb
     # @!method group_index=(value)
     TxnFields.instance_methods.each do |m|
       define_method("#{m}=") do |_value|
-        @contract.itxn_field m.to_s.split('_').collect(&:capitalize).join, _value
+        if m == :application_id
+          @contract.itxn_field 'ApplicationID'
+        else
+          @contract.itxn_field m.to_s.split('_').collect(&:capitalize).join, _value
+        end
       end
     end
   end

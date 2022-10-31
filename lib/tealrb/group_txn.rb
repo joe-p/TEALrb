@@ -1,10 +1,6 @@
 module TEALrb
-  class GroupTxn
+  class GroupTxn < OpcodeType
     include TxnFields
-
-    def initialize(contract)
-      @contract = contract
-    end
 
     def txnfield_opcode(field, *_args)
       @contract.gtxns field

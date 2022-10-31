@@ -1,10 +1,6 @@
 module TEALrb
-  class ThisTxn
+  class ThisTxn < OpcodeType
     include TxnFields
-
-    def initialize(contract)
-      @contract = contract
-    end
 
     private
 

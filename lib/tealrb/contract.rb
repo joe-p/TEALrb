@@ -9,12 +9,11 @@ module TEALrb
     include ABI
     include Rewriters
     include Enums
-    include IfMethods
 
     alias global_opcode global
 
     attr_reader :eval_location
-    attr_accessor :teal
+    attr_accessor :teal, :if_count
 
     class << self
       attr_accessor :subroutines, :version, :teal_methods, :abi_interface, :debug,
@@ -79,6 +78,18 @@ module TEALrb
       end
     end
 
+    TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
+      define_method(meth) do |other|
+        @contract.send(opcode, self, other)
+      end
+    end
+
+    TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
+      define_method(meth) do
+        @contract.send(opcode, self)
+      end
+    end
+
     # sets the `#pragma version`, defines teal methods, and defines subroutines
     def initialize
       self.class.parse(self.class)
@@ -87,6 +98,7 @@ module TEALrb
       @scratch = Scratch.new self
 
       @contract = self
+      @if_count = -1
 
       self.class.method_hashes.each do |mh|
         define_subroutine(mh[:name], method(mh[:name]))
@@ -404,14 +416,15 @@ module TEALrb
     private
 
     def route_abi_methods
-      self.class.abi_interface.methods.each do |meth|
+      self.class.abi_interface.methods.each_with_index do |meth, i|
         signature = "#{meth[:name]}(#{meth[:args].map { _1[:type] }.join(',')})#{meth[:returns][:type]}"
         selector = OpenSSL::Digest.new('SHA512-256').hexdigest(signature)[..7]
 
-        teal_if(app_args[0].equal(byte(selector))) do
-          callsub(meth[:name])
-          approve
-        end
+        app_args[int(0)] == byte(selector)
+        bz("abi_routing#{i}")
+        callsub(meth[:name])
+        approve
+        label("abi_routing#{i}")
       end
     end
 
@@ -458,7 +471,7 @@ module TEALrb
       end
       assert
 
-      assert(this_txn.application_id == int(0)) if method_hash[:create]
+      assert(this_txn.application_id == (int(0))) if method_hash[:create]
 
       if abi_hash['methods'].find { _1[:name] == method_hash[:name].to_s }
         definition.parameters.each_with_index do |param, i|
@@ -471,7 +484,7 @@ module TEALrb
           type = arg_types[i].downcase
 
           if txn_types.include? type
-            @scratch[scratch_name] = group_txns[this_txn.group_index - int(txn_params)]
+            @scratch[scratch_name] = group_txns[this_txn.group_index.subtract int(txn_params)]
             txn_params -= 1
           elsif type == 'application'
             @scratch[scratch_name] = apps[int(app_param_index += 1)]
@@ -485,7 +498,7 @@ module TEALrb
             @scratch[scratch_name] = app_args[int(args_index += 1)]
           end
 
-          pre_string << "#{param_name} = -> { @scratch['#{scratch_name}'] }"
+          pre_string << "#{param_name} = -> {@scratch['#{scratch_name}'] }"
         end
 
       else

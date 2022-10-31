@@ -1,9 +1,5 @@
 module TEALrb
-  class Asset
-    def initialize(contract)
-      @contract = contract
-    end
-
+  class Asset < OpcodeType
     def [](_index)
       @contract.txnas 'Assets'
       self

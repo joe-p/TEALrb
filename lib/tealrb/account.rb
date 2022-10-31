@@ -1,9 +1,5 @@
 module TEALrb
-  class Account
-    def initialize(contract)
-      @contract = contract
-    end
-
+  class Account < OpcodeType
     def [](_account_index)
       @contract.txnas 'Accounts'
       self
