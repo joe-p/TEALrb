@@ -8,10 +8,11 @@ abi_meth: // abi_meth(asa)
 	==
 	assert
 
-	// src_map:future.rb:12
+	int 0
 	txnas Assets
 	store 0 // abi_meth: asa [asset]
 
+	// src_map:future.rb:12
 	load 0 // abi_meth: asa [asset]
 	asset_params_get AssetUnitName
 	swap
@@ -36,9 +37,9 @@ sub_meth: // sub_meth(asa)
 	==
 	assert
 
-	// src_map:future.rb:18
 	store 1 // sub_meth: asa [asset]
 
+	// src_map:future.rb:18
 	load 1 // sub_meth: asa [asset]
 	asset_params_get AssetUnitName
 	swap

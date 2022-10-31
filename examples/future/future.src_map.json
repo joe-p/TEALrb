@@ -1,38 +1,15 @@
 {
-  "12": {
-    "location": "future.rb:12",
-    "pcs": [
-      32,
-      33
-    ]
-  },
-  "13": {
-    "location": "future.rb:12",
-    "pcs": [
-      34,
-      35
-    ]
-  },
-  "14": {
-    "location": "future.rb:12"
-  },
-  "15": {
-    "location": "future.rb:12",
-    "pcs": [
-      36,
-      37
-    ]
-  },
   "16": {
     "location": "future.rb:12",
     "pcs": [
-      38,
-      39
+      37,
+      38
     ]
   },
   "17": {
     "location": "future.rb:12",
     "pcs": [
+      39,
       40
     ]
   },
@@ -45,44 +22,47 @@
   "19": {
     "location": "future.rb:12",
     "pcs": [
-      42,
-      43,
-      44
+      42
     ]
   },
   "20": {
-    "location": "future.rb:12"
-  },
-  "21": {
     "location": "future.rb:12",
     "pcs": [
-      45,
-      46
+      43,
+      44,
+      45
     ]
+  },
+  "21": {
+    "location": "future.rb:12"
   },
   "22": {
     "location": "future.rb:12",
     "pcs": [
-      47,
-      48
+      46,
+      47
     ]
   },
   "23": {
     "location": "future.rb:12",
     "pcs": [
+      48,
       49
     ]
   },
   "24": {
     "location": "future.rb:12",
     "pcs": [
-      50,
-      51,
-      52
+      50
     ]
   },
   "25": {
-    "location": "future.rb:12"
+    "location": "future.rb:12",
+    "pcs": [
+      51,
+      52,
+      53
+    ]
   },
   "26": {
     "location": "future.rb:12"
@@ -96,28 +76,25 @@
   "29": {
     "location": "future.rb:12"
   },
-  "31": {
-    "location": "future.rb:13",
-    "pcs": [
-      53
-    ]
+  "30": {
+    "location": "future.rb:12"
   },
   "32": {
-    "location": "future.rb:13"
+    "location": "future.rb:13",
+    "pcs": [
+      54
+    ]
   },
   "33": {
     "location": "future.rb:13"
   },
   "34": {
-    "location": "future.rb:13",
-    "pcs": [
-      54,
-      55
-    ]
+    "location": "future.rb:13"
   },
   "35": {
     "location": "future.rb:13",
     "pcs": [
+      55,
       56
     ]
   },
@@ -134,35 +111,35 @@
     ]
   },
   "38": {
+    "location": "future.rb:13",
+    "pcs": [
+      59
+    ]
+  },
+  "39": {
     "location": "future.rb:13"
   },
   "40": {
-    "location": "future.rb:18",
+    "location": "future.rb:13",
     "pcs": [
-      59,
-      60
+      60,
+      61
     ]
   },
   "41": {
-    "location": "future.rb:18"
-  },
-  "42": {
-    "location": "future.rb:18",
-    "pcs": [
-      61,
-      62
-    ]
+    "location": "future.rb:13"
   },
   "43": {
     "location": "future.rb:18",
     "pcs": [
-      63,
-      64
+      62,
+      63
     ]
   },
   "44": {
     "location": "future.rb:18",
     "pcs": [
+      64,
       65
     ]
   },
@@ -175,44 +152,47 @@
   "46": {
     "location": "future.rb:18",
     "pcs": [
-      67,
-      68,
-      69
+      67
     ]
   },
   "47": {
-    "location": "future.rb:18"
-  },
-  "48": {
     "location": "future.rb:18",
     "pcs": [
-      70,
-      71
+      68,
+      69,
+      70
     ]
+  },
+  "48": {
+    "location": "future.rb:18"
   },
   "49": {
     "location": "future.rb:18",
     "pcs": [
-      72,
-      73
+      71,
+      72
     ]
   },
   "50": {
     "location": "future.rb:18",
     "pcs": [
+      73,
       74
     ]
   },
   "51": {
     "location": "future.rb:18",
     "pcs": [
-      75,
-      76,
-      77
+      75
     ]
   },
   "52": {
-    "location": "future.rb:18"
+    "location": "future.rb:18",
+    "pcs": [
+      76,
+      77,
+      78
+    ]
   },
   "53": {
     "location": "future.rb:18"
@@ -226,29 +206,31 @@
   "56": {
     "location": "future.rb:18"
   },
-  "58": {
-    "location": "future.rb:19",
-    "pcs": [
-      78
-    ]
+  "57": {
+    "location": "future.rb:18"
   },
   "59": {
-    "location": "future.rb:19"
+    "location": "future.rb:19",
+    "pcs": [
+      79
+    ]
   },
   "60": {
     "location": "future.rb:19"
   },
   "61": {
-    "location": "future.rb:19",
-    "pcs": [
-      79,
-      80
-    ]
+    "location": "future.rb:19"
   },
   "62": {
     "location": "future.rb:19",
     "pcs": [
-      81,
+      80,
+      81
+    ]
+  },
+  "63": {
+    "location": "future.rb:19",
+    "pcs": [
       82,
       83,
       84,
@@ -257,42 +239,37 @@
       87,
       88,
       89,
-      90
-    ]
-  },
-  "63": {
-    "location": "future.rb:19",
-    "pcs": [
+      90,
       91
     ]
   },
   "64": {
     "location": "future.rb:19",
     "pcs": [
-      92,
-      93,
-      94
+      92
     ]
   },
   "65": {
-    "location": "future.rb:19"
+    "location": "future.rb:19",
+    "pcs": [
+      93,
+      94,
+      95
+    ]
   },
   "66": {
-    "location": "future.rb:19",
-    "pcs": [
-      95,
-      96,
-      97
-    ]
-  },
-  "67": {
     "location": "future.rb:19"
   },
-  "68": {
+  "67": {
     "location": "future.rb:19",
     "pcs": [
+      96,
+      97,
       98
     ]
+  },
+  "68": {
+    "location": "future.rb:19"
   },
   "69": {
     "location": "future.rb:19",
@@ -301,18 +278,21 @@
     ]
   },
   "70": {
-    "location": "future.rb:19"
-  },
-  "71": {
     "location": "future.rb:19",
     "pcs": [
-      100,
-      101,
-      102
+      100
     ]
   },
-  "72": {
+  "71": {
     "location": "future.rb:19"
+  },
+  "72": {
+    "location": "future.rb:19",
+    "pcs": [
+      101,
+      102,
+      103
+    ]
   },
   "73": {
     "location": "future.rb:19"
@@ -326,50 +306,47 @@
   "76": {
     "location": "future.rb:19"
   },
-  "78": {
-    "location": "future.rb:22",
-    "pcs": [
-      103
-    ]
+  "77": {
+    "location": "future.rb:19"
   },
   "79": {
-    "location": "future.rb:22"
-  },
-  "81": {
-    "location": "future.rb:23",
+    "location": "future.rb:22",
     "pcs": [
       104
     ]
   },
-  "82": {
-    "location": "future.rb:23"
+  "80": {
+    "location": "future.rb:22"
   },
-  "84": {
-    "location": "future.rb:24",
+  "82": {
+    "location": "future.rb:23",
     "pcs": [
       105
     ]
   },
-  "85": {
-    "location": "future.rb:24"
+  "83": {
+    "location": "future.rb:23"
   },
-  "87": {
-    "location": "future.rb:25",
+  "85": {
+    "location": "future.rb:24",
     "pcs": [
-      106,
-      107
+      106
     ]
+  },
+  "86": {
+    "location": "future.rb:24"
   },
   "88": {
     "location": "future.rb:25",
     "pcs": [
-      108,
-      109
+      107,
+      108
     ]
   },
   "89": {
     "location": "future.rb:25",
     "pcs": [
+      109,
       110
     ]
   },
@@ -382,20 +359,20 @@
   "91": {
     "location": "future.rb:25",
     "pcs": [
-      112,
-      113
+      112
     ]
   },
   "92": {
     "location": "future.rb:25",
     "pcs": [
-      114,
-      115
+      113,
+      114
     ]
   },
   "93": {
     "location": "future.rb:25",
     "pcs": [
+      115,
       116
     ]
   },
@@ -412,13 +389,13 @@
     ]
   },
   "96": {
-    "location": "future.rb:25"
-  },
-  "98": {
-    "location": "future.rb:27",
+    "location": "future.rb:25",
     "pcs": [
       119
     ]
+  },
+  "97": {
+    "location": "future.rb:25"
   },
   "99": {
     "location": "future.rb:27",
@@ -433,13 +410,13 @@
     ]
   },
   "101": {
-    "location": "future.rb:27"
-  },
-  "103": {
-    "location": "future.rb:28",
+    "location": "future.rb:27",
     "pcs": [
       122
     ]
+  },
+  "102": {
+    "location": "future.rb:27"
   },
   "104": {
     "location": "future.rb:28",
@@ -454,99 +431,99 @@
     ]
   },
   "106": {
-    "location": "future.rb:28"
-  },
-  "108": {
-    "location": "future.rb:30",
+    "location": "future.rb:28",
     "pcs": [
       125
     ]
   },
-  "109": {
-    "location": "future.rb:30"
+  "107": {
+    "location": "future.rb:28"
   },
-  "111": {
-    "location": "future.rb:31",
+  "109": {
+    "location": "future.rb:30",
     "pcs": [
       126
     ]
   },
+  "110": {
+    "location": "future.rb:30"
+  },
   "112": {
     "location": "future.rb:31",
     "pcs": [
-      127,
-      128
+      127
     ]
   },
   "113": {
-    "location": "future.rb:31"
-  },
-  "115": {
-    "location": "future.rb:32",
+    "location": "future.rb:31",
     "pcs": [
-      129,
-      130
+      128,
+      129
     ]
+  },
+  "114": {
+    "location": "future.rb:31"
   },
   "116": {
     "location": "future.rb:32",
     "pcs": [
-      131,
-      132
+      130,
+      131
     ]
   },
   "117": {
-    "location": "future.rb:32"
-  },
-  "119": {
-    "location": "future.rb:33",
+    "location": "future.rb:32",
     "pcs": [
-      133,
-      134,
-      135,
-      136
+      132,
+      133
     ]
+  },
+  "118": {
+    "location": "future.rb:32"
   },
   "120": {
     "location": "future.rb:33",
     "pcs": [
-      137,
-      138
+      134,
+      135,
+      136,
+      137
     ]
   },
   "121": {
-    "location": "future.rb:33"
-  },
-  "123": {
-    "location": "future.rb:34",
+    "location": "future.rb:33",
     "pcs": [
+      138,
       139
     ]
+  },
+  "122": {
+    "location": "future.rb:33"
   },
   "124": {
     "location": "future.rb:34",
     "pcs": [
-      140,
-      141
+      140
     ]
   },
   "125": {
-    "location": "future.rb:34"
-  },
-  "127": {
-    "location": "future.rb:35",
+    "location": "future.rb:34",
     "pcs": [
+      141,
       142
     ]
   },
-  "128": {
-    "location": "future.rb:35"
+  "126": {
+    "location": "future.rb:34"
   },
-  "130": {
-    "location": "future.rb:37",
+  "128": {
+    "location": "future.rb:35",
     "pcs": [
       143
     ]
+  },
+  "129": {
+    "location": "future.rb:35"
   },
   "131": {
     "location": "future.rb:37",
@@ -563,18 +540,18 @@
   "133": {
     "location": "future.rb:37",
     "pcs": [
-      146,
-      147
+      146
     ]
   },
   "134": {
-    "location": "future.rb:37"
-  },
-  "136": {
-    "location": "future.rb:39",
+    "location": "future.rb:37",
     "pcs": [
+      147,
       148
     ]
+  },
+  "135": {
+    "location": "future.rb:37"
   },
   "137": {
     "location": "future.rb:39",
@@ -589,13 +566,13 @@
     ]
   },
   "139": {
-    "location": "future.rb:39"
-  },
-  "141": {
-    "location": "future.rb:40",
+    "location": "future.rb:39",
     "pcs": [
       151
     ]
+  },
+  "140": {
+    "location": "future.rb:39"
   },
   "142": {
     "location": "future.rb:40",
@@ -604,172 +581,172 @@
     ]
   },
   "143": {
+    "location": "future.rb:40",
+    "pcs": [
+      153
+    ]
+  },
+  "144": {
     "location": "future.rb:40"
   },
-  "145": {
+  "146": {
     "location": "future.rb:41",
     "pcs": [
-      153,
-      154
+      154,
+      155
     ]
   },
-  "146": {
+  "147": {
     "location": "future.rb:41"
   },
-  "148": {
+  "149": {
     "location": "future.rb:42",
     "pcs": [
-      155,
-      156
-    ]
-  },
-  "149": {
-    "location": "future.rb:42"
-  },
-  "151": {
-    "location": "future.rb:44",
-    "pcs": [
+      156,
       157
     ]
+  },
+  "150": {
+    "location": "future.rb:42"
   },
   "152": {
     "location": "future.rb:44",
     "pcs": [
-      158,
-      159
+      158
     ]
   },
   "153": {
     "location": "future.rb:44",
     "pcs": [
+      159,
       160
     ]
   },
   "154": {
-    "location": "future.rb:44"
-  },
-  "156": {
-    "location": "future.rb:45",
+    "location": "future.rb:44",
     "pcs": [
       161
     ]
   },
+  "155": {
+    "location": "future.rb:44"
+  },
   "157": {
     "location": "future.rb:45",
     "pcs": [
-      162,
-      163
+      162
     ]
   },
   "158": {
     "location": "future.rb:45",
     "pcs": [
-      164,
-      165
+      163,
+      164
     ]
   },
   "159": {
     "location": "future.rb:45",
     "pcs": [
+      165,
       166
     ]
   },
   "160": {
-    "location": "future.rb:45"
-  },
-  "162": {
-    "location": "future.rb:47",
+    "location": "future.rb:45",
     "pcs": [
       167
     ]
   },
+  "161": {
+    "location": "future.rb:45"
+  },
   "163": {
     "location": "future.rb:47",
     "pcs": [
-      168,
-      169
+      168
     ]
   },
   "164": {
     "location": "future.rb:47",
     "pcs": [
+      169,
       170
     ]
   },
   "165": {
-    "location": "future.rb:47"
-  },
-  "167": {
-    "location": "future.rb:48",
+    "location": "future.rb:47",
     "pcs": [
       171
     ]
   },
+  "166": {
+    "location": "future.rb:47"
+  },
   "168": {
     "location": "future.rb:48",
     "pcs": [
-      172,
-      173
+      172
     ]
   },
   "169": {
     "location": "future.rb:48",
     "pcs": [
-      174,
-      175
+      173,
+      174
     ]
   },
   "170": {
     "location": "future.rb:48",
     "pcs": [
+      175,
       176
     ]
   },
   "171": {
-    "location": "future.rb:48"
-  },
-  "173": {
-    "location": "future.rb:50",
+    "location": "future.rb:48",
     "pcs": [
       177
     ]
   },
+  "172": {
+    "location": "future.rb:48"
+  },
   "174": {
     "location": "future.rb:50",
     "pcs": [
-      178,
-      179
+      178
     ]
   },
   "175": {
-    "location": "future.rb:50"
-  },
-  "177": {
-    "location": "future.rb:51",
+    "location": "future.rb:50",
     "pcs": [
+      179,
       180
     ]
+  },
+  "176": {
+    "location": "future.rb:50"
   },
   "178": {
     "location": "future.rb:51",
     "pcs": [
-      181,
-      182
+      181
     ]
   },
   "179": {
-    "location": "future.rb:51"
-  },
-  "181": {
-    "location": "future.rb:53",
+    "location": "future.rb:51",
     "pcs": [
-      183,
-      184
+      182,
+      183
     ]
+  },
+  "180": {
+    "location": "future.rb:51"
   },
   "182": {
     "location": "future.rb:53",
     "pcs": [
+      184,
       185
     ]
   },
@@ -786,18 +763,18 @@
     ]
   },
   "185": {
-    "location": "future.rb:53"
-  },
-  "187": {
-    "location": "future.rb:54",
+    "location": "future.rb:53",
     "pcs": [
-      188,
-      189
+      188
     ]
+  },
+  "186": {
+    "location": "future.rb:53"
   },
   "188": {
     "location": "future.rb:54",
     "pcs": [
+      189,
       190
     ]
   },
@@ -808,76 +785,76 @@
     ]
   },
   "190": {
-    "location": "future.rb:54"
-  },
-  "192": {
-    "location": "future.rb:56",
+    "location": "future.rb:54",
     "pcs": [
       192
     ]
   },
+  "191": {
+    "location": "future.rb:54"
+  },
   "193": {
     "location": "future.rb:56",
     "pcs": [
-      193,
-      194
+      193
     ]
   },
   "194": {
-    "location": "future.rb:56"
-  },
-  "196": {
-    "location": "future.rb:57",
+    "location": "future.rb:56",
     "pcs": [
-      195,
-      196
+      194,
+      195
     ]
+  },
+  "195": {
+    "location": "future.rb:56"
   },
   "197": {
     "location": "future.rb:57",
     "pcs": [
-      197,
-      198,
-      199,
-      200,
-      201
+      196,
+      197
     ]
   },
   "198": {
     "location": "future.rb:57",
     "pcs": [
+      198,
+      199,
+      200,
+      201,
       202
     ]
   },
   "199": {
-    "location": "future.rb:57"
-  },
-  "201": {
-    "location": "future.rb:59",
+    "location": "future.rb:57",
     "pcs": [
       203
     ]
   },
+  "200": {
+    "location": "future.rb:57"
+  },
   "202": {
     "location": "future.rb:59",
     "pcs": [
-      204,
-      205
+      204
     ]
   },
   "203": {
-    "location": "future.rb:59"
-  },
-  "205": {
-    "location": "future.rb:61",
+    "location": "future.rb:59",
     "pcs": [
-      206,
-      207
+      205,
+      206
     ]
+  },
+  "204": {
+    "location": "future.rb:59"
   },
   "206": {
     "location": "future.rb:61",
     "pcs": [
+      207,
       208
     ]
   },
@@ -890,42 +867,45 @@
   "208": {
     "location": "future.rb:61",
     "pcs": [
-      210,
-      211,
-      212
+      210
     ]
   },
   "209": {
-    "location": "future.rb:61"
-  },
-  "210": {
     "location": "future.rb:61",
     "pcs": [
-      213,
-      214,
-      215,
-      216
+      211,
+      212,
+      213
     ]
+  },
+  "210": {
+    "location": "future.rb:61"
   },
   "211": {
     "location": "future.rb:61",
     "pcs": [
+      214,
+      215,
+      216,
       217
     ]
   },
   "212": {
-    "location": "future.rb:61"
-  },
-  "213": {
     "location": "future.rb:61",
     "pcs": [
-      218,
-      219,
-      220
+      218
     ]
   },
-  "214": {
+  "213": {
     "location": "future.rb:61"
+  },
+  "214": {
+    "location": "future.rb:61",
+    "pcs": [
+      219,
+      220,
+      221
+    ]
   },
   "215": {
     "location": "future.rb:61"
@@ -939,52 +919,52 @@
   "218": {
     "location": "future.rb:61"
   },
-  "220": {
-    "location": "future.rb:63",
-    "pcs": [
-      221
-    ]
+  "219": {
+    "location": "future.rb:61"
   },
   "221": {
     "location": "future.rb:63",
     "pcs": [
-      222,
-      223,
-      224
+      222
     ]
   },
   "222": {
-    "location": "future.rb:63"
-  },
-  "224": {
-    "location": "future.rb:64",
+    "location": "future.rb:63",
     "pcs": [
-      225,
-      226,
-      227,
-      228,
-      229
+      223,
+      224,
+      225
     ]
+  },
+  "223": {
+    "location": "future.rb:63"
   },
   "225": {
     "location": "future.rb:64",
     "pcs": [
+      226,
+      227,
+      228,
+      229,
       230
     ]
   },
   "226": {
-    "location": "future.rb:64"
-  },
-  "228": {
-    "location": "future.rb:63",
+    "location": "future.rb:64",
     "pcs": [
-      231,
-      232,
-      233
+      231
     ]
   },
+  "227": {
+    "location": "future.rb:64"
+  },
   "229": {
-    "location": "future.rb:63"
+    "location": "future.rb:63",
+    "pcs": [
+      232,
+      233,
+      234
+    ]
   },
   "230": {
     "location": "future.rb:63"
@@ -992,52 +972,52 @@
   "231": {
     "location": "future.rb:63"
   },
-  "233": {
-    "location": "future.rb:65",
-    "pcs": [
-      234
-    ]
+  "232": {
+    "location": "future.rb:63"
   },
   "234": {
     "location": "future.rb:65",
     "pcs": [
-      235,
-      236,
-      237
+      235
     ]
   },
   "235": {
-    "location": "future.rb:65"
-  },
-  "237": {
-    "location": "future.rb:66",
+    "location": "future.rb:65",
     "pcs": [
-      238,
-      239,
-      240,
-      241,
-      242
+      236,
+      237,
+      238
     ]
+  },
+  "236": {
+    "location": "future.rb:65"
   },
   "238": {
     "location": "future.rb:66",
     "pcs": [
+      239,
+      240,
+      241,
+      242,
       243
     ]
   },
   "239": {
-    "location": "future.rb:66"
-  },
-  "241": {
-    "location": "future.rb:65",
+    "location": "future.rb:66",
     "pcs": [
-      244,
-      245,
-      246
+      244
     ]
   },
+  "240": {
+    "location": "future.rb:66"
+  },
   "242": {
-    "location": "future.rb:65"
+    "location": "future.rb:65",
+    "pcs": [
+      245,
+      246,
+      247
+    ]
   },
   "243": {
     "location": "future.rb:65"
@@ -1045,50 +1025,53 @@
   "244": {
     "location": "future.rb:65"
   },
-  "246": {
+  "245": {
+    "location": "future.rb:65"
+  },
+  "247": {
     "location": "future.rb:68",
     "pcs": [
-      247,
       248,
       249,
       250,
       251,
       252,
-      253
-    ]
-  },
-  "247": {
-    "location": "future.rb:68",
-    "pcs": [
+      253,
       254
     ]
   },
   "248": {
-    "location": "future.rb:68"
-  },
-  "250": {
-    "location": "future.rb:67"
-  },
-  "251": {
-    "location": "future.rb:67"
-  },
-  "253": {
-    "location": "future.rb:71",
+    "location": "future.rb:68",
     "pcs": [
       255
     ]
   },
+  "249": {
+    "location": "future.rb:68"
+  },
+  "251": {
+    "location": "future.rb:67"
+  },
+  "252": {
+    "location": "future.rb:67"
+  },
   "254": {
     "location": "future.rb:71",
     "pcs": [
-      256,
-      257
+      256
     ]
   },
   "255": {
     "location": "future.rb:71",
     "pcs": [
+      257,
       258
+    ]
+  },
+  "256": {
+    "location": "future.rb:71",
+    "pcs": [
+      259
     ]
   }
 }

@@ -381,11 +381,14 @@ module TEALrb
       eval_tealrb(
         rewrite(
           method(:main).source,
-          method_rewriter: true,
-          starting_location: method(:main).source_location
+          method_rewriter: true
         ),
         debug_context: 'main'
       )
+    end
+
+    def main
+      nil
     end
 
     def compiled_program
@@ -411,7 +414,7 @@ module TEALrb
     end
 
     def generate_method_source(name, definition)
-      new_source = rewrite(definition.source, method_rewriter: true, starting_location: method(name).source_location)
+      new_source = rewrite(definition.source, method_rewriter: true)
 
       pre_string = []
 
@@ -429,7 +432,7 @@ module TEALrb
     end
 
     def generate_subroutine_source(definition, method_hash)
-      new_source = rewrite(definition.source, method_rewriter: true, starting_location: definition.source_location)
+      new_source = rewrite(definition.source, method_rewriter: true)
 
       pre_string = []
 
@@ -466,18 +469,18 @@ module TEALrb
           type = arg_types[i].downcase
 
           if txn_types.include? type
-            pre_string << "@scratch['#{scratch_name}'] = group_txns[this_txn.group_index - int(#{txn_params})]"
+            @scratch[scratch_name] = group_txns[this_txn.group_index - int(txn_params)]
             txn_params -= 1
           elsif type == 'application'
-            pre_string << "@scratch['#{scratch_name}'] = apps[#{app_param_index += 1}]"
+            @scratch[scratch_name] = apps[int(app_param_index += 1)]
           elsif type == 'asset'
-            pre_string << "@scratch['#{scratch_name}'] = assets[#{asset_param_index += 1}]"
+            @scratch[scratch_name] = assets[int(asset_param_index += 1)]
           elsif type == 'account'
-            pre_string << "@scratch['#{scratch_name}'] = accounts[#{account_param_index += 1}]"
+            @scratch[scratch_name] = accounts[int(account_param_index += 1)]
           elsif type == 'uint64'
-            pre_string << "@scratch['#{scratch_name}'] = btoi(app_args[#{args_index += 1}])"
+            @scratch[scratch_name] = btoi(app_args[int(args_index += 1)])
           else
-            pre_string << "@scratch['#{scratch_name}'] = app_args[#{args_index += 1}]"
+            @scratch[scratch_name] = app_args[int(args_index += 1)]
           end
 
           pre_string << "#{param_name} = -> { @scratch['#{scratch_name}'] }"
@@ -496,17 +499,17 @@ module TEALrb
 
           type = arg_types[i]&.downcase
 
-          pre_string << if txn_types.include? type
-                          "@scratch['#{scratch_name}'] = gtxn"
-                        elsif type == 'application'
-                          "@scratch['#{scratch_name}'] = application"
-                        elsif type == 'asset'
-                          "@scratch['#{scratch_name}'] = asset"
-                        elsif type == 'account'
-                          "@scratch['#{scratch_name}'] = account"
-                        else
-                          "@scratch.store('#{scratch_name}')"
-                        end
+          if txn_types.include? type
+            @scratch[scratch_name] = group_txn
+          elsif type == 'application'
+            @scratch[scratch_name] = application
+          elsif type == 'asset'
+            @scratch[scratch_name] = asset
+          elsif type == 'account'
+            @scratch[scratch_name] = account
+          else
+            @scratch.store(scratch_name)
+          end
 
           pre_string << "#{param_name} = -> { @scratch['#{scratch_name}'] }"
         end
@@ -521,7 +524,7 @@ module TEALrb
       rewriter.new.rewrite(process_source, self)
     end
 
-    def rewrite(string, starting_location: nil, method_rewriter: false)
+    def rewrite(string, method_rewriter: false)
       if self.class.debug
         puts 'DEBUG: Rewriting the following code:'
         puts string
