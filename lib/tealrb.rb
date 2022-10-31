@@ -37,8 +37,12 @@ module TEALrb
 
     def <<(value)
       return super if caller.join['src_map']
+      return super unless @contract.eval_location
 
-      eval_line = caller.find { _1[/^\(eval/] }.split(':')[1].to_i
+      eval_location = caller.find { _1[/^\(eval/] }&.split(':')
+      return super unless eval_location
+
+      eval_line = eval_location[1].to_i
       src_map(@contract.eval_location.first, @contract.eval_location.last + eval_line)
       super
     end
