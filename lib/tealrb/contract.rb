@@ -9,6 +9,7 @@ module TEALrb
     include ABI
     include Rewriters
     include Enums
+    include IfMethods
 
     alias global_opcode global
 
@@ -83,8 +84,7 @@ module TEALrb
       self.class.parse(self.class)
 
       @teal = TEAL.new ["#pragma version #{self.class.version}"], self
-      IfBlock.id = 0
-      @scratch = Scratch.new
+      @scratch = Scratch.new self
 
       @contract = self
 

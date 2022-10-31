@@ -39,6 +39,21 @@ class Future < TEALrb::Contract
 
     local[this_txn.sender]['hello'] = 'world'
     local[this_txn.sender]['foo']
+
+    $foo = 'foo'
+    concat($foo, 'bar')
+
+    $i = 1
+
+    log('Hi') if $i == 1
+
+    if 1
+      log('One')
+    elsif 2
+      log('Two')
+    else
+      log('Other')
+    end
   end
 end
 

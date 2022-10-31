@@ -480,5 +480,267 @@
     "pcs": [
       112
     ]
+  },
+  "116": {
+    "location": "future.rb:41"
+  },
+  "118": {
+    "location": "future.rb:43",
+    "pcs": [
+      113
+    ]
+  },
+  "119": {
+    "location": "future.rb:43",
+    "pcs": [
+      114,
+      115
+    ]
+  },
+  "120": {
+    "location": "future.rb:43"
+  },
+  "122": {
+    "location": "future.rb:44",
+    "pcs": [
+      116,
+      117
+    ]
+  },
+  "123": {
+    "location": "future.rb:44",
+    "pcs": [
+      118,
+      119,
+      120,
+      121,
+      122
+    ]
+  },
+  "124": {
+    "location": "future.rb:44",
+    "pcs": [
+      123
+    ]
+  },
+  "125": {
+    "location": "future.rb:44"
+  },
+  "127": {
+    "location": "future.rb:46",
+    "pcs": [
+      124
+    ]
+  },
+  "128": {
+    "location": "future.rb:46",
+    "pcs": [
+      125,
+      126
+    ]
+  },
+  "129": {
+    "location": "future.rb:46"
+  },
+  "131": {
+    "location": "future.rb:48",
+    "pcs": [
+      127,
+      128
+    ]
+  },
+  "132": {
+    "location": "future.rb:48",
+    "pcs": [
+      129
+    ]
+  },
+  "133": {
+    "location": "future.rb:48",
+    "pcs": [
+      130
+    ]
+  },
+  "134": {
+    "location": "future.rb:48",
+    "pcs": [
+      131,
+      132,
+      133
+    ]
+  },
+  "135": {
+    "location": "future.rb:48"
+  },
+  "137": {
+    "location": "future.rb:49",
+    "pcs": [
+      134,
+      135,
+      136,
+      137
+    ]
+  },
+  "138": {
+    "location": "future.rb:49",
+    "pcs": [
+      138
+    ]
+  },
+  "139": {
+    "location": "future.rb:49"
+  },
+  "141": {
+    "location": "future.rb:48",
+    "pcs": [
+      139,
+      140,
+      141
+    ]
+  },
+  "142": {
+    "location": "future.rb:48"
+  },
+  "143": {
+    "location": "future.rb:48"
+  },
+  "144": {
+    "location": "future.rb:48"
+  },
+  "145": {
+    "location": "future.rb:48"
+  },
+  "146": {
+    "location": "future.rb:48"
+  },
+  "148": {
+    "location": "future.rb:52",
+    "pcs": [
+      142
+    ]
+  },
+  "149": {
+    "location": "future.rb:52",
+    "pcs": [
+      143,
+      144,
+      145
+    ]
+  },
+  "150": {
+    "location": "future.rb:52"
+  },
+  "152": {
+    "location": "future.rb:53",
+    "pcs": [
+      146,
+      147,
+      148,
+      149,
+      150
+    ]
+  },
+  "153": {
+    "location": "future.rb:53",
+    "pcs": [
+      151
+    ]
+  },
+  "154": {
+    "location": "future.rb:53"
+  },
+  "156": {
+    "location": "future.rb:52",
+    "pcs": [
+      152,
+      153,
+      154
+    ]
+  },
+  "157": {
+    "location": "future.rb:52"
+  },
+  "158": {
+    "location": "future.rb:52"
+  },
+  "159": {
+    "location": "future.rb:52"
+  },
+  "161": {
+    "location": "future.rb:54",
+    "pcs": [
+      155
+    ]
+  },
+  "162": {
+    "location": "future.rb:54",
+    "pcs": [
+      156,
+      157,
+      158
+    ]
+  },
+  "163": {
+    "location": "future.rb:54"
+  },
+  "165": {
+    "location": "future.rb:55",
+    "pcs": [
+      159,
+      160,
+      161,
+      162,
+      163
+    ]
+  },
+  "166": {
+    "location": "future.rb:55",
+    "pcs": [
+      164
+    ]
+  },
+  "167": {
+    "location": "future.rb:55"
+  },
+  "169": {
+    "location": "future.rb:54",
+    "pcs": [
+      165,
+      166,
+      167
+    ]
+  },
+  "170": {
+    "location": "future.rb:54"
+  },
+  "171": {
+    "location": "future.rb:54"
+  },
+  "172": {
+    "location": "future.rb:54"
+  },
+  "174": {
+    "location": "future.rb:57",
+    "pcs": [
+      168,
+      169,
+      170,
+      171,
+      172,
+      173,
+      174
+    ]
+  },
+  "175": {
+    "location": "future.rb:57",
+    "pcs": [
+      175
+    ]
+  },
+  "176": {
+    "location": "future.rb:57"
+  },
+  "178": {
+    "location": "future.rb:56"
   }
 }

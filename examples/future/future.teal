@@ -113,3 +113,66 @@ app_local_put
 txn Sender
 byte "foo"
 app_local_get
+
+// src_map:future.rb:43
+byte "foo"
+store 0 // foo
+
+// src_map:future.rb:44
+load 0 // foo
+byte "bar"
+concat
+
+// src_map:future.rb:46
+int 1
+store 1 // i
+
+// src_map:future.rb:48
+load 1 // i
+int 1
+==
+bz if0_else0
+
+// src_map:future.rb:49
+byte "Hi"
+log
+
+// src_map:future.rb:48
+b if0_end
+
+if0_else0:
+
+if0_end:
+
+	// src_map:future.rb:52
+	int 1
+	bz if1_else0
+
+	// src_map:future.rb:53
+	byte "One"
+	log
+
+	// src_map:future.rb:52
+	b if1_end
+
+if1_else0:
+
+	// src_map:future.rb:54
+	int 2
+	bz if1_else1
+
+	// src_map:future.rb:55
+	byte "Two"
+	log
+
+	// src_map:future.rb:54
+	b if1_end
+
+if1_else1:
+
+	// src_map:future.rb:57
+	byte "Other"
+	log
+
+// src_map:future.rb:56
+if1_end:

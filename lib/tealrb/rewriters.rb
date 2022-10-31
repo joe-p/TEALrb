@@ -65,11 +65,6 @@ module TEALrb
       def on_send(node)
         remove node.loc.selector if node.loc.selector.source == 'subroutine' || node.loc.selector.source == 'teal'
 
-        # @teal_methods[:name] = ->(*args) { ... } becomes ->(*args) { ... }
-        if ['@teal_methods', '@subroutines'].include? node.children[0]&.source
-          replace node.source_range, node.children[3].body.source
-        end
-
         super
       end
     end
@@ -98,7 +93,7 @@ module TEALrb
       end
 
       def on_ivar(node)
-        insert_after(node.loc.name, '.call') unless ['@teal_methods', '@subroutines', '@scratch'].include? node.source
+        insert_after(node.loc.name, '.call')
         super
       end
 
@@ -179,21 +174,8 @@ module TEALrb
           end
         elsif OPCODE_INSTANCE_METHODS.keys.include? meth_name
           replace node.loc.selector, ".#{OPCODE_INSTANCE_METHODS[meth_name]}"
-        elsif %i[comment placeholder rb].include?(meth_name) ||
-              (%i[[] []=].include?(meth_name) &&
-                (
-                  %i[@scratch @teal_methods Gtxn
-                     AppArgs].include?(node.children[0].children.last) ||
-                    node.children[0].children.first&.children&.last == :Txna
-                ))
-
+        elsif %i[comment placeholder rb].include?(meth_name)
           @skips << node.children[2]
-        elsif node.children.first&.children&.last == :@scratch && meth_name[/=$/]
-          nil
-        elsif %i[@scratch Gtxn].include? node.children.first&.children&.last
-          @skips << node.children.last
-        elsif %i[Accounts ApplicationArgs Assets Apps Logs].include? node.children.first&.children&.last
-          @skips << node.children.last if node.children.last.int_type?
         end
 
         super
@@ -253,9 +235,9 @@ module TEALrb
       def on_if(node)
         case node.loc.keyword.source
         when 'if'
-          replace(node.loc.keyword, 'IfBlock.new((')
+          replace(node.loc.keyword, 'teal_if((')
         when 'unless'
-          replace(node.loc.keyword, 'IfBlock.new(!(')
+          replace(node.loc.keyword, 'teal_if(!(')
         when 'elsif'
           replace(node.loc.keyword, 'end.elsif((')
         end

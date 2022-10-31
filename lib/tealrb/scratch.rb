@@ -2,14 +2,15 @@
 
 module TEALrb
   class Scratch
-    def initialize
+    def initialize(contract)
       @open_slots = (0..256).to_a
       @named_slots = {}
       @values = {}
+      @contract = contract
     end
 
     def [](key)
-      TEAL.instance << "load #{@named_slots[key]} // #{key}"
+      @contract.teal << "load #{@named_slots[key]} // #{key}"
       @values[key]
     end
 
@@ -19,7 +20,7 @@ module TEALrb
 
     def store(key, value = TEAL.instance)
       @values[key] = value
-      TEAL.instance << "store #{@named_slots[key] ||= @open_slots.shift} // #{key}"
+      @contract.teal << "store #{@named_slots[key] ||= @open_slots.shift} // #{key}"
     end
 
     def delete(key)
