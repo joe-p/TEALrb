@@ -1,15 +1,15 @@
-#pragma version 6
-
-// src_map:future.rb:8
-int 1
+#pragma version 8
 
 // src_map:future.rb:9
-int 2
+int 1
 
 // src_map:future.rb:10
-+
+int 2
 
 // src_map:future.rb:11
++
+
+// src_map:future.rb:12
 txn Sender
 acct_params_get AcctBalance
 pop
@@ -17,4 +17,99 @@ int 2
 txnas Accounts
 acct_params_get AcctBalance
 pop
+==
 assert
+
+// src_map:future.rb:14
+byte "hello"
+byte "world"
+box_put
+
+// src_map:future.rb:15
+byte "foo"
+box_get
+pop
+
+// src_map:future.rb:17
+itxn_begin
+
+// src_map:future.rb:18
+int pay
+itxn_field TypeEnum
+
+// src_map:future.rb:19
+txn Sender
+itxn_field Receiver
+
+// src_map:future.rb:20
+int 100000
+itxn_field Amount
+
+// src_map:future.rb:21
+int 0
+itxn_field Fee
+
+// src_map:future.rb:22
+itxn_submit
+
+// src_map:future.rb:24
+int 1
+int 1
++
+gtxns Sender
+
+// src_map:future.rb:26
+byte "hello"
+byte "world"
+app_global_put
+
+// src_map:future.rb:27
+byte "foo"
+app_global_get
+
+// src_map:future.rb:28
+global MinTxnFee
+
+// src_map:future.rb:29
+global MinBalance
+
+// src_map:future.rb:31
+int 1
+app_params_get AppAddress
+pop
+
+// src_map:future.rb:32
+int 1
+txnas Applications
+app_params_get AppAddress
+pop
+
+// src_map:future.rb:34
+int 1
+asset_params_get AssetCreator
+pop
+
+// src_map:future.rb:35
+int 1
+txnas Assets
+asset_params_get AssetCreator
+pop
+
+// src_map:future.rb:37
+int 1
+txnas Logs
+
+// src_map:future.rb:38
+int 1
+txnas ApplicationArgs
+
+// src_map:future.rb:40
+txn Sender
+byte "hello"
+byte "world"
+app_local_put
+
+// src_map:future.rb:41
+txn Sender
+byte "foo"
+app_local_get

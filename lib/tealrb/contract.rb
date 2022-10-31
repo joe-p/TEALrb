@@ -5,10 +5,14 @@ module TEALrb
     include TEALrb
     include Opcodes::TEALOpcodes
     include MaybeOps
+    include ByteOpcodes
     include ABI
     include Rewriters
+    include Enums
 
-    attr_reader :this_txn, :eval_location
+    alias global_opcode global
+
+    attr_reader :eval_location
     attr_accessor :teal
 
     class << self
@@ -83,7 +87,6 @@ module TEALrb
       @scratch = Scratch.new
 
       @contract = self
-      @this_txn = ThisTxn.new self
 
       self.class.method_hashes.each do |mh|
         define_subroutine(mh[:name], method(mh[:name]))
@@ -109,6 +112,60 @@ module TEALrb
     end
 
     alias accounts account
+
+    def app(_app = nil)
+      @app ||= App.new self
+    end
+
+    alias apps app
+
+    def asset(_asset = nil)
+      @asset ||= Asset.new self
+    end
+
+    alias assets asset
+
+    def group_txn(_group_txn = nil)
+      @group_txn ||= GroupTxn.new self
+    end
+
+    alias group_txns group_txn
+
+    def global(field = nil, *_args)
+      if field
+        global_opcode(field)
+      else
+        @global ||= Global.new self
+      end
+    end
+
+    def this_txn
+      ThisTxn.new self
+    end
+
+    def box
+      Box.new self
+    end
+
+    def inner_txn
+      InnerTxn.new self
+    end
+
+    def logs
+      Logs.new self
+    end
+
+    def app_args
+      AppArgs.new self
+    end
+
+    def local
+      Local.new self
+    end
+
+    def txn_type
+      TxnType.new self
+    end
 
     def generate_source_map(src)
       last_location = nil

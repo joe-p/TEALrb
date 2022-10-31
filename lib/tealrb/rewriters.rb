@@ -164,6 +164,7 @@ module TEALrb
       end
 
       OPCODE_METHODS = TEALrb::Opcodes::TEALOpcodes.instance_methods.freeze
+      OPCODE_INSTANCE_METHODS = TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.merge(TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING)
 
       def on_send(node)
         meth_name = node.children[1]
@@ -176,6 +177,8 @@ module TEALrb
             req_params = params.count { |param| param[0] == :req }
             @skips += node.children[2..(1 + req_params.size)] unless req_params.zero?
           end
+        elsif OPCODE_INSTANCE_METHODS.keys.include? meth_name
+          replace node.loc.selector, ".#{OPCODE_INSTANCE_METHODS[meth_name]}"
         elsif %i[comment placeholder rb].include?(meth_name) ||
               (%i[[] []=].include?(meth_name) &&
                 (
