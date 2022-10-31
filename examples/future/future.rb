@@ -4,7 +4,7 @@ require_relative '../../lib/tealrb'
 
 class DemoContract < TEALrb::Contract
   def main
-    int(1).add int(1)
+    int(1).add account(this_txn.sender).balance
   end
 end
 

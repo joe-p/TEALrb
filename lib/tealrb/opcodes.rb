@@ -45,845 +45,845 @@ module TEALrb
 
     module TEALOpcodes
       def acct_params_get(field, account = nil)
-        @teal << "acct_params_get #{field}"
-        self
+        @contract.teal << "acct_params_get #{field}"
+        @contract
       end
 
       def add(a = nil, b = nil)
-        @teal << '+'
-        self
+        @contract.teal << '+'
+        @contract
       end
 
       def addr(address)
-        @teal << "addr #{address}"
-        self
+        @contract.teal << "addr #{address}"
+        @contract
       end
 
       def addw(a = nil, b = nil)
-        @teal << 'addw'
-        self
+        @contract.teal << 'addw'
+        @contract
       end
 
       def app_global_del(key = nil)
-        @teal << 'app_global_del'
-        self
+        @contract.teal << 'app_global_del'
+        @contract
       end
 
       def app_global_get(key = nil)
-        @teal << 'app_global_get'
-        self
+        @contract.teal << 'app_global_get'
+        @contract
       end
 
       def app_global_get_ex(app = nil, key = nil)
-        @teal << 'app_global_get_ex'
-        self
+        @contract.teal << 'app_global_get_ex'
+        @contract
       end
 
       def app_global_put(key = nil, value = nil)
-        @teal << 'app_global_put'
-        self
+        @contract.teal << 'app_global_put'
+        @contract
       end
 
       def app_local_del(account = nil, key = nil)
-        @teal << 'app_local_del'
-        self
+        @contract.teal << 'app_local_del'
+        @contract
       end
 
       def app_local_get(account = nil, key = nil)
-        @teal << 'app_local_get'
-        self
+        @contract.teal << 'app_local_get'
+        @contract
       end
 
       def app_local_get_ex(account = nil, application = nil, key = nil)
-        @teal << 'app_local_get_ex'
-        self
+        @contract.teal << 'app_local_get_ex'
+        @contract
       end
 
       def app_local_put(account = nil, key = nil, value = nil)
-        @teal << 'app_local_put'
-        self
+        @contract.teal << 'app_local_put'
+        @contract
       end
 
       def app_opted_in(account = nil, app = nil)
-        @teal << 'app_opted_in'
-        self
+        @contract.teal << 'app_opted_in'
+        @contract
       end
 
       def app_params_get(field, app_id = nil)
-        @teal << "app_params_get #{field}"
-        self
+        @contract.teal << "app_params_get #{field}"
+        @contract
       end
 
       def approve
-        @teal << 'int 1'
-        @teal << 'return'
-        self
+        @contract.teal << 'int 1'
+        @contract.teal << 'return'
+        @contract
       end
 
       def arg(index)
-        @teal << "arg #{index}"
-        self
+        @contract.teal << "arg #{index}"
+        @contract
       end
 
       def arg_0 # rubocop:disable Naming/VariableNumber
-        @teal << 'arg_0'
-        self
+        @contract.teal << 'arg_0'
+        @contract
       end
 
       def arg_1 # rubocop:disable Naming/VariableNumber
-        @teal << 'arg_1'
-        self
+        @contract.teal << 'arg_1'
+        @contract
       end
 
       def arg_2 # rubocop:disable Naming/VariableNumber
-        @teal << 'arg_2'
-        self
+        @contract.teal << 'arg_2'
+        @contract
       end
 
       def arg_3 # rubocop:disable Naming/VariableNumber
-        @teal << 'arg_3'
-        self
+        @contract.teal << 'arg_3'
+        @contract
       end
 
       def args(index = nil)
-        @teal << 'args'
-        self
+        @contract.teal << 'args'
+        @contract
       end
 
       def assert(expr = nil)
-        @teal << 'assert'
-        self
+        @contract.teal << 'assert'
+        @contract
       end
 
       def asset_holding_get(field, account = nil, asset = nil)
-        @teal << "asset_holding_get #{field}"
-        self
+        @contract.teal << "asset_holding_get #{field}"
+        @contract
       end
 
       def asset_params_get(field, asset = nil)
-        @teal << "asset_params_get #{field}"
-        self
+        @contract.teal << "asset_params_get #{field}"
+        @contract
       end
 
       def b(target)
-        @teal << "#{__method__} #{target}"
-        self
+        @contract.teal << "#{__method__} #{target}"
+        @contract
       end
 
       def base32(input)
-        @teal << "byte base32(#{input})"
-        self
+        @contract.teal << "byte base32(#{input})"
+        @contract
       end
 
       def base64_decode(encoding, input = nil)
-        @teal << "base64_decode #{encoding}"
-        self
+        @contract.teal << "base64_decode #{encoding}"
+        @contract
       end
 
       def balance(account = nil)
-        @teal << 'balance'
-        self
+        @contract.teal << 'balance'
+        @contract
       end
 
       def big_endian_add(a = nil, b = nil)
-        @teal << 'b+'
-        self
+        @contract.teal << 'b+'
+        @contract
       end
 
       def big_endian_divide(a = nil, b = nil)
-        @teal << 'b/'
-        self
+        @contract.teal << 'b/'
+        @contract
       end
 
       def big_endian_equal(a = nil, b = nil)
-        @teal << 'b=='
-        self
+        @contract.teal << 'b=='
+        @contract
       end
 
       def big_endian_less(a = nil, b = nil)
-        @teal << 'b<'
-        self
+        @contract.teal << 'b<'
+        @contract
       end
 
       def big_endian_less_eq(a = nil, b = nil)
-        @teal << 'b<='
-        self
+        @contract.teal << 'b<='
+        @contract
       end
 
       def big_endian_modulo(a = nil, b = nil)
-        @teal << 'b%'
-        self
+        @contract.teal << 'b%'
+        @contract
       end
 
       def big_endian_more(a = nil, b = nil)
-        @teal << 'b>'
-        self
+        @contract.teal << 'b>'
+        @contract
       end
 
       def big_endian_more_eq(a = nil, b = nil)
-        @teal << 'b>='
-        self
+        @contract.teal << 'b>='
+        @contract
       end
 
       def big_endian_multiply(a = nil, b = nil)
-        @teal << 'b*'
-        self
+        @contract.teal << 'b*'
+        @contract
       end
 
       def big_endian_not_equal(a = nil, b = nil)
-        @teal << 'b!='
-        self
+        @contract.teal << 'b!='
+        @contract
       end
 
       def big_endian_subtract(a = nil, b = nil)
-        @teal << 'b-'
-        self
+        @contract.teal << 'b-'
+        @contract
       end
 
       def bitlen(input = nil)
-        @teal << 'bitlen'
-        self
+        @contract.teal << 'bitlen'
+        @contract
       end
 
       def bitwise_and(a = nil, b = nil)
-        @teal << '&'
-        self
+        @contract.teal << '&'
+        @contract
       end
 
       def bitwise_byte_invert(a = nil, b = nil)
-        @teal << 'b~'
-        self
+        @contract.teal << 'b~'
+        @contract
       end
 
       def bitwise_invert(a = nil, b = nil)
-        @teal << '~'
-        self
+        @contract.teal << '~'
+        @contract
       end
 
       def bitwise_or(a = nil, b = nil)
-        @teal << '|'
-        self
+        @contract.teal << '|'
+        @contract
       end
 
       def bitwise_xor(a = nil, b = nil)
-        @teal << '^'
-        self
+        @contract.teal << '^'
+        @contract
       end
 
       def bnz(target)
-        @teal << "#{__method__} #{target}"
-        self
+        @contract.teal << "#{__method__} #{target}"
+        @contract
       end
 
       def box_create(name = nil, length = nil)
-        @teal << 'box_create'
-        self
+        @contract.teal << 'box_create'
+        @contract
       end
 
       def box_extract(name = nil, offset = nil, length = nil)
-        @teal << 'box_extract'
-        self
+        @contract.teal << 'box_extract'
+        @contract
       end
 
       def box_replace(name = nil, offset = nil, value = nil)
-        @teal << 'box_replace'
-        self
+        @contract.teal << 'box_replace'
+        @contract
       end
 
       def box_del(name = nil)
-        @teal << 'box_del'
-        self
+        @contract.teal << 'box_del'
+        @contract
       end
 
       def box_len(name = nil)
-        @teal << 'box_len'
-        self
+        @contract.teal << 'box_len'
+        @contract
       end
 
       def box_get(name = nil)
-        @teal << 'box_get'
-        self
+        @contract.teal << 'box_get'
+        @contract
       end
 
       def box_put(name = nil, value = nil)
-        @teal << 'box_put'
-        self
+        @contract.teal << 'box_put'
+        @contract
       end
 
       def bsqrt(big_endian_uint = nil)
-        @teal << 'bsqrt'
-        self
+        @contract.teal << 'bsqrt'
+        @contract
       end
 
       def btoi(bytes = nil)
-        @teal << 'btoi'
-        self
+        @contract.teal << 'btoi'
+        @contract
       end
 
       def byte(string)
-        @teal << "byte \"#{string}\""
-        self
+        @contract.teal << "byte \"#{string}\""
+        @contract
       end
 
       def bytec(index)
-        @teal << "bytec #{index}"
-        self
+        @contract.teal << "bytec #{index}"
+        @contract
       end
 
       def bytec_0 # rubocop:disable Naming/VariableNumber
-        @teal << 'bytec_0'
-        self
+        @contract.teal << 'bytec_0'
+        @contract
       end
 
       def bytec_1 # rubocop:disable Naming/VariableNumber
-        @teal << 'bytec_1'
-        self
+        @contract.teal << 'bytec_1'
+        @contract
       end
 
       def bytec_2 # rubocop:disable Naming/VariableNumber
-        @teal << 'bytec_2'
-        self
+        @contract.teal << 'bytec_2'
+        @contract
       end
 
       def bytec_3 # rubocop:disable Naming/VariableNumber
-        @teal << 'bytec_3'
-        self
+        @contract.teal << 'bytec_3'
+        @contract
       end
 
       def bytecblock(*bytes)
-        @teal << "bytecblock #{bytes.join(' ')}"
-        self
+        @contract.teal << "bytecblock #{bytes.join(' ')}"
+        @contract
       end
 
       def bz(target)
-        @teal << "#{__method__} #{target}"
-        self
+        @contract.teal << "#{__method__} #{target}"
+        @contract
       end
 
       def bzero(length = nil)
-        @teal << 'bzero'
-        self
+        @contract.teal << 'bzero'
+        @contract
       end
 
       def callsub(name, *_args)
-        @teal << "callsub #{name}"
-        self
+        @contract.teal << "callsub #{name}"
+        @contract
       end
 
       def concat(a = nil, b = nil)
-        @teal << 'concat'
-        self
+        @contract.teal << 'concat'
+        @contract
       end
 
       def cover(count)
-        @teal << "cover #{count}"
-        self
+        @contract.teal << "cover #{count}"
+        @contract
       end
 
       def dig(index)
-        @teal << "dig #{index}"
-        self
+        @contract.teal << "dig #{index}"
+        @contract
       end
 
       def divide(a = nil, b = nil)
-        @teal << '/'
-        self
+        @contract.teal << '/'
+        @contract
       end
 
       def divmodw(a = nil, b = nil)
-        @teal << 'divmodw'
-        self
+        @contract.teal << 'divmodw'
+        @contract
       end
 
       def divw(a = nil, b = nil)
-        @teal << 'divw'
-        self
+        @contract.teal << 'divw'
+        @contract
       end
 
       def dup(expr = nil)
-        @teal << 'dup'
-        self
+        @contract.teal << 'dup'
+        @contract
       end
 
       def dup2(expr_a = nil, expr_b = nil)
-        @teal << 'dup2'
-        self
+        @contract.teal << 'dup2'
+        @contract
       end
 
       def ecdsa_pk_decompress(index, input = nil)
-        @teal << "ecdsa_pk_decompress #{index}"
-        self
+        @contract.teal << "ecdsa_pk_decompress #{index}"
+        @contract
       end
 
       def ecdsa_pk_recover(index, input = nil)
-        @teal << "ecdsa_pk_recover #{index}"
-        self
+        @contract.teal << "ecdsa_pk_recover #{index}"
+        @contract
       end
 
       def ecdsa_verify(index, input = nil)
-        @teal << "ecdsa_verify #{index}"
-        self
+        @contract.teal << "ecdsa_verify #{index}"
+        @contract
       end
 
       def ed25519verify(input = nil)
-        @teal << 'ed25519verify'
-        self
+        @contract.teal << 'ed25519verify'
+        @contract
       end
 
       def ed25519verify_bare(input = nil)
-        @teal << 'ed25519verify_bare'
-        self
+        @contract.teal << 'ed25519verify_bare'
+        @contract
       end
 
       def equal(a = nil, b = nil)
-        @teal << '=='
-        self
+        @contract.teal << '=='
+        @contract
       end
 
       def err
-        @teal << 'err'
-        self
+        @contract.teal << 'err'
+        @contract
       end
 
       def exp(a = nil, b = nil)
-        @teal << 'exp'
-        self
+        @contract.teal << 'exp'
+        @contract
       end
 
       def expw(a = nil, b = nil)
-        @teal << 'expw'
-        self
+        @contract.teal << 'expw'
+        @contract
       end
 
       def extract(start, length, byte_array = nil)
-        @teal << "extract #{start} #{length}"
-        self
+        @contract.teal << "extract #{start} #{length}"
+        @contract
       end
 
       def extract3(byte_array = nil, start = nil, exclusive_end = nil)
-        @teal << 'extract3'
-        self
+        @contract.teal << 'extract3'
+        @contract
       end
 
       def extract_uint16(byte_array = nil, start = nil)
-        @teal << 'extract_uint16'
-        self
+        @contract.teal << 'extract_uint16'
+        @contract
       end
 
       def extract_uint32(byte_array = nil, start = nil)
-        @teal << 'extract_uint32'
-        self
+        @contract.teal << 'extract_uint32'
+        @contract
       end
 
       def extract_uint64(byte_array = nil, start = nil)
-        @teal << 'extract_uint64'
-        self
+        @contract.teal << 'extract_uint64'
+        @contract
       end
 
       def gaid(transaction_index)
-        @teal << "gaid #{transaction_index}"
-        self
+        @contract.teal << "gaid #{transaction_index}"
+        @contract
       end
 
       def gaids(transaction = nil)
-        @teal << 'gaids'
-        self
+        @contract.teal << 'gaids'
+        @contract
       end
 
       def getbit(input = nil, bit_index = nil)
-        @teal << 'getbit'
-        self
+        @contract.teal << 'getbit'
+        @contract
       end
 
       def getbyte(input = nil, byte_index = nil)
-        @teal << 'getbyte'
-        self
+        @contract.teal << 'getbyte'
+        @contract
       end
 
       def gitxn(transaction_index, field)
-        @teal << "gitxn #{transaction_index} #{field}"
-        self
+        @contract.teal << "gitxn #{transaction_index} #{field}"
+        @contract
       end
 
       def gitxna(transaction_index, field, index)
-        @teal << "gitxna #{transaction_index} #{field} #{index}"
-        self
+        @contract.teal << "gitxna #{transaction_index} #{field} #{index}"
+        @contract
       end
 
       def gitxnas(transaction_index, field, index = nil)
-        @teal << "gitxnas #{transaction_index} #{field}"
-        self
+        @contract.teal << "gitxnas #{transaction_index} #{field}"
+        @contract
       end
 
       def gload(transaction_index, index)
-        @teal << "gload #{transaction_index} #{index}"
-        self
+        @contract.teal << "gload #{transaction_index} #{index}"
+        @contract
       end
 
       def gloads(index, transaction_index = nil)
-        @teal << "gloads #{index}"
-        self
+        @contract.teal << "gloads #{index}"
+        @contract
       end
 
       def gloadss(transaction = nil, index = nil)
-        @teal << 'gloadss'
-        self
+        @contract.teal << 'gloadss'
+        @contract
       end
 
       def global(field)
-        @teal << "global #{field}"
-        self
+        @contract.teal << "global #{field}"
+        @contract
       end
 
       def greater(a = nil, b = nil)
-        @teal << '>'
-        self
+        @contract.teal << '>'
+        @contract
       end
 
       def greater_eq(a = nil, b = nil)
-        @teal << '>='
-        self
+        @contract.teal << '>='
+        @contract
       end
 
       def gtxn(index, field)
-        @teal << "gtxn #{index} #{field}"
-        self
+        @contract.teal << "gtxn #{index} #{field}"
+        @contract
       end
 
       def gtxna(transaction_index, field, index)
-        @teal << "gtxna #{transaction_index} #{field} #{index}"
-        self
+        @contract.teal << "gtxna #{transaction_index} #{field} #{index}"
+        @contract
       end
 
       def gtxns(field, transaction_index = nil)
-        @teal << "gtxns #{field}"
-        self
+        @contract.teal << "gtxns #{field}"
+        @contract
       end
 
       def gtxnsa(field, index, transaction_index = nil)
-        @teal << "gtxnsa #{field} #{index}"
-        self
+        @contract.teal << "gtxnsa #{field} #{index}"
+        @contract
       end
 
       def gtxnas(transaction_index, field, index = nil)
-        @teal << "gtxnas #{transaction_index} #{field}"
-        self
+        @contract.teal << "gtxnas #{transaction_index} #{field}"
+        @contract
       end
 
       def gtxnsas(field, transaction_index = nil, index = nil)
-        @teal << "gtxnsas #{field}"
-        self
+        @contract.teal << "gtxnsas #{field}"
+        @contract
       end
 
       def int(integer)
-        @teal << "int #{integer}"
-        self
+        @contract.teal << "int #{integer}"
+        @contract
       end
 
       def intc(index)
-        @teal << "intc #{index}"
-        self
+        @contract.teal << "intc #{index}"
+        @contract
       end
 
       def intc_0 # rubocop:disable Naming/VariableNumber
-        @teal << 'intc_0'
-        self
+        @contract.teal << 'intc_0'
+        @contract
       end
 
       def intc_1 # rubocop:disable Naming/VariableNumber
-        @teal << 'intc_1'
-        self
+        @contract.teal << 'intc_1'
+        @contract
       end
 
       def intc_2 # rubocop:disable Naming/VariableNumber
-        @teal << 'intc_2'
-        self
+        @contract.teal << 'intc_2'
+        @contract
       end
 
       def intc_3 # rubocop:disable Naming/VariableNumber
-        @teal << 'intc_3'
-        self
+        @contract.teal << 'intc_3'
+        @contract
       end
 
       def intcblock(*ints)
-        @teal << "intcblock #{ints.join(' ')}"
-        self
+        @contract.teal << "intcblock #{ints.join(' ')}"
+        @contract
       end
 
       def itob(bytes = nil)
-        @teal << 'itob'
-        self
+        @contract.teal << 'itob'
+        @contract
       end
 
       def itxn_begin
-        @teal << 'itxn_begin'
-        self
+        @contract.teal << 'itxn_begin'
+        @contract
       end
 
       def itxn_field(field, value = nil)
-        @teal << "itxn_field #{field}"
-        self
+        @contract.teal << "itxn_field #{field}"
+        @contract
       end
 
       def itxn_next
-        @teal << 'itxn_next'
-        self
+        @contract.teal << 'itxn_next'
+        @contract
       end
 
       def itxn_submit
-        @teal << 'itxn_submit'
-        self
+        @contract.teal << 'itxn_submit'
+        @contract
       end
 
       def itxna(field, index)
-        @teal << "itxna #{field} #{index}"
-        self
+        @contract.teal << "itxna #{field} #{index}"
+        @contract
       end
 
       def itxnas(field, index = nil)
-        @teal << "itxnas #{field}"
-        self
+        @contract.teal << "itxnas #{field}"
+        @contract
       end
 
       def json_ref(type, object = nil, key = nil)
-        @teal << "json_ref #{type}"
-        self
+        @contract.teal << "json_ref #{type}"
+        @contract
       end
 
       def keccak256(input = nil)
-        @teal << 'keccak256'
-        self
+        @contract.teal << 'keccak256'
+        @contract
       end
 
       def label(label_name)
-        @teal << "#{label_name}:"
-        self
+        @contract.teal << "#{label_name}:"
+        @contract
       end
 
       def len(input = nil)
-        @teal << 'len'
-        self
+        @contract.teal << 'len'
+        @contract
       end
 
       def less(a = nil, b = nil)
-        @teal << '<'
-        self
+        @contract.teal << '<'
+        @contract
       end
 
       def less_eq(a = nil, b = nil)
-        @teal << '<='
-        self
+        @contract.teal << '<='
+        @contract
       end
 
       def load(index)
-        @teal << "load #{index}"
-        self
+        @contract.teal << "load #{index}"
+        @contract
       end
 
       def loads(index = nil)
-        @teal << 'loads'
-        self
+        @contract.teal << 'loads'
+        @contract
       end
 
       def log(byte_array = nil)
-        @teal << 'log'
-        self
+        @contract.teal << 'log'
+        @contract
       end
 
       def method_signature(signature)
-        @teal << %(method "#{signature}")
-        self
+        @contract.teal << %(method "#{signature}")
+        @contract
       end
 
       def min_balance(account = nil)
-        @teal << 'min_balance'
-        self
+        @contract.teal << 'min_balance'
+        @contract
       end
 
       def modulo(a = nil, b = nil)
-        @teal << '%'
-        self
+        @contract.teal << '%'
+        @contract
       end
 
       def multiply(a = nil, b = nil)
-        @teal << '*'
-        self
+        @contract.teal << '*'
+        @contract
       end
 
       def mulw(a = nil, b = nil)
-        @teal << 'mulw'
-        self
+        @contract.teal << 'mulw'
+        @contract
       end
 
       def zero?(expr = nil)
-        @teal << '!'
-        self
+        @contract.teal << '!'
+        @contract
       end
 
       def not_equal(a = nil, b = nil)
-        @teal << '!='
-        self
+        @contract.teal << '!='
+        @contract
       end
 
       def padded_bitwise_and(a = nil, b = nil)
-        @teal << 'b&'
-        self
+        @contract.teal << 'b&'
+        @contract
       end
 
       def padded_bitwise_or(a = nil, b = nil)
-        @teal << 'b|'
-        self
+        @contract.teal << 'b|'
+        @contract
       end
 
       def padded_bitwise_xor(a = nil, b = nil)
-        @teal << 'b^'
-        self
+        @contract.teal << 'b^'
+        @contract
       end
 
       def pop(expr = nil)
-        @teal << 'pop'
-        self
+        @contract.teal << 'pop'
+        @contract
       end
 
       def pushbytes(string)
-        @teal << "pushbytes \"#{string}\""
-        self
+        @contract.teal << "pushbytes \"#{string}\""
+        @contract
       end
 
       def pushint(integer)
-        @teal << "pushint #{integer}"
-        self
+        @contract.teal << "pushint #{integer}"
+        @contract
       end
 
       def replace(a = nil, b = nil, c = nil)
-        @teal << 'replace'
-        self
+        @contract.teal << 'replace'
+        @contract
       end
 
       def replace2(start, a = nil, b = nil)
-        @teal << "replace2 #{start}"
-        self
+        @contract.teal << "replace2 #{start}"
+        @contract
       end
 
       def retsub
-        @teal << 'retsub'
-        self
+        @contract.teal << 'retsub'
+        @contract
       end
 
       def select(expr_a = nil, expr_b = nil, expr_c = nil)
-        @teal << 'select'
-        self
+        @contract.teal << 'select'
+        @contract
       end
 
       def setbit(input = nil, bit_index = nil, value = nil)
-        @teal << 'setbit'
-        self
+        @contract.teal << 'setbit'
+        @contract
       end
 
       def setbyte(byte_array = nil, byte_index = nil, value = nil)
-        @teal << 'setbyte'
-        self
+        @contract.teal << 'setbyte'
+        @contract
       end
 
       def sha256(input = nil)
-        @teal << 'sha256'
-        self
+        @contract.teal << 'sha256'
+        @contract
       end
 
       def sha3_256(input = nil)
         # rubocop:disable Naming/VariableNumber
-        @teal << 'sha3_256'
-        self
+        @contract.teal << 'sha3_256'
+        @contract
       end
 
       def sha512_256(input = nil)
-        @teal << 'sha512_256'
-        self
+        @contract.teal << 'sha512_256'
+        @contract
       end
 
       def shl(a = nil, b = nil)
-        @teal << 'shl'
-        self
+        @contract.teal << 'shl'
+        @contract
       end
 
       def shr(a = nil, b = nil)
-        @teal << 'shr'
-        self
+        @contract.teal << 'shr'
+        @contract
       end
 
       def sqrt(integer = nil)
-        @teal << 'sqrt'
-        self
+        @contract.teal << 'sqrt'
+        @contract
       end
 
       def store(index, value = nil)
-        @teal << "store #{index}"
-        self
+        @contract.teal << "store #{index}"
+        @contract
       end
 
       def stores(index = nil, value = nil)
-        @teal << 'stores'
-        self
+        @contract.teal << 'stores'
+        @contract
       end
 
       def substring(start, exclusive_end, byte_array = nil)
-        @teal << "substring #{start} #{exclusive_end}"
-        self
+        @contract.teal << "substring #{start} #{exclusive_end}"
+        @contract
       end
 
       def substring3(byte_array = nil, start = nil, exclusive_end = nil)
-        @teal << 'substring3'
-        self
+        @contract.teal << 'substring3'
+        @contract
       end
 
       def subtract(a = nil, b = nil)
-        @teal << '-'
-        self
+        @contract.teal << '-'
+        @contract
       end
 
       def swap(expr_a = nil, expr_b = nil)
-        @teal << 'swap'
-        self
+        @contract.teal << 'swap'
+        @contract
       end
 
       def teal_return(expr = nil)
-        @teal << 'return'
-        self
+        @contract.teal << 'return'
+        @contract
       end
 
       def txn(field)
-        @teal << "txn #{field}"
-        self
+        @contract.teal << "txn #{field}"
+        @contract
       end
 
       def txna(field, index)
-        @teal << "txna #{field} #{index}"
-        self
+        @contract.teal << "txna #{field} #{index}"
+        @contract
       end
 
       def txnas(field, index = nil)
-        @teal << "txnas #{field}"
-        self
+        @contract.teal << "txnas #{field}"
+        @contract
       end
 
       def uncover(count)
-        @teal << "uncover #{count}"
-        self
+        @contract.teal << "uncover #{count}"
+        @contract
       end
 
       def vrf_verify(standard, message = nil, proof = nil, public_key = nil)
-        @teal << "vrf_verify #{standard}"
-        self
+        @contract.teal << "vrf_verify #{standard}"
+        @contract
       end
 
       def boolean_and(a = nil, b = nil)
-        @teal << '&&'
-        self
+        @contract.teal << '&&'
+        @contract
       end
 
       def boolean_or(a = nil, b = nil)
-        @teal << '||'
-        self
+        @contract.teal << '||'
+        @contract
       end
     end
   end

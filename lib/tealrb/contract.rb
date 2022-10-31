@@ -4,10 +4,11 @@ module TEALrb
   class Contract
     include TEALrb
     include Opcodes::TEALOpcodes
+    include MaybeOps
     include ABI
-    include Rewriters
 
-    attr_reader :teal
+    attr_reader :this_txn
+    attr_accessor :teal
 
     class << self
       attr_accessor :subroutines, :version, :teal_methods, :abi_interface, :debug,
@@ -80,7 +81,8 @@ module TEALrb
       IfBlock.id = 0
       @scratch = Scratch.new
 
-      @@active_contract = self # rubocop:disable Style/ClassVars
+      @contract = self
+      @this_txn = ThisTxn.new self
 
       self.class.method_hashes.each do |mh|
         define_subroutine(mh[:name], method(mh[:name]))
@@ -99,6 +101,10 @@ module TEALrb
 
     def teal_source
       TEAL.instance.compact.join("\n")
+    end
+
+    def account(_account = nil)
+      Account.new self
     end
 
     def generate_source_map(src)
@@ -317,14 +323,7 @@ module TEALrb
       route_abi_methods unless self.class.disable_abi_routing
       return unless respond_to? :main
 
-      eval_tealrb(
-        rewrite(
-          method(:main).source,
-          method_rewriter: true,
-          starting_location: method(:main).source_location
-        ),
-        debug_context: 'main'
-      )
+      main
     end
 
     def compiled_program
