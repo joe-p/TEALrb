@@ -16,24 +16,15 @@ require_relative 'tealrb/this_txn'
 require_relative 'tealrb/if_block'
 require_relative 'tealrb/scratch'
 require_relative 'tealrb/algod'
+require_relative 'tealrb/rewriters'
 require_relative 'tealrb/contract'
 require_relative 'tealrb/cmd_line/teal2tealrb'
 
 module TEALrb
   class TEAL < Array
-    class << self
-      attr_writer :instance
-
-      def instance
-        raise 'TEALrb does not support multi-threading' if Thread.current != Thread.main
-
-        @instance
-      end
-    end
-
-    def initialize(teal_array)
-      self.class.instance = self
-      super
+    def initialize(teal_array, contract)
+      @contract = contract
+      super(teal_array)
     end
 
     def teal
@@ -42,6 +33,23 @@ module TEALrb
 
     def boolean_and(_other)
       self << '&&'
+    end
+
+    def <<(value)
+      return super if caller.join['src_map']
+
+      eval_line = caller.find { _1[/^\(eval/] }.split(':')[1].to_i
+      src_map(@contract.eval_location.first, @contract.eval_location.last + eval_line)
+      super
+    end
+
+    def src_map(file, line_number)
+      ln = "// src_map:#{File.basename(file)}:#{line_number}"
+      return if ln == @last_src_map
+
+      @last_src_map = ln
+
+      self << ln
     end
 
     def boolean_or(_other)

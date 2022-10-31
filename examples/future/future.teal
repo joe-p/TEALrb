@@ -1,8 +1,20 @@
 #pragma version 6
 
+// src_map:future.rb:8
 int 1
+
+// src_map:future.rb:9
+int 2
+
+// src_map:future.rb:10
++
+
+// src_map:future.rb:11
 txn Sender
+acct_params_get AcctBalance
+pop
+int 2
 txnas Accounts
 acct_params_get AcctBalance
 pop
-+
+assert

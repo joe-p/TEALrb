@@ -2,7 +2,11 @@ module TEALrb
   class Account
     def initialize(contract)
       @contract = contract
+    end
+
+    def [](_account_index)
       @contract.txnas 'Accounts'
+      self
     end
 
     def asset_balance?(_asa_id = nil)

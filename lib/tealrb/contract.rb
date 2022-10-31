@@ -6,8 +6,9 @@ module TEALrb
     include Opcodes::TEALOpcodes
     include MaybeOps
     include ABI
+    include Rewriters
 
-    attr_reader :this_txn
+    attr_reader :this_txn, :eval_location
     attr_accessor :teal
 
     class << self
@@ -77,7 +78,7 @@ module TEALrb
     def initialize
       self.class.parse(self.class)
 
-      @teal = TEAL.new ["#pragma version #{self.class.version}"]
+      @teal = TEAL.new ["#pragma version #{self.class.version}"], self
       IfBlock.id = 0
       @scratch = Scratch.new
 
@@ -100,12 +101,14 @@ module TEALrb
                   log itxn_submit itxn_next].freeze
 
     def teal_source
-      TEAL.instance.compact.join("\n")
+      @teal.compact.join("\n")
     end
 
     def account(_account = nil)
-      Account.new self
+      @account ||= Account.new self
     end
+
+    alias accounts account
 
     def generate_source_map(src)
       last_location = nil
@@ -185,7 +188,7 @@ module TEALrb
       new_lines = []
       comments = []
 
-      TEAL.instance.compact.each do |ln|
+      @teal.compact.each do |ln|
         ln = ln.strip
 
         next if ln.empty?
@@ -257,16 +260,7 @@ module TEALrb
         callsub(name)
       end
 
-      unless TEAL.instance.include? 'b main'
-        if self.class.src_map
-          main_location = method(:main).source_location
-          main_file = File.basename(main_location.first)
-          main_line = main_location.last
-          src_map(main_file, main_line)
-        end
-
-        TEAL.instance << 'b main'
-      end
+      @teal << 'b main' unless @teal.include? 'b main'
 
       label(name) # add teal label
 
@@ -290,17 +284,17 @@ module TEALrb
     def comment(content, inline: false)
       content = " #{content}" unless content[0] == ' '
       if inline
-        last_line = TEAL.instance.pop
-        TEAL.instance << "#{last_line} //#{content}"
+        last_line = @teal.pop
+        @teal << "#{last_line} //#{content}"
       else
-        TEAL.instance << "//#{content}"
+        @teal << "//#{content}"
       end
     end
 
     # inserts a string into TEAL source
     # @param string [String] the string to insert
     def placeholder(string)
-      TEAL.instance << string
+      @teal << string
     end
 
     # the hash of the abi description
@@ -319,11 +313,20 @@ module TEALrb
     # transpiles #main and routes abi methods. To disable abi routing, set `@disable_abi_routing` to true in your
     # Contract subclass
     def compile
-      TEAL.instance << 'main:' if TEAL.instance.include? 'b main'
+      @teal << 'main:' if @teal.include? 'b main'
       route_abi_methods unless self.class.disable_abi_routing
       return unless respond_to? :main
 
-      main
+      @eval_location = method(:main).source_location
+
+      eval_tealrb(
+        rewrite(
+          method(:main).source,
+          method_rewriter: true,
+          starting_location: method(:main).source_location
+        ),
+        debug_context: 'main'
+      )
     end
 
     def compiled_program
@@ -456,7 +459,7 @@ module TEALrb
 
     def rewrite_with_rewriter(string, rewriter)
       process_source = RuboCop::ProcessedSource.new(string, RUBY_VERSION[/\d\.\d/].to_f)
-      rewriter.new.rewrite(process_source)
+      rewriter.new.rewrite(process_source, self)
     end
 
     def rewrite(string, starting_location: nil, method_rewriter: false)
@@ -464,37 +467,6 @@ module TEALrb
         puts 'DEBUG: Rewriting the following code:'
         puts string
         puts ''
-      end
-
-      if starting_location && self.class.src_map
-        multi_line = false
-
-        string = string.lines.map.with_index do |ln, i|
-          line_num = i + starting_location.last
-          file = File.basename(starting_location.first)
-          ln.strip!
-
-          if ln[/^def /]
-            method_name = ln.split[1].split('(').first.strip.to_sym
-            yardoc = YARD::Registry.all.find { _1.name == method_name }
-
-            unless yardoc.has_tag? 'teal'
-              last_ln = TEAL.instance.pop
-              src_map(file, line_num)
-              TEAL.instance.push(last_ln)
-            end
-          elsif !multi_line && !ln.empty?
-            ln = "\nsrc_map(rb('#{file}'),rb(#{line_num}))\n#{ln.strip}"
-          end
-
-          multi_line = if ln[/\\$/]
-                         true
-                       else
-                         false
-                       end
-
-          "#{ln}\n"
-        end.join
       end
 
       [CommentRewriter, ComparisonRewriter, WhileRewriter, InlineIfRewriter, IfRewriter, OpRewriter,
@@ -513,12 +485,8 @@ module TEALrb
       string
     end
 
-    def src_map(file, location)
-      comment("src_map:#{file}:#{location}") unless TEAL.instance.empty?
-    end
-
     def eval_tealrb(s, debug_context:)
-      pre_teal = Array.new TEAL.instance
+      pre_teal = Array.new @teal
 
       if self.class.debug
         puts "DEBUG: Evaluating the following code (#{debug_context}):"
@@ -530,7 +498,7 @@ module TEALrb
 
       if self.class.debug
         puts "DEBUG: Resulting TEAL (#{debug_context}):"
-        puts Array.new(TEAL.instance) - pre_teal
+        puts Array.new(@teal) - pre_teal
         puts ''
       end
     rescue SyntaxError, StandardError => e

@@ -4,9 +4,11 @@ module TEALrb
   module Rewriters
     class Rewriter < Parser::TreeRewriter
       include RuboCop::AST::Traversal
+      attr_reader :contract
 
-      def rewrite(processed_source)
+      def rewrite(processed_source, contract)
         @comments = processed_source.comments
+        @contract = contract
         super(processed_source.buffer, processed_source.ast)
       end
     end
@@ -29,7 +31,7 @@ module TEALrb
 
     class InternalMethodRewriter < Rewriter
       def on_send(node)
-        teal_methods = TEALrb::Contract.class_variable_get(:@@active_contract).class.teal_methods
+        teal_methods = @contract.class.teal_methods
 
         method_name = node.loc.selector.source.to_sym
 
