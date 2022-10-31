@@ -38,12 +38,6 @@ module TEALrb
       def on_block(node)
         replace node.source_range, node.body.source
       end
-
-      def on_send(node)
-        remove node.loc.selector if node.loc.selector.source == 'subroutine' || node.loc.selector.source == 'teal'
-
-        super
-      end
     end
 
     class AssignRewriter < Rewriter
