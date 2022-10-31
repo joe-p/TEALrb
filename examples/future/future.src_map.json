@@ -1,0 +1,82 @@
+{
+  "4": {
+    "location": "future.rb:8",
+    "pcs": [
+      4,
+      5
+    ]
+  },
+  "5": {
+    "location": "future.rb:8"
+  },
+  "7": {
+    "location": "future.rb:9",
+    "pcs": [
+      6
+    ]
+  },
+  "8": {
+    "location": "future.rb:9"
+  },
+  "10": {
+    "location": "future.rb:10",
+    "pcs": [
+      7
+    ]
+  },
+  "11": {
+    "location": "future.rb:10"
+  },
+  "13": {
+    "location": "future.rb:11",
+    "pcs": [
+      8,
+      9
+    ]
+  },
+  "14": {
+    "location": "future.rb:11",
+    "pcs": [
+      10,
+      11
+    ]
+  },
+  "15": {
+    "location": "future.rb:11",
+    "pcs": [
+      12
+    ]
+  },
+  "16": {
+    "location": "future.rb:11",
+    "pcs": [
+      13
+    ]
+  },
+  "17": {
+    "location": "future.rb:11",
+    "pcs": [
+      14,
+      15
+    ]
+  },
+  "18": {
+    "location": "future.rb:11",
+    "pcs": [
+      16,
+      17
+    ]
+  },
+  "19": {
+    "location": "future.rb:11",
+    "pcs": [
+      18
+    ]
+  },
+  "20": {
+    "location": "future.rb:11",
+    "pcs": [
+      19
+    ]
+  }
+}

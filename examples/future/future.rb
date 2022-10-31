@@ -3,7 +3,7 @@
 require_relative '../../lib/tealrb'
 require 'pry'
 
-class DemoContract < TEALrb::Contract
+class Future < TEALrb::Contract
   def main
     1
     2
@@ -12,8 +12,6 @@ class DemoContract < TEALrb::Contract
   end
 end
 
-approval = DemoContract.new
-File.write("#{__dir__}/future.teal", approval.formatted_teal)
-File.write("#{__dir__}/future.json", JSON.pretty_generate(approval.abi_hash))
-puts approval.formatted_teal
-approval.dump
+f = Future.new
+puts f.formatted_teal
+f.dump(__dir__)
