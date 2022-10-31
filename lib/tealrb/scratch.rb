@@ -18,7 +18,7 @@ module TEALrb
       store(key, value)
     end
 
-    def store(key, value = TEAL.instance)
+    def store(key, value = @contract.teal)
       @values[key] = value
       @contract.teal << "store #{@named_slots[key] ||= @open_slots.shift} // #{key}"
     end

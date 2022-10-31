@@ -5,6 +5,19 @@ require 'pry'
 
 class Future < TEALrb::Contract
   @version = 8
+
+  # @abi
+  # @param asa [Asset]
+  def abi_meth(asa)
+    asa.unit_name if asa.unit_name?
+  end
+
+  # @subroutine
+  # @param asa [Asset]
+  def sub_meth(asa)
+    asa.unit_name if asa.unit_name?
+  end
+
   def main
     1
     2
@@ -54,6 +67,8 @@ class Future < TEALrb::Contract
     else
       log('Other')
     end
+
+    sub_meth(assets[1])
   end
 end
 

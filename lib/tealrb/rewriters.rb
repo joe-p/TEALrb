@@ -45,7 +45,7 @@ module TEALrb
             pre_string.puts "@scratch.store('#{scratch_name}', #{node.children[i + 2].loc.expression.source})"
           end
 
-          replace node.source_range, "#{pre_string.string}\n#{method_name}"
+          replace node.source_range, "#{pre_string.string};#{method_name}"
         end
 
         super
@@ -224,7 +224,7 @@ module TEALrb
                      node.children[1].source
                    end
 
-          replace(node.loc.expression, "if(#{conditional})\n#{if_blk}\nend")
+          replace(node.loc.expression, "if(#{conditional});#{if_blk};end")
         end
 
         super
@@ -267,9 +267,9 @@ module TEALrb
 
       def on_while(node)
         cond_node = node.children.first
-        replace(node.loc.keyword, ":while#{while_count}\n#{cond_node.source}\nbz :end_while#{while_count}")
+        replace(node.loc.keyword, ":while#{while_count};#{cond_node.source};bz :end_while#{while_count}")
         replace(node.loc.begin, '') if node.loc.begin
-        replace(node.loc.end, "b :while#{while_count}\n:end_while#{while_count}")
+        replace(node.loc.end, "b :while#{while_count};:end_while#{while_count}")
         replace(cond_node.loc.expression, '')
         super
       end

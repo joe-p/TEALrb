@@ -222,7 +222,7 @@ module TEALrb
         end
 
         line_to_pc.each do |line, pcs|
-          src_map_hash[line][:pcs] = pcs
+          src_map_hash[line][:pcs] = pcs if src_map_hash[line]
         end
       end
 
@@ -313,6 +313,8 @@ module TEALrb
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
     # @return [nil]
     def define_subroutine(name, definition)
+      @eval_location = method(name).source_location
+
       define_singleton_method(name) do |*_args|
         callsub(name)
       end
@@ -401,7 +403,7 @@ module TEALrb
         signature = "#{meth[:name]}(#{meth[:args].map { _1[:type] }.join(',')})#{meth[:returns][:type]}"
         selector = OpenSSL::Digest.new('SHA512-256').hexdigest(signature)[..7]
 
-        IfBlock.new(AppArgs[0] == byte(selector)) do
+        teal_if(app_args[0].equal(byte(selector))) do
           callsub(meth[:name])
           approve
         end
@@ -411,7 +413,7 @@ module TEALrb
     def generate_method_source(name, definition)
       new_source = rewrite(definition.source, method_rewriter: true, starting_location: method(name).source_location)
 
-      pre_string = StringIO.new
+      pre_string = []
 
       scratch_names = []
       definition.parameters.reverse.each_with_index do |param, _i|
@@ -419,17 +421,17 @@ module TEALrb
         scratch_name = [name, param_name].map(&:to_s).join(': ')
         scratch_names << scratch_name
 
-        pre_string.puts "@scratch.store('#{scratch_name}')"
-        pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
+        pre_string << "@scratch.store('#{scratch_name}')"
+        pre_string << "#{param_name} = -> { @scratch['#{scratch_name}'] }"
       end
 
-      "#{pre_string.string}#{new_source}"
+      "#{pre_string.join(';')};#{new_source}"
     end
 
     def generate_subroutine_source(definition, method_hash)
       new_source = rewrite(definition.source, method_rewriter: true, starting_location: definition.source_location)
 
-      pre_string = StringIO.new
+      pre_string = []
 
       scratch_names = []
 
@@ -444,14 +446,14 @@ module TEALrb
       args_index = 0
 
       method_hash[:on_completion].each_with_index do |oc, i|
-        Txn.on_completion
+        this_txn.on_completion
         int(oc)
         equal
         boolean_or unless i.zero?
       end
       assert
 
-      assert(Txn.application_id == int(0)) if method_hash[:create]
+      assert(this_txn.application_id == int(0)) if method_hash[:create]
 
       if abi_hash['methods'].find { _1[:name] == method_hash[:name].to_s }
         definition.parameters.each_with_index do |param, i|
@@ -464,21 +466,21 @@ module TEALrb
           type = arg_types[i].downcase
 
           if txn_types.include? type
-            pre_string.puts "@scratch['#{scratch_name}'] = Gtxns[Txn.group_index - int(#{txn_params})]"
+            pre_string << "@scratch['#{scratch_name}'] = group_txns[this_txn.group_index - int(#{txn_params})]"
             txn_params -= 1
           elsif type == 'application'
-            pre_string.puts "@scratch['#{scratch_name}'] = Apps[#{app_param_index += 1}]"
+            pre_string << "@scratch['#{scratch_name}'] = apps[#{app_param_index += 1}]"
           elsif type == 'asset'
-            pre_string.puts "@scratch['#{scratch_name}'] = Assets[#{asset_param_index += 1}]"
+            pre_string << "@scratch['#{scratch_name}'] = assets[#{asset_param_index += 1}]"
           elsif type == 'account'
-            pre_string.puts "@scratch['#{scratch_name}'] = Accounts[#{account_param_index += 1}]"
+            pre_string << "@scratch['#{scratch_name}'] = accounts[#{account_param_index += 1}]"
           elsif type == 'uint64'
-            pre_string.puts "@scratch['#{scratch_name}'] = btoi(AppArgs[#{args_index += 1}])"
+            pre_string << "@scratch['#{scratch_name}'] = btoi(app_args[#{args_index += 1}])"
           else
-            pre_string.puts "@scratch['#{scratch_name}'] = AppArgs[#{args_index += 1}]"
+            pre_string << "@scratch['#{scratch_name}'] = app_args[#{args_index += 1}]"
           end
 
-          pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
+          pre_string << "#{param_name} = -> { @scratch['#{scratch_name}'] }"
         end
 
       else
@@ -494,24 +496,24 @@ module TEALrb
 
           type = arg_types[i]&.downcase
 
-          if txn_types.include? type
-            pre_string.puts "@scratch['#{scratch_name}'] = Gtxns"
-          elsif type == 'application'
-            pre_string.puts "@scratch['#{scratch_name}'] = Applications.new"
-          elsif type == 'asset'
-            pre_string.puts "@scratch['#{scratch_name}'] = Assets.new"
-          elsif type == 'account'
-            pre_string.puts "@scratch['#{scratch_name}'] = Accounts.new"
-          else
-            pre_string.puts "@scratch.store('#{scratch_name}')"
-          end
+          pre_string << if txn_types.include? type
+                          "@scratch['#{scratch_name}'] = gtxn"
+                        elsif type == 'application'
+                          "@scratch['#{scratch_name}'] = application"
+                        elsif type == 'asset'
+                          "@scratch['#{scratch_name}'] = asset"
+                        elsif type == 'account'
+                          "@scratch['#{scratch_name}'] = account"
+                        else
+                          "@scratch.store('#{scratch_name}')"
+                        end
 
-          pre_string.puts "#{param_name} = -> { @scratch['#{scratch_name}'] }"
+          pre_string << "#{param_name} = -> { @scratch['#{scratch_name}'] }"
         end
 
       end
 
-      "#{pre_string.string}#{new_source}"
+      "#{pre_string.join(';')};#{new_source}"
     end
 
     def rewrite_with_rewriter(string, rewriter)

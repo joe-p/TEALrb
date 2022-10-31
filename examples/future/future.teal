@@ -1,178 +1,255 @@
 #pragma version 8
 
-// src_map:future.rb:9
-int 1
+b main
 
-// src_map:future.rb:10
-int 2
+abi_meth: // abi_meth(asa)
+	txn OnCompletion
+	int NoOp
+	==
+	assert
 
-// src_map:future.rb:11
-+
+	// src_map:future.rb:12
+	txnas Assets
+	store 0 // abi_meth: asa [asset]
 
-// src_map:future.rb:12
-txn Sender
-acct_params_get AcctBalance
-pop
-int 2
-txnas Accounts
-acct_params_get AcctBalance
-pop
-==
-assert
+	load 0 // abi_meth: asa [asset]
+	asset_params_get AssetUnitName
+	swap
+	pop
+	bz if0_else0
 
-// src_map:future.rb:14
-byte "hello"
-byte "world"
-box_put
-
-// src_map:future.rb:15
-byte "foo"
-box_get
-pop
-
-// src_map:future.rb:17
-itxn_begin
-
-// src_map:future.rb:18
-int pay
-itxn_field TypeEnum
-
-// src_map:future.rb:19
-txn Sender
-itxn_field Receiver
-
-// src_map:future.rb:20
-int 100000
-itxn_field Amount
-
-// src_map:future.rb:21
-int 0
-itxn_field Fee
-
-// src_map:future.rb:22
-itxn_submit
-
-// src_map:future.rb:24
-int 1
-int 1
-+
-gtxns Sender
-
-// src_map:future.rb:26
-byte "hello"
-byte "world"
-app_global_put
-
-// src_map:future.rb:27
-byte "foo"
-app_global_get
-
-// src_map:future.rb:28
-global MinTxnFee
-
-// src_map:future.rb:29
-global MinBalance
-
-// src_map:future.rb:31
-int 1
-app_params_get AppAddress
-pop
-
-// src_map:future.rb:32
-int 1
-txnas Applications
-app_params_get AppAddress
-pop
-
-// src_map:future.rb:34
-int 1
-asset_params_get AssetCreator
-pop
-
-// src_map:future.rb:35
-int 1
-txnas Assets
-asset_params_get AssetCreator
-pop
-
-// src_map:future.rb:37
-int 1
-txnas Logs
-
-// src_map:future.rb:38
-int 1
-txnas ApplicationArgs
-
-// src_map:future.rb:40
-txn Sender
-byte "hello"
-byte "world"
-app_local_put
-
-// src_map:future.rb:41
-txn Sender
-byte "foo"
-app_local_get
-
-// src_map:future.rb:43
-byte "foo"
-store 0 // foo
-
-// src_map:future.rb:44
-load 0 // foo
-byte "bar"
-concat
-
-// src_map:future.rb:46
-int 1
-store 1 // i
-
-// src_map:future.rb:48
-load 1 // i
-int 1
-==
-bz if0_else0
-
-// src_map:future.rb:49
-byte "Hi"
-log
-
-// src_map:future.rb:48
-b if0_end
+	load 0 // abi_meth: asa [asset]
+	asset_params_get AssetUnitName
+	pop
+	b if0_end
 
 if0_else0:
 
 if0_end:
 
-	// src_map:future.rb:52
-	int 1
+	// src_map:future.rb:13
+	retsub
+
+sub_meth: // sub_meth(asa)
+	txn OnCompletion
+	int NoOp
+	==
+	assert
+
+	// src_map:future.rb:18
+	store 1 // sub_meth: asa [asset]
+
+	load 1 // sub_meth: asa [asset]
+	asset_params_get AssetUnitName
+	swap
+	pop
 	bz if1_else0
 
-	// src_map:future.rb:53
-	byte "One"
-	log
-
-	// src_map:future.rb:52
+	load 1 // sub_meth: asa [asset]
+	asset_params_get AssetUnitName
+	pop
 	b if1_end
 
 if1_else0:
 
-	// src_map:future.rb:54
-	int 2
-	bz if1_else1
+if1_end:
 
-	// src_map:future.rb:55
+	// src_map:future.rb:19
+	retsub
+
+main:
+	txnas ApplicationArgs
+	byte "d4a4c636"
+	==
+	bz if2_else0
+
+	callsub abi_meth
+
+	int 1
+	return
+
+	b if2_end
+
+if2_else0:
+
+if2_end:
+
+	// src_map:future.rb:22
+	int 1
+
+	// src_map:future.rb:23
+	int 2
+
+	// src_map:future.rb:24
+	+
+
+	// src_map:future.rb:25
+	txn Sender
+	acct_params_get AcctBalance
+	pop
+	int 2
+	txnas Accounts
+	acct_params_get AcctBalance
+	pop
+	==
+	assert
+
+	// src_map:future.rb:27
+	byte "hello"
+	byte "world"
+	box_put
+
+	// src_map:future.rb:28
+	byte "foo"
+	box_get
+	pop
+
+	// src_map:future.rb:30
+	itxn_begin
+
+	// src_map:future.rb:31
+	int pay
+	itxn_field TypeEnum
+
+	// src_map:future.rb:32
+	txn Sender
+	itxn_field Receiver
+
+	// src_map:future.rb:33
+	int 100000
+	itxn_field Amount
+
+	// src_map:future.rb:34
+	int 0
+	itxn_field Fee
+
+	// src_map:future.rb:35
+	itxn_submit
+
+	// src_map:future.rb:37
+	int 1
+	int 1
+	+
+	gtxns Sender
+
+	// src_map:future.rb:39
+	byte "hello"
+	byte "world"
+	app_global_put
+
+	// src_map:future.rb:40
+	byte "foo"
+	app_global_get
+
+	// src_map:future.rb:41
+	global MinTxnFee
+
+	// src_map:future.rb:42
+	global MinBalance
+
+	// src_map:future.rb:44
+	int 1
+	app_params_get AppAddress
+	pop
+
+	// src_map:future.rb:45
+	int 1
+	txnas Applications
+	app_params_get AppAddress
+	pop
+
+	// src_map:future.rb:47
+	int 1
+	asset_params_get AssetCreator
+	pop
+
+	// src_map:future.rb:48
+	int 1
+	txnas Assets
+	asset_params_get AssetCreator
+	pop
+
+	// src_map:future.rb:50
+	int 1
+	txnas Logs
+
+	// src_map:future.rb:51
+	int 1
+	txnas ApplicationArgs
+
+	// src_map:future.rb:53
+	txn Sender
+	byte "hello"
+	byte "world"
+	app_local_put
+
+	// src_map:future.rb:54
+	txn Sender
+	byte "foo"
+	app_local_get
+
+	// src_map:future.rb:56
+	byte "foo"
+	store 2 // foo
+
+	// src_map:future.rb:57
+	load 2 // foo
+	byte "bar"
+	concat
+
+	// src_map:future.rb:59
+	int 1
+	store 3 // i
+
+	// src_map:future.rb:61
+	load 3 // i
+	int 1
+	==
+	bz if3_else0
+
+	byte "Hi"
+	log
+
+	b if3_end
+
+if3_else0:
+
+if3_end:
+
+	// src_map:future.rb:63
+	int 1
+	bz if4_else0
+
+	// src_map:future.rb:64
+	byte "One"
+	log
+
+	// src_map:future.rb:63
+	b if4_end
+
+if4_else0:
+
+	// src_map:future.rb:65
+	int 2
+	bz if4_else1
+
+	// src_map:future.rb:66
 	byte "Two"
 	log
 
-	// src_map:future.rb:54
-	b if1_end
+	// src_map:future.rb:65
+	b if4_end
 
-if1_else1:
+if4_else1:
 
-	// src_map:future.rb:57
+	// src_map:future.rb:68
 	byte "Other"
 	log
 
-// src_map:future.rb:56
-if1_end:
+// src_map:future.rb:67
+if4_end:
+
+	// src_map:future.rb:71
+	int 1
+	txnas Assets
+	callsub sub_meth
