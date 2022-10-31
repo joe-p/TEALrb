@@ -568,23 +568,9 @@ module TEALrb
         error_line = eval_locations[@eval_tealrb_rescue_count].split(':')[1].to_i
       end
 
-      warn "'#{e}' when evaluating transpiled TEALrb source" if @eval_tealrb_rescue_count.zero?
+      msg = "#{@eval_location.first}:#{error_line + @eval_location.last}"
 
-      warn "Backtrace location (#{@eval_tealrb_rescue_count + 1} / #{eval_locations.size}):"
-
-      @eval_tealrb_rescue_count += 1
-
-      s.lines.each_with_index do |line, i|
-        line_num = i + 1
-        if error_line == line_num
-          warn "=> #{line_num}: #{line}"
-        else
-          warn "   #{line_num}: #{line}"
-        end
-      end
-
-      warn ''
-      raise e
+      raise e, "#{msg}: #{e}"
     end
   end
 end
