@@ -8,7 +8,7 @@ class Future < TEALrb::Contract
     1
     2
     add
-    assert account(this_txn.sender).balance == account[2].balance
+    assert account(this_txn.sender).balance == accounts[2].balance
   end
 end
 
