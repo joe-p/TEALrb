@@ -311,6 +311,8 @@ module TEALrb
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
     # @return [nil]
     def define_teal_method(name, definition)
+      return if method(name).source_location.first == __FILE__
+
       new_source = generate_method_source(name, definition)
       loc = method(name).source_location
 
@@ -327,6 +329,8 @@ module TEALrb
     # @param definition [Lambda, Proc, UnboundMethod] the method definition
     # @return [nil]
     def define_subroutine(name, definition)
+      return if method(name).source_location.first == __FILE__
+
       @eval_location = method(name).source_location
 
       define_singleton_method(name) do |*_args|
