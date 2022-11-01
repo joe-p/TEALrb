@@ -790,8 +790,8 @@ module TEALrb
         @contract
       end
 
+      # rubocop:disable Naming/VariableNumber
       def sha3_256(input = nil)
-        # rubocop:disable Naming/VariableNumber
         @contract.teal << 'sha3_256'
         @contract
       end
@@ -800,6 +800,8 @@ module TEALrb
         @contract.teal << 'sha512_256'
         @contract
       end
+
+      # rubocop:enable Naming/VariableNumber
 
       def shl(a = nil, b = nil)
         @contract.teal << 'shl'

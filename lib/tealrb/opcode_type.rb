@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   class OpcodeType
     TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|

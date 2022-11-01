@@ -123,7 +123,9 @@ module TEALrb
       end
 
       OPCODE_METHODS = TEALrb::Opcodes::TEALOpcodes.instance_methods.freeze
-      OPCODE_INSTANCE_METHODS = TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.merge(TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING)
+      OPCODE_INSTANCE_METHODS = TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.merge(
+        TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING
+      )
 
       def on_send(node)
         meth_name = node.children[1]

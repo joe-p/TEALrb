@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   module ByteOpcodes
     def byte_b64(b64)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   class Box
     def initialize(contract)

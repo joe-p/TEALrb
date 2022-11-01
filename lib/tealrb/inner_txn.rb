@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   class InnerTxn
     def initialize(contract)
@@ -81,11 +83,11 @@ module TEALrb
     # @!method asset_close_to=(value)
     # @!method group_index=(value)
     TxnFields.instance_methods.each do |m|
-      define_method("#{m}=") do |_value|
+      define_method("#{m}=") do |value|
         if m == :application_id
           @contract.itxn_field 'ApplicationID'
         else
-          @contract.itxn_field m.to_s.split('_').collect(&:capitalize).join, _value
+          @contract.itxn_field m.to_s.split('_').collect(&:capitalize).join, value
         end
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   class Asset < OpcodeType
     def initialize(contract)

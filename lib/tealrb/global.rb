@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   class Global
     def initialize(contract)

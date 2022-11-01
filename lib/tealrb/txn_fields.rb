@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   module TxnFields
     def txnfield_opcode(*args)

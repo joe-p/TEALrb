@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TEALrb
   class Account < OpcodeType
     def initialize(contract)
