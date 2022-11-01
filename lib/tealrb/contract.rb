@@ -398,7 +398,7 @@ module TEALrb
         signature = "#{meth[:name]}(#{meth[:args].map { _1[:type] }.join(',')})#{meth[:returns][:type]}"
         selector = OpenSSL::Digest.new('SHA512-256').hexdigest(signature)[..7]
 
-        app_args[int(0)].equal byte(selector)
+        app_args[int(0)] == byte(selector) # rubocop:disable Lint/Void
         bz("abi_routing#{i}")
         callsub(meth[:name])
         approve
