@@ -1,7 +1,8 @@
 module TEALrb
   class Logs < OpcodeType
-    def [](_index)
-      @contract.txnas 'Logs'
+    def initialize(contract)
+      @field = 'Logs'
+      super
     end
   end
 end

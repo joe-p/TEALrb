@@ -15,5 +15,15 @@ module TEALrb
     def initialize(contract)
       @contract = contract
     end
+
+    def [](index)
+      if index.is_a?(Integer)
+        @contract.txna @field, index
+      else
+        @contract.txnas @field
+      end
+
+      self
+    end
   end
 end

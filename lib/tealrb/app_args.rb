@@ -1,7 +1,8 @@
 module TEALrb
   class AppArgs < OpcodeType
-    def [](_index)
-      @contract.txnas 'ApplicationArgs'
+    def initialize(contract)
+      @field = 'ApplicationArgs'
+      super
     end
   end
 end

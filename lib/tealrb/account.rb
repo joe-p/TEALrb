@@ -1,8 +1,8 @@
 module TEALrb
   class Account < OpcodeType
-    def [](_account_index)
-      @contract.txnas 'Accounts'
-      self
+    def initialize(contract)
+      @field = 'Accounts'
+      super
     end
 
     def asset_balance?(_asa_id = nil)

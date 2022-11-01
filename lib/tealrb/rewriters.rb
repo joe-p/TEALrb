@@ -138,6 +138,8 @@ module TEALrb
           end
         elsif %i[comment placeholder rb].include?(meth_name)
           @skips << node.children[2]
+        elsif meth_name == :[]
+          @skips << node.children[2] if node.children[2].type == :int
         end
 
         super

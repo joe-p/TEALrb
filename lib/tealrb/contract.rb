@@ -465,15 +465,15 @@ module TEALrb
             @scratch[scratch_name] = group_txns[this_txn.group_index.subtract int(txn_params)]
             txn_params -= 1
           elsif type == 'application'
-            @scratch[scratch_name] = apps[int(app_param_index += 1)]
+            @scratch[scratch_name] = apps[app_param_index += 1]
           elsif type == 'asset'
-            @scratch[scratch_name] = assets[int(asset_param_index += 1)]
+            @scratch[scratch_name] = assets[asset_param_index += 1]
           elsif type == 'account'
-            @scratch[scratch_name] = accounts[int(account_param_index += 1)]
+            @scratch[scratch_name] = accounts[account_param_index += 1]
           elsif type == 'uint64'
-            @scratch[scratch_name] = btoi(app_args[int(args_index += 1)])
+            @scratch[scratch_name] = btoi(app_args[args_index += 1])
           else
-            @scratch[scratch_name] = app_args[int(args_index += 1)]
+            @scratch[scratch_name] = app_args[args_index += 1]
           end
 
           pre_string << "#{param_name} = -> {@scratch['#{scratch_name}'] }"

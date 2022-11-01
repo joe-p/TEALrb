@@ -1,8 +1,8 @@
 module TEALrb
   class App < OpcodeType
-    def [](_app_index)
-      @contract.txnas 'Applications'
-      self
+    def initialize(contract)
+      @field = 'Applications'
+      super
     end
 
     # @return [[]byte] Bytecode of Approval Program
