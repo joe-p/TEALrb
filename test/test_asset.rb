@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require_relative '../lib/tealrb'
 require_relative 'common'
+
 class AssetTests < Minitest::Test
   include TestMethods
 
@@ -21,7 +22,7 @@ class AssetTests < Minitest::Test
     creator: 'AssetCreator'
   }.each do |meth, enum|
     define_method("test_#{meth}") do
-      compile_test_last("Assets[0].#{meth}", ['txna Assets 0', "asset_params_get #{enum}", 'pop'], 3)
+      compile_test_last("assets[0].#{meth}", ['txna Assets 0', "asset_params_get #{enum}", 'pop'], 3)
     end
   end
 
@@ -40,7 +41,7 @@ class AssetTests < Minitest::Test
     creator?: 'AssetCreator'
   }.each do |meth, enum|
     define_method("test_#{meth}") do
-      compile_test_last("Assets[0].#{meth}", ['txna Assets 0', "asset_params_get #{enum}", 'swap', 'pop'], 4)
+      compile_test_last("assets[0].#{meth}", ['txna Assets 0', "asset_params_get #{enum}", 'swap', 'pop'], 4)
     end
   end
 end

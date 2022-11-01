@@ -3,19 +3,6 @@
 require 'minitest/autorun'
 require_relative '../lib/tealrb'
 
-class TealTest < TEALrb::Contract
-  @src_map = false
-
-  # @teal
-  def teal_method(x, y)
-    x / y
-  end
-
-  def main
-    teal_method 1, 2
-  end
-end
-
 class SubroutineTest < TEALrb::Contract
   @src_map = false
 
@@ -36,16 +23,9 @@ class ModuleTests < Minitest::Test
                             'load 0 // subroutine_method: y [any] ', '/',
                             'retsub', 'main:', 'int 1', 'int 2', 'callsub subroutine_method'].freeze
 
-  TEAL_METHOD_TEAL = ['int 1', 'int 2', 'store 0 // teal_method: y', 'store 1 // teal_method: x',
-                      'load 1 // teal_method: x', 'load 0 // teal_method: y', '/'].freeze
-
   def method_test(contract_class, expected_teal)
     contract = contract_class.new
     assert_equal(expected_teal, contract.teal[1..])
-  end
-
-  def test_teal
-    method_test(TealTest, TEAL_METHOD_TEAL)
   end
 
   def test_subroutine

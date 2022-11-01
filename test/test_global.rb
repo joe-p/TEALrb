@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require_relative '../lib/tealrb'
 require_relative 'common'
+
 class GlobalTests < Minitest::Test
   include TestMethods
 
@@ -23,15 +24,15 @@ class GlobalTests < Minitest::Test
     caller_application_address: 'CallerApplicationAddress'
   }.each do |meth, enum|
     define_method("test_global_#{meth}") do
-      compile_test_last("Global.#{meth}", "global #{enum}")
+      compile_test_last("global.#{meth}", "global #{enum}")
     end
   end
 
   def test_global_put
-    compile_test 'Global["key"] = 123', ['byte "key"', 'int 123', 'app_global_put']
+    compile_test 'global["key"] = 123', ['byte "key"', 'int 123', 'app_global_put']
   end
 
   def test_app_local_get
-    compile_test 'Global["key"]', ['byte "key"', 'app_global_get']
+    compile_test 'global["key"]', ['byte "key"', 'app_global_get']
   end
 end

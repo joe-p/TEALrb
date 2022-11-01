@@ -5,10 +5,10 @@ require_relative '../lib/tealrb'
 
 class WhileTest < TEALrb::Contract
   def main
-    @scratch['i'] = 1
+    $i = 1
 
-    while @scratch['i'] < 3
-      @scratch['i'] = @scratch['i'] + 1
+    while $i < 3
+      $i = $i + 1
     end
   end
 end

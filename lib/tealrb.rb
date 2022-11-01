@@ -47,6 +47,7 @@ module TEALrb
     end
 
     def <<(value)
+      return super unless @contract.class.src_map
       return super if caller.join['src_map']
       return super unless @contract.eval_location
 
@@ -73,13 +74,13 @@ module TEALrb
 
     TEALrb::Opcodes::BINARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do |other|
-        TEALrb::Opcodes::ExtendedOpcodes.send(opcode, self, other)
+        @contract.send(opcode, self, other)
       end
     end
 
     TEALrb::Opcodes::UNARY_OPCODE_METHOD_MAPPING.each do |meth, opcode|
       define_method(meth) do
-        TEALrb::Opcodes::ExtendedOpcodes.send(opcode, self)
+        @contract.send(opcode, self)
       end
     end
   end

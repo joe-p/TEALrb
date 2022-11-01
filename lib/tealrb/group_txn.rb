@@ -6,8 +6,23 @@ module TEALrb
       @contract.gtxns field
     end
 
-    def [](_index)
-      self
+    def [](index)
+      if index.is_a? Integer
+        Gtxn.new(@contract, index)
+      else
+        self
+      end
+    end
+  end
+
+  class Gtxn < GroupTxn
+    def initialize(contract, index)
+      @index = index
+      super(contract)
+    end
+
+    def txnfield_opcode(field, *_args)
+      @contract.gtxn @index, field
     end
   end
 

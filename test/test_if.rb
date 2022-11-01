@@ -51,22 +51,21 @@ class IfTests < Minitest::Test
   end
 
   def test_if
-    if_test(IfTest, ['int 1', 'bz if0_else0', 'int 2', 'b if0_end', 'if0_else0:', 'if0_end:'])
+    if_test(IfTest, ['int 1', 'bz if0_end', 'int 2', 'if0_end:'])
   end
 
   def test_if_else
-    if_test(IfElseTest, ['int 1', 'bz if0_else0', 'int 2', 'b if0_end', 'if0_else0:', 'int 3', 'if0_end:'])
+    if_test(IfElseTest, ['int 1', 'bz if0_else', 'int 2', 'b if0_end', 'if0_else:', 'int 3', 'if0_end:'])
   end
 
   def test_if_elsif
     if_test(IfElsifTest,
-            ['int 1', 'bz if0_else0', 'int 2', 'b if0_end', 'if0_else0:', 'int 3', 'bz if0_else1', 'int 4', 'b if0_end',
-             'if0_else1:', 'if0_end:'])
+            ['int 1', 'bz if0_elsif0', 'int 2', 'b if0_end', 'if0_elsif0:', 'int 3', 'bz if0_end', 'int 4', 'if0_end:'])
   end
 
-  def test_if_elsif_esle
+  def test_if_elsif_else
     if_test(IfElsifElseTest,
-            ['int 1', 'bz if0_else0', 'int 2', 'b if0_end', 'if0_else0:', 'int 3', 'bz if0_else1', 'int 4', 'b if0_end',
-             'if0_else1:', 'int 5', 'if0_end:'])
+            ['int 1', 'bz if0_elsif0', 'int 2', 'b if0_end', 'if0_elsif0:', 'int 3', 'bz if0_else', 'int 4',
+             'b if0_end', 'if0_else:', 'int 5', 'if0_end:'])
   end
 end

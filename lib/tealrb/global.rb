@@ -72,8 +72,8 @@ module TEALrb
       @contract.global_opcode('GroupID', *args)
     end
 
-    # @return [uint64] The remaining cost that can be spent by @contract.global_opcodes in this program. (v6)
-    def @contract.global_opcode_budget(*args)
+    # @return [uint64] The remaining cost that can be spent by opcodes in this program. (v6)
+    def opcode_budget(*args)
       @contract.global_opcode('OpcodeBudget', *args)
     end
 

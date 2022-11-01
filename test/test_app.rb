@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require_relative '../lib/tealrb'
 require_relative 'common'
+
 class AppTests < Minitest::Test
   include TestMethods
 
@@ -18,7 +19,7 @@ class AppTests < Minitest::Test
     address: 'AppAddress'
   }.each do |meth, enum|
     define_method("test_#{meth}") do
-      compile_test_last("Apps[0].#{meth}", ['txna Applications 0', "app_params_get #{enum}", 'pop'], 3)
+      compile_test_last("apps[0].#{meth}", ['txna Applications 0', "app_params_get #{enum}", 'pop'], 3)
     end
   end
 
@@ -34,7 +35,7 @@ class AppTests < Minitest::Test
     address?: 'AppAddress'
   }.each do |meth, enum|
     define_method("test_#{meth}") do
-      compile_test_last("Apps[0].#{meth}", ['txna Applications 0', "app_params_get #{enum}", 'swap', 'pop'], 4)
+      compile_test_last("apps[0].#{meth}", ['txna Applications 0', "app_params_get #{enum}", 'swap', 'pop'], 4)
     end
   end
 end
