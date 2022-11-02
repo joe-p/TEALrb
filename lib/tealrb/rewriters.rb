@@ -204,9 +204,13 @@ module TEALrb
         block = node.children[1]
 
         case node.loc.keyword.source
-        when 'if'
+        when 'if', 'unless'
           @contract.if_count += 1
-          replace(node.loc.keyword, '')
+          if node.loc.keyword.source == 'unless'
+            replace(node.loc.keyword, '!')
+          else
+            replace(node.loc.keyword, '')
+          end
 
           case node.loc.else&.source
           when 'else'
