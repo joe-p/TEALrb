@@ -261,33 +261,38 @@ module TEALrb
           comments << ln
         else
           op = ln.split.first
-          new_lines << { text: ln, void: VOID_OPS.include?(op), comments: comments, label: ln[%r{\S+:($| //)}] }
+          new_lines << { text: ln, void: VOID_OPS.include?(op), comments: comments, label: ln[%r{\S+:($| //)}],
+                         if_number: ln[/(?<=^if)\d+/], if_end: ln[/^if\d+_end/] }
           comments = []
         end
       end
 
       output = []
-      under_label = false
+      indent_level = 0
+      current_ifs = []
 
       new_lines.each do |ln|
-        output << '' if !output.last&.empty? && (ln[:label] || ln[:comments].any?)
-        under_label = true if ln[:label]
+        indent_level = 1 if ln[:label] && indent_level.zero?
 
-        ln[:comments].each do |c|
-          output << if ln[:label] || !under_label
-                      c
-                    else
-                      "\t#{c}"
-                    end
+        if ln[:if_number]
+          indent_level += 1 unless current_ifs.include? ln[:if_number]
+          current_ifs << ln[:if_number]
         end
 
-        output << if ln[:label] || !under_label
-                    ln[:text]
-                  else
-                    "\t#{ln[:text]}"
-                  end
+        ln_indent_level = indent_level
+        ln_indent_level -= 1 if ln[:label]
+
+        output << '' if !output.last&.empty? && (ln[:label] || ln[:comments].any?)
+
+        ln[:comments].each { output << (("\t" * ln_indent_level) + _1) }
+        output << (("\t" * ln_indent_level) + ln[:text])
 
         output << '' if ln[:void] && !output.last.empty?
+
+        if ln[:if_end]
+          indent_level -= 1
+          current_ifs.delete ln[:if_number]
+        end
       end
 
       output.join("\n")
