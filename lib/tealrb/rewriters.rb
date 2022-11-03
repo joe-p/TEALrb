@@ -207,10 +207,11 @@ module TEALrb
         when 'if', 'unless'
           @contract.if_count += 1
           if node.loc.keyword.source == 'unless'
-            replace(node.loc.keyword, '!')
+            replace(node.loc.keyword, ":if#{@contract.if_count}_condition;!")
           else
-            replace(node.loc.keyword, '')
+            replace(node.loc.keyword, ":if#{@contract.if_count}_condition;")
           end
+          insert_before(block.source_range, ":if#{@contract.if_count}_logic;")
 
           case node.loc.else&.source
           when 'else'
@@ -218,9 +219,9 @@ module TEALrb
             insert_after(block.source_range, "; b :if#{@contract.if_count}_end")
             replace(node.loc.else, ":if#{@contract.if_count}_else;")
           when 'elsif'
-            insert_after(condition.source_range, "; bz :if#{@contract.if_count}_elsif#{@elsif_count}")
+            insert_after(condition.source_range, "; bz :if#{@contract.if_count}_elsif#{@elsif_count}_condition")
             insert_after(block.source_range, "; b :if#{@contract.if_count}_end")
-            replace(node.loc.else, ":if#{@contract.if_count}_elsif#{@elsif_count};")
+            replace(node.loc.else, ":if#{@contract.if_count}_elsif#{@elsif_count}_condition;")
           else
             insert_after(condition.source_range, "; bz :if#{@contract.if_count}_end")
           end
@@ -232,12 +233,14 @@ module TEALrb
             insert_after(block.source_range, "; b :if#{@contract.if_count}_end")
             replace(node.loc.else, ":if#{@contract.if_count}_else;")
           when 'elsif'
-            insert_after(condition.source_range, "; bz :if#{@contract.if_count}_elsif#{@elsif_count}")
+            insert_after(condition.source_range, "; bz :if#{@contract.if_count}_elsif#{@elsif_count}_condition")
             insert_after(block.source_range, "; b :if#{@contract.if_count}_end")
-            replace(node.loc.else, ":if#{@contract.if_count}_elsif#{@elsif_count};")
+            replace(node.loc.else, ":if#{@contract.if_count}_elsif#{@elsif_count}_condition;")
           else
             insert_after(condition.source_range, "; bz :if#{@contract.if_count}_end")
           end
+
+          insert_before(block.source_range, ":if#{@contract.if_count}_elsif#{@elsif_count}_logic;")
         end
 
         super
@@ -261,9 +264,12 @@ module TEALrb
 
       def on_while(node)
         cond_node = node.children.first
-        replace(node.loc.keyword, ":while#{while_count};#{cond_node.source};bz :end_while#{while_count}")
+        replace(
+          node.loc.keyword,
+          ":while#{while_count}_condition;#{cond_node.source};bz :while#{while_count}_end; :while#{while_count}_logic;"
+        )
         replace(node.loc.begin, '') if node.loc.begin
-        replace(node.loc.end, "b :while#{while_count};:end_while#{while_count}")
+        replace(node.loc.end, "b :while#{while_count}_condition;:while#{while_count}_end")
         replace(cond_node.loc.expression, '')
         super
       end

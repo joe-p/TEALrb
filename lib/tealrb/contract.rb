@@ -261,22 +261,32 @@ module TEALrb
           comments << ln
         else
           op = ln.split.first
-          new_lines << { text: ln, void: VOID_OPS.include?(op), comments: comments, label: ln[%r{\S+:($| //)}],
-                         if_number: ln[/(?<=^if)\d+/], if_end: ln[/^if\d+_end/] }
+          label_regex = %r{\S+:($| //)}
+
+          label_type = label_number = label_end = nil
+
+          if ln[label_regex]
+            label_type = ln[/^if/] || ln[/^while/]
+            label_number = ln[/(?<=^if)\d+/] || ln[/(?<=^while)\d+/]
+            label_end = ln[/_end:/]
+          end
+
+          new_lines << { text: ln, void: VOID_OPS.include?(op), comments: comments, label: ln[label_regex],
+                         label_type: label_type, label_number: label_number, label_end: label_end }
           comments = []
         end
       end
 
       output = []
       indent_level = 0
-      current_ifs = []
+      current_labels = { 'while' => [], 'if' => [] }
 
       new_lines.each do |ln|
-        indent_level = 1 if ln[:label] && indent_level.zero?
+        indent_level = 1 if ln[:label] && indent_level.zero? && !ln[:label_type]
 
-        if ln[:if_number]
-          indent_level += 1 unless current_ifs.include? ln[:if_number]
-          current_ifs << ln[:if_number]
+        if ln[:label_type]
+          indent_level += 1 unless current_labels[ln[:label_type]].include?(ln[:label_number])
+          current_labels[ln[:label_type]] << ln[:label_number]
         end
 
         ln_indent_level = indent_level
@@ -289,10 +299,10 @@ module TEALrb
 
         output << '' if ln[:void] && !output.last.empty?
 
-        if ln[:if_end]
-          indent_level -= 1
-          current_ifs.delete ln[:if_number]
-        end
+        next unless ln[:label_end]
+
+        indent_level -= 1
+        current_labels[ln[:label_type]].delete ln[:label_number]
       end
 
       output.join("\n")

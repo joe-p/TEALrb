@@ -22,7 +22,7 @@ class WhileTests < Minitest::Test
 
   def test_while
     while_test(WhileTest,
-               ['int 1', 'store 0 // i', 'while0:', 'load 0 // i', 'int 3', '<', 'bz end_while0', 'load 0 // i',
-                'int 1', '+', 'store 0 // i', 'b while0', 'end_while0:'])
+               ['int 1', 'store 0 // i', 'while0_condition:', 'load 0 // i', 'int 3', '<', 'bz while0_end',
+                'while0_logic:', 'load 0 // i', 'int 1', '+', 'store 0 // i', 'b while0_condition', 'while0_end:'])
   end
 end
