@@ -64,7 +64,7 @@ module TEALrb
       @contract.global_opcode('CreatorAddress', *args)
     end
 
-    # @return [[]byte] Address that the current application controls. Application mode only. (v5)
+    # @return [Account] Address that the current application controls. Application mode only. (v5)
     def current_application_address(*args)
       @contract.account @contract.global_opcode('CurrentApplicationAddress', *args)
     end
@@ -79,7 +79,7 @@ module TEALrb
       @contract.global_opcode('OpcodeBudget', *args)
     end
 
-    # @return [uint64] The application ID of the application that called this application.
+    # @return [Application] The application ID of the application that called this application.
     #   0 if this application is at the top-level. Application mode only. (v6)
     def caller_application_id(*args)
       @contract.app @contract.global_opcode('CallerApplicationID', *args)
