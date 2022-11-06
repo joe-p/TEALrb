@@ -59,4 +59,4 @@ class Golf < TEALrb::Contract
   end
 end
 
-Golf.new.dump(abi: false)
+Golf.new.dump(__dir__, abi: false)
