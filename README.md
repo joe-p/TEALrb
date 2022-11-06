@@ -1,5 +1,8 @@
 # TEALrb
-TEALrb is a Ruby-based DSL for writing Algorand smart contracts. The goal is to make smart contracts easy to read and write. It's designed to support raw teal (as much as possible within the confines of Ruby syntax) while also providing some useful functionality and abstraction.
+
+TEALrb is a Ruby-based DSL for writing Algorand smart contracts. The goal is to make smart contracts easy to read and
+write. It's designed to support raw teal (as much as possible within the confines of Ruby syntax) while also providing
+some useful functionality and abstraction.
 
 # Installation
 
@@ -7,8 +10,9 @@ TEALrb can be installed by adding `tealrb` to your Gemfile or running `gem insta
 
 # Using TEALrb
 
-To create a smart contract with TEALrb you must require the gem, create a subclass of `TEALrb::Contract`, and define an instance method `main`. `main` is a special method that will be automatically converted to TEAL upon compilation. For example:
-
+To create a smart contract with TEALrb you must require the gem, create a subclass of `TEALrb::Contract`, and define an
+instance method `main`. `main` is a special method that will be automatically converted to TEAL upon compilation. For
+example:
 
 ```ruby
 require 'tealrb'
@@ -19,23 +23,23 @@ class Approval < TEALrb::Contract
   end
 end
 
-approval = Approval.new
-approval.compile
-puts approval.teal_source
+puts Approval.new.formatted_teal
 ```
 
 This script will output the following:
 
 ```
 #pragma version 6
-    int 1
+int 1
 ```
 
 ## Specifying TEAL Version
 
-As seen in the above example, by default TEALrb will assume you are creating a contract for the latest TEAL version. To change this, you can change the value of the `@version` class instance variable:
+As seen in the above example, by default TEALrb will assume you are creating a contract for the latest TEAL version. To
+change this, you can change the value of the `@version` class instance variable:
 
 ```ruby
+
 class Approval < TEALrb::Contract
   @version = 2 # => #pragma version 2
 
@@ -44,13 +48,15 @@ class Approval < TEALrb::Contract
 
 ## Scratch Space Management
 
-With TEALrb you can call `load`/`store` manually or you can use the `$` prefix on variables to reserve named scratch slots. For example:
+With TEALrb you can call `load`/`store` manually or you can use the `$` prefix on variables to reserve named scratch
+slots. For example:
 
 ```rb
 $some_key = 123
 ```
 
-Will save 123 in the first available scratch slot. Assuming this is the first named slot we've reserved, this will be `slot 0`. 
+Will save 123 in the first available scratch slot. Assuming this is the first named slot we've reserved, this will
+be `slot 0`.
 
 ```c
 int 123
@@ -95,49 +101,63 @@ end
 
 ```rb
 $counter = 0
-while($counter < 10) do
-    $counter = $counter + 1
+while ($counter < 10) do
+  $counter = $counter + 1
 end
 ```
 
 ## App Arrays
 
-Foreign apps, assets, and accounts can be access via the `Apps`, `Assets`, and `Accounts` classes.
+Foreign apps, assets, and accounts can be access via the `apps`, `assets`, and `accounts` methods.
 
 ### Parameters
-Each of these classes also have methods that can be used for getting the respective parameters (and whether they exist or not).
+
+Each of these classes also have methods that can be used for getting the respective parameters (and whether they exist
+or not).
 
 ```rb
-$asa = Assets[0]
+$asa = assets[0]
 
-Global['Unit Name'] = $asa.unit_name if $asa.unit_name?
+global['Unit Name'] = $asa.unit_name if $asa.unit_name?
+```
+
+## Box Storage
+
+Box storage can be accessed via `box`
+
+```rb
+box['some_key'] = $some_value
+box['another_key'] = box['some_key']
 ```
 
 ## Global and Local Storage
 
-Global and local storage can be accessed via `Global` and `Local` respectively
+Global and local storage can be accessed via `global` and `local` respectively
 
 ```rb
-Global["Last favorite color"] = Local[Txn.sender]['Favorite color']
+global["Last favorite color"] = local[this_txn.sender]['Favorite color']
 ```
 
 ## Grouped Transactions
 
-Grouped transactions can be accessed via `Gtxn` or `Gtxns`. `Gtxns` must be used when the index is not static.
+Grouped transactions can be accessed via `gtxns`.
 
 ```rb
-$payment_txn = Gtxns[Txn.group_index + 1]
+$payment_txn = gtxns[this_txn.group_index + 1]
 
-assert $payment_txn.receiver == Global.current_application_address
+assert $payment_txn.receiver == global.current_application_address
 assert $payment_txn.amount == 100_000
 ```
 
 ## ABI Support
 
 ### ABI Interface JSON
-TEALrb can generate an ABI Inerface JSON file from a `Contract` subclass. By default, the interface name will be the name of the subclass. To change the name simply change the value of `@abi_interface.name` as the class level:
+
+TEALrb can generate an ABI Inerface JSON file from a `Contract` subclass. By default, the interface name will be the
+name of the subclass. To change the name simply change the value of `@abi_interface.name` as the class level:
 
 ```rb
+
 class DemoContract < TEALrb::Contract
   @abi_interface.name = 'AnotherName'
 ```
@@ -145,6 +165,7 @@ class DemoContract < TEALrb::Contract
 To add network app IDs:
 
 ```rb
+
 class DemoContract < TEALrb::Contract
   @abi_interface.add_id(MAINNET, '1234')
 ```
@@ -152,55 +173,48 @@ class DemoContract < TEALrb::Contract
 Method interfaces will be defined automatically as seen below.
 
 ### ABI Methods
-To define an ABI method, the [YARD](https://rubydoc.info/gems/yard/file/docs/GettingStarted.md) docstring must contain the `@abi` tag. For example:
+
+To define an ABI method, the [YARD](https://rubydoc.info/gems/yard/file/docs/GettingStarted.md) docstring must contain
+the `@abi` tag. For example:
 
 ```rb
   # @abi
-  # This is an abi method that does some stuff
-  # @param asa [asset] Some asset
-  # @param axfer_txn [axfer] A axfer txn
-  # @param another_app [application] Another app
-  # @param some_number [uint64]
-  # @return [uint64]
-  def some_abi_method(asa, axfer_txn, another_app, some_number)
-    assert asa.unit_name?
-    assert payment_txn.sender == Txn.sender
-    assert another_app.extra_program_pages?
+# This is an abi method that does some stuff
+# @param asa [asset] Some asset
+# @param axfer_txn [axfer] A axfer txn
+# @param another_app [application] Another app
+# @param some_number [uint64]
+# @return [uint64]
+def some_abi_method(asa, axfer_txn, another_app, some_number)
+  assert asa.unit_name?
+  assert payment_txn.sender == axfer_txn.sender
+  assert another_app.extra_program_pages?
 
-    return itob some_number + 1
-  end
+  return itob some_number + 1
+end
 ```
 
-TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this, set `@disable_abi_routing` to true within your `TEALrb::Contract` subclass. 
+TEALrb will also add proper routing for the given methods in the compiled TEAL automatically. To disable this,
+set `@disable_abi_routing` to true within your `TEALrb::Contract` subclass.
 
 ## Defining Subroutines
 
-Subroutines can be defined just like ABI Methods, except the yard tag is `@subroutine`. Unlike ABI methods, subroutines are not exposed via the ABI interface and are intended to be used internally.
+Subroutines can be defined just like ABI Methods, except the yard tag is `@subroutine`. Unlike ABI methods, subroutines
+are not exposed via the ABI interface and are intended to be used internally.
 
 ```rb
   # @subroutine
-  # @param asa [asset]
-  # @param axfer_txn [axfer]
-  def helper_subroutine(asa, axfer_txn)
-    assert axfer_txn.sender == asa.creator
-  end
-```
-
-## Defining TEAL methods
-
-TEAL methods are methods that result in TEAL being written in-place when called. They are defined with the `@teal` YARD tag.
-
-```rb
-  # @teal
-  # @param asa [asset]
-  # @param axfer_txn [axfer_txn]
-  def helper_teal_method(asa, axfer_txn)
-    assert axfer_txn.sender == asa.creator
-  end
+# @param asa [asset]
+# @param axfer_txn [axfer]
+def helper_subroutine(asa, axfer_txn)
+  assert axfer_txn.sender == asa.creator
+end
 ```
 
 # Raw TEAL Exceptions
-TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby syntax therefore the TEALrb-specific syntax must be used.
+
+TEALrb supports the writing of raw TEAL with following exceptions. In these exceptions, the raw teal is not valid ruby
+syntax therefore the TEALrb-specific syntax must be used.
 
 ## Overview
 
@@ -211,8 +225,8 @@ TEALrb supports the writing of raw TEAL with following exceptions. In these exce
 | Branching to labels with literal symbols | `bz br_label`| `bz :br_label` |
 | Opcodes with required arguments | `gtxna 0 1 2` | `gtxna 0, 1, 2` |
 
-
 ## Opcodes
+
 | TEAL | TEALrb |
 |------|--------|
 | `+` | `add(a, b)` |
@@ -250,7 +264,8 @@ TEALrb supports the writing of raw TEAL with following exceptions. In these exce
 | `return` | `teal_return(expr)` |
 
 ### Instance Methods
-Some of these opcodes can still be used on TEALrb opcodes as methods. 
+
+Some of these opcodes can still be used on TEALrb opcodes as methods.
 
 | Instance Method | Opcode Method |
 | --- | --- |
@@ -275,7 +290,8 @@ Some of these opcodes can still be used on TEALrb opcodes as methods.
 
 #### Example
 
-**Valid Examples:** 
+**Valid Examples:**
+
 ```ruby
 app_global_get('Some Key') == 'Some Bytes'
 ```
@@ -285,6 +301,7 @@ app_global_get('Some Key') == 'Some Bytes'
 ```
 
 **Invalid Examples:**
+
 ```ruby
 byte 'Some Key'
 app_global_get
@@ -310,9 +327,12 @@ In TEALrb, branch labels are symbol literals and when using a branching opcode t
 | `bnz br_label`| `bnz :br_label` |
 
 ## Opcode Arguments
-If an Opcode has required arguments, it must be called with the required arguments in TEALrb. To maintain valid ruby syntax, this means the arguments must be separated by commas. 
+
+If an Opcode has required arguments, it must be called with the required arguments in TEALrb. To maintain valid ruby
+syntax, this means the arguments must be separated by commas.
 
 ### Example
+
 ```ruby
 gtxna 0 1 2 # => SyntaxError
 gtxna 0, 1, 2 # => gtxna 0 1 2
@@ -323,6 +343,7 @@ gtxna 0, 1, 2 # => gtxna 0 1 2
 Comments in the Ruby source code that start with `# //` or `#//` will be included in the generated TEAL
 
 ### Example
+
 ```ruby
 # this comment won't be in the TEAL
 # // this comment will be in the TEAL
@@ -335,33 +356,40 @@ int 1 // this comment will be in the TEAL as an inline comment
 ```
 
 ## Maybe Values
-TEAL has a couple of opcodes that return two values with one indicating the value actually exists and the other being the actual value (if it exists). 
 
-TEALrb offers some additional opcodes/methods for dealing with either of these return values. The methods are listed below
+TEAL has a couple of opcodes that return two values with one indicating the value actually exists and the other being
+the actual value (if it exists).
 
-| TEAL | TEALrb Exists | TEALrb Value
-|------|--------|---------|
-| `app_params_get` | `app_param_exists?` | `app_param_value` |
-| `asset_params_get` | `asset_params_exists?` | `asset_param_value` |
-| `app_local_get_ex` | `app_local_ex_exists?` | `app_local_ex_value` |
+TEALrb offers some additional opcodes/methods for dealing with either of these return values. The methods are listed
+below
+
+| TEAL                | TEALrb Exists           | TEALrb Value             
+|---------------------|-------------------------|--------------------------|
+| `app_params_get`    | `app_param_exists?`     | `app_param_value`        |
+| `asset_params_get`  | `asset_params_exists?`  | `asset_param_value`      |
+| `app_local_get_ex`  | `app_local_ex_exists?`  | `app_local_ex_value`     |
 | `app_global_get_ex` | `app_global_ex_exists?` | `ex_app_global_ex_value` |
+| `box_get`           | `box_exists?`           | `box_value`              |
+| `box_len`           | `box_len_exists??`      | `box_len_value`          |
 
 # Planned Features
+
 - ABI type encoding/decoding
 
 # Test Coverage
 
-TEALrb is a current work in progress. One benchmark for a full release is test coverage. While test coverage does not indicate proper testing, it is a useful benchmark for quanitfying tests.
+TEALrb is a current work in progress. One benchmark for a full release is test coverage. While test coverage does not
+indicate proper testing, it is a useful benchmark for quanitfying tests.
 
 Generated on 2022-10-03 17:27:34 ([e9f0d11](https://github.com/joe-p/TEALrb/tree/e9f0d11))
-| File                                                         | Lines of Code | Coverage |
+| File | Lines of Code | Coverage |
 |--------------------------------------------------------------|---------------|----------|
-| [lib/tealrb/constants.rb](lib/tealrb/constants.rb)           | 2             | 100.0%   |
-| [lib/tealrb/if_block.rb](lib/tealrb/if_block.rb)             | 29            | 100.0%   |
-| [lib/tealrb/opcodes.rb](lib/tealrb/opcodes.rb)               | 314           | 93.63%   |
-| [lib/tealrb/opcode_modules.rb](lib/tealrb/opcode_modules.rb) | 410           | 93.17%   |
-| [lib/tealrb.rb](lib/tealrb.rb)                               | 34            | 88.24%   |
-| [lib/tealrb/abi.rb](lib/tealrb/abi.rb)                       | 20            | 75.0%    |
-| [lib/tealrb/rewriters.rb](lib/tealrb/rewriters.rb)           | 151           | 74.17%   |
-| [lib/tealrb/scratch.rb](lib/tealrb/scratch.rb)               | 23            | 73.91%   |
-| [lib/tealrb/contract.rb](lib/tealrb/contract.rb)             | 207           | 66.18%   |
+| [lib/tealrb/constants.rb](lib/tealrb/constants.rb)           | 2 | 100.0% |
+| [lib/tealrb/if_block.rb](lib/tealrb/if_block.rb)             | 29 | 100.0% |
+| [lib/tealrb/opcodes.rb](lib/tealrb/opcodes.rb)               | 314 | 93.63% |
+| [lib/tealrb/opcode_modules.rb](lib/tealrb/opcode_modules.rb) | 410 | 93.17% |
+| [lib/tealrb.rb](lib/tealrb.rb)                               | 34 | 88.24% |
+| [lib/tealrb/abi.rb](lib/tealrb/abi.rb)                       | 20 | 75.0% |
+| [lib/tealrb/rewriters.rb](lib/tealrb/rewriters.rb)           | 151 | 74.17% |
+| [lib/tealrb/scratch.rb](lib/tealrb/scratch.rb)               | 23 | 73.91% |
+| [lib/tealrb/contract.rb](lib/tealrb/contract.rb)             | 207 | 66.18% |
