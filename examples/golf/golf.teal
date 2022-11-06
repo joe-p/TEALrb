@@ -1,0 +1,189 @@
+#pragma version 8
+
+// src_map:golf.rb:7
+if0_condition:
+	txn ApplicationID
+	int 0
+	==
+	bz if0_end
+
+if0_logic:
+	int 1
+	return
+
+if0_end:
+
+// src_map:golf.rb:8
+txna ApplicationArgs 0
+extract 6 2
+store 0 // uint16
+
+// src_map:golf.rb:10
+if1_condition:
+	byte "ints"
+	box_get
+	swap
+	pop
+	bz if1_else
+
+// src_map:golf.rb:23
+if1_logic:
+	txna ApplicationArgs 0
+	btoi
+	store 1 // value
+
+	// src_map:golf.rb:24
+	int 0
+	store 2 // low
+
+	// src_map:golf.rb:25
+	byte "ints"
+	box_len
+	pop
+	int 2
+	/
+	store 3 // high
+
+	// src_map:golf.rb:27
+	while0_condition:
+		load 2 // low
+		load 3 // high
+		<
+		bz while0_end
+
+	while0_logic:
+
+		// src_map:golf.rb:28
+		load 2 // low
+		load 3 // high
+		+
+		int 2
+		/
+		store 4 // mid
+
+		// src_map:golf.rb:29
+		byte "ints"
+		load 4 // mid
+		int 2
+		*
+		int 2
+		box_extract
+		btoi
+		store 5 // mid_value
+
+		// src_map:golf.rb:31
+		if2_condition:
+			load 5 // mid_value
+			load 1 // value
+			<
+			bz if2_else
+
+		// src_map:golf.rb:32
+		if2_logic:
+			load 4 // mid
+			int 1
+			+
+			store 2 // low
+
+			b if2_end
+
+		// src_map:golf.rb:33
+		if2_else:
+
+			// src_map:golf.rb:34
+			load 4 // mid
+			store 3 // high
+
+		// src_map:golf.rb:35
+		if2_end:
+
+		// src_map:golf.rb:36
+		b while0_condition
+
+	while0_end:
+
+	// src_map:golf.rb:38
+	load 2 // low
+	int 2
+	*
+	store 6 // offset
+
+	// src_map:golf.rb:40
+	byte "ints"
+	int 0
+	load 6 // offset
+	box_extract
+	store 7 // before
+
+	// src_map:golf.rb:41
+	byte "ints"
+	load 6 // offset
+	byte "ints"
+	box_len
+	pop
+	load 6 // offset
+	-
+	box_extract
+	store 8 // after
+
+	// src_map:golf.rb:43
+	load 7 // before
+	load 0 // uint16
+	concat
+	load 8 // after
+	concat
+	store 9 // new_box_value
+
+	// src_map:golf.rb:44
+	byte "ints"
+	box_len
+	pop
+	store 10 // last_len
+
+	// src_map:golf.rb:46
+	byte "ints"
+	box_del
+
+	// src_map:golf.rb:47
+	byte "ints"
+	load 10 // last_len
+	int 2
+	+
+	box_create
+
+	// src_map:golf.rb:48
+	byte "ints"
+	load 9 // new_box_value
+	box_put
+	b if1_end
+
+// src_map:golf.rb:49
+if1_else:
+
+	// src_map:golf.rb:50
+	byte "ints"
+	int 2
+	box_create
+
+	// src_map:golf.rb:51
+	byte "ints"
+	load 0 // uint16
+	box_put
+
+// src_map:golf.rb:52
+if1_end:
+
+// src_map:golf.rb:54
+byte "ints"
+box_get
+pop
+log
+
+// src_map:golf.rb:55
+global OpcodeBudget
+itob
+log
+
+// src_map:golf.rb:56
+int 1
+return
