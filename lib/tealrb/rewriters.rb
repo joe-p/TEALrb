@@ -199,13 +199,14 @@ module TEALrb
 
     class IfRewriter < Rewriter
       def on_if(node)
-        @elsif_count ||= 0
         condition = node.children.first
         block = node.children[1]
 
         case node.loc.keyword.source
         when 'if', 'unless'
           @contract.if_count += 1
+          @elsif_count ||= 0
+
           if node.loc.keyword.source == 'unless'
             replace(node.loc.keyword, ":if#{@contract.if_count}_condition;!")
           else
@@ -219,23 +220,25 @@ module TEALrb
             insert_after(block.source_range, "; b :if#{@contract.if_count}_end")
             replace(node.loc.else, ":if#{@contract.if_count}_else;")
           when 'elsif'
-            insert_after(condition.source_range, "; bz :if#{@contract.if_count}_elsif#{@elsif_count}_condition")
+            insert_after(condition.source_range, "; bz :if#{@contract.if_count}_elsif#{@elsif_count + 1}_condition")
             insert_after(block.source_range, "; b :if#{@contract.if_count}_end")
-            replace(node.loc.else, ":if#{@contract.if_count}_elsif#{@elsif_count}_condition;")
+            replace(node.loc.else, ":if#{@contract.if_count}_elsif#{@elsif_count + 1}_condition;")
           else
             insert_after(condition.source_range, "; bz :if#{@contract.if_count}_end")
           end
           replace(node.loc.end, ":if#{@contract.if_count}_end")
         when 'elsif'
+          @elsif_count += 1
+
           case node.loc.else&.source
           when 'else'
             insert_after(condition.source_range, "; bz :if#{@contract.if_count}_else")
             insert_after(block.source_range, "; b :if#{@contract.if_count}_end")
             replace(node.loc.else, ":if#{@contract.if_count}_else;")
           when 'elsif'
-            insert_after(condition.source_range, "; bz :if#{@contract.if_count}_elsif#{@elsif_count}_condition")
+            insert_after(condition.source_range, "; bz :if#{@contract.if_count}_elsif#{@elsif_count + 1}_condition")
             insert_after(block.source_range, "; b :if#{@contract.if_count}_end")
-            replace(node.loc.else, ":if#{@contract.if_count}_elsif#{@elsif_count}_condition;")
+            replace(node.loc.else, ":if#{@contract.if_count}_elsif#{@elsif_count + 1}_condition;")
           else
             insert_after(condition.source_range, "; bz :if#{@contract.if_count}_end")
           end

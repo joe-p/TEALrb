@@ -1,17 +1,17 @@
 #pragma version 8
 
 // src_map:golf.rb:9
-if0_condition:
+if1_condition:
 	txn ApplicationID
 	int 0
 	==
-	bz if0_end
+	bz if1_end
 
-if0_logic:
+if1_logic:
 	int 1
 	return
 
-if0_end:
+if1_end:
 
 // src_map:golf.rb:10
 txna ApplicationArgs 0
@@ -19,15 +19,15 @@ extract 6 2
 store 0 // uint16
 
 // src_map:golf.rb:12
-if1_condition:
+if2_condition:
 	byte "ints"
 	box_get
 	swap
 	pop
-	bz if1_else
+	bz if2_else
 
 // src_map:golf.rb:25
-if1_logic:
+if2_logic:
 	txna ApplicationArgs 0
 	btoi
 	store 1 // value
@@ -72,30 +72,30 @@ if1_logic:
 		store 5 // mid_value
 
 		// src_map:golf.rb:33
-		if2_condition:
+		if3_condition:
 			load 5 // mid_value
 			load 1 // value
 			<
-			bz if2_else
+			bz if3_else
 
 		// src_map:golf.rb:34
-		if2_logic:
+		if3_logic:
 			load 4 // mid
 			int 1
 			+
 			store 2 // low
 
-			b if2_end
+			b if3_end
 
 		// src_map:golf.rb:35
-		if2_else:
+		if3_else:
 
 			// src_map:golf.rb:36
 			load 4 // mid
 			store 3 // high
 
 		// src_map:golf.rb:37
-		if2_end:
+		if3_end:
 
 		// src_map:golf.rb:38
 		b while0_condition
@@ -155,10 +155,10 @@ if1_logic:
 	byte "ints"
 	load 9 // new_box_value
 	box_put
-	b if1_end
+	b if2_end
 
 // src_map:golf.rb:51
-if1_else:
+if2_else:
 
 	// src_map:golf.rb:52
 	byte "ints"
@@ -171,7 +171,7 @@ if1_else:
 	box_put
 
 // src_map:golf.rb:54
-if1_end:
+if2_end:
 
 // src_map:golf.rb:56
 byte "ints"

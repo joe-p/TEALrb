@@ -94,7 +94,7 @@ module TEALrb
       @scratch = Scratch.new self
 
       @contract = self
-      @if_count = -1
+      @if_count = 0
 
       self.class.method_hashes.each do |mh|
         define_subroutine(mh[:name], method(mh[:name]))
