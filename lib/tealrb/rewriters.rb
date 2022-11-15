@@ -131,7 +131,7 @@ module TEALrb
         meth_name = node.children[1]
 
         if OPCODE_METHODS.include? meth_name
-          if meth_name[/(byte|int)cblock/]
+          if %w[bytecblock intcblock pushints pushbytess switch match].include? meth_name.to_s
             @skips += node.children[2..]
           else
             params = TEALrb::Opcodes::TEALOpcodes.instance_method(meth_name).parameters

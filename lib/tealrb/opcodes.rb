@@ -887,6 +887,56 @@ module TEALrb
         @contract.teal << '||'
         @contract
       end
+
+      def pushints(*ints)
+        @contract.teal << "pushints #{ints.join(' ')}"
+        @contract
+      end
+
+      def pushbytess(*bytes)
+        @contract.teal << "pushbytes #{bytes.map { "\"#{_1}\"" }.join(' ')}"
+        @contract
+      end
+
+      def proto(num_args, num_return)
+        @contract.teal << "proto #{num_args} #{num_return}"
+        @contract
+      end
+
+      def frame_dig(n)
+        @contract.teal << "frame_dig #{n}"
+        @contract
+      end
+
+      def frame_bury(n)
+        @contract.teal << "frame_bury #{n}"
+        @contract
+      end
+
+      def switch(*labels)
+        @contract.teal << "switch #{labels.join(' ')}"
+        @contract
+      end
+
+      def match(*labels)
+        @contract.teal << "match #{labels.join(' ')}"
+        @contract
+      end
+
+      def popn(n)
+        @contract.teal << "popn #{n}"
+        @contract
+      end
+
+      def dupn(n)
+        @contract.teal << "dupn #{n}"
+        @contract
+      end
+
+      def bury(n)
+        @contract.teal << "bury #{n}"
+        @contract
+      end
     end
   end
 end
