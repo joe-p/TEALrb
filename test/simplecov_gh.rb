@@ -35,10 +35,6 @@ module SimpleCov
         content.puts table
 
         File.write(File.join(SimpleCov.coverage_path, 'gh.md'), content.string)
-
-        puts ''
-        puts content.string
-        puts ''
       end
     end
   end
