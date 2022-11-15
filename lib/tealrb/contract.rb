@@ -474,7 +474,7 @@ module TEALrb
             args[i][:desc] if args[i]}"
           scratch_names << scratch_name
 
-          type = arg_types[i].downcase
+          type = arg_types[i]&.downcase
 
           if txn_types.include? type
             @scratch[scratch_name] = group_txns[this_txn.group_index.subtract int(txn_params)]
