@@ -381,15 +381,31 @@ below
 TEALrb is a current work in progress. One benchmark for a full release is test coverage. While test coverage does not
 indicate proper testing, it is a useful benchmark for quanitfying tests.
 
-Generated on 2022-10-03 17:27:34 ([e9f0d11](https://github.com/joe-p/TEALrb/tree/e9f0d11))
+Generated on 2022-11-14 20:45:01 ([75cfd63](https://github.com/joe-p/TEALrb/tree/75cfd63))
+
 | File | Lines of Code | Coverage |
-|--------------------------------------------------------------|---------------|----------|
-| [lib/tealrb/constants.rb](lib/tealrb/constants.rb)           | 2 | 100.0% |
-| [lib/tealrb/if_block.rb](lib/tealrb/if_block.rb)             | 29 | 100.0% |
-| [lib/tealrb/opcodes.rb](lib/tealrb/opcodes.rb)               | 314 | 93.63% |
-| [lib/tealrb/opcode_modules.rb](lib/tealrb/opcode_modules.rb) | 410 | 93.17% |
-| [lib/tealrb.rb](lib/tealrb.rb)                               | 34 | 88.24% |
-| [lib/tealrb/abi.rb](lib/tealrb/abi.rb)                       | 20 | 75.0% |
-| [lib/tealrb/rewriters.rb](lib/tealrb/rewriters.rb)           | 151 | 74.17% |
-| [lib/tealrb/scratch.rb](lib/tealrb/scratch.rb)               | 23 | 73.91% |
-| [lib/tealrb/contract.rb](lib/tealrb/contract.rb)             | 207 | 66.18% |
+|----------------------------------------------------------|---------------|----------|
+| [lib/tealrb/app_args.rb](lib/tealrb/app_args.rb)         | 5 | 100.0% |
+| [lib/tealrb/this_txn.rb](lib/tealrb/this_txn.rb)         | 6 | 100.0% |
+| [lib/tealrb/algod.rb](lib/tealrb/algod.rb)               | 10 | 100.0% |
+| [lib/tealrb/logs.rb](lib/tealrb/logs.rb)                 | 5 | 100.0% |
+| [lib/tealrb/asset.rb](lib/tealrb/asset.rb)               | 53 | 100.0% |
+| [lib/tealrb/constants.rb](lib/tealrb/constants.rb)       | 2 | 100.0% |
+| [lib/tealrb/local.rb](lib/tealrb/local.rb)               | 13 | 100.0% |
+| [lib/tealrb/txn_fields.rb](lib/tealrb/txn_fields.rb)     | 132 | 99.24% |
+| [lib/tealrb/global.rb](lib/tealrb/global.rb)             | 38 | 97.37% |
+| [lib/tealrb/group_txn.rb](lib/tealrb/group_txn.rb)       | 21 | 90.48% |
+| [lib/tealrb/account.rb](lib/tealrb/account.rb)           | 39 | 89.74% |
+| [lib/tealrb/opcodes.rb](lib/tealrb/opcodes.rb)           | 540 | 87.59% |
+| [lib/tealrb/app.rb](lib/tealrb/app.rb)                   | 57 | 85.96% |
+| [lib/tealrb/rewriters.rb](lib/tealrb/rewriters.rb)       | 159 | 80.5% |
+| [lib/tealrb/opcode_type.rb](lib/tealrb/opcode_type.rb)   | 15 | 80.0% |
+| [lib/tealrb.rb](lib/tealrb.rb)                           | 60 | 75.0% |
+| [lib/tealrb/scratch.rb](lib/tealrb/scratch.rb)           | 24 | 75.0% |
+| [lib/tealrb/abi.rb](lib/tealrb/abi.rb)                   | 20 | 75.0% |
+| [lib/tealrb/contract.rb](lib/tealrb/contract.rb)         | 327 | 72.48% |
+| [lib/tealrb/byte_opcodes.rb](lib/tealrb/byte_opcodes.rb) | 6 | 66.67% |
+| [lib/tealrb/box.rb](lib/tealrb/box.rb)                   | 8 | 62.5% |
+| [lib/tealrb/enums.rb](lib/tealrb/enums.rb)               | 22 | 59.09% |
+| [lib/tealrb/maybe_ops.rb](lib/tealrb/maybe_ops.rb)       | 58 | 56.9% |
+| [lib/tealrb/inner_txn.rb](lib/tealrb/inner_txn.rb)       | 15 | 53.33% |
