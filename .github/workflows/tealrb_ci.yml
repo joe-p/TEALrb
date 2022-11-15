@@ -11,25 +11,39 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: ['2.7', '3.0', '3.1']
+        node-version: [ 'v3.12.0-beta' ]
+        ruby-version: [ '2.7', '3.0', '3.1' ]
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Clone algodeploy
+        run: git clone https://github.com/joe-p/algodeploy
+
+      - name: Install algodeploy dependencies
+        run: pip3 install -r ./algodeploy/requirements.txt
+
+      - name: Run algodeploy create ${{ matrix.node-version }}
+        run: python3 ./algodeploy/algodeploy.py create ${{ matrix.node-version }}
+
       - name: Set up Ruby ${{ matrix.ruby-version }}
         uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
         with:
           ruby-version: ${{ matrix.ruby-version }}
-      
+
       - name: Install dependencies
         run: bundle install
 
       - name: Run rubocop
         run: bundle exec rake lint
-      
+
       - name: Run tests
         run: bundle exec rake test
 
       - name: Run examples
         run: bundle exec rake examples
-      
+
       - name: Build gem
         run: bundle exec rake build
