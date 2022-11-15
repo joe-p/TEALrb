@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 task default: %w[clean lint test examples build]
-multitask examples: %i[demo nft atomic_swap voting meta_programming]
+multitask examples: %i[golf]
 
 desc 'Clean up build artifacts (.gem files)'
 task :clean do
@@ -33,27 +33,7 @@ task :fix do
   sh 'rubocop --auto-correct'
 end
 
-desc 'Run demo example'
-task :demo do
-  ruby 'examples/demo/demo.rb'
-end
-
-desc 'Run nft example'
-task :nft do
-  ruby 'examples/nft-app/nft.rb'
-end
-
-desc 'Run atomic_swap example'
-task :atomic_swap do
-  ruby 'examples/pyteal_comparisons/atomic_swap.rb'
-end
-
-desc 'Run voting example'
-task :voting do
-  ruby 'examples/pyteal_comparisons/voting.rb'
-end
-
-desc 'Run meta_programming example'
-task :meta_programming do
-  ruby 'examples/meta_programming/meta_programming.rb'
+desc 'Run golf example'
+task :golf do
+  ruby 'examples/golf/golf.rb'
 end

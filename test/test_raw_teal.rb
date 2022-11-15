@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require_relative '../lib/tealrb'
 require_relative 'common'
+
 class RawTealTests < Minitest::Test
   include TestMethods
 
@@ -536,5 +537,22 @@ class RawTealTests < Minitest::Test
 
   def test_label
     compile_test_last ':label', 'label:'
+  end
+
+  {
+    'pushints 1, 2, 3' => 'pushints 1 2 3',
+    'pushbytess "a", "b", "c"' => 'pushbytes "a" "b" "c"',
+    'proto 1, 2' => 'proto 1 2',
+    'frame_dig 1' => 'frame_dig 1',
+    'frame_bury 1' => 'frame_bury 1',
+    'switch :a, :b, :c' => 'switch a b c',
+    'match :a, :b, :c' => 'match a b c',
+    'popn 1' => 'popn 1',
+    'dupn 1' => 'dupn 1',
+    'bury 1' => 'bury 1'
+  }.each do |input, teal|
+    define_method("test_#{input.split.first}") do
+      compile_test_last(input, teal)
+    end
   end
 end
